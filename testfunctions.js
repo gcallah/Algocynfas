@@ -9,18 +9,30 @@ var radius = 20;
 var linelimit = 180;
 var delaytime = 1000;
 
- async function delay (time) {
+async function delay (time) {
   return new Promise(function (resolve) {
     setTimeout(resolve, time)
   })
 }
 
+async function unhighlight(node)
+{
+  await delay(delaytime);
+   node.set({ fill:'yellow'});
+}
+async function highlight(node)
+{
+ node.set({ fill: 'yellow'});
+var x=await delay(delaytime);
+}
+
+
 
 async function addRoot (value) {
     var value = String(value);
-    var x = new fabric.Circle({ radius: radius, left: width / 2, fill: 'red', top: radius, originX: 'center', originY: 'center', fill: 'red'});
+    var x = new fabric.Circle({radius: radius, left: width / 2, fill: 'red', top: radius, originX: 'center', originY: 'center', fill: 'red'});
     var text = new fabric.Text(value, {fontSize: 10, originX: 'center', originY: 'center', left: width / 2, top: radius});
-    await delay(1000);
+    var temp=await delay(1000);
     canvas.add(x);
     canvas.add(text);
     return x
@@ -32,15 +44,10 @@ function addline (x1, y1, x2, y2) {
   canvas.add(line)
 }
 
-
- async function  addNode (node1, node2, angle) {
+async function  addNode (node1, node2, angle) {
   var intialx = parseInt(node1.left);
-
   var initialy = parseInt(node1.top);
-
-   console.log("addNode");
-
-  if (angle > 0 && angle <= 90) {
+if (angle > 0 && angle <= 90) {
     var pointx = Math.abs(Math.abs(Math.cos(angle * Math.PI / 180) * distance) + intialx);
     var pointy = Math.abs(Math.abs(Math.sin(angle * Math.PI / 180) * distance) - initialy);
 
@@ -86,11 +93,10 @@ function addline (x1, y1, x2, y2) {
   var x = new fabric.Circle({ radius: radius, originX: 'center', originY: 'center', fill: 'red', left: pointx, top: pointy});
   var value1 = String(node2);
   var text = new fabric.Text(value1, {fontSize: 10, originX: 'center', originY: 'center', left: pointx, top: pointy});
-  await delay(1000);
+  var temp=await delay(1000);
   canvas.add(x);
   canvas.add(text);
-  await delay(1000);
-  console.log("Executed");
+  var temp=await delay(1000);
   addline(initiallinex, initialliney, finallinex, finalliney);
   return x;
 }
