@@ -12,21 +12,26 @@
 
 </canvas>
 <script src="fabric.js"></script>
-    <script src="testfunctions.js">
+    <script src="test_graphs.js">
 
     </script>
-<script src="./testfunctions.js"></script>
+
 <script>
 
     var canvas = new fabric.Canvas('canvas');
-    async function x () {
-  // do not declare another canvas, you've already done so in other block
-  var a10 = await addRoot(10)
-  var a20 = await addNode(a10, 20, 225)
-  var a40 = await addNode(a10, 40, 315)
-  var a30 = await addNode(a20, 30, 270)
+
+async function draw()
+{
+  var a10 =  await addRoot(10)
+  var a20 =  await addNode(a10, 20, 225)
+  var a40 =  await addNode(a10, 40, 315)
+  var a30 =  await addNode(a20, 30, 270)
+ // highlight(a10)
+
 }
-x()
+
+draw()
+
 
 </script>
 
