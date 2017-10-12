@@ -14,15 +14,15 @@ function addCanvasElem(value) {
         originX: 'center',
         originY: 'center',
         fill: 'red',
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
         id: value,
     });
     var strValue=String(value);
     var text= new fabric.Text(strValue, {fontSize: 10, originX: 'center', originY: 'center'});
     var group = new fabric.Group([ rect, text ], {left: position, top: 40, angle: 0, id: value});
     canvas.add(group);
-    position += 21;
+    position += 31;
 }
 
 function addRowElem(value, next_to = null, place = RIGHT) {
@@ -30,12 +30,16 @@ function addRowElem(value, next_to = null, place = RIGHT) {
     // create a rectangle object
     resetCanvas();
     redrawList(value, next_to, place);
+    drawCanvas();
+}
+
+function drawCanvas() {
     arr.map((item) =>
       addCanvasElem(item)
     );
 }
 
-function colorElem(value) {
+function highlight(value) {
     canvas.getObjects().map((item) =>
     item.getObjects().map((node) =>
     node.id === value ? node.set('fill', 'pink'): ''
@@ -54,4 +58,35 @@ function redrawList(value, next_to, place) {
     } else {
         arr.push(value);
     }
+}
+
+function displayList(array) {
+    createList(array);
+    drawCanvas();
+}
+
+function createList(array) {
+    for(i in array) {
+        arr.push(parseInt(array[i]));
+    }
+}
+
+async function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function swapElem(a, b) {
+    highlight(a);
+    highlight(b);
+    await delay(500);
+    var temp;
+    var eleIndexA = arr.indexOf(a);
+    var eleIndexB = arr.indexOf(b);
+    temp = arr[eleIndexA];
+    arr[eleIndexA] = arr[eleIndexB];
+    arr[eleIndexB] = temp;
+    resetCanvas();
+    drawCanvas();
+    highlight(a);
+    highlight(b);
 }
