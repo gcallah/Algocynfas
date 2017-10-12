@@ -5,10 +5,15 @@
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
 const DEFAULT_DELAY = 2000; // in milliseconds
+const DEF_ELEM_HEIGHT = 60;
+const DEF_ELEM_WIDTH = 60;
+const PCT_FONT_BOX = .72;
+const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
 
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
-var position = width/2;
+var position = width / 2;
+var topPos = Math.floor(width / 10)
 var arr = [];
 
 function addCanvasElem(value) {
@@ -16,15 +21,17 @@ function addCanvasElem(value) {
         originX: 'center',
         originY: 'center',
         fill: 'red',
-        width: 30,
-        height: 30,
+        width: DEF_ELEM_WIDTH,
+        height: DEF_ELEM_HEIGHT,
         id: value,
     });
     var strValue = String(value);
-    var text = new fabric.Text(strValue, {fontSize: 10, originX: 'center', originY: 'center'});
-    var group = new fabric.Group([ rect, text ], {left: position, top: 40, angle: 0, id: value});
+    var text = new fabric.Text(strValue,
+            {fontSize: DEF_FONT, originX: 'center', originY: 'center'});
+    var group = new fabric.Group([ rect, text ],
+            {left: position, top: topPos, angle: 0, id: value});
     canvas.add(group);
-    position += 31;
+    position += DEF_ELEM_WIDTH + 1;
 }
 
 function addRowElem(value, next_to = null, place = RIGHT) {
