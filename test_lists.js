@@ -4,8 +4,10 @@
 
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
-var height=parseInt(document.getElementById("canvas").getAttribute("height"));
-var width=parseInt(document.getElementById("canvas").getAttribute("width"));
+const DEFAULT_DELAY = 2000; // in milliseconds
+
+var height = parseInt(document.getElementById("canvas").getAttribute("height"));
+var width = parseInt(document.getElementById("canvas").getAttribute("width"));
 var position = width/2;
 var arr = [];
 
@@ -18,8 +20,8 @@ function addCanvasElem(value) {
         height: 30,
         id: value,
     });
-    var strValue=String(value);
-    var text= new fabric.Text(strValue, {fontSize: 10, originX: 'center', originY: 'center'});
+    var strValue = String(value);
+    var text = new fabric.Text(strValue, {fontSize: 10, originX: 'center', originY: 'center'});
     var group = new fabric.Group([ rect, text ], {left: position, top: 40, angle: 0, id: value});
     canvas.add(group);
     position += 31;
@@ -78,7 +80,7 @@ async function delay(ms) {
 async function swapElem(a, b) {
     highlight(a);
     highlight(b);
-    await delay(500);
+    await delay(DEFAULT_DELAY);
     var temp;
     var eleIndexA = arr.indexOf(a);
     var eleIndexB = arr.indexOf(b);
