@@ -7,14 +7,10 @@
     </head>
     <body>
       <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
+      <script src="common_primitives.js"></script>
       <script src="list_primitives.js"></script>
       <script>
           var canvas = new fabric.Canvas('canvas');
-          // window.addRowElem(7);
-          // window.addRowElem(10);
-          // window.addRowElem(13,7,"LEFT");
-          // window.addRowElem(4,13,"RIGHT");
-          // window.highlight(4);
           var x = [10, 1, 22, 34, 56];
           window.displayList(x);
           swapElem(56, 22);

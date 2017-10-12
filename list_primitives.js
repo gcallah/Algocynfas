@@ -9,6 +9,8 @@ const DEF_ELEM_HEIGHT = 60;
 const DEF_ELEM_WIDTH = 60;
 const PCT_FONT_BOX = .72;
 const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
+const DEF_BG_COLOR = 'yellow';
+const DEF_HL_COLOR = 'blue';
 
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
@@ -20,7 +22,7 @@ function addCanvasElem(value) {
     var rect = new fabric.Rect({
         originX: 'center',
         originY: 'center',
-        fill: 'red',
+        fill: DEF_BG_COLOR,
         width: DEF_ELEM_WIDTH,
         height: DEF_ELEM_HEIGHT,
         id: value,
@@ -51,8 +53,7 @@ function drawCanvas() {
 function highlight(value) {
     canvas.getObjects().map((item) =>
     item.getObjects().map((node) =>
-    node.id === value ? node.set('fill', 'pink'): ''
-    ));
+    node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
 }
 
 function resetCanvas() {
