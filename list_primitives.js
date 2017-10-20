@@ -9,8 +9,9 @@ const DEF_ELEM_HEIGHT = 60;
 const DEF_ELEM_WIDTH = 60;
 const PCT_FONT_BOX = .72;
 const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
-const DEF_BG_COLOR = 'yellow';
-const DEF_HL_COLOR = 'blue';
+const DEF_BG_COLOR = '#ffff99';
+const DEF_HL_COLOR = '#99ccff';
+const DEF_HLK_COLOR = '#0073e6';
 
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
@@ -76,6 +77,7 @@ function displayList(array) {
 }
 
 function createList(array) {
+    arr = [];
     for(i in array) {
         arr.push(parseInt(array[i]));
     }
@@ -99,4 +101,10 @@ async function swapElem(a, b) {
     drawCanvas();
     highlight(a);
     highlight(b);
+}
+
+function highlightKey(value) {
+    canvas.getObjects().map((item) =>
+    item.getObjects().map((node) =>
+    node.id === value ? node.set('fill', DEF_HLK_COLOR): ''));
 }
