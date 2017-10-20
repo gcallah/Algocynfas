@@ -53,8 +53,8 @@ function drawCanvas() {
 
 function highlight(value) {
     canvas.getObjects().map((item) =>
-    item.getObjects().map((node) =>
-    node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
+        item.getObjects().map((node) =>
+            node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
 }
 
 function resetCanvas() {
@@ -65,7 +65,8 @@ function resetCanvas() {
 function redrawList(value, next_to, place) {
     if(next_to) {
         var eleIndex = arr.indexOf(next_to);
-        place === 'LEFT' ? arr.splice(eleIndex, 0, value) : arr.splice(eleIndex + 1, 0, value)
+        place === 'LEFT' ? arr.splice(eleIndex, 0, value) :
+            arr.splice(eleIndex + 1, 0, value)
     } else {
         arr.push(value);
     }
@@ -83,14 +84,9 @@ function createList(array) {
     }
 }
 
-async function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function swapElem(a, b) {
+function swapElem(a, b) {
     highlight(a);
     highlight(b);
-    await delay(DEFAULT_DELAY);
     var temp;
     var eleIndexA = arr.indexOf(a);
     var eleIndexB = arr.indexOf(b);
