@@ -22,9 +22,9 @@ var canvas = new fabric.Canvas('canvas');
 async function draw()
 {
   var a10 =  await addRoot(10)
-  var a20 =  await addNode(a10, 20, 225)
-  var a40 =  await addNode(a10, 40, 315)
-  var a30 =  await addNode(a20, 30, 270)
+  var a20 =  await addChild(a10, 20, 225)
+  var a40 =  await addChild(a10, 40, 315)
+  var a30 =  await addChild(a20, 30, 270)
  // highlight(a10)
 
 }

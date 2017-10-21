@@ -4,14 +4,6 @@
 
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
-const DEFAULT_DELAY = 2000; // in milliseconds
-const DEF_ELEM_HEIGHT = 60;
-const DEF_ELEM_WIDTH = 60;
-const PCT_FONT_BOX = .72;
-const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
-const DEF_BG_COLOR = '#ffff99';
-const DEF_HL_COLOR = '#99ccff';
-const DEF_HLK_COLOR = '#0073e6';
 
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
