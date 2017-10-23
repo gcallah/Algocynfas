@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Test for fabric</title>
+        <script src="fabric.js"></script>
+    </head>
+    <body>
+      <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
+      <script src="common_primitives.js"></script>
+      <script src="list_primitives.js"></script>
+      <script>
+          var canvas = new fabric.Canvas('canvas');
+          var x = [10, 1, 22, 34, 56];
+          window.displayList(x);
+          swapElem(56, 22);
+      </script>
+
+      </body>
+</html>

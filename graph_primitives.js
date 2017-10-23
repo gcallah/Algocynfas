@@ -1,5 +1,6 @@
 /**
  * Created by Varun on 15/08/17.
+ * This file contains priitives common to graph animations.
  */
 var canvas = new fabric.Canvas('canvas')
 var height = parseInt(document.getElementById('canvas').getAttribute('height'))
@@ -7,13 +8,7 @@ var width = parseInt(document.getElementById('canvas').getAttribute('width'))
 var distance = 200
 var radius = 20
 var linelimit = 180
-var delaytime = 1000
 
-async function delay (time) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, time)
-  })
-}
 
 function calculate (angle, initialx, initialy) {
   var pointx = Math.abs(Math.cos(angle * Math.PI / 180) * distance + initialx)
