@@ -2,7 +2,7 @@
  * Created by Varun and the professor on 12/10/17.
  * This file contains priitives common to all types of animations.
  */
-var delaytime = 1000
+var delaytime = document.getElementById('myRange').value
 
 async function delay (time) {
   return new Promise(function (resolve) {
@@ -10,4 +10,3 @@ async function delay (time) {
     setTimeout(resolve, time)
   })
 }
-

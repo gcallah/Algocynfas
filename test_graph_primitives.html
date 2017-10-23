@@ -7,10 +7,15 @@
 </head>
 <body>
 
+<div class="sliderContainer">
+  <label id="displayRange" for="myRange">Slider speed </label>
+  <input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 oninput="updateValue()"/>
+</div>
+    
 <canvas id="canvas" width="800" height="800" style="border:1px solid #000000">
 
-
 </canvas>
+
 <script src="fabric.js"></script>
 <script src="common_primitives.js"></script>
 <script src="graph_primitives.js"></script>
@@ -29,10 +34,43 @@ async function draw()
 
 }
 
-draw()
+// Updates the slider value onto the label
+function updateValue(){
+  
+  var rangeValue = document.getElementById('myRange').value;
+  var dispRange =  document.getElementById("displayRange");
+  dispRange.innerHTML = '<p>'
+              + 'Slider speed: '
+              + '<strong>' + rangeValue + '</strong>'
+              + '</p>'; 
+  // Sets the alue to local Storage
+  localStorage.setItem("myRange", rangeValue);
+  canvas.clear();
+  draw();
+  
+}
 
+// This on loads value if available from local storage
+window.onload = function(){
+  // Retrieves from local storage
+  var range = localStorage.getItem("myRange");
+  if (range != undefined && range!= null){
+    var rangeValue = document.getElementById('myRange').value = range;
+  }
+  updateValue()
+}
+
+  
 
 </script>
+
+<!--
+[x] slider width fits the canvas
+
+[x] set slider values from 1000 to 10000
+
+[x] onchange save the value even on page refresh
+-->
 
 </body>
 </html>

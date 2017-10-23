@@ -34,7 +34,7 @@ async function addRoot (value) {
   var value = String(value)
   var x = new fabric.Circle({radius: radius, left: width / 2, fill: 'red', top: radius, originX: 'center', originY: 'center', fill: 'red'})
   var text = new fabric.Text(value, {fontSize: 10, originX: 'center', originY: 'center', left: width / 2, top: radius})
-  var temp = await delay(1000)
+  var temp = await delay(delaytime)
   canvas.add(x)
   canvas.add(text)
   return x
@@ -59,10 +59,10 @@ async function addNode (node1, node2, angle) {
   var x = new fabric.Circle({ radius: radius, originX: 'center', originY: 'center', fill: 'red', left: pointx, top: pointy})
   var value1 = String(node2)
   var text = new fabric.Text(value1, {fontSize: 10, originX: 'center', originY: 'center', left: pointx, top: pointy})
-  var temp = await delay(1000)
+  var temp = await delay(delaytime)
   canvas.add(x)
   canvas.add(text)
-  var temp = await delay(1000)
+  var temp = await delay(delaytime)
   addline(initiallinex, initialliney, finallinex, finalliney)
   return x
 }
