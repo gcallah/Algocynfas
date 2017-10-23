@@ -6,7 +6,10 @@
 
 </head>
 <body>
-
+<div class="sliderContainer">
+<label id="displayRange" for="myRange">Slider speed </label>
+<input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 oninput="updateValue()"/>
+</div>
 <canvas id="canvas" width="800" height="800" style="border:1px solid #000000">
 
 
@@ -30,6 +33,29 @@ async function draw()
 }
 
 draw()
+
+function updateValue(){
+
+  var rangeValue = document.getElementById('myRange').value;
+  var dispRange =  document.getElementById("displayRange");
+  dispRange.innerHTML = '<p>'
+              + 'Slider speed: '
+              + '<strong>' + rangeValue + '</strong>'
+              + '</p>';
+  // Sets the alue to local Storage
+  localStorage.setItem("myRange", rangeValue);
+  canvas.clear();
+  draw();
+
+}
+window.onload = function(){
+  // Retrieves from local storage
+  var range = localStorage.getItem("myRange");
+  if (range != undefined && range!= null){
+    var rangeValue = document.getElementById('myRange').value = range;
+  }
+  updateValue()
+}
 
 
 </script>
