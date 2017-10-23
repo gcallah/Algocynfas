@@ -3,7 +3,7 @@
  * This file contains primitives common to all types of animations.
  */
 
-const DEFAULT_DELAY = 2000; // in milliseconds
+const DEFAULT_DELAY = document.getElementById('myRange'); // in milliseconds
 const DEF_ELEM_HEIGHT = 60;
 const DEF_ELEM_WIDTH = 60;
 const PCT_FONT_BOX = .72;
@@ -19,4 +19,3 @@ async function delay (time) {
     setTimeout(resolve, time)
   })
 }
-
