@@ -24,10 +24,10 @@ var canvas = new fabric.Canvas('canvas');
 
 async function draw()
 {
-  var a10 =  await addRoot(10)
-  var a20 =  await addChild(a10, 20, 225)
-  var a40 =  await addChild(a10, 40, 315)
-  var a30 =  await addChild(a20, 30, 270)
+    await addRoot(10)  
+    await addChild(10, 20, 225)//left
+    await addChild(10, 40, 315)//right
+    await addChild(20, 30, 270)//koi kaam ki nahi h yeh
  // highlight(a10)
 
 }

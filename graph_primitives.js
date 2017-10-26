@@ -36,7 +36,7 @@ async function highlight (node) {
 
 async function drawNode(key, nodeX, nodeY) {
   var newNode = new fabric.Circle(
-                        {
+                        {   id:key,
                             radius: radius,
                             left: nodeX,
                             top: nodeY,
@@ -60,12 +60,25 @@ async function drawNode(key, nodeX, nodeY) {
   return newNode
 }
 
+async function getobject(key){
 
+var objects=canvas.getObjects();
+for(i=0;i<objects.length;i++){
+    if(objects[i].id==key){
+          await delay(DEFAULT_DELAY)
+          return objects[i]
+    }
+
+}
+
+
+}
 async function addRoot(key) {
     return drawNode(key, width / 2, topStart)
 }
 
 async function addChild(parentNode, key, angle) {
+  parentNode=await getobject(parentNode);
   var coordinates = getCoordinates(angle,
           parseInt(parentNode.left), parseInt(parentNode.top))
   newNode = drawNode(key, coordinates.nodeX, coordinates.nodeY)
