@@ -94,3 +94,48 @@ function addline (x1, y1, x2, y2) {
           {stroke: 'black', originX: CENTER, originY: CENTER})
   canvas.add(line)
 }
+
+/*
+elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+                  0
+                /   \
+               1     2
+              /\     /\
+             3  4   5  6
+            78 910 1112 1314
+          15
+*/
+
+async function createBT(elements){
+  // Since the height of BT would be logN at atmost
+  let limit = Math.log(elements.length) / Math.log(2);
+  limit = Math.floor(limit);
+  let offset = 90;
+  await addRoot(elements[0]);
+  let i = 0, j = 0;
+  let count = 0;
+  visited = [];
+  console.log(limit)
+  while (i < elements.length && count < elements.length){
+    
+    for (j = 0; j <= i; j++){
+      if ((2*i - j + 1) in visited || (2*i -j +2) in visited || elements.indexOf(i+j) == "-1"){
+        console.log(elements.indexOf(i+j));
+        continue
+      }
+      else{
+        if (elements[2*i -j + 1] != undefined && elements[2*i -j + 1] != null)
+          await addChild(elements[i+j], elements[2*i -j +1], 230 + ((i)*5));
+        if (elements[2*i -j + 2] != undefined && elements[2*i -j + 2] != null)
+          await addChild(elements[i+j], elements[2*i -j +2], 230 + offset - ((i)*5));
+        visited.push(2*i - j + 1);
+        visited.push(2*i - j + 2);
+        count += 2
+      
+      }
+    }
+    i += 1;
+  }
+}
+

@@ -7,11 +7,11 @@
 </head>
 <body>
 <div class="sliderContainer">
-<label id="displayRange" for="myRange">Slider speed </label>
-<input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 oninput="updateValue()"/>
+  <label id="displayRange" for="myRange">Slider speed </label>
+  <input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 onchange="updateValue()"/>
 </div>
-<canvas id="canvas" width="800" height="800" style="border:1px solid #000000">
 
+<canvas id="canvas" width="800" height="800" style="border:1px solid #000000">
 
 </canvas>
 <script src="fabric.js"></script>
@@ -24,28 +24,38 @@ var canvas = new fabric.Canvas('canvas');
 
 async function draw()
 {
-    await addRoot(10)  
+  let elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  await createBT(elements);
+  /*
+    await addRoot(10)
     await addChild(10, 20, 225)//left
     await addChild(10, 40, 315)//right
-    await addChild(20, 30, 270)//koi kaam ki nahi h yeh
+    await addChild(20, 30, 270)
+    */
  // highlight(a10)
 
 }
 
-draw()
 
 function updateValue(){
 
   var rangeValue = document.getElementById('myRange').value;
+  DEFAULT_DELAY = rangeValue;
   var dispRange =  document.getElementById("displayRange");
   dispRange.innerHTML = '<p>'
               + 'Slider speed: '
               + '<strong>' + rangeValue + '</strong>'
               + '</p>';
   // Sets the alue to local Storage
-  localStorage.setItem("myRange", rangeValue);
-  canvas.clear();
-  draw();
+
+  var range = localStorage.getItem("myRange");
+  draw()
+  if (range != undefined && range != rangeValue){
+    localStorage.setItem("myRange", rangeValue)
+    location.reload('/');
+
+  }
+
 
 }
 window.onload = function(){
