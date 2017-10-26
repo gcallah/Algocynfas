@@ -7,7 +7,9 @@ const RIGHT = 'RIGHT';
 
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
-var position = width / 2;
+const DEF_LIST_START_POS = width / 2;
+var listStartPos = DEF_LIST_START_POS
+var currListPos = listStartPos
 var topPos = Math.floor(width / 10)
 var arr = [];
 
@@ -24,9 +26,9 @@ async function addCanvasElem(value) {
     var text = new fabric.Text(strValue,
             {fontSize: DEF_FONT, originX: 'center', originY: 'center'});
     var group = new fabric.Group([ rect, text ],
-            {left: position, top: topPos, angle: 0, id: value});
+            {left: currListPos, top: topPos, angle: 0, id: value});
     canvas.add(group);
-    position += DEF_ELEM_WIDTH + 1;
+    currListPos += DEF_ELEM_WIDTH + 1;
 }
 
 function addRowElem(value, next_to = null, place = RIGHT) {
@@ -53,7 +55,7 @@ async function highlight(value) {
 
 function resetCanvas() {
     canvas.clear();
-    position = width/2;
+    currListPos = listStartPos;
 }
 
 function redrawList(value, next_to, place) {
