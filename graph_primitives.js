@@ -60,19 +60,16 @@ async function drawNode(key, nodeX, nodeY) {
   return newNode
 }
 
-async function getobject(key){
-
-var objects=canvas.getObjects();
-for(i=0;i<objects.length;i++){
-    if(objects[i].id==key){
-          await delay(DEFAULT_DELAY)
-          return objects[i]
+async function getobject(key) {
+    var objects=canvas.getObjects();
+    for(i=0;i<objects.length;i++){
+        if(objects[i].id==key){
+              return objects[i]
+        }
     }
-
 }
 
 
-}
 async function addRoot(key) {
     return drawNode(key, width / 2, topStart)
 }

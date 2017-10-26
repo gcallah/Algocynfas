@@ -13,8 +13,12 @@
       <script>
           var canvas = new fabric.Canvas('canvas');
           var list_to_sort = [10, 1, 56, 34, 22];
-          // insertion sort algorithm goes here!
-          window.insertionSort(list_to_sort);
+          
+          sort(list_to_sort)
+
+          async function sort(list_to_sort) {
+            await window.insertionSort(list_to_sort);
+          }
       </script>
 
       </body>

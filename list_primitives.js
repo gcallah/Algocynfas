@@ -11,7 +11,7 @@ var position = width / 2;
 var topPos = Math.floor(width / 10)
 var arr = [];
 
-function addCanvasElem(value) {
+async function addCanvasElem(value) {
     var rect = new fabric.Rect({
         originX: 'center',
         originY: 'center',
@@ -37,16 +37,18 @@ function addRowElem(value, next_to = null, place = RIGHT) {
     drawCanvas();
 }
 
-function drawCanvas() {
+async function drawCanvas() {
     arr.map((item) =>
       addCanvasElem(item)
     );
+    await delay(DEFAULT_DELAY)
 }
 
-function highlight(value) {
+async function highlight(value) {
     canvas.getObjects().map((item) =>
         item.getObjects().map((node) =>
             node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
+    await delay(DEFAULT_DELAY)
 }
 
 function resetCanvas() {
@@ -65,6 +67,7 @@ function redrawList(value, next_to, place) {
 }
 
 function displayList(array) {
+    resetCanvas();
     createList(array);
     drawCanvas();
 }
