@@ -7,12 +7,10 @@ async function insertionSort(elements) {
         await highlightKey(key);
         while(i >= 0 && elements[i] > key) {
             await highlight(elements[i]);
-            console.log("Highlighting element to swap ", elements[i])
             elements[i + 1] = elements[i];
             i = i - 1
         }
         elements[i + 1] = key;
     }
-    resetCanvas();
-    displayList(elements);
+    await displayList(elements);
 }

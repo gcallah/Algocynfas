@@ -2,22 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Test for fabric</title>
+        <title>
+            Insertion sort
+        </title>
         <script src="fabric.js"></script>
     </head>
     <body>
+        <h1>
+            Insertion Sort
+        </h1>
       <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
       <script src="common_primitives.js"></script>
       <script src="list_primitives.js"></script>
       <script src="insertion_sort.js"></script>
       <script>
           var canvas = new fabric.Canvas('canvas');
-          var list_to_sort = [10, 1, 108, 88, 56, 34, 22];
-          
+          var list_to_sort = [10, 1, 56, 34, 22];
+
           sort(list_to_sort)
 
           async function sort(list_to_sort) {
-            await window.insertionSort(list_to_sort);
+              await window.insertionSort(list_to_sort);
           }
       </script>
 

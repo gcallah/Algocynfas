@@ -12,8 +12,9 @@ var listStartPos = DEF_LIST_START_POS
 var currListPos = listStartPos
 var topPos = Math.floor(width / 10)
 var arr = [];
+var k = 1;
 
-async function addCanvasElem(value) {
+function addCanvasElem(value) {
     var rect = new fabric.Rect({
         originX: 'center',
         originY: 'center',
@@ -39,18 +40,19 @@ function addRowElem(value, next_to = null, place = RIGHT) {
     drawCanvas();
 }
 
-async function drawCanvas() {
+function drawCanvas() {
     arr.map((item) =>
       addCanvasElem(item)
     );
-    await delay(DEFAULT_DELAY)
+
 }
 
 async function highlight(value) {
     canvas.getObjects().map((item) =>
         item.getObjects().map((node) =>
             node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
-    await delay(DEFAULT_DELAY)
+    canvas.renderAll();
+    await delay(DEFAULT_DELAY);
 }
 
 function resetCanvas() {
@@ -68,10 +70,11 @@ function redrawList(value, next_to, place) {
     }
 }
 
-function displayList(array) {
+async function displayList(array) {
     resetCanvas();
     createList(array);
     drawCanvas();
+    await delay(DEFAULT_DELAY);
 }
 
 function createList(array) {
@@ -96,8 +99,10 @@ function swapElem(a, b) {
     highlight(b);
 }
 
-function highlightKey(value) {
+async function highlightKey(value) {
     canvas.getObjects().map((item) =>
-    item.getObjects().map((node) =>
-    node.id === value ? node.set('fill', DEF_HLK_COLOR): ''));
+        item.getObjects().map((node) =>
+            node.id === value ? node.set('fill', DEF_HLK_COLOR): ''));
+    canvas.renderAll();
+    await delay(DEFAULT_DELAY);
 }
