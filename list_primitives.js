@@ -41,6 +41,7 @@ function addRowElem(value, next_to = null, place = RIGHT) {
 }
 
 function drawCanvas() {
+    currListPos = calListPos(document.body.clientWidth);
     arr.map((item) =>
       addCanvasElem(item)
     );
@@ -57,7 +58,7 @@ async function highlight(value) {
 
 function resetCanvas() {
     canvas.clear();
-    currListPos = listStartPos;
+    canvas.setWidth(document.body.clientWidth);
 }
 
 function redrawList(value, next_to, place) {
@@ -84,19 +85,16 @@ function createList(array) {
     }
 }
 
-function swapElem(a, b) {
-    highlight(a);
-    highlight(b);
+async function swapElem(a, b) {
+    await highlight(a);
+    await highlight(b);
     var temp;
     var eleIndexA = arr.indexOf(a);
     var eleIndexB = arr.indexOf(b);
     temp = arr[eleIndexA];
     arr[eleIndexA] = arr[eleIndexB];
     arr[eleIndexB] = temp;
-    resetCanvas();
-    drawCanvas();
-    highlight(a);
-    highlight(b);
+    return [b, a];
 }
 
 async function highlightKey(value) {
@@ -105,4 +103,10 @@ async function highlightKey(value) {
             node.id === value ? node.set('fill', DEF_HLK_COLOR): ''));
     canvas.renderAll();
     await delay(DEFAULT_DELAY);
+}
+
+function calListPos(width){
+  var listPos = listStartPos;
+  listPos = (width/2) - DEF_ELEM_WIDTH * (arr.length/2);
+  return listPos;
 }

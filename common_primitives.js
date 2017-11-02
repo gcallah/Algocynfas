@@ -19,3 +19,34 @@ async function delay (time) {
     setTimeout(resolve, time)
   })
 }
+
+function create_legend() {
+    const legend = {
+        "data": [{
+                    "title": "Key",
+                    "color": DEF_HLK_COLOR,
+                },
+                {
+                    "title": "Selected Element",
+                    "color": DEF_HL_COLOR,
+                        },]
+    };
+    return legend;
+}
+
+function footer() {
+  var legend = create_legend();
+  return document.getElementById("footer").innerHTML =
+  "<table style = width:10%>" +
+      "<tr>" +
+          "<td style = background-color:" + legend.data[0].color + ">" +
+            legend.data[0].title +
+          "</td>" +
+      "</tr>" +
+      "<tr>" +
+          "<td style = background-color:" + legend.data[1].color + ">" +
+            legend.data[1].title +
+          "</td>" +
+      "</tr>" +
+  "</table>";
+}
