@@ -5,6 +5,9 @@
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
 
+const HORIZ = 0;
+const VERTICAL = 1;
+
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
 const DEF_LIST_START_POS = width / 2;
@@ -71,7 +74,7 @@ function redrawList(value, next_to, place) {
     }
 }
 
-async function displayList(array) {
+async function displayList(array, orientation=HORIZ) {
     resetCanvas();
     createList(array);
     drawCanvas();

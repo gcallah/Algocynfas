@@ -23,11 +23,11 @@ async function delay (time) {
 function create_legend() {
     const legend = {
         "data": [{
-                    "title": "Key",
+                    "title": "Item to Place",
                     "color": DEF_HLK_COLOR,
                 },
                 {
-                    "title": "Selected Element",
+                    "title": "Item Being Compared",
                     "color": DEF_HL_COLOR,
                         },]
     };
