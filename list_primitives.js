@@ -44,7 +44,7 @@ function addRowElem(value, next_to = null, place = RIGHT) {
 }
 
 function drawCanvas() {
-    currListPos = calListPos(document.body.clientWidth);
+    currListPos = calListPos(width);
     arr.map((item) =>
       addCanvasElem(item)
     );
@@ -61,7 +61,7 @@ async function highlight(value) {
 
 function resetCanvas() {
     canvas.clear();
-    canvas.setWidth(document.body.clientWidth);
+    canvas.setWidth(width);
 }
 
 function redrawList(value, next_to, place) {
