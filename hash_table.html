@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Hash Table
+        </title>
+        <script src="fabric.js"></script>
+    </head>
+    <body>
+        <h1>
+            Hash Table
+        </h1>
+      <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
+      <script src="common_primitives.js"></script>
+      <script src="list_primitives.js"></script>
+      <script src="hash_table.js"></script>
+      <script>
+          var canvas = new fabric.Canvas('canvas');
+          var HashTable = new hashTable(5);
+          HashTable.insert(8);
+          displayHT(HashTable);
+      </script>
+      </br>
+      <footer id="footer">
+          <script> window.footer() </script>
+      </footer>
+      </body>
+</html>

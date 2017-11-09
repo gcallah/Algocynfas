@@ -11,13 +11,13 @@ const VERTICAL = 1;
 var height = parseInt(document.getElementById("canvas").getAttribute("height"));
 var width = parseInt(document.getElementById("canvas").getAttribute("width"));
 const DEF_LIST_START_POS = width / 2;
-var listStartPos = DEF_LIST_START_POS
-var currListPos = listStartPos
-var topPos = Math.floor(width / 10)
+var listStartPos = DEF_LIST_START_POS;
+var currListPos = listStartPos;
+var topPos = Math.floor(width / 10);
 var arr = [];
 var k = 1;
 
-function addCanvasElem(value) {
+function addCanvasElem(value, orientation) {
     var rect = new fabric.Rect({
         originX: 'center',
         originY: 'center',
@@ -32,7 +32,7 @@ function addCanvasElem(value) {
     var group = new fabric.Group([ rect, text ],
             {left: currListPos, top: topPos, angle: 0, id: value});
     canvas.add(group);
-    currListPos += DEF_ELEM_WIDTH + 1;
+    orientation === 0 ? currListPos += DEF_ELEM_WIDTH + 1 : topPos += DEF_ELEM_HEIGHT + 1;
 }
 
 function addRowElem(value, next_to = null, place = RIGHT) {
@@ -43,10 +43,10 @@ function addRowElem(value, next_to = null, place = RIGHT) {
     drawCanvas();
 }
 
-function drawCanvas() {
+function drawCanvas(orientation) {
     currListPos = calListPos(width);
     arr.map((item) =>
-      addCanvasElem(item)
+      addCanvasElem(item, orientation)
     );
 
 }
@@ -74,10 +74,10 @@ function redrawList(value, next_to, place) {
     }
 }
 
-async function displayList(array, orientation=HORIZ) {
-    resetCanvas();
+async function displayList(array, orientation = HORIZ) {
+    orientation === 0 ? resetCanvas(): '';
     createList(array);
-    drawCanvas();
+    drawCanvas(orientation);
     await delay(DEFAULT_DELAY);
 }
 
@@ -97,6 +97,8 @@ async function swapElem(a, b) {
     temp = arr[eleIndexA];
     arr[eleIndexA] = arr[eleIndexB];
     arr[eleIndexB] = temp;
+    displayList(arr);
+    await highlightSwap(a, b);
     return [b, a];
 }
 
@@ -113,3 +115,26 @@ function calListPos(width){
   listPos = (width/2) - DEF_ELEM_WIDTH * (arr.length/2);
   return listPos;
 }
+
+async function highlightSwap(a, b) {
+    canvas.getObjects().map((item) =>
+        item.getObjects().map((node) => {
+              node.id === a ? node.set('fill', SWAP_COLOR): '';
+              node.id === b ? node.set('fill', SWAP_COLOR): '';
+            }));
+    canvas.renderAll();
+    await delay(DEFAULT_DELAY);
+}
+
+function addArrow() {
+  var line = new fabric.Line([3*width/4, width/4, 3*width/4 + 100, width/4],
+          {stroke: 'black', originX: 'left', originY: 'center'})
+  listStartPos = 3*width/4 + 100 + width/4;
+  canvas.add(line);
+ }
+
+ function displayHashTable(table) {
+   console.log(table);
+   displayList(table.values[3]);
+   displayList(table.values, VERTICAL);
+ }
