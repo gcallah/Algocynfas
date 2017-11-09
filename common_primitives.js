@@ -11,6 +11,7 @@ const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
 const DEF_BG_COLOR = '#ffff99';
 const DEF_HL_COLOR = '#99ccff';
 const DEF_HLK_COLOR = '#0073e6';
+const SWAP_COLOR = '#ffb380';
 var delayTime = DEFAULT_DELAY;
 
 async function delay (time) {
