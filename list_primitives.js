@@ -16,6 +16,7 @@ var currListPos = listStartPos;
 var topPos = Math.floor(width / 10);
 var arr = [];
 var k = 1;
+var hashTable = false;
 
 function addCanvasElem(value, orientation) {
     var rect = new fabric.Rect({
@@ -44,7 +45,7 @@ function addRowElem(value, next_to = null, place = RIGHT) {
 }
 
 function drawCanvas(orientation) {
-    currListPos = calListPos(width);
+    currListPos = calListPos(width, orientation);
     arr.map((item) =>
       addCanvasElem(item, orientation)
     );
@@ -56,7 +57,7 @@ async function highlight(value) {
         item.getObjects().map((node) =>
             node.id === value ? node.set('fill', DEF_HL_COLOR): ''));
     canvas.renderAll();
-    await delay(DEFAULT_DELAY);
+    await delay(delayTime);
 }
 
 function resetCanvas() {
@@ -75,10 +76,10 @@ function redrawList(value, next_to, place) {
 }
 
 async function displayList(array, orientation = HORIZ) {
-    orientation === 0 ? resetCanvas(): '';
+    hashTable ? '' : resetCanvas();
     createList(array);
     drawCanvas(orientation);
-    await delay(DEFAULT_DELAY);
+    await delay(delayTime);
 }
 
 function createList(array) {
@@ -107,34 +108,57 @@ async function highlightKey(value) {
         item.getObjects().map((node) =>
             node.id === value ? node.set('fill', DEF_HLK_COLOR): ''));
     canvas.renderAll();
-    await delay(DEFAULT_DELAY);
+    await delay(delayTime);
 }
 
-function calListPos(width){
+function calListPos(width, orientation) {
   var listPos = listStartPos;
-  listPos = (width/2) - DEF_ELEM_WIDTH * (arr.length/2);
+  orientation === 0 ? listPos = (width/2) - DEF_ELEM_WIDTH * (arr.length/2) : listPos = DEF_LIST_START_POS;
+  hashTable ? listPos = currListPos : '';
   return listPos;
 }
 
 async function highlightSwap(a, b) {
-    canvas.getObjects().map((item) =>
-        item.getObjects().map((node) => {
-              node.id === a ? node.set('fill', SWAP_COLOR): '';
-              node.id === b ? node.set('fill', SWAP_COLOR): '';
-            }));
+    if(arguments.length === 2) {
+      canvas.getObjects().map((item) =>
+          item.getObjects().map((node) => {
+                node.id === a ? node.set('fill', SWAP_COLOR): '';
+                node.id === b ? node.set('fill', SWAP_COLOR): '';
+              }));
+    } else {
+      canvas.getObjects().map((item) =>
+          item.getObjects().map((node) => {
+                node.id === a ? node.set('fill', SWAP_COLOR): ''
+              }));
+    }
     canvas.renderAll();
-    await delay(DEFAULT_DELAY);
+    await delay(delayTime);
 }
 
 function addArrow() {
-  var line = new fabric.Line([3*width/4, width/4, 3*width/4 + 100, width/4],
-          {stroke: 'black', originX: 'left', originY: 'center'})
-  listStartPos = 3*width/4 + 100 + width/4;
-  canvas.add(line);
+    var currListNewPos = DEF_LIST_START_POS + DEF_ELEM_WIDTH + 10;
+    var linePos = topPos + DEF_ELEM_HEIGHT / 2;
+    var line = new fabric.Line([currListNewPos, linePos, currListNewPos + 100, linePos],
+            {stroke: 'black', originX: 'center', originY: 'center'})
+    canvas.add(line);
+    currListPos = currListNewPos + 110;
  }
 
  function displayHashTable(table) {
-   console.log(table);
-   displayList(table.values[3]);
-   displayList(table.values, VERTICAL);
+     hashTable = true;
+     displayList(table.values, VERTICAL);
+     calTopPos();
+     table.values.map((items, index) => {
+        addArrow();
+        var listFinal = [];
+        for(j in items) {
+          j != 0 ? listFinal.push(items[j]) : '';
+        }
+        displayList(listFinal);
+        topPos += DEF_ELEM_HEIGHT + 1;
+      });
+ }
+
+function calTopPos(){
+    topPos = Math.floor(width / 10);
  }

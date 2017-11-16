@@ -11,6 +11,7 @@ async function insertionSort(elements) {
         }
         elements[i + 1] = key;
         await displayList(elements);
+        await highlightSwap(key);
         await displayList(elements);
     }
     await displayList(elements);

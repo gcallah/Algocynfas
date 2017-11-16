@@ -13,7 +13,7 @@ hashTable.prototype.insert = function(value) {
        this.values[hindex] = [];
     }
     this.numberOfValues++;
-    this.values[hindex].push(hindex, value);
+    this.values[hindex].length === 0 ? this.values[hindex].push(hindex, value) : this.values[hindex].push(value);
 };
 
 function calDivHash(k, ts) {

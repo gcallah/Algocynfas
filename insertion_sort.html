@@ -11,18 +11,51 @@
         <h1>
             Insertion Sort
         </h1>
-      <canvas id="canvas" width="800" height="500" style="border:1px solid #000000"></canvas>
-      <script src="common_primitives.js"></script>
-      <script src="list_primitives.js"></script>
-      <script src="insertion_sort.js"></script>
-      <script>
-          var canvas = new fabric.Canvas('canvas');
-          var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
-          sort(list_to_sort)
-          async function sort(list_to_sort) {
-              await window.insertionSort(list_to_sort);
-          }
-      </script>
+        <div class="sliderContainer">
+          <label id="displayRange" for="myRange">Slider speed </label>
+          <input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 onchange="updateValue()"/>
+        </div>
+        <canvas id="canvas" width="800" height="500" style="border:1px solid #000000"></canvas>
+        <script src="common_primitives.js"></script>
+        <script src="list_primitives.js"></script>
+        <script src="insertion_sort.js"></script>
+        <script>
+            var canvas = new fabric.Canvas('canvas');
+            var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
+            //  sort(list_to_sort)
+            async function sort(list_to_sort) {
+                await window.insertionSort(list_to_sort);
+            }
+            function updateValue(){
+
+              var rangeValue = document.getElementById('myRange').value;
+              delayTime = rangeValue;
+              var dispRange =  document.getElementById("displayRange");
+              dispRange.innerHTML = '<p>'
+                          + 'Slider speed: '
+                          + '<strong>' + rangeValue + '</strong>'
+                          + '</p>';
+              // Sets the alue to local Storage
+
+              var range = localStorage.getItem("myRange");
+              sort(list_to_sort);
+              if (range != undefined && range != rangeValue){
+                localStorage.setItem("myRange", rangeValue)
+                location.reload('/');
+
+              }
+
+
+            }
+            window.onload = function(){
+              // Retrieves from local storage
+              var range = localStorage.getItem("myRange");
+              if (range != undefined && range!= null){
+                var rangeValue = document.getElementById('myRange').value = range;
+              }
+              updateValue()
+            }
+        </script>
       </body>
       </br>
       <footer id="footer">
