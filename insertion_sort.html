@@ -12,8 +12,10 @@
             Insertion Sort
         </h1>
         <div class="sliderContainer">
-          <label id="displayRange" for="myRange">Slider speed </label>
-          <input id="myRange" style="width:800px" type="range"  min=1000 max=10000 step=1000 value=1000 onchange="updateValue()"/>
+          <label id="delayLbl" for="myDelay">Delay: </label>
+          <input id="myDelay" style="width:800px" type="range"
+            min=1000 max=10000 step=1000 value=1000
+            onchange="updateDelay()"/>
         </div>
         <canvas id="canvas" width="800" height="500" style="border:1px solid #000000"></canvas>
         <script src="common_primitives.js"></script>
@@ -22,39 +24,39 @@
         <script>
             var canvas = new fabric.Canvas('canvas');
             var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
-            //  sort(list_to_sort)
+
             async function sort(list_to_sort) {
                 await window.insertionSort(list_to_sort);
             }
-            function updateValue(){
 
-              var rangeValue = document.getElementById('myRange').value;
-              delayTime = rangeValue;
-              var dispRange =  document.getElementById("displayRange");
+            function updateDelay() {
+              var delay = document.getElementById('myDelay').value;
+              delayTime = delay;
+              var dispRange =  document.getElementById("delayLbl");
               dispRange.innerHTML = '<p>'
-                          + 'Slider speed: '
-                          + '<strong>' + rangeValue + '</strong>'
+                          + 'Delay: '
+                          + '<strong>' + delay + '</strong>'
                           + '</p>';
-              // Sets the alue to local Storage
+              // Sets the value to local Storage
 
-              var range = localStorage.getItem("myRange");
+              var range = localStorage.getItem("myDelay");
+              // i don't think we want to sort again here!
               sort(list_to_sort);
-              if (range != undefined && range != rangeValue){
-                localStorage.setItem("myRange", rangeValue)
+              if (range != undefined && range != delay) {
+                localStorage.setItem("myDelay", rangeValue)
                 location.reload('/');
-
               }
-
-
             }
-            window.onload = function(){
+
+            window.onload = function() {
               // Retrieves from local storage
-              var range = localStorage.getItem("myRange");
-              if (range != undefined && range!= null){
-                var rangeValue = document.getElementById('myRange').value = range;
+              var range = localStorage.getItem("myDelay");
+              if (range != undefined && range!= null) {
+                var rangeValue = document.getElementById('myDelay').value = range;
               }
-              updateValue()
+              updateDelay()
             }
+
         </script>
       </body>
       </br>
