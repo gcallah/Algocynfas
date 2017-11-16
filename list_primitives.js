@@ -146,7 +146,14 @@ function addArrow() {
 
  function displayHashTable(table) {
      hashTable = true;
-     displayList(table.values, VERTICAL);
+     var indices = []
+     console.log("Table length = ", table.table_size)
+     for(i = 0; i < table.table_size; i++) {
+        console.log("In table loop")
+        indices.push(i)
+     }
+     console.log("Indices = ", indices)
+     displayList(indices, VERTICAL);
      calTopPos();
      table.values.map((items, index) => {
         addArrow();
