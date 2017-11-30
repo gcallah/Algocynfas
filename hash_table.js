@@ -10,6 +10,7 @@ function hashTable(table_size) {
 hashTable.prototype.insert = function(value) {
     var hindex  = calDivHash(value, this.table_size);
     this.numberOfValues++;
+    this.values[hindex].push(value);
     this.values[hindex].length === 0 ?
         this.values[hindex].push(hindex, value) :
         this.values[hindex].push(value);

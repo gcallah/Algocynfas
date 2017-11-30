@@ -11,6 +11,10 @@
         <h1>
             Hash Table
         </h1>
+      Insert: <input type="number" id="eleValue">
+      <button id = "runButton" type="button" onclick="insert()">Insert</button>
+      <br/>
+      <br/>
       <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
       <script src="common_primitives.js"></script>
       <script src="list_primitives.js"></script>
@@ -18,12 +22,15 @@
       <script>
           var canvas = new fabric.Canvas('canvas');
           var HashTable = new hashTable(5);
-          HashTable.insert(8);
-          HashTable.insert(9);
-          HashTable.insert(14);
-          HashTable.insert(19);
-          HashTable.insert(7);
-          HashTable.insert(3);
+          function insert() {
+              var val = document.getElementById("eleValue").value;
+              HashTable.insert(val);
+          }
+          // HashTable.insert(9);
+          // HashTable.insert(14);
+          // HashTable.insert(19);
+          // HashTable.insert(7);
+          // HashTable.insert(3);
           displayHT(HashTable);
       </script>
       </br>
