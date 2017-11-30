@@ -11,12 +11,16 @@
         <h1>
             Insertion Sort
         </h1>
+        <button id = "runButton" type="button" onclick="sort()">Run</button>
+        <br/>
+        <br/>
         <div class="sliderContainer">
           <label id="delayLbl" for="myDelay">Delay: </label>
           <input id="myDelay" style="width:800px" type="range"
             min=1000 max=10000 step=1000 value=1000
             onchange="updateDelay()"/>
         </div>
+        <br/>
         <canvas id="canvas" width="800" height="500" style="border:1px solid #000000"></canvas>
         <script src="common_primitives.js"></script>
         <script src="list_primitives.js"></script>
@@ -24,11 +28,12 @@
         <script src="insertion_sort.js"></script>
         <script>
             var canvas = new fabric.Canvas('canvas');
-            var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
-
-            sort(list_to_sort);
-            async function sort(list_to_sort) {
+            async function sort() {
+                var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
+                console.log(list_to_sort);
+                document.getElementById("runButton").disabled = true;
                 await window.insertionSort(list_to_sort);
+                document.getElementById("runButton").disabled = false;
             }
 
         </script>

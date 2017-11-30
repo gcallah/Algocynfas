@@ -147,10 +147,10 @@ function addArrow() {
  function displayHashTable(table) {
      hashTable = true;
      var indices = []
-     console.log("Table length = ", table.table_size)
+     console.log("Table length = ", table.table_size);
      for(i = 0; i < table.table_size; i++) {
-        console.log("In table loop")
-        indices.push(i)
+        console.log("In table loop");
+        indices.push(i);
      }
      console.log("Indices = ", indices)
      displayList(indices, VERTICAL);
@@ -168,4 +168,10 @@ function addArrow() {
 
 function calTopPos(){
     topPos = Math.floor(width / 10);
- }
+}
+
+function addText(text){
+    var text = new fabric.Text(strValue,
+            {fontSize: DEF_FONT, originX: 'center', originY: 'center'});
+    canvas.add(text);
+}
