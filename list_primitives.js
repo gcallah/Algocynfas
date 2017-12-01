@@ -44,9 +44,9 @@ function addRowElem(value, next_to = null, place = RIGHT) {
     drawCanvas();
 }
 
-function drawCanvas(orientation) {
-    currListPos = calListPos(width, orientation);
-    arr.map((item) =>
+function drawCanvas(array, orientation) {
+    currListPos = calcListPos(array.length, width, orientation);
+    array.map((item) =>
       addCanvasElem(item, orientation)
     );
 
@@ -76,9 +76,9 @@ function redrawList(value, next_to, place) {
 }
 
 async function displayList(array, orientation = HORIZ) {
-    hashTable ? '' : resetCanvas();
+    //resetCanvas();
     createList(array);
-    drawCanvas(orientation);
+    drawCanvas(array, orientation);
     await delay(delayTime);
 }
 
@@ -89,18 +89,17 @@ function createList(array) {
     }
 }
 
-async function swapElem(a, b) {
+async function swapElem(array, a, b) {
     await highlight(a);
     await highlight(b);
     var temp;
-    var eleIndexA = arr.indexOf(a);
-    var eleIndexB = arr.indexOf(b);
-    temp = arr[eleIndexA];
-    arr[eleIndexA] = arr[eleIndexB];
-    arr[eleIndexB] = temp;
-    displayList(arr);
+    var eleIndexA = array.indexOf(a);
+    var eleIndexB = array.indexOf(b);
+    temp = array[eleIndexA];
+    array[eleIndexA] = array[eleIndexB];
+    array[eleIndexB] = temp;
+    displayList(array);
     await highlightSwap(a, b);
-    return [b, a];
 }
 
 async function highlightKey(value) {
@@ -111,9 +110,9 @@ async function highlightKey(value) {
     await delay(delayTime);
 }
 
-function calListPos(width, orientation) {
+function calcListPos(length, width, orientation) {
   var listPos = listStartPos;
-  orientation === 0 ? listPos = (width/2) - DEF_ELEM_WIDTH * (arr.length/2) : listPos = DEF_LIST_START_POS;
+  orientation === 0 ? listPos = (width/2) - DEF_ELEM_WIDTH * (length/2) : listPos = DEF_LIST_START_POS;
   hashTable ? listPos = currListPos : '';
   return listPos;
 }
@@ -155,13 +154,10 @@ function addArrow() {
      console.log("Indices = ", indices)
      displayList(indices, VERTICAL);
      calTopPos();
+     console.log(table);
      table.values.map((items, index) => {
         addArrow();
-        var listFinal = [];
-        for(j in items) {
-          j != 0 ? listFinal.push(items[j]) : '';
-        }
-        displayList(listFinal);
+        displayList(items);
         topPos += DEF_ELEM_HEIGHT + 1;
       });
  }

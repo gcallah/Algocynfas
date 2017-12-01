@@ -17,7 +17,7 @@
         <div class="sliderContainer">
           <label id="delayLbl" for="myDelay">Delay: </label>
           <input id="myDelay" style="width:800px" type="range"
-            min=1000 max=10000 step=1000 value=1000
+            min=200 max=4000 step=1000 value=1000
             onchange="updateDelay()"/>
         </div>
         <br/>
@@ -30,10 +30,11 @@
             var canvas = new fabric.Canvas('canvas');
             async function sort() {
                 var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
-                console.log(list_to_sort);
+                document.getElementById("runButton").innerHTML = "Stop";
                 document.getElementById("runButton").disabled = true;
                 await window.insertionSort(list_to_sort);
                 document.getElementById("runButton").disabled = false;
+                document.getElementById("runButton").innerHTML = "Run"
             }
 
         </script>
