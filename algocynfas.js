@@ -43,14 +43,16 @@ class ListElem extends DataElem {
         height: DEF_ELEM_HEIGHT,
         id: val,
     });
-    var dispText = new fabric.Text(String(val),
+    this.dispText = new fabric.Text(String(val),
             {fontSize: DEF_FONT, originX: CENTER, originY: CENTER});
+    this.group = new fabric.Group([ this.shape, this.dispText ],
+                    {left: 400, top: 40, angle: 0, id: val});
   }
 
   draw(canvas, x, y) {
       this.shape.originX = CENTER;
       this.shape.originY = CENTER;
-      canvas.add(this.shape)
+      canvas.add(this.group)
   }
 }
 
@@ -67,21 +69,21 @@ class DataStructure extends DataElem {
 
 class List extends DataStructure {
   constructor(list = null) {
-    super('List')
+    super();
+    this.setList(list);
   }
 
   setList(list) {
-      for (val in list) {
-          super.add(new ListElem(val))
+      for (var valIndex in list) {
+          super.add(new ListElem(list[valIndex]))
       }
   }
 
   draw(canvas, x, y) {
-    for (elem in this.dataElems) {
-        elem.draw(canvas, x, y)
+    for (var elemIndex in this.dataElems) {
+        this.dataElems[elemIndex].draw(canvas, x, y)
         x += DEF_ELEM_WIDTH
     }
     canvas.renderAll()
   }
 }
-
