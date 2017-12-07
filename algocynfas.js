@@ -22,9 +22,9 @@ const VERTICAL = 1;
 
 class DataElem {
 
-  constructor(name = 'Data', val = null, shape = null) {
+  constructor(name = 'Data', key = null, shape = null) {
       this.name = name;
-      this.val = val;
+      this.key = key;
       this.shape = shape;
   }
 
@@ -35,10 +35,10 @@ class DataElem {
 
 class ListElem extends DataElem {
 
-  constructor(val, shape = null) {
-      super('ListElem', val);
-      this.shape = this.setShape(val);
-      this.dispText = this.setText(val);
+  constructor(key, shape = null) {
+      super('ListElem', key);
+      this.shape = this.setShape(key);
+      this.dispText = this.setText(key);
       this.group = this.setGroup(this.shape, this.dispText);
   }
 
@@ -79,14 +79,35 @@ class DataStructure extends DataElem {
       this.dataElems.push(elem);
   }
 
-  setListPos(canvasWidth) {
-      return canvasWidth/2 - DEF_ELEM_WIDTH * (this.dataElems.length/2);
+  indexOf(key) {
+      for (var i in this.dataElems) {
+        if(this.dataElems[i].key === key) {
+          return i;
+        }
+      }
+      return -1;
   }
 
-  setListElemPos(canvasWidth, elemIndex) {
-      return this.setListPos(canvasWidth) + (DEF_ELEM_WIDTH + 1) * elemIndex;
+  remove(key) {
+      var i = this.indexOf(key);
+      console.log("Trying to remove elem ", key, " at pos ", i)
+      if(i >= 0) {
+        console.log("Removing elem ", key, " at pos ", i)
+        this.dataElems.splice(i, 1)
+      }
   }
 
+  getDSPos(canvasWidth) {
+      return canvasWidth/2 - DEF_ELEM_WIDTH * (this.size() / 2);
+  }
+
+  positionElem(canvasWidth, elemIndex) {
+      return null;
+  }
+
+  size() {
+      return this.dataElems.length
+  }
 }
 
 class List extends DataStructure {
@@ -97,16 +118,21 @@ class List extends DataStructure {
   }
 
   setList(list) {
-      for (var valIndex in list) {
-          super.add(new ListElem(list[valIndex]));
+      for (var index in list) {
+          super.add(new ListElem(list[index]));
       }
   }
 
+  positionElem(canvasWidth, elemIndex) {
+      return super.getDSPos(canvasWidth) + (DEF_ELEM_WIDTH + 1) * elemIndex;
+  }
+
   draw(canvas, x, y) {
-      for (var elemIndex in this.dataElems) {
-          x = super.setListElemPos(canvas.width, elemIndex)
-          this.dataElems[elemIndex].draw(canvas, x, y);
-          //x += DEF_ELEM_WIDTH;
+      for (var i in this.dataElems) {
+          x = this.positionElem(canvas.width, i)
+          // console.log("Drawing elem: ", i, " at pos x: ", x, ", y: ", y)
+          this.dataElems[i].draw(canvas, x, y);
+          i++;
       }
       canvas.renderAll();
   }
