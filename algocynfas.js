@@ -63,9 +63,8 @@ class ListElem extends DataElem {
   }
 
   setGroup(shape, dispText, x) {
-      console.log(x);
       return new fabric.Group([ shape, dispText ],
-                      {left: 400, top: 40, angle: 0});
+                      {left: x, top: 40, angle: 0});
   }
 }
 
@@ -81,7 +80,7 @@ class DataStructure extends DataElem {
   }
 
   setListPos(canvasWidth) {
-      return canvasWidth/2 - DEF_ELEM_WIDTH * Math.floor(this.dataElems.length/2);
+      return canvasWidth/2 - DEF_ELEM_WIDTH * (this.dataElems.length/2);
   }
 
   setListElemPos(canvasWidth, elemIndex) {
