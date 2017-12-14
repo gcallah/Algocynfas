@@ -39,11 +39,11 @@ class ListElem extends DataElem {
       super('ListElem', key);
       this.shape = this.setShape(key);
       this.dispText = this.setText(key);
-      this.group = this.setGroup(this.shape, this.dispText);
+      this.group = this.setGroup(this.shape, this.dispText, key);
   }
 
   draw(canvas, x, y) {
-      canvas.add(this.setGroup(this.shape, this.dispText, x, y));
+      canvas.add(this.setGroup(this.shape, this.dispText, x, y, this.key));
   }
 
   setShape(id) {
@@ -62,9 +62,9 @@ class ListElem extends DataElem {
               {fontSize: DEF_FONT, originX: CENTER, originY: CENTER});
   }
 
-  setGroup(shape, dispText, x) {
+  setGroup(shape, dispText, x, y, id) {
       return new fabric.Group([ shape, dispText ],
-                      {left: x, top: 40, angle: 0});
+                      {left: x, top: 40, angle: 0, id: id});
   }
 }
 
@@ -73,9 +73,10 @@ class DataStructure extends DataElem {
   constructor() {
       super('DataStructure');
       this.dataElems = [];
+      //this.canvas = canvas;
   }
 
-  add(elem) {
+  insert(elem) {
       this.dataElems.push(elem);
   }
 
@@ -95,18 +96,32 @@ class DataStructure extends DataElem {
         console.log("Removing elem ", key, " at pos ", i)
         this.dataElems.splice(i, 1)
       }
+      console.log(canvas.getObjects());
+      console.log(canvas.remove(canvas.getObjects()[0]));
+      console.log(canvas.getObjects());
+
   }
 
-  getDSPos(canvasWidth) {
-      return canvasWidth/2 - DEF_ELEM_WIDTH * (this.size() / 2);
+  getDSPos() {
+      return canvas.width/2 - DEF_ELEM_WIDTH * (this.size() / 2);
   }
 
-  positionElem(canvasWidth, elemIndex) {
+  positionElem(elemIndex) {
       return null;
   }
 
   size() {
-      return this.dataElems.length
+      return this.dataElems.length;
+  }
+
+  swap(a, b) {
+    var temp;
+    var eleIndexA = this.indexOf(a);
+    var eleIndexB = this.indexOf(b);
+    temp = this.dataElems[eleIndexA];
+    this.dataElems[eleIndexA] = this.dataElems[eleIndexB];
+    this.dataElems[eleIndexB] = temp;
+    canvas.renderAll();
   }
 }
 
@@ -114,22 +129,24 @@ class List extends DataStructure {
 
   constructor(list = null) {
       super('List');
-      this.setList(list);
+      this.list = list;
+      //this.canvas = canvas;
+      this.setList(this.list);
   }
 
   setList(list) {
-      for (var index in list) {
-          super.add(new ListElem(list[index]));
+      for (var index in this.list) {
+          super.insert(new ListElem(list[index]));
       }
   }
 
-  positionElem(canvasWidth, elemIndex) {
-      return super.getDSPos(canvasWidth) + (DEF_ELEM_WIDTH + 1) * elemIndex;
+  positionElem(elemIndex) {
+      return super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex;
   }
 
   draw(canvas, x, y) {
       for (var i in this.dataElems) {
-          x = this.positionElem(canvas.width, i)
+          x = this.positionElem(i);
           // console.log("Drawing elem: ", i, " at pos x: ", x, ", y: ", y)
           this.dataElems[i].draw(canvas, x, y);
           i++;
