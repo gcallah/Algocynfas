@@ -26,13 +26,10 @@ class DataElem {
       this.name = name;
       this.key = key;
       this.shape = shape;
+      this.color = DEF_BG_COLOR
   }
 
-  draw() {
-  }
-
-  redraw() {
-
+  draw(canvas, x, y, init=false) {
   }
 }
 
@@ -42,23 +39,23 @@ class ListElem extends DataElem {
   constructor(key, shape = null) {
       super('ListElem', key, 'Rect');
       this.shape = this.setShape();
-      this.group = this.setGroup(this.shape, this.setText(this.key), this.key);
+      this.group = this.setGroup(this.shape, this.setText(this.key),
+          this.key);
   }
 
-  draw(canvas, x, y) {
+  draw(canvas, x, y, init=false) {
+      console.log("init = ", init)
+      this.shape.set('fill', this.color)
       this.group.left = x;
       this.group.top = y;
-      canvas.add(this.group);
-  }
-
-  redraw(x, y) {
-      this.group.left = x;
-      this.group.top = y;
+      if(init) {
+        canvas.add(this.group);
+      }
   }
 
   setShape() {
       return new fabric.Rect({
-          fill: DEF_BG_COLOR,
+          fill: this.color,
           originX: CENTER,
           originY: CENTER,
           width: DEF_ELEM_WIDTH,
@@ -77,7 +74,7 @@ class ListElem extends DataElem {
   }
 
   highlight() {
-      this.shape.set('fill', DEF_HL_COLOR);
+      this.color = DEF_HL_COLOR
   }
 }
 
@@ -154,27 +151,18 @@ class List extends DataStructure {
       return super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex;
   }
 
-  draw() {
+  draw(init=false) {
       var x;
       var y = 40;
       for (var i in this.dataElems) {
           x = this.positionElem(i);
-          this.dataElems[i].draw(this.canvas, x, y);
-      }
-      this.canvas.renderAll();
-  }
-
-  redraw() {
-      var x;
-      var y = 40;
-      for (var i in this.dataElems) {
-          x = this.positionElem(i);
-          this.dataElems[i].redraw(x, y);
+          this.dataElems[i].draw(this.canvas, x, y, init);
       }
       this.canvas.renderAll();
   }
 
   highlight(key) {
       this.dataElems[super.indexOf(key)].highlight();
+      console.log(this);
   }
 }
