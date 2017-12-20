@@ -18,11 +18,13 @@
       <script>
           var canvas = new fabric.Canvas('canvas');
           var myList = new List(canvas, [7, 4, 6, 9, 2, 1, 12])
-          myList.draw(0, 0)
+          myList.draw();
           myList.swap(2, 12);
+          myList.redraw();
           myList.remove(9)
-          //canvas.clear();
-          //myList.draw(canvas, 0, 0)
+          myList.redraw();
+          myList.highlight(12);
+          myList.redraw();
       </script>
 
       </body>
