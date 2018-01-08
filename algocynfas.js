@@ -26,11 +26,13 @@ class DataElem {
       this.name = name;
       this.key = key;
       this.shape = shape;
+      this.delayTime = DEFAULT_DELAY;
       this.color = DEF_BG_COLOR
   }
 
   draw(canvas, x, y, init=false) {
   }
+
 }
 
 
@@ -44,7 +46,6 @@ class ListElem extends DataElem {
   }
 
   draw(canvas, x, y, init=false) {
-      console.log("init = ", init)
       this.shape.set('fill', this.color)
       this.group.left = x;
       this.group.top = y;
@@ -76,6 +77,7 @@ class ListElem extends DataElem {
   highlight() {
       this.color = DEF_HL_COLOR
   }
+
 }
 
 class DataStructure extends DataElem {
@@ -131,6 +133,13 @@ class DataStructure extends DataElem {
       this.dataElems[eleIndexA] = this.dataElems[eleIndexB];
       this.dataElems[eleIndexB] = temp;
   }
+
+  async pause (time) {
+      return new Promise(function (resolve) {
+        console.log("In pause with time of ", time);
+        setTimeout(resolve, time)
+      })
+  }
 }
 
 class List extends DataStructure {
@@ -151,18 +160,24 @@ class List extends DataStructure {
       return super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex;
   }
 
-  draw(init=false) {
+  async draw(init=false) {
+      console.log(this);
       var x;
       var y = 40;
       for (var i in this.dataElems) {
           x = this.positionElem(i);
-          this.dataElems[i].draw(this.canvas, x, y, init);
+          await this.dataElems[i].draw(this.canvas, x, y, init);
       }
       this.canvas.renderAll();
+      await super.pause(this.delayTime);
   }
 
   highlight(key) {
       this.dataElems[super.indexOf(key)].highlight();
-      console.log(this);
+  }
+
+  async pause (time) {
+      this.delayTime = time;
+      await super.pause(this.delayTime);
   }
 }

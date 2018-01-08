@@ -3,34 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            Test Algocynfas version 2
+            Insertion Sort version 2
         </title>
         <script src="fabric.js"></script>
     </head>
     <body>
         <h1>
-            Test Algocynfas version 2
+            Insertion Sort version 2
         </h1>
 
       <canvas id="canvas" width="800" height="400"
           style="border:1px solid #000000"></canvas>
       <script src="algocynfas.js"></script>
+      <script src="V2insertion_sort.js"></script>
       <script>
           var canvas = new fabric.Canvas('canvas');
           async function sort() {
-          var myList = new List(canvas, [7, 4, 6, 9, 2, 1, 12])
-          await myList.draw(true);
-// pause here
-          myList.swap(2, 12);
-          await myList.draw();
-          await myList.pause(1200);
-// pause here
-          myList.remove(9)
-          await myList.draw();
-// pause here
-          myList.highlight(12);
-          await myList.draw();
-// pause here
+          var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
+          await window.insertionSort(canvas, list_to_sort);
           }
           sort();
       </script>
