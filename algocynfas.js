@@ -164,7 +164,7 @@ class DataStructure extends DataElem {
       })
   }
 
-  [Symbol.iterator](){
+  [Symbol.iterator]() {
       let index = 0;
       return {
           next: () => {
