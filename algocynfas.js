@@ -33,6 +33,9 @@ class DataElem {
   draw(canvas, x, y, init=false) {
   }
 
+  reOrder() {
+  }
+
 }
 
 
@@ -75,7 +78,22 @@ class ListElem extends DataElem {
   }
 
   highlight() {
-      this.color = DEF_HL_COLOR
+      this.setColor(DEF_HL_COLOR);
+  }
+
+  unhighlight() {
+      this.setColor(DEF_BG_COLOR);
+  }
+
+  highlightSwap() {
+      this.setColor(SWAP_COLOR);
+  }
+
+  setColor(color) {
+      this.color = color;
+  }
+
+  reOrder() {
   }
 
 }
@@ -140,6 +158,26 @@ class DataStructure extends DataElem {
         setTimeout(resolve, time)
       })
   }
+
+  [Symbol.iterator](){
+      let index = 0;
+      return {
+          next: () => {
+          let value = this[index];
+          let done = index >= this.length;
+          index++;
+          return { value, done };
+          }
+      };
+  };
+
+  iterator() {
+      let iterator = this.dataElems[Symbol.iterator]();
+      console.log(iterator.next());
+      // for (let item, val of this.dataElems) {
+      //     console.log(item, val);
+      // }
+  }
 }
 
 class List extends DataStructure {
@@ -161,7 +199,6 @@ class List extends DataStructure {
   }
 
   async draw(init=false) {
-      console.log(this);
       var x;
       var y = 40;
       for (var i in this.dataElems) {
@@ -179,5 +216,19 @@ class List extends DataStructure {
   async pause (time) {
       this.delayTime = time;
       await super.pause(this.delayTime);
+  }
+
+  reOrder() {
+      for (var i in this.list) {
+          super.swap(this.list[i], this.dataElems[i].key);
+      }
+  }
+
+  unhighlight(key) {
+      this.dataElems[super.indexOf(key)].unhighlight();
+  }
+
+  highlightSwap(key) {
+      this.dataElems[super.indexOf(key)].highlightSwap();
   }
 }
