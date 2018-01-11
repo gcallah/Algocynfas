@@ -36,6 +36,9 @@ class DataElem {
   reOrder() {
   }
 
+  getKey() {
+    return this.key
+  }
 }
 
 
@@ -110,6 +113,10 @@ class DataStructure extends DataElem {
       this.dataElems.push(elem);
   }
 
+  elemAt(index) {
+    return this.dataElems[index]
+  }
+
   indexOf(key) {
       for (var i in this.dataElems) {
         if(this.dataElems[i].key === key) {
@@ -143,13 +150,11 @@ class DataStructure extends DataElem {
       return this.dataElems.length;
   }
 
-  swap(a, b) {
+  swap(i, j) {
       var temp;
-      var eleIndexA = this.indexOf(a);
-      var eleIndexB = this.indexOf(b);
-      temp = this.dataElems[eleIndexA];
-      this.dataElems[eleIndexA] = this.dataElems[eleIndexB];
-      this.dataElems[eleIndexB] = temp;
+      temp = this.dataElems[i];
+      this.dataElems[i] = this.dataElems[j];
+      this.dataElems[j] = temp;
   }
 
   async pause (time) {
@@ -163,14 +168,15 @@ class DataStructure extends DataElem {
       let index = 0;
       return {
           next: () => {
-          let value = this[index];
-          let done = index >= this.length;
-          index++;
-          return { value, done };
+            let value = this.dataElems[index];
+            let done = index >= this.dataElems.length;
+            index++;
+            return { value, done };
           }
       };
   };
 
+// for debugging:
   iterator() {
       let iterator = this.dataElems[Symbol.iterator]();
       console.log(iterator.next());
@@ -209,8 +215,16 @@ class List extends DataStructure {
       await super.pause(this.delayTime);
   }
 
-  highlight(key) {
-      this.dataElems[super.indexOf(key)].highlight();
+  highlight(i) {
+      this.dataElems[i].highlight();
+  }
+
+  unhighlight(i) {
+      this.dataElems[i].unhighlight();
+  }
+
+  highlightSwap(i) {
+      this.dataElems[i].highlightSwap();
   }
 
   async pause (time) {
@@ -220,15 +234,8 @@ class List extends DataStructure {
 
   reOrder() {
       for (var i in this.list) {
-          super.swap(this.list[i], this.dataElems[i].key);
+          // this must be re-written for new swap() if needed!
+          // super.swap(this.list[i], this.dataElems[i].key);
       }
-  }
-
-  unhighlight(key) {
-      this.dataElems[super.indexOf(key)].unhighlight();
-  }
-
-  highlightSwap(key) {
-      this.dataElems[super.indexOf(key)].highlightSwap();
   }
 }
