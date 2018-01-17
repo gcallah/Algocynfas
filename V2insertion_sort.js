@@ -16,9 +16,10 @@ async function insertionSort(canvas, list) {
             await myList.draw();
         }
         await myList.draw();
-        for(var h = j; h > i; h--) {
-            myList.unhighlight(h);
-        }
+        myList.unhighlight(i + 1, j);
+//        for(var h = j; h > i; h--) {
+//            myList.unhighlight(h);
+//        }
         await myList.draw();
         j++;
     }

@@ -215,12 +215,22 @@ class List extends DataStructure {
       await super.pause(this.delayTime);
   }
 
-  highlight(i) {
-      this.dataElems[i].highlight();
+  highlight(i, j=0) {
+      var k = i;
+      do {
+        this.dataElems[k].highlight();
+        k++;
+      }
+      while (k <= j);
   }
 
-  unhighlight(i) {
-      this.dataElems[i].unhighlight();
+  unhighlight(i, j=0) {
+      var k = i;
+      do {
+        this.dataElems[k].unhighlight();
+        k++;
+      }
+      while (k <= j);
   }
 
   highlightSwap(i) {
