@@ -1,21 +1,26 @@
-async function insertionSort(elements) {
-    await displayList(elements);
-    for(var j = 1; j < elements.length; j++) {
-        var key = elements[j];
-        var i = j - 1;
-        await highlightSwap(key);
-        while(i >= 0 && elements[i] > key) {
-            await highlight(elements[i]);
-            elements[i + 1] = elements[i];
+async function insertionSort(canvas, list) {
+    var myList = new List(canvas, list)
+    await myList.draw(true);
+    var j = 0;
+    var i = 0;
+    for (let dataElem of myList) {
+        var key = dataElem.getKey();
+        i = j - 1; // will be -1 first iteration!
+        myList.highlightSwap(j);
+        await myList.draw();
+        while(i >= 0 && myList.elemAt(i).getKey() > key) {
+            myList.highlight(i);
+            await myList.draw();
+            myList.swap(i, i + 1)
             i = i - 1
+            await myList.draw();
         }
-        elements[i + 1] = key;
-        displayList(elements);
-        for(var h = j; h > i + 1; h--) {
-          highlight(elements[h]);
-        }
-        await highlightSwap(key);
-        await displayList(elements);
+        await myList.draw();
+        myList.unhighlight(i + 1, j);
+//        for(var h = j; h > i; h--) {
+//            myList.unhighlight(h);
+//        }
+        await myList.draw();
+        j++;
     }
-    await displayList(elements);
 }

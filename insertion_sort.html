@@ -3,44 +3,27 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            Insertion sort
+            Insertion Sort version 2
         </title>
         <script src="fabric.js"></script>
     </head>
     <body>
         <h1>
-            Insertion Sort
+            Insertion Sort version 2
         </h1>
-        <button id = "runButton" type="button" onclick="sort()">Run</button>
-        <br/>
-        <br/>
-        <div class="sliderContainer">
-          <label id="delayLbl" for="myDelay">Delay: </label>
-          <input id="myDelay" style="width:800px" type="range"
-            min=200 max=4000 step=1000 value=1000
-            onchange="updateDelay()"/>
-        </div>
-        <br/>
-        <canvas id="canvas" width="800" height="500" style="border:1px solid #000000"></canvas>
-        <script src="common_primitives.js"></script>
-        <script src="list_primitives.js"></script>
-        <script src="widgets.js"></script>
-        <script src="insertion_sort.js"></script>
-        <script>
-            var canvas = new fabric.Canvas('canvas');
-            async function sort() {
-                var list_to_sort = [10, 1, 56, 34, 97, 88, 23, 12, 5];
-                document.getElementById("runButton").innerHTML = "Stop";
-                document.getElementById("runButton").disabled = true;
-                await window.insertionSort(list_to_sort);
-                document.getElementById("runButton").disabled = false;
-                document.getElementById("runButton").innerHTML = "Run"
-            }
 
-        </script>
+      <canvas id="canvas" width="800" height="400"
+          style="border:1px solid #000000"></canvas>
+      <script src="algocynfas.js"></script>
+      <script src="V2insertion_sort.js"></script>
+      <script>
+          var canvas = new fabric.Canvas('canvas');
+          async function sort() {
+            var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
+            await window.insertionSort(canvas, list_to_sort);
+          }
+          sort();
+      </script>
+
       </body>
-      </br>
-      <footer id="footer">
-          <script> window.footer() </script>
-      </footer>
 </html>
