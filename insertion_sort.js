@@ -1,5 +1,5 @@
 async function insertionSort(canvas, list) {
-    var myList = new List(canvas, list)
+    var myList = new List(canvas, list);
     await myList.draw(true);
     var j = 0;
     var i = 0;
@@ -12,7 +12,7 @@ async function insertionSort(canvas, list) {
             myList.highlight(i);
             await myList.draw();
             myList.swap(i, i + 1)
-            i = i - 1
+            i = i - 1;
             await myList.draw();
         }
         await myList.draw();

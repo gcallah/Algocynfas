@@ -3,27 +3,39 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            Insertion Sort version 2
+            Insertion Sort
         </title>
         <script src="fabric.js"></script>
     </head>
     <body>
         <h1>
-            Insertion Sort version 2
+            Insertion Sort
         </h1>
-
-      <canvas id="canvas" width="800" height="400"
-          style="border:1px solid #000000"></canvas>
-      <script src="algocynfas.js"></script>
-      <script src="insertion_sort.js"></script>
-      <script>
-          var canvas = new fabric.Canvas('canvas');
-          async function sort() {
-            var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
-            await window.insertionSort(canvas, list_to_sort);
-          }
-          sort();
-      </script>
+        <button id = "runButton" type="button" onclick="sort()">Run</button>
+        <br/>
+        <br/>
+        <div class="sliderContainer">
+            <label id="delayLbl" for="myDelay">Delay: </label>
+            <input id="myDelay" style="width:800px" type="range"
+              min=200 max=4000 step=1000 value=1000
+              onchange="updateDelay()"/>
+        </div>
+        <br/>
+        <canvas id="canvas" width="800" height="400"
+            style="border:1px solid #000000"></canvas>
+        <script src="algocynfas.js"></script>
+        <script src="insertion_sort.js"></script>
+        <script src="widgets.js"></script>
+        <script>
+            var canvas = new fabric.Canvas('canvas');
+            async function sort() {
+              var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
+              await window.insertionSort(canvas, list_to_sort);
+            }
+        </script>
+        <footer id="footer">
+         <script> window.footer() </script>
+        </footer>
 
       </body>
 </html>

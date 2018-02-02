@@ -11,24 +11,31 @@
         <h1>
             Bubble Sort
         </h1>
+        <button id = "runButton" type="button" onclick="sort()">Run</button>
+        <br/>
+        <br/>
         <div class="sliderContainer">
-          <label id="delayLbl" for="myDelay">Delay: </label>
-          <input id="myDelay" style="width:800px" type="range"
-            min=1000 max=10000 step=1000 value=1000
-            onchange="updateDelay()"/>
+            <label id="delayLbl" for="myDelay">Delay: </label>
+            <input id="myDelay" style="width:800px" type="range"
+              min=1000 max=10000 step=1000 value=1000
+              onchange="updateDelay()"/>
         </div>
+        <br/>
         <canvas id="canvas" width="800" height="400"
             style="border:1px solid #000000"></canvas>
         <script src="algocynfas.js"></script>
         <script src="bubble_sort.js"></script>
+        <script src="widgets.js"></script>
         <script>
             var canvas = new fabric.Canvas('canvas');
             async function sort() {
               var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
               await window.bubbleSort(canvas, list_to_sort);
             }
-            sort();
           </script>
+          <footer id="footer">
+           <script> window.footer() </script>
+          </footer>
       </br>
       </body>
 </html>
