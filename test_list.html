@@ -12,23 +12,23 @@
             Test Algocynfas
         </h1>
 
-      <canvas id="canvas" width="800" height="400"
+      <canvas id="canvas" width="800" height="600"
           style="border:1px solid #000000"></canvas>
       <script src="algocynfas.js"></script>
       <script>
           var canvas = new fabric.Canvas('canvas');
           async function sort() {
           var myList = new List(canvas, [7, 4, 6, 9, 2, 1, 12])
-          await myList.draw(true);
+          await myList.draw(true, 1);
 // pause here
-          myList.swap(2, 12);
+          myList.swap(3, 1);
           await myList.draw();
           await myList.pause(1200);
 // pause here
           myList.remove(9)
           await myList.draw();
 // pause here
-          myList.highlight(12);
+          myList.highlight(3);
           await myList.draw();
 // pause here
           }

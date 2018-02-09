@@ -15,19 +15,21 @@ const SWAP_COLOR = '#ffb380';
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
 const CENTER = 'center';
-
+const DEF_X = 40;
+const DEF_Y = 40;
 const HORIZ = 0;
 const VERTICAL = 1;
 
 
 class DataElem {
 
-  constructor(name = 'Data', key = null, shape = null) {
+  constructor(name = 'Data', key = null, shape = null, orientation = HORIZ) {
       this.name = name;
       this.key = key;
       this.shape = shape;
       this.delayTime = DEFAULT_DELAY;
-      this.color = DEF_BG_COLOR
+      this.color = DEF_BG_COLOR;
+      this.orientation = orientation;
   }
 
   draw(canvas, x, y, init=false) {
@@ -37,7 +39,7 @@ class DataElem {
   }
 
   getKey() {
-    return this.key
+    return this.key;
   }
 }
 
@@ -139,7 +141,8 @@ class DataStructure extends DataElem {
   }
 
   getDSPos() {
-      return this.canvas.width/2 - DEF_ELEM_WIDTH * (this.size() / 2);
+      return this.orientation === 0 ? (this.canvas.width/2 - DEF_ELEM_WIDTH * (this.size() / 2)):
+          this.canvas.height/2 - DEF_ELEM_HEIGHT * (this.size() / 2);
   }
 
   positionElem(elemIndex) {
@@ -201,14 +204,17 @@ class List extends DataStructure {
   }
 
   positionElem(elemIndex) {
-      return super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex;
+      return this.orientation == 0 ? [super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
+            : [DEF_X, super.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
 
-  async draw(init=false) {
-      var x;
-      var y = 40;
+  async draw(init=false, orientation = HORIZ) {
+      var x, y;
+      if(init) {
+          this.orientation = orientation;
+      }
       for (var i in this.dataElems) {
-          x = this.positionElem(i);
+          [x, y] = this.positionElem(i);
           await this.dataElems[i].draw(this.canvas, x, y, init);
       }
       this.canvas.renderAll();
