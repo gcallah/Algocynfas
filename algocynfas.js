@@ -141,8 +141,9 @@ class DataStructure extends DataElem {
   }
 
   getDSPos() {
-      return this.orientation === 0 ? (this.canvas.width/2 - DEF_ELEM_WIDTH * (this.size() / 2)):
-          this.canvas.height/2 - DEF_ELEM_HEIGHT * (this.size() / 2);
+      return this.orientation === HORIZ ?
+          (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
+          this.canvas.height / 2 - DEF_ELEM_HEIGHT * (this.size() / 2);
   }
 
   positionElem(elemIndex) {
@@ -204,7 +205,8 @@ class List extends DataStructure {
   }
 
   positionElem(elemIndex) {
-      return this.orientation == 0 ? [super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
+      return this.orientation == HORIZ ?
+          [super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
             : [DEF_X, super.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
 
@@ -247,11 +249,10 @@ class List extends DataStructure {
       this.delayTime = time;
       await super.pause(this.delayTime);
   }
+}
 
-  reOrder() {
-      for (var i in this.list) {
-          // this must be re-written for new swap() if needed!
-          // super.swap(this.list[i], this.dataElems[i].key);
-      }
-  }
+function createList(canvas, list) {
+    l = new List(canvas, list);
+    l.draw(true);
+    return l;
 }

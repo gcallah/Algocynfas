@@ -1,6 +1,4 @@
-async function quickSort(canvas, list) {
-    var myList = new List(canvas, list);
-    await myList.draw(true);
+async function quickSort(myList) {
     mySort(myList, 0, myList.size() - 1);
 }
 

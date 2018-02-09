@@ -1,6 +1,4 @@
-async function bubbleSort(canvas, list) {
-    var myList = new List(canvas, list)
-    await myList.draw(true);
+async function bubbleSort(myList) {
     for(var i = 0; i < myList.size(); i++) {
         for(var j = myList.size() - 1; j > i; j--) {
             myList.highlightSwap(j);

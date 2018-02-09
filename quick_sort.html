@@ -21,16 +21,18 @@
               onchange="updateDelay()"/>
         </div>
         <br/>
-        <canvas id="canvas" width="800" height="400"
+        <canvas id="canvas" width="800" height="144"
             style="border:1px solid #000000"></canvas>
         <script src="algocynfas.js"></script>
         <script src="quick_sort.js"></script>
         <script src="widgets.js"></script>
         <script>
-            var canvas = new fabric.Canvas('canvas');
+           var canvas = new fabric.Canvas('canvas');
+           var list = [7, 4, 6, 9, 2, 1, 12];
+           var fList = window.createList(canvas, list);
+
             async function sort() {
-              var list_to_sort = [7, 4, 6, 9, 2, 1, 12];
-              await window.quickSort(canvas, list_to_sort);
+              await window.quickSort(fList);
             }
           </script>
           <footer id="footer">

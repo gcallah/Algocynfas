@@ -1,6 +1,4 @@
-async function insertionSort(canvas, list) {
-    var myList = new List(canvas, list);
-    await myList.draw(true);
+async function insertionSort(myList) {
     var j = 0;
     var i = 0;
     for (let dataElem of myList) {
