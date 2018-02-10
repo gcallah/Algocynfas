@@ -3,6 +3,9 @@ async function quickSort(myList) {
 }
 
 async function mySort(myList, low, high) {
+    if (!animeRunning) {
+        return;
+    }
     if(low < high) {
       var pIndex = await partition(myList, low, high);
       myList.unhighlight(low, high);
@@ -13,11 +16,18 @@ async function mySort(myList, low, high) {
 }
 
 async function partition(myList, low, high) {
+    if (!animeRunning) {
+        return;
+    }
+
     var pivot = myList.elemAt(high).getKey();
     myList.highlightSwap(high);
     await myList.draw();
     var i = (low - 1);
     for(var j = low; j < high; j++) {
+        if (!animeRunning) {
+            return;
+        }
         myList.highlight(j);
         await myList.draw();
         if(myList.elemAt(j).getKey() <= pivot) {

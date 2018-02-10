@@ -16,10 +16,11 @@
             </h1>
             <div class="input-group justify-content-around">
                 <button id = "runButton" type="button" class="btn btn-primary col-1" onclick="sort()">Run</button>
+                <button id = "stopButton" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
                 <input id="myDelay" type="range" class="col-6 form-control-range"
-                       min=1000 max=10000 step=1000 value=1000
+                       min=100 max=1000 step=100 value=100
                        onchange="updateDelay()"/>
-                <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 1000</label>
+                <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 100</label>
 
             </div>
 
@@ -35,7 +36,17 @@
                 var fList = window.createList(canvas, list);
 
                 async function sort() {
+                    animeRunning = true;
+
+                    let runButton = document.getElementById("runButton");
+
+                    runButton.disabled = true;
                     await window.quickSort(fList);
+                    runButton.disabled = false;
+                }
+
+                function stopAnime() {
+                    animeRunning = false;
                 }
             </script>
             <footer id="footer">
