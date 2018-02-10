@@ -2,10 +2,8 @@ function updateDelay() {
   var delay = document.getElementById('myDelay').value;
   delayTime = delay;
   var delayDisplay =  document.getElementById("delayLbl");
-  delayDisplay.innerHTML = '<p>'
-              + 'Delay: '
-              + '<strong>' + delay + '</strong>'
-              + '</p>';
+  console.log(delay);
+  delayDisplay.innerHTML = "Delay: " + delay;
 }
 
 function create_legend() {
@@ -25,16 +23,12 @@ function create_legend() {
 function footer() {
   var legend = create_legend();
   return document.getElementById("footer").innerHTML =
-  "<table style = width:10%>" +
-      "<tr>" +
-          "<td style = background-color:" + legend.data[0].color + ">" +
-            legend.data[0].title +
-          "</td>" +
-      "</tr>" +
-      "<tr>" +
-          "<td style = background-color:" + legend.data[1].color + ">" +
-            legend.data[1].title +
-          "</td>" +
-      "</tr>" +
-  "</table>";
+  `<ul class='list-group col-3'>
+    <li class='list-group-item' style = background-color:${legend.data[0].color}>
+    ${legend.data[0].title}
+    </li>
+    <li class='list-group-item' style = background-color:${legend.data[1].color}>
+    ${legend.data[1].title}
+    </li>
+  </ul>`;
 }
