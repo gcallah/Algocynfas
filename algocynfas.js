@@ -3,7 +3,7 @@
  * Created by Vainika and Prof. C on 12/01/17.
  */
 
-const DEFAULT_DELAY = 100;
+const DEFAULT_DELAY = 1000;
 const DEF_ELEM_HEIGHT = 60;
 const DEF_ELEM_WIDTH = 60;
 const PCT_FONT_BOX = .72;
