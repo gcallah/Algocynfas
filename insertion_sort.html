@@ -15,12 +15,19 @@
                 Insertion Sort
             </h1>
             <div class="input-group justify-content-around">
-                <button id = "runButton" type="button" class="btn btn-primary col-1" onclick="sort()">Run</button>
-                <button id = "stopButton" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
-                <input id="myDelay" type="range" class="col-6 form-control-range"
+                <button id="runButton" type="button"
+                    class="btn btn-primary col-1"
+                    onclick="sort()">Run</button>
+                <button id="stopButton" type="button"
+                    class="btn btn-danger col-1"
+                    onclick="stopAnime()">Stop</button>
+                <input id="myDelay" type="range"
+                                    class="col-6 form-control-range"
                        min=100 max=1000 step=100 value=100
                        onchange="updateDelay()"/>
-                <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 100</label>
+                <label id="delayLbl" for="myDelay"
+                    class="col-2 input-group-text">Delay: 100
+                </label>
 
             </div>
 
