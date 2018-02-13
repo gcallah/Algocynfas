@@ -20,9 +20,9 @@ function create_legend() {
     return legend;
 }
 
-function footer() {
+function display_legend() {
   var legend = create_legend();
-  return document.getElementById("footer").innerHTML =
+  return document.getElementById("legend").innerHTML =
   `<ul class='list-group col-3'>
     <li class='list-group-item' style = background-color:${legend.data[0].color}>
     ${legend.data[0].title}
