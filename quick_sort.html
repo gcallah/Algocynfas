@@ -14,16 +14,34 @@
             <h1>
                 Quick Sort
             </h1>
-            <div class="input-group justify-content-around">
-                <button id = "runButton" type="button" class="btn btn-primary col-1" onclick="sort()">Run</button>
-                <button id = "stopButton" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+            <div class="input-group justify-content-around mb-3">
+                <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+                <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
                 <input id="myDelay" type="range" class="col-6 form-control-range"
                        min=100 max=1000 step=100 value=100
                        onchange="updateDelay()"/>
                 <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 100</label>
 
             </div>
+            <div class="input-group mb-3">
+                <input type="text" class="col-4" id="number-input" placeholder="Append Element in Array" aria-label="Append Element in Array">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">+</button>
+                </div>
+            </div>
 
+            <div class="input-group form-inline mb-3 numbers-group" onclick="deleteNumberGroup(event)">
+                <!--This is a template. Only use for create and display-->
+                <div class="input-group mx-2 border number-group" style="display:none">
+                    <label class="input-group-text number-group-number">This is just a template</label>
+                    <div class="input-group-append mx-1">
+                        <button type="button" class="close close-button" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
             <br/>
             <canvas id="canvas" width="800" height="144"
                     style="border:1px solid #000000"></canvas>
@@ -31,23 +49,93 @@
             <script src="quick_sort.js"></script>
             <script src="widgets.js"></script>
             <script>
-                var canvas = new fabric.Canvas('canvas');
-                var list = [7, 4, 6, 9, 2, 1, 12];
-                var fList = window.createList(canvas, list);
+                const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+
+
+                let canvas = new fabric.Canvas('canvas');
+                let list = [];
+                let fList = null;
+
+                function drawListOnScreen(currentNumbersList) {
+                    canvas.clear();
+                    fList = window.createList(canvas, currentNumbersList);
+                }
 
                 async function sort() {
+                    clearNumberGroup();
+
                     animeRunning = true;
 
-                    let runButton = document.getElementById("runButton");
-
+                    let runButton = document.getElementById("run-button");
+                    let addNumberButton = document.getElementById("add-number-button");
                     runButton.disabled = true;
+                    addNumberButton.disabled = true;
+
                     await window.quickSort(fList);
+                    console.log("sorted");
                     runButton.disabled = false;
+                    addNumberButton.disabled = false;
+
+                    list = [];
                 }
 
                 function stopAnime() {
                     animeRunning = false;
                 }
+
+                function clearNumberGroup() {
+                    let numbersGroupChildren = numbersGroup.getElementsByClassName("number-group");
+                    let size = numbersGroupChildren.length;
+                    for (let i = 1; i < size; i++) {
+                        numbersGroup.removeChild(numbersGroupChildren[1]);
+                    }
+                }
+
+                function inputNumberToArray() {
+                    let number = document.getElementById("number-input").value;
+                    document.getElementById("number-input").value = "";
+                    number = parseFloat(number);
+
+                    if (!Number.isInteger(number)) {
+                        alert("You should input an integer."); return;
+                    }
+
+                    if (number < -99 || number > 99) {
+                        alert("Number should great than -100 and less than 100"); return;
+                    }
+
+                    numberGroupTemplate = document.getElementsByClassName("number-group")[0].cloneNode(true);
+                    numberGroupTemplate.childNodes[1].innerText = number;
+
+                    numberGroupTemplate.style.display = "inherit";
+                    numbersGroup.appendChild(numberGroupTemplate);
+
+                    list.push(number);
+
+                    drawListOnScreen(list);
+                }
+
+                function deleteNumberGroup(e) {
+                    if (e.target.nodeName === "SPAN") {
+                        let clickedNumberGroup = e.target.parentElement.parentElement.parentElement;
+                        let number = parseInt(
+                            clickedNumberGroup.getElementsByClassName("number-group-number")[0].innerText);
+                        let numbersGroupList = numbersGroup.getElementsByClassName("number-group");
+
+                        for (let i = 0; i < numbersGroupList.length; i++) {
+                            if (clickedNumberGroup === numbersGroupList[i]) {
+                                // Index 0 element always be template, so need to minus one.
+                                list.splice(i - 1, 1);
+                            }
+                        }
+                        numbersGroup.removeChild(clickedNumberGroup);
+
+                        drawListOnScreen(list);
+                    }
+                }
+
+                drawListOnScreen(list);
+
             </script>
             <footer id="footer">
                 <script> window.footer() </script>
