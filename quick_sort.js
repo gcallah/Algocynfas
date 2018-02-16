@@ -1,5 +1,5 @@
 async function quickSort(myList) {
-    mySort(myList, 0, myList.size() - 1);
+    await mySort(myList, 0, myList.size() - 1);
 }
 
 async function mySort(myList, low, high) {
@@ -10,9 +10,10 @@ async function mySort(myList, low, high) {
       var pIndex = await partition(myList, low, high);
       myList.unhighlight(low, high);
       await myList.draw();
-      mySort(myList, low, pIndex - 1);
-      mySort(myList, pIndex + 1, high);
+      await mySort(myList, low, pIndex - 1);
+      await mySort(myList, pIndex + 1, high);
     }
+
 }
 
 async function partition(myList, low, high) {
