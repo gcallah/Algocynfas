@@ -19,12 +19,12 @@
                 <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
                 <input id="myDelay" type="range" class="col-6 form-control-range"
                        min=100 max=1000 step=100 value=100
-                       onchange="updateDelay()"/
+                       onchange="updateDelay()"
                 <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 100</label>
 
             </div>
             <div class="input-group mb-3"> 
-                <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers without [ ]" aria-label="Enter a list without [ ]>
+                <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers without [ ]" aria-label="Enter a list without [ ]">
                 <div class="input-group-append">
                     <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
                 </div>
