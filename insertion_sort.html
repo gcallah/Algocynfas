@@ -24,9 +24,9 @@
 
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="col-4" id="number-input" placeholder="Append Element in Array" aria-label="Append Element in Array">
+        <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers without [ ]" aria-label="Enter a list without [ ]">
         <div class="input-group-append">
-            <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">+</button>
+            <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
         </div>
     </div>
 
@@ -56,11 +56,7 @@
         let list = [];
         let fList = null;
 
-        function drawListOnScreen(currentNumbersList) {
-            canvas.clear();
-            fList = window.createList(canvas, currentNumbersList);
-        }
-
+        
         async function sort() {
             clearNumberGroup();
 
@@ -77,61 +73,6 @@
             addNumberButton.disabled = false;
 
             list = [];
-        }
-
-        function stopAnime() {
-            animeRunning = false;
-        }
-
-        function clearNumberGroup() {
-            let numbersGroupChildren = numbersGroup.getElementsByClassName("number-group");
-            let size = numbersGroupChildren.length;
-            for (let i = 1; i < size; i++) {
-                numbersGroup.removeChild(numbersGroupChildren[1]);
-            }
-        }
-
-        function inputNumberToArray() {
-            let number = document.getElementById("number-input").value;
-            document.getElementById("number-input").value = "";
-            number = parseFloat(number);
-
-            if (!Number.isInteger(number)) {
-                alert("You should input an integer."); return;
-            }
-
-            if (number < -99 || number > 99) {
-                alert("Number should great than -100 and less than 100"); return;
-            }
-
-            numberGroupTemplate = document.getElementsByClassName("number-group")[0].cloneNode(true);
-            numberGroupTemplate.childNodes[1].innerText = number;
-
-            numberGroupTemplate.style.display = "inherit";
-            numbersGroup.appendChild(numberGroupTemplate);
-
-            list.push(number);
-
-            drawListOnScreen(list);
-        }
-
-        function deleteNumberGroup(e) {
-            if (e.target.nodeName === "SPAN") {
-                let clickedNumberGroup = e.target.parentElement.parentElement.parentElement;
-                let number = parseInt(
-                    clickedNumberGroup.getElementsByClassName("number-group-number")[0].innerText);
-                let numbersGroupList = numbersGroup.getElementsByClassName("number-group");
-
-                for (let i = 0; i < numbersGroupList.length; i++) {
-                    if (clickedNumberGroup === numbersGroupList[i]) {
-                        // Index 0 element always be template, so need to minus one.
-                        list.splice(i - 1, 1);
-                    }
-                }
-                numbersGroup.removeChild(clickedNumberGroup);
-
-                drawListOnScreen(list);
-            }
         }
 
         drawListOnScreen(list);
