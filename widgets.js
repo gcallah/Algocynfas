@@ -1,8 +1,7 @@
 function check_and_Delay(){
     if(document.getElementById('Fast').checked)
     {
-       document.getElementById('Fast').checked = false;
-       return 100;
+       return 200;
     }
     else if(document.getElementById('Medium').checked)
     {
@@ -10,7 +9,6 @@ function check_and_Delay(){
     }
     else
     {
-       document.getElementById('Slow').checked = false;
        return 1000;
     }
     
