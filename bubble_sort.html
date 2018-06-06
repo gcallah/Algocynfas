@@ -25,7 +25,8 @@
        
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers separate by comma" aria-label="Enter a list of Integers separate by comma">
+        <input type="text" class="" id=inputbox"number-input" placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
+            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
         <div class="input-group-append">
             <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
         </div>
@@ -74,7 +75,6 @@
             addNumberButton.disabled = false;
 
             list = [];
-            document.getElementById('Medium').checked=true;
         }
 
         drawListOnScreen(list);
