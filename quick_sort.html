@@ -14,17 +14,18 @@
             <h1>
                 Quick Sort
             </h1>
-            <div class="input-group justify-content-around mb-3">
+            <div class="rg_button">
                 <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+                &emsp;&emsp;&emsp;
                 <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
-                <input id="myDelay" type="range" class="col-6 form-control-range"
-                       min=100 max=1000 step=100 value=100
-                       onchange="updateDelay()"
-                <label id="delayLbl" for="myDelay" class="col-2 input-group-text">Delay: 100</label>
-
+                <br>
+                <input type="radio" name="speed" value="500" id="Fast"> Fast<br>
+                <input type="radio" name="speed" value="1000" id="Medium" checked="true"> Medium<br>
+                <input type="radio" name="speed" value="2000" id="Slow"> Slow
+                
             </div>
             <div class="input-group mb-3"> 
-                <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers without [ ]" aria-label="Enter a list without [ ]">
+                <input type="text" class="col-4" id="number-input" placeholder="Enter a list of Integers separate by comma" aria-label="Enter a list of Integers separate by comma">
                 <div class="input-group-append">
                     <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
                 </div>
@@ -72,6 +73,7 @@
                     addNumberButton.disabled = false;
 
                     list = [];
+                    document.getElementById('Medium').checked=true;
                 }
 
                 

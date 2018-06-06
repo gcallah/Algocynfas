@@ -1,11 +1,20 @@
-function updateDelay() {
-  var delay = document.getElementById('myDelay').value;
-  delayTime = delay;
-  var delayDisplay =  document.getElementById("delayLbl");
-  console.log(delay);
-  delayDisplay.innerHTML = "Delay: " + delay;
+function check_and_Delay(){
+    if(document.getElementById('Fast').checked)
+    {
+       document.getElementById('Fast').checked = false;
+       return 100;
+    }
+    else if(document.getElementById('Medium').checked)
+    {
+       return 500;
+    }
+    else
+    {
+       document.getElementById('Slow').checked = false;
+       return 1000;
+    }
+    
 }
-
 
 function drawListOnScreen(currentNumbersList) {
     canvas.clear();
@@ -24,7 +33,7 @@ function inputNumberToArray() {
     let an_input = document.getElementById("number-input").value;
     var list_num = an_input.split(",");
     if(list_num.length == 0 || list_num.length == 1){
-      alert("Please enter a valid integer between -100 to 100 or valid array without '[]' "); 
+      alert("Please enter a valid list without '[]' "); 
       document.getElementById("number-input").value = "";
       return;
     } 

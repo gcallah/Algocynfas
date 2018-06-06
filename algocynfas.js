@@ -41,6 +41,10 @@ class DataElem {
   getKey() {
     return this.key;
   }
+
+  setDelay(newDelay) {
+    this.delayTime = newDelay;
+  }
 }
 
 
@@ -193,6 +197,7 @@ class DataStructure extends DataElem {
 class List extends DataStructure {
 
   constructor(canvas, list = null) {
+    
       super('List', canvas);
       this.list = list;
       this.setList(this.list);

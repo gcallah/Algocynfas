@@ -1,4 +1,7 @@
 async function quickSort(myList) {
+    
+    var delayTime = check_and_Delay();
+    myList.setDelay(delayTime);
     await mySort(myList, 0, myList.size() - 1);
 }
 
@@ -6,6 +9,7 @@ async function mySort(myList, low, high) {
     if (!animeRunning) {
         return;
     }
+
     if(low < high) {
       var pIndex = await partition(myList, low, high);
       myList.unhighlight(low, high);

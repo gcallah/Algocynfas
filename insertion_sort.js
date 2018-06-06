@@ -3,6 +3,9 @@ animeRunning = false;
 async function insertionSort(myList) {
     var j = 0;
     var i = 0;
+
+    var delayTime = check_and_Delay();
+    myList.setDelay(delayTime);
     for (let dataElem of myList) {
         if (!animeRunning) break;
         var key = dataElem.getKey();
@@ -23,3 +26,4 @@ async function insertionSort(myList) {
         j++;
     }
 }
+
