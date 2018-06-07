@@ -5,32 +5,61 @@
         <title>
             Hash Table
         </title>
+        <link rel="stylesheet" href="hash_style.css">
         <script src="lib/fabric.js"></script>
     </head>
-    <body>
+    <body class="body">
+      <div class="container">
         <h1>
-            Hash Table
+            Hash Table with Chaining 
         </h1>
-      Insert: <input type="number" id="eleValue">
-      <button id = "runButton" type="button" onclick="insert()">Insert</button>
+      <input type="text" class="size_box" id="table_size" style="background: #FCF5DB" placeholder="Enter an integer between 2-20" value="10">
+      <button id = "sizeButton" class="ins_btn" type="button" onclick="SetupTable()">Set size</button>
+      &emsp;&emsp;
+      <input type="text" class="insert_box" id="InputValue" placeholder="Enter an interger from -99 to 99">
+      <button id = "insertButton" class="ins_btn" type="button" onclick="Insert()">Insert</button>
+      &emsp;&emsp;
+      <input type="text" class="insert_box" id="InputValue" placeholder="Enter a hash function">
+      <button id = "runButton" class="ins_btn" type="button" onclick="hash()">Run</button>
+
+    </div>
       <br/>
       <br/>
-      <canvas id="canvas" width="800" height="800" style="border:1px solid #000000"></canvas>
+      <canvas id="canvas" width="1300" height="1300" 
+        style=" border:1px  solid #000000"></canvas>
+
       <script src="algocynfas.js"></script>
-      <script src="insertion_sort.js"></script>
+      <script src="hash_table.js"></script>
       <script src="widgets.js"></script>
+      
       <script>
           var canvas = new fabric.Canvas('canvas');
-          var HashTable = new hashTable(5);
-          function insert() {
-              var val = document.getElementById("eleValue").value;
-              HashTable.insert(val);
-              displayHT(HashTable);
+          let list = [];
+          let fList = null;
+
+
+          function SetupTable(){
+              let size = document.getElementById("table_size").value;
+              size=parseInt(size);
+              canvas.clear();      
+              if (Number.isInteger(size) && size > 1 && size < 21){
+                  document.getElementById("table_size").style.background="#FCF5DB";
+                  list=Array.apply(null, {length: size}).map(Number.call, Number); 
+                  fList = window.createHashTable(canvas, list);
+              }
+              else
+              {
+                  
+                  error("table_size","Please enter a valid size between 2-20 !");
+
+              }
+              document.getElementById("table_size").value="";
+              return;
           }
+
+          
       </script>
       </br>
-      <footer id="footer">
-          <script> window.footer() </script>
-      </footer>
+
       </body>
 </html>

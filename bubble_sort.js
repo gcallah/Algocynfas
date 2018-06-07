@@ -5,6 +5,7 @@ async function bubbleSort(myList) {
     
     var delayTime = check_and_Delay();
     myList.setDelay(delayTime);
+    
     for(let i = 0; i < myList.size(); i++) {
         for(let j = myList.size() - 1; j > i; j--) {
             if (!animeRunning) break;

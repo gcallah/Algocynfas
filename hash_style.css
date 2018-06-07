@@ -1,0 +1,29 @@
+.body{
+    margin: 50px; 
+}
+.container{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.insert_box{
+    font-size: 15px;
+    width:250px;
+    height:25px;
+    background-color: #FCF5DB;
+    
+}
+.size_box{
+    font-size:15px;
+    width:220px;
+    height:25px;
+    
+}
+
+.ins_btn{
+    background:rgba(0,0,0,0);
+    font-size:22px;
+    border-color: deepskyblue;
+    color: deepskyblue;
+    
+    
+}

@@ -14,6 +14,10 @@ function check_and_Delay(){
     
 }
 
+function error(id,message) {
+   document.getElementById(id).style.background="red";
+   alert(message);
+}
 function drawListOnScreen(currentNumbersList) {
     canvas.clear();
     fList = window.createList(canvas, currentNumbersList);

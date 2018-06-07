@@ -15,22 +15,26 @@
         Bubble Sort
     </h1>
     <div class="rg_button">
-        <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
-        &emsp;&emsp;&emsp;
-        <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
-<br>
-        <input type="radio" name="speed" value="500" id="Fast"> Fast<br>
-        <input type="radio" name="speed" value="1000" id="Medium" checked="true"> Medium<br>
-        <input type="radio" name="speed" value="2000" id="Slow"> Slow
-       
-    </div>
-    <div class="input-group mb-3">
-        <input type="text" class="" id=inputbox"number-input" placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
-            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
-        <div class="input-group-append">
-            <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
+            <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+            &emsp;&emsp;&emsp;
+            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+            <br>
+            <input type="radio" name="speed" value="500" id="Fast"> Fast<br>
+            <input type="radio" name="speed" value="1000" id="Medium" checked="true"> Medium<br>
+            <input type="radio" name="speed" value="2000" id="Slow"> Slow
+
         </div>
-    </div>
+
+
+
+        
+    <div class="input-group mb-3">
+            <input type="text" class="inputbox" id="number-input" placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
+            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
+            </div>
+        </div>
 
     <div class="input-group form-inline mb-3 numbers-group" onclick="deleteNumberGroup(event)">
         <!--This is a template. Only use for create and display-->
