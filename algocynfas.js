@@ -210,12 +210,13 @@ class List extends DataStructure {
   }
 
   positionElem(elemIndex) {
+      console.log("Calling method in List")
       return this.orientation == HORIZ ?
           [super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
             : [DEF_X, super.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
 
-  async draw(init=false, orientation = HORIZ) {
+  async draw(init=false, orientation=HORIZ) {
       var x, y;
       if(init) {
           this.orientation = orientation;
@@ -260,29 +261,17 @@ class List extends DataStructure {
 class HashTable extends List {
 
   constructor(canvas, list = null) {
-    
-      super( canvas,list);
-
+      super(canvas, list);
   }
 
-  async draw(init=false, orientation = VERTICAL) {
-      var x, y;
-      if(init) {
-          this.orientation = orientation;
-      }
-      for (var i in this.dataElems) {
-          [x, y] = this.positionElem(i);
-          await this.dataElems[i].draw(this.canvas, x, y, init);
-      }
-      this.canvas.renderAll();
-      await super.pause(this.delayTime);
-  }
   getDSPos() {
       return this.orientation === HORIZ ?
           (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
            10;
   }
+
   positionElem(elemIndex) {
+      console.log("Calling method in HashTable")
       return this.orientation == HORIZ ?
           [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
             : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
@@ -298,7 +287,7 @@ function createList(canvas, list) {
 
 function createHashTable(canvas, list) {
     l = new HashTable(canvas, list);
-    l.draw(true);
+    l.draw(true, orientation=VERTICAL);
     return l;
 }
 
