@@ -257,11 +257,11 @@ class List extends DataStructure {
 }
 
 
-class hashTable extends DataStructure {
+class HashTable extends DataStructure {
 
   constructor(canvas, list = null) {
     
-      super('hashTable', canvas);
+      super('HashTable', canvas);
       this.list = list;
       this.setList(this.list);
   }
@@ -271,6 +271,7 @@ class hashTable extends DataStructure {
           super.insert(new ListElem(list[index]));
       }
   }
+
   getDSPos() {
       return this.orientation === HORIZ ?
           (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
@@ -331,8 +332,8 @@ function createList(canvas, list) {
 }
 
 function createHashTable(canvas, list) {
-    l = new hashTable(canvas, list);
-    l.draw(true,VERTICAL);
+    l = new HashTable(canvas, list);
+    l.draw(true, VERTICAL);
     return l;
 }
 
