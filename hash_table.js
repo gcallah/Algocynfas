@@ -1,4 +1,4 @@
-
+/*
 
 function hashTable(table_size) {
     this.values = Array(table_size);
@@ -21,3 +21,4 @@ function displayHT(table) {
     displayHashTable(table);
 }
 
+*/

@@ -257,33 +257,15 @@ class List extends DataStructure {
 }
 
 
-class hashTable extends DataStructure {
+class HashTable extends List {
 
   constructor(canvas, list = null) {
     
-      super('hashTable', canvas);
-      this.list = list;
-      this.setList(this.list);
+      super( canvas,list);
+
   }
 
-  setList(list) {
-      for (var index in this.list) {
-          super.insert(new ListElem(list[index]));
-      }
-  }
-  getDSPos() {
-      return this.orientation === HORIZ ?
-          (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
-           10;
-  }
-
-  positionElem(elemIndex) {
-      return this.orientation == HORIZ ?
-          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
-            : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
-  }
-
-  async draw(init=false, orientation = HORIZ) {
+  async draw(init=false, orientation = VERTICAL) {
       var x, y;
       if(init) {
           this.orientation = orientation;
@@ -295,33 +277,20 @@ class hashTable extends DataStructure {
       this.canvas.renderAll();
       await super.pause(this.delayTime);
   }
-
-  highlight(i, j=0) {
-      var k = i;
-      do {
-        this.dataElems[k].highlight();
-        k++;
-      }
-      while (k <= j);
+  getDSPos() {
+      return this.orientation === HORIZ ?
+          (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
+           10;
   }
-
-  unhighlight(i, j=0) {
-      var k = i;
-      do {
-        this.dataElems[k].unhighlight();
-        k++;
-      }
-      while (k <= j);
+  positionElem(elemIndex) {
+      return this.orientation == HORIZ ?
+          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
+            : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
+  
+  
 
-  highlightSwap(i) {
-      this.dataElems[i].highlightSwap();
-  }
-
-  async pause (time) {
-      this.delayTime = time;
-      await super.pause(this.delayTime);
-  }
+ 
 }
 
 function createList(canvas, list) {
@@ -331,8 +300,8 @@ function createList(canvas, list) {
 }
 
 function createHashTable(canvas, list) {
-    l = new hashTable(canvas, list);
-    l.draw(true,VERTICAL);
+    l = new HashTable(canvas, list);
+    l.draw(true);
     return l;
 }
 
