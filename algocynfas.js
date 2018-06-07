@@ -288,9 +288,6 @@ class HashTable extends List {
             : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
   
-  
-
- 
 }
 
 function createList(canvas, list) {
