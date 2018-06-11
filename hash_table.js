@@ -1,20 +1,21 @@
-function hash()
-{
-	animeRunning = true;
-    document.getElementById("set-button").disabled = true;
-	document.getElementById("table_size").disabled = true;
-	document.getElementById("hash_func").disabled = true;
-	
-	window.hashing(Hash_Table);
-	
-    document.getElementById("set-button").disabled = false;
-	document.getElementById("table_size").disabled = false;
-	document.getElementById("hash_func").disabled = false;
+function SetupTable(){
 
+	let size = document.getElementById("table_size").value;
+	size=parseInt(size);
+	canvas.clear();      
+	if (Number.isInteger(size) && size > 1 && size < 21){
+		document.getElementById("table_size").style.background="#FCF5DB";
+		list=Array.apply(null, {length: size}).map(Number.call, Number); 
+		Hash_Table= createHashTable(canvas, list);
+	}
+	else
+	{
+		notice_err("Please enter a valid size between 2-20 !","table_size");
+	}
+	return;
 }
 
-
-function hashing()
+function hash()
 {
 	var func = document.getElementById("hash_func").value; 
 	var size= document.getElementById("table_size").value;
@@ -52,4 +53,14 @@ function hashing()
     }
 }
 
+
+function clearTable()
+{
+	canvas.clear();
+	document.getElementById("hash_func").value="";
+	document.getElementById("InputValue").value="";
+	
+
+
+}
 

@@ -24,7 +24,7 @@
        <input type="text" class="box" id="InputValue"  placeholder="Enter an interger">
        <button id = "run-button" type="button" class="btn btn-success col-1" onclick="hash()">Hash</button>
     
-       <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+       <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="clearTable()">Clear</button>
 
       <br/>
       <br/>
@@ -44,30 +44,6 @@
           let list = [];
           let fList = null;
           let Hash_Table = null;
-
-
-          function SetupTable(){
-
-         
-
-              let size = document.getElementById("table_size").value;
-              size=parseInt(size);
-              canvas.clear();      
-              if (Number.isInteger(size) && size > 1 && size < 21){
-                  document.getElementById("table_size").style.background="#FCF5DB";
-                  list=Array.apply(null, {length: size}).map(Number.call, Number); 
-                  Hash_Table= createHashTable(canvas, list);
-                  fList= window.Hash_Table;
-
-              }
-              else
-              {
-                  
-                  notice_err("Please enter a valid size between 2-20 !","table_size");
-
-              }
-              return;
-          }
 
           
       </script>
