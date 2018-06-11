@@ -66,7 +66,33 @@ function clearTable()
 	document.getElementById("hash_func").value="";
 	document.getElementById("InputValue").value="";
 	
+}
 
 
+function create_legend() {
+    const legend = {    
+        "data": [{
+                    "title": "Table Index",
+                    "color": DEF_HL_COLOR,
+                },
+                {
+                    "title": "Hashed List",
+                    "color": DEF_BG_COLOR,
+                        },]
+    };
+    return legend;
+}
+
+function displayLegend() {
+  var legend = create_legend();
+  return document.getElementById("legend").innerHTML =
+  `<ul class='list-group col-3'>
+    <li class='list-group-item' style = background-color:${legend.data[0].color}>
+    ${legend.data[0].title}
+    </li>
+    <li class='list-group-item' style = background-color:${legend.data[1].color}>
+    ${legend.data[1].title}
+    </li>
+  </ul>`;
 }
 

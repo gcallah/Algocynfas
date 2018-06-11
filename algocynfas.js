@@ -263,12 +263,17 @@ class HashTable extends List {
   constructor(canvas, list = null) {
       super(canvas, list);
       if(list!=null){
+        for(var i=0; i<list.length; i++)
+        {
+          super.highlight(i);
+        }
         var len = list.length; 
         this.HeadLists=[];
         while(len!=0){
             this.HeadLists.push([]);
             len-=1;
         }
+
       }
   }
 
@@ -286,10 +291,6 @@ class HashTable extends List {
     }
    
   }
-
-
-
-
 }
 
 class ListWithHead extends List{
@@ -298,11 +299,7 @@ class ListWithHead extends List{
         this.Head = head;
         this.line=new Line();
         this.line.draw(this.canvas, 100, 20+head*60, true);
-        
-
     } 
-
- 
 
     getDSPos() {
       return this.orientation === HORIZ ?
@@ -345,9 +342,6 @@ class Line extends ListElem{
     }
  
 }
-
-
-
 function createList(canvas, list) {
     l = new List(canvas, list);
     l.draw(true);
