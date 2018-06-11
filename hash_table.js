@@ -20,6 +20,7 @@ function hash()
 	var func = document.getElementById("hash_func").value; 
 	var size= document.getElementById("table_size").value;
 	var input = document.getElementById("InputValue").value;
+
 	if(func&&size&&input){
 	    try {
 	  		formula = func.split("x").join("input");
@@ -42,7 +43,12 @@ function hash()
 	 		result = parseInt(result % parseInt(size)); 
 	 		console.log(result);
 	 		input = parseInt(input);
+	 		if(!Hash_Table){
+	 			notice_err("Please set the size first!");
+	 		}
+	 		else{
 	 		Hash_Table.setHList(result,input);
+	 	    }
 	    }
 	    catch(error) {
 	        notice_err("Function is invalid!", "hash_func");
