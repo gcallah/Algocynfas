@@ -210,10 +210,9 @@ class List extends DataStructure {
   }
 
   positionElem(elemIndex) {
-      console.log("Calling method in List")
       return this.orientation == HORIZ ?
-          [super.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
-            : [DEF_X, super.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
+          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
+            : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
 
   async draw(init=false, orientation=HORIZ) {
@@ -260,24 +259,91 @@ class List extends DataStructure {
 
 class HashTable extends List {
 
+
   constructor(canvas, list = null) {
       super(canvas, list);
+      if(list!=null){
+        var len = list.length; 
+        this.HeadLists=[];
+        while(len!=0){
+            this.HeadLists.push([]);
+            len-=1;
+        }
+      }
   }
 
   getDSPos() {
-      return this.orientation === HORIZ ?
-          (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
-           10;
-  }
-
-  positionElem(elemIndex) {
-      console.log("Calling method in HashTable")
-      return this.orientation == HORIZ ?
-          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, DEF_Y]
-            : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
+    return this.orientation === HORIZ ?
+        (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):10;
   }
   
+  setHList(ListWHead_index, value){
+    this.canvas.clear();
+    super.draw(true,orientation=VERTICAL);
+    this.HeadLists[ListWHead_index].push(value);
+    for(var i=0; i<this.HeadLists.length;i++){
+        createListWithHead(this.canvas,this.HeadLists[i], i);
+    }
+   
+  }
+
 }
+
+class ListWithHead extends List{
+    constructor(canvas, list = null, head = 0 ){
+        super(canvas,list);
+        this.Head = head;
+        this.line=new Line();
+        this.line.draw(this.canvas, 100, 20+head*60, true);
+        
+
+    } 
+
+ 
+
+    getDSPos() {
+      return this.orientation === HORIZ ?
+          150:
+          this.canvas.height / 2 - DEF_ELEM_HEIGHT * (this.size() / 2);
+  }
+
+    positionElem(elemIndex) {
+      return this.orientation == HORIZ ?
+          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, (10+this.Head*61)]
+            : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
+  }
+
+
+}
+
+class Line extends ListElem{
+  constructor() {
+      super(" ");
+  }
+
+   draw(canvas, x, y, init=false) {
+      this.shape.set('fill', "black")
+      this.group.left = x;
+      this.group.top = y;
+      if(init) {
+        canvas.add(this.group);
+      }
+  }
+
+  setShape(){
+       return new fabric.Rect({
+          fill: DEF_HLK_COLOR,
+          originX: CENTER,
+          originY: CENTER,
+          width: 40,
+          height: 3,
+      });
+
+    }
+ 
+}
+
+
 
 function createList(canvas, list) {
     l = new List(canvas, list);
@@ -290,4 +356,11 @@ function createHashTable(canvas, list) {
     l.draw(true, orientation=VERTICAL);
     return l;
 }
+
+function createListWithHead(canvas, list, head){
+    l = new ListWithHead(canvas, list , head);
+    l.draw(true);
+    return l;
+}
+
 

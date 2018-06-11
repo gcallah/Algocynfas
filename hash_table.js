@@ -1,24 +1,53 @@
-/*
+function hash()
+{
+	animeRunning = true;
+    document.getElementById("set-button").disabled = true;
+	document.getElementById("table_size").disabled = true;
+	document.getElementById("hash_func").disabled = true;
+	
+	window.hashing(Hash_Table);
+	
+    document.getElementById("set-button").disabled = false;
+	document.getElementById("table_size").disabled = false;
+	document.getElementById("hash_func").disabled = false;
 
-function hashTable(table_size) {
-    this.values = Array(table_size);
-    for(i = 0; i < table_size; i++) {
-        this.values[i] = [];
+}
+
+
+function hashing()
+{
+	var func = document.getElementById("hash_func").value; 
+	var size= document.getElementById("table_size").value;
+	var input = document.getElementById("InputValue").value;
+	if(func&&size&&input){
+	    try {
+	  		formula = func.split("x").join("input");
+	  		if(func==formula){
+	  			notice_err("hash_func","Function is invalid!");
+	  			return;
+	  		}
+	  		else{
+	  			formula=func.split("x");
+	  			for(var i=0; i<formula.length-1; i++){
+	  				if(formula[i].length>1 || Number.isInteger(parseInt(formula[i]))){
+	  					formula[i]=formula[i].concat("*");
+	  				}
+	  			}
+                formula=formula.join(input);
+	  		}
+	  		formula = formula.split("^").join("**");
+	 		result = eval(formula);
+	 		result = result % parseInt(size); 
+	 		input = parseInt(input);
+	 		Hash_Table.setHList(result,input);
+	    }
+	    catch(error) {
+	        notice_err("Function is invalid!", "hash_func");
+	    }
     }
-    this.table_size = table_size;
+    else{
+    	notice_err("Incomplete input!");
+    }
 }
 
-hashTable.prototype.insert = function(value) {
-    var hindex  = calDivHash(value, this.table_size);
-    this.values[hindex].push(value);
-};
 
-function calcDivHash(k, table_size) {
-    return k % table_size;
-}
-
-function displayHT(table) {
-    displayHashTable(table);
-}
-
-*/

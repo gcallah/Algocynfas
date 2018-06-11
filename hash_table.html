@@ -5,55 +5,67 @@
         <title>
             Hash Table
         </title>
+        <link rel="stylesheet" href="lib/bootstrap.min.css">
         <link rel="stylesheet" href="hash_style.css">
+        <script src="lib/bootstrap.min.js"></script>
         <script src="lib/fabric.js"></script>
     </head>
-    <body class="body">
+    <body >
       <div class="container">
         <h1>
             Hash Table with Chaining 
         </h1>
-      <input type="text" class="size_box" id="table_size" style="background: #FCF5DB" placeholder="Enter an integer between 2-20" value="10">
-      <button id = "sizeButton" class="ins_btn" type="button" onclick="SetupTable()">Set size</button>
-      &emsp;&emsp;
-      <input type="text" class="insert_box" id="InputValue" placeholder="Enter an interger from -99 to 99">
-      <button id = "insertButton" class="ins_btn" type="button" onclick="Insert()">Insert</button>
-      &emsp;&emsp;
-      <input type="text" class="insert_box" id="InputValue" placeholder="Enter a hash function">
-      <button id = "runButton" class="ins_btn" type="button" onclick="hash()">Run</button>
+      <input type="text" class="box" id="table_size" placeholder="Enter an integer" value="10">
+       <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
+      &emsp;
+      <input type="text" class="func_box" id="hash_func"  placeholder="Enter a hash function with x as variable"> % Size
+ 
+      &emsp;
+       <input type="text" class="box" id="InputValue"  placeholder="Enter an interger">
+       <button id = "run-button" type="button" class="btn btn-success col-1" onclick="hash()">Hash</button>
+    
+       <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
 
-    </div>
       <br/>
       <br/>
-      <canvas id="canvas" width="1300" height="1300" 
-        style=" border:1px  solid #000000"></canvas>
+       <canvas id="canvas" width="1000" height="1400"
+        style="border:1px solid #000000"></canvas>
+        </div>
+
 
       <script src="algocynfas.js"></script>
-      <script src="hash_table.js"></script>
       <script src="widgets.js"></script>
+      <script src="hash_table.js"></script>
+      
       
       <script>
+    
           var canvas = new fabric.Canvas('canvas');
           let list = [];
           let fList = null;
+          let Hash_Table = null;
 
 
           function SetupTable(){
+
+         
+
               let size = document.getElementById("table_size").value;
               size=parseInt(size);
               canvas.clear();      
               if (Number.isInteger(size) && size > 1 && size < 21){
                   document.getElementById("table_size").style.background="#FCF5DB";
                   list=Array.apply(null, {length: size}).map(Number.call, Number); 
-                  fList = window.createHashTable(canvas, list);
+                  Hash_Table= createHashTable(canvas, list);
+                  fList= window.Hash_Table;
+
               }
               else
               {
                   
-                  error("table_size","Please enter a valid size between 2-20 !");
+                  notice_err("Please enter a valid size between 2-20 !","table_size");
 
               }
-              document.getElementById("table_size").value="";
               return;
           }
 
