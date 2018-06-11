@@ -29,15 +29,17 @@ function hashing()
 	  		else{
 	  			formula=func.split("x");
 	  			for(var i=0; i<formula.length-1; i++){
-	  				if(formula[i].length>1 || Number.isInteger(parseInt(formula[i]))){
+	  				if( Number.isInteger(parseInt(formula[i][(formula[i].length)-1]))){
 	  					formula[i]=formula[i].concat("*");
 	  				}
 	  			}
                 formula=formula.join(input);
 	  		}
 	  		formula = formula.split("^").join("**");
+	  		console.log(formula);
 	 		result = eval(formula);
-	 		result = result % parseInt(size); 
+	 		result = parseInt(result % parseInt(size)); 
+	 		console.log(result);
 	 		input = parseInt(input);
 	 		Hash_Table.setHList(result,input);
 	    }
