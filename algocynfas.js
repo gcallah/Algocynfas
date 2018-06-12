@@ -19,6 +19,7 @@ const DEF_X = 40;
 const DEF_Y = 40;
 const HORIZ = 0;
 const VERTICAL = 1;
+const HashTableMargin = 10;
 
 
 class DataElem {
@@ -167,7 +168,6 @@ class DataStructure extends DataElem {
 
   async pause (time) {
       return new Promise(function (resolve) {
-        console.log("In pause with time of ", time);
         setTimeout(resolve, time)
       })
   }
@@ -279,13 +279,35 @@ class HashTable extends List {
 
   getDSPos() {
     return this.orientation === HORIZ ?
-        (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):10;
+        (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):HashTableMargin;
   }
   
   setHList(ListWHead_index, value){
     this.canvas.clear();
     super.draw(true,orientation=VERTICAL);
     this.HeadLists[ListWHead_index].push(value);
+    for(var i=0; i<this.HeadLists.length;i++){
+        if (this.HeadLists[i].length>14)
+        {
+          notice_err("Sorry we are unable to handle these many items in one chain!");
+        }
+        createListWithHead(this.canvas,this.HeadLists[i], i);
+    }
+   
+  }
+
+    setHValue(ListWHead_index, value){
+    this.canvas.clear();
+    super.draw(true,orientation=VERTICAL);
+    for(var i = ListWHead_index ; i<ListWHead_index+this.list.length ; i++)
+    {
+      if(this.HeadLists[i%(this.list.length)].length==0)
+      {
+          this.HeadLists[i%(this.list.length)].push(value);
+          break;
+      }
+    }
+
     for(var i=0; i<this.HeadLists.length;i++){
         createListWithHead(this.canvas,this.HeadLists[i], i);
     }
@@ -297,8 +319,8 @@ class ListWithHead extends List{
     constructor(canvas, list = null, head = 0 ){
         super(canvas,list);
         this.Head = head;
-        this.line=new Line();
-        this.line.draw(this.canvas, 100, 20+head*60, true);
+        this.line=new Line(); // draw a line between the hash indedx and the hashed values
+        this.line.draw(this.canvas, 100, 15 + (head * (DEF_ELEM_HEIGHT + 1)) , true); //tried value to adjust the line position
     } 
 
     getDSPos() {
@@ -309,7 +331,7 @@ class ListWithHead extends List{
 
     positionElem(elemIndex) {
       return this.orientation == HORIZ ?
-          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, (10+this.Head*61)]
+          [this.getDSPos() + (DEF_ELEM_WIDTH + 1) * elemIndex, (HashTableMargin+this.Head*(DEF_ELEM_HEIGHT + 1))]
             : [DEF_X, this.getDSPos() + (DEF_ELEM_HEIGHT + 1) * elemIndex];
   }
 
@@ -336,7 +358,7 @@ class Line extends ListElem{
           originX: CENTER,
           originY: CENTER,
           width: 40,
-          height: 3,
+          height: 3,   
       });
 
     }

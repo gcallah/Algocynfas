@@ -21,6 +21,11 @@ function notice_err(message,id="") {
    alert(message);
 }
 
+function correct_err(id) {
+    document.getElementById(id).style.background="#FCF5DB";
+}
+
+
 function drawListOnScreen(currentNumbersList) {
     canvas.clear();
     fList = window.createList(canvas, currentNumbersList);
