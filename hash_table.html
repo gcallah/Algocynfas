@@ -13,13 +13,18 @@
     <body >
       <div class="container">
         <h1>
-            Hash Table with Linear Probing 
+            Hash Table
         </h1>
+      <div class="firstLine">
+      <input type="radio" name="hashType" id="chaining" checked="true"> Chaining<br>
+      <input type="radio" name="hashType" id="linearProbing"> Linear Probing<br>
+      <br>
+      
       <input type="text" class="box" id="table_size" placeholder="Enter an integer" value="10">
        <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
-      &emsp;
+        &emsp;
       <input type="text" class="func_box" id="hash_func"  placeholder="Enter a hash function with x as variable"> % Size
-      &nbsp;
+     
       <div class="help-tip">
       <p>
       This is a Hash Table using Linear Probing. Make sure to set size,
@@ -31,16 +36,17 @@
  
       &emsp;
        <input type="text" class="box" id="InputValue"  placeholder="Enter an interger">
-       <button id = "run-button" type="button" class="btn btn-success col-1"
-           onclick="hash(1)">Hash</button>
+       <button id = "run-button" type="button" class="btn btn-success col-1" onclick="hash()">Hash</button>
     
        <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="clearTable()">Clear</button>
 
       <br/>
       <br/>
-       <canvas id="canvas" width="1000" height="1400"
-        style="border:1px solid #000000"></canvas>
-        </div>
+      <div class="canvasBox"  style="border:1px solid #000000">
+         <canvas id="canvas" width="1000" height="1400"></canvas>
+      </div>
+   
+
 
 
       <script src="algocynfas.js"></script>
@@ -61,7 +67,8 @@
        <footer id="legend">
             <script> window.displayLegend() </script>
         </footer>
-      </br>
+          </div>
+  
 
       </body>
 </html>

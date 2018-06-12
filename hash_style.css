@@ -16,6 +16,18 @@
     background:#FCF5DB;
     
 }
+
+
+.rightGroup{
+    float:center;
+}
+
+.canvasBox{
+    width: 1100px;
+    height:400px;
+    overflow: scroll;
+
+}
 .help-tip{
     position: absolute;
     top: 18px;

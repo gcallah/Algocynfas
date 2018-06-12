@@ -64,11 +64,16 @@ function calculateHashValue()
     }
 }
 
-let CHAIN = 0
-let PROBE = 1
-
-function hash(chain_or_probe)
+function checkHashType()
 {
+  if(document.getElementById("chaining").checked){
+      return "CHAIN";
+  }
+  return "PROB";
+}
+function hash()
+{
+  chainOrProbe= checkHashType()
 	var error_value = 100;
 	var input = document.getElementById("InputValue").value;
 	input = parseInt(input);
@@ -79,12 +84,13 @@ function hash(chain_or_probe)
 		var value = calculateHashValue();
 		if(value != error_value)
 		{
-            if(chain_or_probe == CHAIN)
+            if(chainOrProbe == "CHAIN")
             {
                 hashChaining(input, value)
             }
             else
             {
+                console.log("here");
                 hashProbing(input, value)
             }
         }
@@ -105,8 +111,7 @@ function hashProbing(input, value)
 	}
 	else{
 		notice_err("Sorry, the hash table is full!");
-		Probing_counter=0;
-	    clearTable();
+
     }
 }
 
