@@ -121,10 +121,8 @@ function clearTable()
 	canvas.clear();
 	document.getElementById("hash_func").value="";
 	document.getElementById("InputValue").value="";
-	if(document.getElementsByTagName("h1")[0].innerHTML="Hash Table with Linear Probing")
-	{
-		Probing_counter=0;
-	}
+  probingCounter=0;
+	
 	
 }
 
