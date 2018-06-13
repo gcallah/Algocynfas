@@ -1,40 +1,40 @@
 function SetupTable(){
 
-	let size = document.getElementById("table_size").value;
+	let size = document.getElementById("tableSize").value;
 	size=parseInt(size);
 	canvas.clear();      
 	if (Number.isInteger(size) && size > 1 && size < 21){
-		correct_err("table_size");
-		document.getElementById("table_size").style.background="#FCF5DB";
+		correctErr("tableSize");
+		document.getElementById("tableSize").style.background="#FCF5DB";
 		list=Array.apply(null, {length: size}).map(Number.call, Number); 
-		Hash_Table= createHashTable(canvas, list);
+		hashTable= createHashTable(canvas, list);
 	}
 	else
 	{
-		notice_err("Please enter a valid size between 2-20 !","table_size");
+		noticeErr("Please enter a valid size between 2-20 !","tableSize");
 	}
 	return;
 }
 
 function calculateHashValue()
 {
-    var func = document.getElementById("hash_func").value; 
-    var size= document.getElementById("table_size").value;
+    var func = document.getElementById("hashFunc").value; 
+    var size= document.getElementById("tableSize").value;
     var input = document.getElementById("InputValue").value;
-    var error_value = 100;
+    var errorValue = 100;
     
     if(func&&size&&input){
     	if(parseInt(input) > 999 || parseInt(input) < 0){
-    		notice_err("Please enter a positive integer between 0 to 999!",
+    		noticeErr("Please enter a positive integer between 0 to 999!",
                 "InputValue")
-    		return error_value;
+    		return errorValue;
     	}
-    	correct_err("InputValue");
+    	correctErr("InputValue");
         try {
       		formula = func.split("x").join("input");
       		if(func==formula){
-      			notice_err("Function is invalid!","hash_func");
-      			return error_value;
+      			noticeErr("Function is invalid!","hashFunc");
+      			return errorValue;
       		}
       		else{
       		;
@@ -49,18 +49,18 @@ function calculateHashValue()
       		formula = formula.split("^").join("**");
      		result = eval(formula);
      		result = parseInt(result % parseInt(size)); 
-     		correct_err("hash_func");
+     		correctErr("hashFunc");
      		return result;
     
      		 }
         catch(error) {
-            notice_err("Function is invalid!", "hash_func");
-            return error_value;
+            noticeErr("Function is invalid!", "hashFunc");
+            return errorValue;
         }
     }
     else{
-    	notice_err("Incomplete input!");
-    	return error_value;
+    	noticeErr("Incomplete input!");
+    	return errorValue;
     }
 }
 
@@ -74,15 +74,15 @@ function checkHashType()
 function hash()
 {
   chainOrProbe= checkHashType()
-	var error_value = 100;
+	var errorValue = 100;
 	var input = document.getElementById("InputValue").value;
 	input = parseInt(input);
-	if(!Hash_Table){
-		notice_err("Please set the size first!");
+	if(!hashTable){
+		noticeErr("Please set the size first!");
 	}
 	else{
 		var value = calculateHashValue();
-		if(value != error_value)
+		if(value != errorValue)
 		{
             if(chainOrProbe == "CHAIN")
             {
@@ -99,18 +99,18 @@ function hash()
 
 function hashChaining(input, value)
 {
-    Hash_Table.setHList(value, input);
+    hashTable.setHList(value, input);
 }
 
 function hashProbing(input, value)
 {
-	if(Probing_counter <= document.getElementById("table_size").value-1){
-		Probing_counter += 1;
-		Hash_Table.setHValue(value, input);
+	if(probingCounter <= document.getElementById("tableSize").value-1){
+		probingCounter += 1;
+		hashTable.setHValue(value, input);
 		
 	}
 	else{
-		notice_err("Sorry, the hash table is full!");
+		noticeErr("Sorry, the hash table is full!");
 
     }
 }
@@ -119,7 +119,7 @@ function hashProbing(input, value)
 function clearTable()
 {
 	canvas.clear();
-	document.getElementById("hash_func").value="";
+	document.getElementById("hashFunc").value="";
 	document.getElementById("InputValue").value="";
   probingCounter=0;
 	
@@ -127,7 +127,7 @@ function clearTable()
 }
 
 
-function create_legend() {
+function createLegend() {
     const legend = {    
         "data": [{
                     "title": "Table Index",
@@ -142,7 +142,7 @@ function create_legend() {
 }
 
 function displayLegend() {
-  var legend = create_legend();
+  var legend = createLegend();
   return document.getElementById("legend").innerHTML =
   `<ul class='list-group col-3'>
     <li class='list-group-item' style = background-color:${legend.data[0].color}>

@@ -14,14 +14,14 @@ function check_and_Delay(){
     
 }
 
-function notice_err(message,id="") {
+function noticeErr(message,id="") {
   if(id!=""){
       document.getElementById(id).style.background="red";
    }
    alert(message);
 }
 
-function correct_err(id) {
+function correctErr(id) {
     document.getElementById(id).style.background="#FCF5DB";
 }
 
