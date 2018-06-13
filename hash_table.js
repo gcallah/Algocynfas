@@ -144,13 +144,13 @@ function createLegend() {
 function displayLegend() {
   var legend = createLegend();
   return document.getElementById("legend").innerHTML =
-  `<ul class='list-group col-3'>
-    <li class='list-group-item' style = background-color:${legend.data[0].color}>
+  `<div class='list-group col-3'>
+    <div class='list-group-item' style = background-color:${legend.data[0].color}>
     ${legend.data[0].title}
-    </li>
-    <li class='list-group-item' style = background-color:${legend.data[1].color}>
+    </div>
+    <div class='list-group-item' style = background-color:${legend.data[1].color}>
     ${legend.data[1].title}
-    </li>
-  </ul>`;
+    </div>
+  </div>`;
 }
 

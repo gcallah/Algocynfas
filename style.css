@@ -41,10 +41,6 @@ th {
     background: #afd;
 }
 
-canvas {
-    margin: .5em 2em .5em 2em;
-    border: .1em dashed black;
-}
 
 li {
     margin: .5em .75em .5em .75em;
@@ -82,8 +78,10 @@ h1,h2 {
 }
 
 h1 {
+
     margin: 0 0 1.5em 0;
-    padding-bottom: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     text-align: center;
     font-weight: 300;
     font-size: 2.5em;
@@ -260,7 +258,6 @@ p.lead-quote {
     width:280px;
     height:25px;
     background:#FCF5DB;
-    
 }
 
 
@@ -357,3 +354,4 @@ p.lead-quote {
     0% { opacity:0; }
     100% { opacity:100%; }
 }
+
