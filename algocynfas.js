@@ -289,7 +289,7 @@ class HashTable extends List {
     for(var i=0; i<this.HeadLists.length;i++){
         if (this.HeadLists[i].length>14)
         {
-          notice_err("Sorry we are unable to handle these many items in one chain!");
+          noticeErr("Sorry we are unable to handle these many items in one chain!");
         }
         createListWithHead(this.canvas,this.HeadLists[i], i);
     }
