@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--include head.txt --> 
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Insertion Sort
+        </h1>
+        <div class="buttons">
+            <!--include buttonsInputs.txt -->
+        </div>
+        <br/>
+        <!--include canvas.txt -->
+        <script>
+            var sortType = "insertionSort"
+            const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+            let canvas = new fabric.Canvas('canvas');
+            let list = [];
+            let fList = null;
+            drawListOnScreen(list);
+        </script>
+        <footer id="legend">
+            <script> window.display_legend() </script>
+        </footer>
+    </div>
+
+</body>
+
+</html>
