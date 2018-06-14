@@ -25,5 +25,6 @@ async function insertionSort(myList) {
         await myList.draw();
         j++;
     }
+    return myList
 }
 
