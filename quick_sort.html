@@ -1,88 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="lib/bootstrap.min.css">
-        <link rel="stylesheet" href="style.css">
-        <script src="lib/bootstrap.min.js"></script>
-        <script src="lib/fabric.js"></script>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lib/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="lib/bootstrap.min.js"></script>
+<script src="lib/fabric.js"></script>
+<script src="algocynfas.js"></script>
+<script src="widgets.js"></script>
+<script src="sort.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Quick Sort
+        </h1>
+        <div class="buttons">
+ <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+&emsp;&emsp;&emsp;
+<button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+<br>
+<input type="radio" name="speed" value="500" id="Fast"> Fast<br>
+<input type="radio" name="speed" value="1000" id="Medium" checked="true"> Medium<br>
+<input type="radio" name="speed" value="2000" id="Slow"> Slow
 
-    </head>
-    <body>
-        <div class="container">
-            <h1>
-                Quick Sort
-            </h1>
-            <div class="rg_button">
-                <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
-                &emsp;&emsp;&emsp;
-                <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
-                <br>
-                <input type="radio" name="speed" value="500" id="Fast"> Fast<br>
-                <input type="radio" name="speed" value="1000" id="Medium" checked="true"> Medium<br>
-                <input type="radio" name="speed" value="2000" id="Slow"> Slow
-                
-            </div>
-            <div class="input-group mb-3"> 
-                <input type="text" class="inputbox" id="number-input" placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
-            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-primary" id="add-number-button" type="button" onclick="inputNumberToArray()">Create a List</button>
-                </div>
-            </div>
+<div class="input-group mb-3">
+    <input type="text" class="inputbox" id="number-input" placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
+    aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
+    <div class="input-group-append">
+        <button class="btn btn-outline-primary" id="add-number-button" type="button" 
+        onclick="inputNumberToArray()">Create a List
+        </button>
+    </div>
+</div>
 
-            <div class="input-group form-inline mb-3 numbers-group" onclick="deleteNumberGroup(event)">
-                <!--This is a template. Only use for create and display-->
-                <div class="input-group mx-2 border number-group" style="display:none">
-                    <label class="input-group-text number-group-number">This is just a template</label>
-                    <div class="input-group-append mx-1">
-                        <button type="button" class="close close-button" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-            <br/>
-            <canvas id="canvas" width="800" height="144"
-                    style="border:1px solid #000000"></canvas>
-            <script src="algocynfas.js"></script>
-            <script src="quick_sort.js"></script>
-            <script src="widgets.js"></script>
-            <script>
-                const numbersGroup = document.getElementsByClassName("numbers-group")[0];
-
-
-                let canvas = new fabric.Canvas('canvas');
-                let list = [];
-                let fList = null;
-
-                async function sort() {
-                    clearNumberGroup();
-
-                    animeRunning = true;
-
-                    let runButton = document.getElementById("run-button");
-                    let addNumberButton = document.getElementById("add-number-button");
-                    runButton.disabled = true;
-                    addNumberButton.disabled = true;
-
-                    await window.quickSort(fList);
-                    console.log("sorted");
-                    runButton.disabled = false;
-                    addNumberButton.disabled = false;
-
-                    list = [];
-                }
-
-                
-                drawListOnScreen(list);
-
-            </script>
-            <footer id="legend">
-            <script> window.display_legend() </script> 
-         </footer>
+<div class="input-group form-inline mb-3 numbers-group"
+onclick="deleteNumberGroup(event)">
+    <!--This is a template. Only use for create and display-->
+    <div class="input-group mx-2 border number-group" style="display:none">
+        <label class="input-group-text number-group-number">
+        This is just a template
+        </label>
+        <div class="input-group-append mx-1">
+            <button type="button" class="close close-button" aria-label="Close">
+                <span aria-hidden="true">&times;
+                </span>
+            </button>
         </div>
+    </div>
 
-      </body>
+</div>
+        </div>
+        <br/>
+<canvas id="canvas" width="800" height="144"
+style="border:1px solid #000000"></canvas>
+        <script>
+            var sortType = "quickSort";
+            const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+            let canvas = new fabric.Canvas('canvas');
+            let list = [];
+            let fList = null;
+            drawListOnScreen(list);
+        </script>
+        <footer idr="legend">
+            <script> window.display_legend() </script> 
+        </footer>
+    </div>
+
+</body>
 </html>

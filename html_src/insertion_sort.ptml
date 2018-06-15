@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
 <!--include head.txt -->
     <title>
         Insertion sort
     </title>
 
+=======
+    <!--include head.txt --> 
+>>>>>>> 2a883d6557510014977f0bb9d3cc0a661614a2b1
 </head>
 <body>
     <div class="container">
         <h1>
             Insertion Sort
         </h1>
+<<<<<<< HEAD
 
         <div class="rg_button">
             <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
@@ -84,6 +89,20 @@
 
             drawListOnScreen(list);
 
+=======
+        <div class="buttons">
+            <!--include buttonsInputs.txt -->
+        </div>
+        <br/>
+        <!--include canvas.txt -->
+        <script>
+            var sortType = "insertionSort"
+            const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+            let canvas = new fabric.Canvas('canvas');
+            let list = [];
+            let fList = null;
+            drawListOnScreen(list);
+>>>>>>> 2a883d6557510014977f0bb9d3cc0a661614a2b1
         </script>
         <footer id="legend">
             <script> window.display_legend() </script>
