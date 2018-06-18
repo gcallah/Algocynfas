@@ -78,9 +78,7 @@ async function partition(myList, low, high) {
 
 
 
-//  insertion sort bellow
-
-
+//  insertion sort below
 
 async function insertionSort(myList) {
     var j = 0;
@@ -109,7 +107,7 @@ async function insertionSort(myList) {
     }
 }
 
-// bubble sort bellow
+// bubble sort below
 
 async function bubbleSort(myList) {
 
