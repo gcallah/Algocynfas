@@ -13,16 +13,7 @@
               <input type="radio" name="hashType" id="linearProbing"> Linear Probing<br>
               <br>
               
-              <input type="text" class="box" id="table_size" placeholder="Enter an integer" value="10">
-               <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
-                &emsp;
-              <input type="text" class="func_box" id="hash_func"  placeholder="Enter a hash function with x as variable"> % Size
-              <input type="text" class="box" id="tableSize" placeholder="Enter an integer" value="10">
-               <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
-                &emsp;
-              <input type="text" class="funcBox" id="hashFunc"  placeholder="Enter a function use x as variable"> % Size
-             
-              <div class="help-tip">
+               <div class="help-tip">
                   <p>
                   This is a Hash Table. Make sure to set size, function and
                   input before hashing. Also make sure the function is only in
@@ -31,6 +22,11 @@
                   </p>
               </div>
          
+              <input type="text" class="box" id="tableSize" placeholder="Enter an integer" value="10">
+               <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
+                &emsp;
+              <input type="text" class="funcBox" id="hashFunc"  placeholder="Enter a function use x as variable"> % Size
+             
               &emsp;
                <input type="text" class="box" id="InputValue" 
                placeholder="Enter an interger">
