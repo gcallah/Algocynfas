@@ -2,12 +2,6 @@
 <html lang="en">
     <head>
 <!--include head.txt -->
-<<<<<<< HEAD
-        <title>
-            Hash Table
-        </title>
-=======
->>>>>>> 2a883d6557510014977f0bb9d3cc0a661614a2b1
     </head>
     <body >
       <div class="container">
@@ -19,17 +13,14 @@
               <input type="radio" name="hashType" id="linearProbing"> Linear Probing<br>
               <br>
               
-<<<<<<< HEAD
               <input type="text" class="box" id="table_size" placeholder="Enter an integer" value="10">
                <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
                 &emsp;
               <input type="text" class="func_box" id="hash_func"  placeholder="Enter a hash function with x as variable"> % Size
-=======
               <input type="text" class="box" id="tableSize" placeholder="Enter an integer" value="10">
                <button id = "set-button" type="button" class="btn btn-success col-1" onclick="SetupTable()">Set Size</button>
                 &emsp;
               <input type="text" class="funcBox" id="hashFunc"  placeholder="Enter a function use x as variable"> % Size
->>>>>>> 2a883d6557510014977f0bb9d3cc0a661614a2b1
              
               <div class="help-tip">
                   <p>
@@ -64,17 +55,12 @@
                   var canvas = new fabric.Canvas('canvas');
                   let list = [];
                   let fList = null;
-<<<<<<< HEAD
                   let Hash_Table = null;
-=======
                   let hashTable = null;
->>>>>>> 2a883d6557510014977f0bb9d3cc0a661614a2b1
                   let probingCounter = 0;
               </script>
                   
-               <footer id="legend">
-                    <script> window.displayLegend() </script>
-               </footer>
+             <!--include footer.txt -->
           </div>
         </div>  
 

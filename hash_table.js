@@ -1,3 +1,16 @@
+//test
+
+module.exports = { SetupTable: SetupTable, 
+                 calculateHashValue: calculateHashValue,
+                 checkHashType: checkHashType,
+                 hash: hash,
+                 hashChaining: hashChaining,
+                 hashProbing: hashProbing,
+                 clearTable: clearTable,
+                  }
+
+//Bellow are functions-----------------------------------------------
+
 function SetupTable(){
 
 	let size = document.getElementById("tableSize").value;
@@ -71,6 +84,8 @@ function checkHashType()
   }
   return "PROB";
 }
+
+
 function hash()
 {
   chainOrProbe= checkHashType()

@@ -1,3 +1,7 @@
+ 
+
+
+
  async function sort() {
     clearNumberGroup();
 
@@ -5,18 +9,21 @@
 
     let runButton = document.getElementById("run-button");
     let addNumberButton = document.getElementById("add-number-button");
+    let sortType = document.getElementsByName("sort");
     runButton.disabled = true;
     addNumberButton.disabled = true;
     
-    if(sortType == "insertionSort"){
+    if(sortType[0].checked){
         await window.insertionSort(fList);
     }
-    else if( sortType == "bubbleSort"){
+    else if( sortType[1].checked){
         await window. bubbleSort(fList);
     }
-    else{ sortType == "quickSort"
+    else{ //sortType[2].checked
         await window.quickSort(fList);
-}
+    }
+    
+
 
 runButton.disabled = false;
 addNumberButton.disabled = false;
@@ -26,7 +33,7 @@ list = [];
 
 
 let animeRunning = false;
-//quick sort bellow
+//quick sort below
 
 async function quickSort(myList) {
     
