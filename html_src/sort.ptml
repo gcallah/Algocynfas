@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--include head.txt -->
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Sorting Algorithms
+        </h1>
+        <div class="buttons">
+            <!--include buttonsInputs.txt -->
+        </div>
+        <br/>
+
+        <div class=numGroup>
+            <!--include numberGroup.txt -->
+        </div>
+
+        <!--include canvas.txt -->
+
+         <script>
+        const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+        let canvas = new fabric.Canvas('canvas');
+        let list = [];
+        let fList = null;
+        drawListOnScreen(list);
+       </script>
+
+       <!--include footer.txt -->
+        
+    </div>
+
+</body>
+</html>
