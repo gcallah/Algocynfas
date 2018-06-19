@@ -255,11 +255,15 @@ p.lead-quote {
 }
 .funcBox{
     font-size:15px;
-    width:280px;
+    width:220px;
     height:25px;
     background:#FCF5DB;
+    visibility: hidden;
 }
-
+.funcText{
+    display:inline;
+    visibility: hidden;
+}
 
 .rightGroup{
     float:center;

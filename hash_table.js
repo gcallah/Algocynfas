@@ -11,6 +11,67 @@ module.exports = { SetupTable: SetupTable,
 
 //Bellow are functions-----------------------------------------------
 
+function checkInput()
+{
+   var input = document.getElementById("InputValue").value;
+   var errorValue = 100;
+  if(parseInt(input) > 999 || parseInt(input) < 0){
+        noticeErr("Please enter a positive integer between 0 to 999!",
+                "InputValue");
+        return errorValue;
+      }
+      correctErr("InputValue");
+}
+
+function chooseFunc(){
+  let selectedBox = document.getElementById("funcChoices");
+  var funcSelected = selectedBox.selectedIndex;
+  var size= parseInt(document.getElementById("tableSize").value);
+  var func = document.getElementsByName("func");
+  var input = parseInt(document.getElementById("InputValue").value);
+  var errorValue = 100;
+
+    if (funcSelected == 0){
+        noticeErr("Please select a function first!");
+        return errorValue;
+    }
+
+    if (funcSelected == 1){
+      if(size % 2 != 0){
+          noticeErr("Please set an even size first!","tableSize");
+          return errorValue;
+      }
+      correctErr("tableSize");
+      return (2 * input) % size; //f1
+    }
+
+    else if (funcSelected == 2){
+      if(!isPrime(size)){
+          noticeErr("Please set a prime size first!","tableSize");
+          return errorValue;
+      }
+      correctErr("tableSize")
+      return (2 * input) % size; //f2
+    }
+    
+    else if (funcSelected == 3){
+      return (input ** 2) % size; //f3
+    }
+
+    else if (funcSelected == 4){
+      return (input ** 3) % size; //f4
+    }
+
+    else if (funcSelected == 5){
+      return (7 * input + 11) % size; //f5
+    }
+  
+    else if (funcSelected == 6){
+    return calculateHashValue(); 
+   }
+}
+
+
 function SetupTable(){
 
 	let size = document.getElementById("tableSize").value;
@@ -29,6 +90,29 @@ function SetupTable(){
 	return;
 }
 
+function isPrime(input) {
+    let prime = true;
+    for (let i = 2; i <= Math.sqrt(input); i++) {
+        if (input % i == 0) {
+            prime = false;
+            break;
+        }
+    }
+    return prime && (input > 1);
+}
+
+function isCustomize(){
+  if (document.getElementById("funcChoices").selectedIndex == 6){
+    document.getElementById("hashFunc").style.visibility = "visible";
+    document.getElementById("text").style.visibility = "visible";
+  }
+  else{
+    document.getElementById("hashFunc").style.visibility = "hidden";
+    document.getElementById("text").style.visibility = "hidden";
+  }
+
+}
+
 function calculateHashValue()
 {
     var func = document.getElementById("hashFunc").value; 
@@ -37,12 +121,6 @@ function calculateHashValue()
     var errorValue = 100;
     
     if(func&&size&&input){
-    	if(parseInt(input) > 999 || parseInt(input) < 0){
-    		noticeErr("Please enter a positive integer between 0 to 999!",
-                "InputValue")
-    		return errorValue;
-    	}
-    	correctErr("InputValue");
         try {
       		formula = func.split("x").join("input");
       		if(func==formula){
@@ -72,7 +150,7 @@ function calculateHashValue()
         }
     }
     else{
-    	noticeErr("Incomplete input!");
+    	noticeErr("Incomplete inputs!");
     	return errorValue;
     }
 }
@@ -96,7 +174,7 @@ function hash()
 		noticeErr("Please set the size first!");
 	}
 	else{
-		var value = calculateHashValue();
+		var value = chooseFunc();
 		if(value != errorValue)
 		{
             if(chainOrProbe == "CHAIN")
