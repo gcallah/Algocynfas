@@ -1,0 +1,86 @@
+<html>
+<head>
+<style type="text/css">
+  #container {
+    max-width: 500px;
+    height: 500px;
+    margin: 10px,10px,10px,10px;
+    border: 1px;
+    border-style: solid;
+  }
+</style>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="sigma.min.js"></script>
+  <script src="sigma.plugins.dragNodes.js"></script>
+  <script src="sigma.parsers.json.min.js"></script>
+  <script src="sigma.canvas.labels.def.js"></script>
+  <script>
+
+   var g = {
+  nodes: [
+    {
+      "id": "n0",
+      "label": "a",
+      "x": 20,
+      "y": 30,
+      "size": 10
+    },
+    {
+      "id": "n1",
+      "label": "b",
+      "x": 40,
+      "y": 60,
+      "size": 10
+    },
+    {
+      "id": "n2",
+      "label": "c",
+      "x": 10,
+      "y": 90,
+      "size": 10
+    }
+  ]
+};
+
+s = new sigma({
+  graph: g,
+  container: 'container',
+   settings: {
+        defaultNodeColor: '#ec5148',
+        autoRescale: false,
+        zoomingRatio: 1,
+        enableCamera: false,
+
+      }
+});
+
+  /*  s = sigma.parsers.json('data.json', {
+      container: 'container',
+      settings: {
+        defaultNodeColor: '#ec5148',
+        autoRescale: false,
+        zoomingRatio: 1,
+        enableCamera: false,
+
+      }
+    }); */
+
+var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+
+dragListener.bind('startdrag', function(event) {
+  console.log(event);
+});
+dragListener.bind('drag', function(event) {
+  console.log(event);
+});
+dragListener.bind('drop', function(event) {
+  console.log(event);
+});
+dragListener.bind('dragend', function(event) {
+  console.log(event);
+});
+  </script>
+</body>
+</html>
