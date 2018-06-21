@@ -241,6 +241,12 @@ p.lead-quote {
     margin: 0 auto;
 }
 
+.numBox{
+    font-size:15px;
+    width:50px;
+    height:25px;
+    background:#FCF5DB;
+}
 
 .container{
     margin: 30px; 

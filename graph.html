@@ -1,85 +1,96 @@
+
 <html>
 <head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lib/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap.min.js"></script>
+<script src="lib/fabric.js"></script>
+<script src="lib/sigma/sigma.min.js"></script>
+<script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+<script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+<script src="lib/graphArrange.js"></script>
+<script src="widgets.js"></script>
+
 <style type="text/css">
-  #container {
-    max-width: 500px;
+  #graphContainer {
+    width: 500px;
     height: 500px;
-    margin: 10px,10px,10px,10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
     border: 1px;
     border-style: solid;
   }
 </style>
 </head>
+
+
 <body>
-  <div id="container"></div>
-  <script src="lib/sigma/sigma.min.js"></script>
-  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
-  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+
+  <h1> Graph </h1>
+<div class="container">
+
+  <input type="text" class="numBox" id="nodeNum" 
+  placeholder="Enter node#, max 16" >
+  <button class="btn btn-outline-primary" id="add-node-button" type="button" 
+  onclick="createNodes()">Create Graph
+  </button>
+
+  <div id="graphContainer" class = "graph"></div>
+
   <script>
 
-   var g = {
-  nodes: [
-    {
-      "id": "n0",
-      "label": "a",
-      "x": 20,
-      "y": 30,
-      "size": 10
-    },
-    {
-      "id": "n1",
-      "label": "b",
-      "x": 40,
-      "y": 60,
-      "size": 10
-    },
-    {
-      "id": "n2",
-      "label": "c",
-      "x": 10,
-      "y": 90,
-      "size": 10
-    }
-  ]
-};
+function createNodes(){
 
-s = new sigma({
-  graph: g,
-  container: 'container',
-   settings: {
-        defaultNodeColor: '#ec5148',
-        autoRescale: false,
-        zoomingRatio: 1,
-        enableCamera: false,
+$( ".graph" ).empty();
+  var inputNum = parseInt(document.getElementById("nodeNum").value);
 
-      }
-});
+if(inputNum > 0 && inputNum < 17)
+{
+      correctErr("nodeNum");
+      var nodeGraph = sixteenArrange[inputNum];
+      var g = {
+        nodes: nodeGraph,
+    }; 
 
-  /*  s = sigma.parsers.json('data.json', {
-      container: 'container',
-      settings: {
-        defaultNodeColor: '#ec5148',
-        autoRescale: false,
-        zoomingRatio: 1,
-        enableCamera: false,
 
-      }
-    }); */
+    s = new sigma({
+      graph: g,
+      container: 'graphContainer',
+       settings: {
+            defaultNodeColor: '#ec5148',
+            autoRescale: false,
+            zoomingRatio: 1,
+            enableCamera: false,
 
-var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+          }
+    });
 
-dragListener.bind('startdrag', function(event) {
-  console.log(event);
-});
-dragListener.bind('drag', function(event) {
-  console.log(event);
-});
-dragListener.bind('drop', function(event) {
-  console.log(event);
-});
-dragListener.bind('dragend', function(event) {
-  console.log(event);
-});
+
+    var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+
+    dragListener.bind('startdrag', function(event) {
+      console.log(event);
+    });
+    dragListener.bind('drag', function(event) {
+      console.log(event);
+    });
+    dragListener.bind('drop', function(event) {
+      console.log(event);
+    });
+    dragListener.bind('dragend', function(event) {
+      console.log(event);
+    });
+}
+else{
+  noticeErr("Please enter a valid node number!", "nodeNum");
+
+}
+
+}
   </script>
+ </div> 
 </body>
 </html>
