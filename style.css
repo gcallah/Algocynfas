@@ -243,10 +243,20 @@ p.lead-quote {
 
 .numBox{
     font-size:15px;
-    width:150px;
+    width:200px;
     height:25px;
     background:#FCF5DB;
+
 }
+
+.edgeBox{
+    font-size:15px;
+    width:400px;
+    height:25px;
+    background:#FCF5DB;
+
+}
+
 
 .container{
     margin: 30px; 

@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="style.css">
 <script src="lib/jquery.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
-<script src="lib/fabric.js"></script>
 <script src="lib/sigma/sigma.min.js"></script>
 <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
 <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
@@ -30,33 +29,151 @@
 <body>
 
   <h1> Graph </h1>
+
 <div class="container">
 
-  <input type="text" class="numBox" id="nodeNum" 
-  placeholder="Enter node#, max 16" >
+   <select id= choices onchange="typeChange()">
+      <option value="Number" >Input by Node numbers (Default Name) </option>
+      <option value="f1" >Input by a List of Node names</option>
+  </select>
+   <input type="text" class="numBox" id="nodeNum" 
+  placeholder="Enter node#, max 16 nodes" >
+
+
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-  onclick="createNodes()">Create Graph
+  onclick="createNodes()">Create Node
+  </button> 
+
+  &emsp; &emsp;
+
+   <input type="text" class="numBox" id="edges" 
+  placeholder="Enter edges (e.g: a-b, e-f-g)">
+
+
+  <button class="btn btn-outline-primary" id="add-node-button" type="button" 
+  onclick="createEdges()"> Create Edges
   </button>
+  <br>
 
   <div id="graphContainer" class = "graph"></div>
 
   <script>
 
+let inputType = "num";
+let nodeList = [];
+let g = null;
+
+function typeChange(){
+    var choice = document.getElementById("choices").selectedIndex;
+    var inputBox = document.getElementById("nodeNum");
+    if(choice == 0){
+      inputBox.style.width = 200;
+      inputBox.placeholder = "Enter node#, max 16 nodes";
+      inputType = "num";
+    }
+    else{
+      inputBox.style.width = 350;
+      inputBox.placeholder = "Enter node names separate by comma, max 16 nodes";
+      inputType = "name";
+    }
+
+
+}
+
 function createNodes(){
 
-$( ".graph" ).empty();
-  var inputNum = parseInt(document.getElementById("nodeNum").value);
+  rawInput = document.getElementById("nodeNum").value;
 
-if(inputNum > 0 && inputNum < 17)
-{
-      correctErr("nodeNum");
-      var nodeGraph = sixteenArrange[inputNum];
-      var g = {
-        nodes: nodeGraph,
+  if (inputType == "num"){
+    var inputNum = parseInt(rawInput);
+  }
+  else{
+    var nameList = rawInput.split(",");
+    var inputNum = nameList.length;
+  }
+
+  if(inputNum > 0 && inputNum < 17)
+  {
+    correctErr("nodeNum");
+    var nodeGraph = sixteenArrange[inputNum];
+    g = {
+      nodes: nodeGraph,
+      edges: [],
     }; 
 
+    if(inputType == "name"){
+      for (var i = 0; i < nameList.length; i++){
+        g.nodes[i].label = nameList[i];
+      }
+      nodeList = rawInput;
 
-    s = new sigma({
+    }
+
+    createGraph();
+
+  }
+  else{
+    noticeErr("Please give a valid input!", "nodeNum");
+
+  }
+
+}
+
+
+function createEdges(){
+  var prepare = ((document.getElementById('edges').value).split(" ")).join("");
+  var edgeList = prepare.split(",");
+  var e = [];
+  var counter = 0;
+  var aAscii = "a".charCodeAt(0);
+
+    for(var i = 0; i < edgeList.length; i++ ){
+       var nodesToConnect = edgeList[i].split("-");
+       for(var j = 0; j < nodesToConnect.length - 1; j++){
+        if (inputType == "num"){
+          e.push({
+           "id": "e"+counter.toString(),
+           "source": (nodesToConnect[j].charCodeAt(0) - aAscii).toString(),
+           "target": (nodesToConnect[j+1].charCodeAt(0) - aAscii).toString(),
+          });
+        }
+        else{
+          e.push({
+           "id": "e"+counter.toString(),
+           "source": find(nodesToConnect[j]).toString(),
+           "target": find(nodesToConnect[j+1]).toString(),
+          });
+        }
+          counter += 1;
+       }
+    }
+
+  g.edges= e;
+  try{
+  createGraph();
+  correctErr("edges");
+  }
+ catch(error){
+  noticeErr("Please make sure if the nodes existed!", "edges");
+ }
+}
+
+
+function find(name){
+  var prepare = (nodeList.split(" ")).join("");
+  var List = prepare.split(",");
+  for(var i =0; i < List.length; i++){
+    if (name == List[i]){
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+function createGraph(){
+  $( ".graph" ).empty();
+   s = new sigma({
       graph: g,
       container: 'graphContainer',
        settings: {
@@ -67,29 +184,29 @@ if(inputNum > 0 && inputNum < 17)
 
           }
     });
-
-
+    enableDrag();
+}
+ 
+function enableDrag()
+{
     var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
 
     dragListener.bind('startdrag', function(event) {
-      console.log(event);
+
     });
     dragListener.bind('drag', function(event) {
-      console.log(event);
+
     });
     dragListener.bind('drop', function(event) {
-      console.log(event);
+
     });
     dragListener.bind('dragend', function(event) {
-      console.log(event);
+ 
     });
 }
-else{
-  noticeErr("Please enter a valid node number!", "nodeNum");
 
-}
 
-}
+
   </script>
  </div> 
 </body>
