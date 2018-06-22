@@ -30,6 +30,25 @@
               <input type="radio" name="hashType" id="linearProbing"> Linear Probing
             
               <br> <br>
+
+               <b>
+                Choose one function or customize one:
+                 <select id= funcChoices onchange="isCustomize()">
+                <option value="Select" >Select one</option>
+                <option value="f1" >2x % Size </option>
+                <option value="f2"> (x^2) % Size</option>
+                <option value="f3">(x^3) % Size</option>
+                <option value="f4">(7x + 11) % Size</option>
+                <option value="Cus">Customize</option>
+              </select>
+        
+              <input type="text" class="funcBox" id="hashFunc"  
+              placeholder="Enter a function use x as variable" > <b id = "text" class= "funcText"> % Size </b>
+               </b>
+             
+              <br>  
+              <br> 
+           
               <input type="text" class="box" id="tableSize" placeholder="Enter an integer" value="10">
               <button id = "set-button" type="button" 
               class="btn btn-success col-1" onclick="SetupTable()">Set Size
@@ -38,10 +57,6 @@
 
              <input type="text" class="box" id="InputValue" 
                placeholder="Enter an interger">
-               <button id = "set-button" type="button"
-                   class="btn btn-success col-1" onclick="checkInput()" >Set Input
-              </button>
-              &emsp; &emsp; 
 
                <button id = "run-button" type="button"
                    class="btn btn-success col-1" onclick="hash()">Hash
@@ -56,25 +71,6 @@
               <br> <br>
 
              
-              <b>
-                Choose one function or customize one:
-                 <select id= funcChoices onchange="isCustomize()">
-                <option value="Select" >Select one</option>
-                <option value="f1" >2x % Size (even)</option>
-                <option value="f2"> 2x % Size (prime)</option>
-                <option value="f3"> (x^2) % Size</option>
-                <option value="f4">(x^3) % Size</option>
-                <option value="f5">(7x + 11) % Size</option>
-                <option value="Cus">Customize</option>
-              </select>
-        
-              <input type="text" class="funcBox" id="hashFunc"  
-              placeholder="Enter a function use x as variable" > <b id = "text" class= "funcText"> % Size </b>
-               </b>
-             
-              <br>  
-              <br> 
-           
               <div class="canvasBox"  style="border:1px solid #000000">
                  <canvas id="canvas" width="1000" height="1400"></canvas>
               </div>
