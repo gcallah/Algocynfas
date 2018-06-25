@@ -249,9 +249,18 @@ p.lead-quote {
 
 }
 
+.weightBox{
+    font-size:15px;
+    width:270px;
+    height:25px;
+    background:#FCF5DB;
+    display: none;
+
+}
+
 .edgeBox{
     font-size:15px;
-    width:400px;
+    width:300px;
     height:25px;
     background:#FCF5DB;
 
@@ -261,6 +270,16 @@ p.lead-quote {
 .container{
     margin: 30px; 
 }
+
+#graphContainer {
+    width: 500px;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    border: 1px;
+    border-style: solid;
+  }
 
 .box{
     font-size:15px;

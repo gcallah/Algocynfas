@@ -7,22 +7,33 @@
 <script src="lib/jquery.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/sigma/sigma.min.js"></script>
+
+<script src="lib/sigma/sigma.renderers.canvas.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.hovers.def.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edges.curve.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edgehovers.def.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edgehovers.curve.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+<script src="lib/sigma/canvas/sigma.canvas.extremities.def.js"></script>
+
 <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
 <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+<script src="lib/sigma/sigma.canvas.edges.labels.curvedArrow.js"></script>
+<script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+<script src="lib/sigma/setting.js"></script>
 <script src="lib/graphArrange.js"></script>
-<script src="widgets.js"></script>
 
-<style type="text/css">
-  #graphContainer {
-    width: 500px;
-    height: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    border: 1px;
-    border-style: solid;
-  }
-</style>
+
+<script src="widgets.js"></script>
+<script src="graph.js"></script>
+
+
 </head>
 
 
@@ -37,22 +48,38 @@
       <option value="f1" >Input by a List of Node names</option>
   </select>
    <input type="text" class="numBox" id="nodeNum" 
-  placeholder="Enter node#, max 16 nodes" >
+  placeholder="Enter node#, max 16 nodes"  >
 
 
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
   onclick="createNodes()">Create Node
   </button> 
 
-  &emsp; &emsp;
+  <br> <br>
+   <select id= graphType onchange="setDir()">
+      <option value="undir" >Undirected </option>
+      <option value="dir" > Directed </option>
+  </select>
 
-   <input type="text" class="numBox" id="edges" 
-  placeholder="Enter edges (e.g: a-b, e-f-g)">
+   <select id= "graphWeight" onchange="setWeight()">
+      <option value="unW" >Unweighted </option>
+      <option value="W" > Weighted </option>
+  </select>
+  <b>
+  Graph
+  </b>
+   <input type="text" class="edgeBox" id="edges" 
+  placeholder="Enter edges (e.g: a-b, e-f-g)" >
 
-
+  
+ &emsp; 
+   <input type="text" class="weightBox" id="weights" 
+  placeholder="Enter weights in the order of edges, e.g: 1,2" >
+  
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
   onclick="createEdges()"> Create Edges
   </button>
+
   <br>
 
   <div id="graphContainer" class = "graph"></div>
@@ -62,149 +89,8 @@
 let inputType = "num";
 let nodeList = [];
 let g = null;
-
-function typeChange(){
-    var choice = document.getElementById("choices").selectedIndex;
-    var inputBox = document.getElementById("nodeNum");
-    if(choice == 0){
-      inputBox.style.width = 200;
-      inputBox.placeholder = "Enter node#, max 16 nodes";
-      inputType = "num";
-    }
-    else{
-      inputBox.style.width = 350;
-      inputBox.placeholder = "Enter node names separate by comma, max 16 nodes";
-      inputType = "name";
-    }
-
-
-}
-
-function createNodes(){
-
-  rawInput = document.getElementById("nodeNum").value;
-
-  if (inputType == "num"){
-    var inputNum = parseInt(rawInput);
-  }
-  else{
-    var nameList = rawInput.split(",");
-    var inputNum = nameList.length;
-  }
-
-  if(inputNum > 0 && inputNum < 17)
-  {
-    correctErr("nodeNum");
-    var nodeGraph = sixteenArrange[inputNum];
-    g = {
-      nodes: nodeGraph,
-      edges: [],
-    }; 
-
-    if(inputType == "name"){
-      for (var i = 0; i < nameList.length; i++){
-        g.nodes[i].label = nameList[i];
-      }
-      nodeList = rawInput;
-
-    }
-
-    createGraph();
-
-  }
-  else{
-    noticeErr("Please give a valid input!", "nodeNum");
-
-  }
-
-}
-
-
-function createEdges(){
-  var prepare = ((document.getElementById('edges').value).split(" ")).join("");
-  var edgeList = prepare.split(",");
-  var e = [];
-  var counter = 0;
-  var aAscii = "a".charCodeAt(0);
-
-    for(var i = 0; i < edgeList.length; i++ ){
-       var nodesToConnect = edgeList[i].split("-");
-       for(var j = 0; j < nodesToConnect.length - 1; j++){
-        if (inputType == "num"){
-          e.push({
-           "id": "e"+counter.toString(),
-           "source": (nodesToConnect[j].charCodeAt(0) - aAscii).toString(),
-           "target": (nodesToConnect[j+1].charCodeAt(0) - aAscii).toString(),
-          });
-        }
-        else{
-          e.push({
-           "id": "e"+counter.toString(),
-           "source": find(nodesToConnect[j]).toString(),
-           "target": find(nodesToConnect[j+1]).toString(),
-          });
-        }
-          counter += 1;
-       }
-    }
-
-  g.edges= e;
-  try{
-  createGraph();
-  correctErr("edges");
-  }
- catch(error){
-  noticeErr("Please make sure if the nodes existed!", "edges");
- }
-}
-
-
-function find(name){
-  var prepare = (nodeList.split(" ")).join("");
-  var List = prepare.split(",");
-  for(var i =0; i < List.length; i++){
-    if (name == List[i]){
-      return i;
-    }
-  }
-
-  return -1;
-}
-
-function createGraph(){
-  $( ".graph" ).empty();
-   s = new sigma({
-      graph: g,
-      container: 'graphContainer',
-       settings: {
-            defaultNodeColor: '#ec5148',
-            autoRescale: false,
-            zoomingRatio: 1,
-            enableCamera: false,
-
-          }
-    });
-    enableDrag();
-}
- 
-function enableDrag()
-{
-    var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
-
-    dragListener.bind('startdrag', function(event) {
-
-    });
-    dragListener.bind('drag', function(event) {
-
-    });
-    dragListener.bind('drop', function(event) {
-
-    });
-    dragListener.bind('dragend', function(event) {
- 
-    });
-}
-
+let dir = 0;
+let weight = 0;
 
 
   </script>
