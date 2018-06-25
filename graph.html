@@ -1,37 +1,37 @@
 
 <html>
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="lib/bootstrap.min.css">
-<link rel="stylesheet" href="style.css">
-<script src="lib/jquery.min.js"></script>
-<script src="lib/bootstrap.min.js"></script>
-<script src="lib/sigma/sigma.min.js"></script>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/sigma/sigma.min.js"></script>
 
-<script src="lib/sigma/sigma.renderers.canvas.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.hovers.def.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edges.curve.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edges.curvedArrow.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edgehovers.def.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edgehovers.curve.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edgehovers.arrow.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
-<script src="lib/sigma/canvas/sigma.canvas.extremities.def.js"></script>
+  <script src="lib/sigma/sigma.renderers.canvas.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.hovers.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.curve.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edgehovers.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edgehovers.curve.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.extremities.def.js"></script>
 
-<script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
-<script src="lib/sigma/sigma.canvas.labels.def.js"></script>
-<script src="lib/sigma/sigma.canvas.edges.labels.curvedArrow.js"></script>
-<script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
-<script src="lib/sigma/setting.js"></script>
-<script src="lib/graphArrange.js"></script>
+  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.curvedArrow.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+  <script src="lib/sigma/setting.js"></script>
+  <script src="lib/graphArrange.js"></script>
 
 
-<script src="widgets.js"></script>
-<script src="graph.js"></script>
+  <script src="widgets.js"></script>
+  <script src="graph.js"></script>
 
 
 </head>
@@ -41,59 +41,59 @@
 
   <h1> Graph </h1>
 
-<div class="container">
+  <div class="container">
 
    <select id= choices onchange="typeChange()">
-      <option value="Number" >Input by Node numbers (Default Name) </option>
-      <option value="f1" >Input by a List of Node names</option>
+    <option value="Number" >Input by Node numbers (Default Name) </option>
+    <option value="f1" >Input by a List of Node names</option>
   </select>
-   <input type="text" class="numBox" id="nodeNum" 
+  <input type="text" class="numBox" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes"  >
 
 
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
   onclick="createNodes()">Create Node
-  </button> 
+</button> 
 
-  <br> <br>
-   <select id= graphType onchange="setDir()">
-      <option value="undir" >Undirected </option>
-      <option value="dir" > Directed </option>
-  </select>
+<br> <br>
+<select id= graphType onchange="setDir()">
+  <option value="undir" >Undirected </option>
+  <option value="dir" > Directed </option>
+</select>
 
-   <select id= "graphWeight" onchange="setWeight()">
-      <option value="unW" >Unweighted </option>
-      <option value="W" > Weighted </option>
-  </select>
-  <b>
+<select id= "graphWeight" onchange="setWeight()">
+  <option value="unW" >Unweighted </option>
+  <option value="W" > Weighted </option>
+</select>
+<b>
   Graph
-  </b>
-   <input type="text" class="edgeBox" id="edges" 
-  placeholder="Enter edges (e.g: a-b, e-f-g)" >
-
-  
- &emsp; 
-   <input type="text" class="weightBox" id="weights" 
-  placeholder="Enter weights in the order of edges, e.g: 1,2" >
-  
-  <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-  onclick="createEdges()"> Create Edges
-  </button>
-
-  <br>
-
-  <div id="graphContainer" class = "graph"></div>
-
-  <script>
-
-let inputType = "num";
-let nodeList = [];
-let g = null;
-let dir = 0;
-let weight = 0;
+</b>
+<input type="text" class="edgeBox" id="edges" 
+placeholder="Enter edges (e.g: a-b, e-f-g)" >
 
 
-  </script>
- </div> 
+&emsp; 
+<input type="text" class="weightBox" id="weights" 
+placeholder="Enter weights in the order of edges, e.g: 1,2" >
+
+<button class="btn btn-outline-primary" id="add-node-button" type="button" 
+onclick="createEdges()"> Create Edges
+</button>
+
+<br>
+
+<div id="graphContainer" class = "graph"></div>
+
+<script>
+
+  let inputType = "num";
+  let nodeList = [];
+  let g = null;
+  let dir = 0;
+  let weight = 0;
+
+
+</script>
+</div> 
 </body>
 </html>

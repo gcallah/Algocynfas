@@ -97,24 +97,20 @@ function createEdges(){
    var nodesToConnect = edgeList[i].split("-");
    for(var j = 0; j < nodesToConnect.length - 1; j++){
     if (weight != 0){
-      try{
-        WEIGHT = listWeight[counter];
+      
+        WEIGHT = parseInt(listWeight[counter]);
         if (Number.isInteger(WEIGHT)){
           correctErr("weights");
+          WEIGHT = WEIGHT.toString();
         }
         else{
-          noticeErr("Please enter Integers as weights!", "weights");
+
+          noticeErr("Please enter valid weights!", "weights");
           return;
         }
-
-      }
-      catch(error){
-        WEIGHT = null;
-      }
-
     }
 
-
+    correctErr("weights");
     if (inputType == "num"){
       e.push({
        "id": nodesToConnect[j]+"-"+nodesToConnect[j+1],
