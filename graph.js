@@ -42,6 +42,7 @@ function createNodes(){
 
   rawInput = document.getElementById("nodeNum").value;
 
+// first determine how nodes are named:
   if (inputType == "num"){
     var inputNum = parseInt(rawInput);
   }
@@ -52,10 +53,10 @@ function createNodes(){
 
   if(inputNum > 0 && inputNum < 17)
   {
-    correctErr("nodeNum");
-    var nodeGraph = sixteenArrange[inputNum];
+    correctErr("nodeNum");  // undo any error display
+    var nodeLayout = sixteenArrange[inputNum];  // get correct arrangement
     g = {
-      nodes: nodeGraph,
+      nodes: nodeLayout,
       edges: [],
     }; 
 
