@@ -33,6 +33,7 @@
   <script src="graph.js"></script>
 
 
+
 </head>
 
 
@@ -40,18 +41,14 @@
 
   <h1> Kruskal Algorithm </h1>
 
-  <div class="container">
+  <div class="container" style ="margin-left: 180px">
 
-   <select id= choices onchange="typeChange()">
-    <option value="Number" >Input by Node numbers (Default Name) </option>
-    <option value="f1" >Input by a List of Node names</option>
-  </select>
   <input type="text" class="numBox" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes"  >
 
 
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-  onclick="createNodes()">Create Node
+  onclick="createKGraph(false)">Create Nodes
 </button> 
 
 <br> <br>
@@ -66,24 +63,32 @@ placeholder="Enter edges (e.g: a-b, e-f-g)" >
 placeholder="Enter weights in the order of edges, e.g: 1,2" style="display: inline" >
 
 <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-onclick="createEdges()"> Create Edges
+onclick="createKGraph(true)"> Create Edges
 </button>
 
 <br>
+<br>
+ <button id = "run-button" type="button" class="btn btn-success col-1" onclick="runKruskal()">Run</button>
+ &emsp;
+<button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
 
-<div id="graphContainer" class = "graph" style = "height: 400px ; width: 800px"></div>
+<br>
+</div> 
+
+<div id="graphContainer" class = "graph" style = "height: 400px ; width: 900px"></div>
 
 <script>
 
-  let inputType = "num";
-  let nodeList = [];
-  let g = null;
-  let dir = 1;
-  let weight = 1;
+  let inputType = "num";  //by giving number as node input
+  let dir = 0;       //undirected
+  let weight = 1;    //Weighted
+  let kGraph = null;
+
+
+ 
 
 
 </script>
-</div> 
 </body>
 </html>
 

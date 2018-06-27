@@ -43,16 +43,16 @@
 
   <div class="container">
 
-   <select id= choices onchange="typeChange()">
-    <option value="Number" >Input by Node numbers (Default Name) </option>
-    <option value="f1" >Input by a List of Node names</option>
+    <select id= choices onchange="typeChange()">
+    <option value="Number" >Input number of nodes (Default Name) </option>
+    <option value="f1" >Input by a list of node names</option>
   </select>
   <input type="text" class="numBox" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes"  >
 
 
   <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-  onclick="createNodes()">Create Node
+  onclick="createGraph(false)">Create Nodes
 </button> 
 
 <br> <br>
@@ -77,7 +77,7 @@ placeholder="Enter edges (e.g: a-b, e-f-g)" >
 placeholder="Enter weights in the order of edges, e.g: 1,2" >
 
 <button class="btn btn-outline-primary" id="add-node-button" type="button" 
-onclick="createEdges()"> Create Edges
+onclick="createGraph(true)"> Create Edges
 </button>
 
 <br>
@@ -87,10 +87,9 @@ onclick="createEdges()"> Create Edges
 <script>
 
   let inputType = "num";
-  let nodeList = [];
-  let g = null;
   let dir = 0;
   let weight = 0;
+  let Graph = null;
 
 
 </script>

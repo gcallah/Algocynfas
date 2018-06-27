@@ -382,4 +382,3 @@ function createListWithHead(canvas, list, head){
     return l;
 }
 
-
