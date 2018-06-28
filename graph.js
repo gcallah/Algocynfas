@@ -394,7 +394,11 @@ class sigmaGraph{
 
 /*async*/ kruskalAlgo(){
   var result = [];
-  var sortedWeight = this.weights.sort();
+
+
+
+  var sortedWeight = this.weights.sort(function(a,b){return a-b});
+  console.log(sortedWeight);
   var aAscii = "a".charCodeAt(0);
   for(var i = 0; i < sortedWeight.length; i++)
   {
@@ -413,6 +417,10 @@ class sigmaGraph{
     }
   
   }
+
+  console.log(sortedWeight);
+
+  console.log(result);
 
   var color = true;
   for(var i = 1; i < this.nodeFindList.length; i++){
