@@ -45,6 +45,30 @@ function createGraph(ifEdge){
 }
 
 
+///////////////////////////////////// kruskal algorithm below:
+
+function createKGraph(ifEdge){
+   var kgraph = new sigmaGraph(ifEdge);
+   kGraph = kgraph;
+}
+
+function runKruskal(){
+  kGraph.kruskal();
+}
+
+function stopAnime(){
+
+}
+
+
+function graphRefresh(){
+
+  kGraph.sigma.refresh();
+
+}
+
+
+
 
 
 
@@ -57,7 +81,12 @@ class sigmaGraph{
       this.nodes = [];
       this.edges = [];
       this.weights = null;
+      this.nodeFindList = null;
       this.setGraph(ifEdge);
+
+     //only for weighted graph
+      this.weightEdgeMap = null;
+    
   
     
     }
@@ -187,22 +216,25 @@ class sigmaGraph{
           correctErr("weights");
           if (inputType == "num"){
             this.edgeLayout.push({
-             "id": nodesToConnect[j]+"-"+nodesToConnect[j+1],
-             "source": (nodesToConnect[0].charCodeAt(0) - aAscii).toString(),
-             "target": (nodesToConnect[1].charCodeAt(0) - aAscii).toString(),
-             "size" :5,
-             "label" : WEIGHT,
-             "type" : shape,
+             id: nodesToConnect[j]+"-"+nodesToConnect[j+1],
+             source: (nodesToConnect[0].charCodeAt(0) - aAscii).toString(),
+             target: (nodesToConnect[1].charCodeAt(0) - aAscii).toString(),
+             size :5,
+             label : WEIGHT,
+             type: shape,
+             color: '#ec5148',
+           
            });
           }
           else{
             this.edgeLayout.push({
-             "id": nodesToConnect[j]+"-"+nodesToConnect[j+1],
-             "source": this.find(nodesToConnect[j]).toString(),
-             "target": this.find(nodesToConnect[j+1]).toString(),
-             "size" :5,
-             "label" : WEIGHT,
-             "type" : shape,
+             id: nodesToConnect[j]+"-"+nodesToConnect[j+1],
+             source: this.find(nodesToConnect[j]).toString(),
+             target: this.find(nodesToConnect[j+1]).toString(),
+             size :5,
+             label : WEIGHT,
+             type : shape,
+             color: '#ec5148',
 
 
            });
@@ -237,8 +269,9 @@ class sigmaGraph{
         enableCamera: false,
         autoRescale: false,
         defaultEdgeLabelSize: 15,
+  
 
-         }
+        }
 
     });
     this.sigma = s;
@@ -273,10 +306,7 @@ class sigmaGraph{
   }
 
 
-  setColor(){
-
-
-  }
+ 
 
   find(name){
   
@@ -290,48 +320,7 @@ class sigmaGraph{
   return -1;
 }
 
-
-}
-
-
-///////////////////////////////////// kruskal algorithm below:
-
-function createKGraph(ifEdge){
-   var kgraph = new kruskalGraph(ifEdge);
-   kGraph = kgraph;
-}
-
-function runKruskal(){
-  kGraph.kruskal();
-}
-
-function stopAnime(){
-
-}
-
-
-
-class kruskalGraph extends sigmaGraph{
-
-    constructor(ifEdge){
-      super(ifEdge);
-        this.nodeFindList = null;
-        this.weightEdgeMap = null;
-    }
-    kruskal(){
-      if(this.edges.length == 0){
-        noticeErr("Please input edge first!","edges");
-        return;
-      }
-      correctErr("edges");
-      this.createFindList();
-      this.createWeightEdgeMap();
-      this.kruskalAlgo();
-
-
-    }
-
-    createFindList(){
+ createFindList(){
       var nodeList = [];
       for(var i = 0; i < this.nodes.length; i++){
           nodeList.push(i);
@@ -358,6 +347,50 @@ class kruskalGraph extends sigmaGraph{
 
     }
 
+    unionFind(node1Index,node2Index){
+    var list = this.nodeFindList;
+    var afterVal = list[node1Index];
+    var beforeVal = list[node2Index];
+    for(var i = 0; i < list.length; i++){
+
+      if(list[i] == beforeVal){
+          list[i] = afterVal;
+      }
+
+    }
+    return list;
+
+  }
+
+  color(path){
+    var pathEdges = this.sigma.graph.edges(path);
+    for(var i = 0; i < pathEdges.length; i++){
+      pathEdges[i].color = "#000";
+
+    }
+    kGraph = this;
+    graphRefresh();
+
+
+  }
+
+/// kruskal
+
+ kruskal(){
+      if(this.edges.length == 0){
+        noticeErr("Please input edge first!","edges");
+        return;
+      }
+      correctErr("edges");
+      this.createFindList();
+      this.createWeightEdgeMap();
+      this.kruskalAlgo();
+
+
+    }
+
+   
+
 
 /*async*/ kruskalAlgo(){
   var result = [];
@@ -380,38 +413,29 @@ class kruskalGraph extends sigmaGraph{
     }
   
   }
-  console.log(result);
+
+  var color = true;
   for(var i = 1; i < this.nodeFindList.length; i++){
     var final = this.nodeFindList[0];
     if(this.nodeFindList[i] != final){
       noticeErr("Sorry this is an disconnected graph so no kruskal path!");
+      color = false
       break;
     }
 
   }
-
-  //var result = await draw(result, time);
-}
-
-  unionFind(node1Index,node2Index){
-    var list = this.nodeFindList;
-    var afterVal = list[node1Index];
-    var beforeVal = list[node2Index];
-    for(var i = 0; i < list.length; i++){
-
-      if(list[i] == beforeVal){
-          list[i] = afterVal;
-      }
-
-    }
-    return list;
-
+  if (color){
+    this.color(result);
   }
 
 
+  //var result = await color(result, time);
 }
 
+  
 
+
+}
 
 
 
