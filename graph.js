@@ -40,7 +40,7 @@ function typeChange(){
 }
 
 function createGraph(ifEdge){
-   var graph = new sigmaGraph(ifEdge);
+   var graph = new ourGraph(ifEdge);
    Graph = graph;
 }
 
@@ -48,7 +48,7 @@ function createGraph(ifEdge){
 ///////////////////////////////////// kruskal algorithm function below:
 
 function createKGraph(ifEdge){
-   var kgraph = new sigmaGraph(ifEdge);
+   var kgraph = new ourGraph(ifEdge);
    kGraph = kgraph;
 }
 
@@ -70,13 +70,15 @@ function graphRefresh(){
 
 //////////wrapper class implementation
 
-class sigmaGraph{
+class ourGraph{
 
     constructor(ifEdge){
       this.sigma = null;
       this.graph = null;
       this.edgeLayout = [];
       this.nodes = [];
+// can we make a map from edges to nodes here so that we can do simple
+// lookups?
       this.edges = [];
       this.weights = null;
       this.nodeSet = null;
@@ -318,7 +320,7 @@ class sigmaGraph{
   return -1;
 }
 
- makeSet(){
+ makeSets() {
       var nodeList = [];
       for(var i = 0; i < this.nodes.length; i++){
           nodeList.push(i);
@@ -379,7 +381,17 @@ class sigmaGraph{
       })
   }
 
-
+getNodes(edge) {
+  var aAscii = "a".charCodeAt(0);
+  var node1 = (edge.split("-"))[0];
+  var node2 = (edge.split("-"))[1];
+  var node1Index = node1.charCodeAt(0)-aAscii;
+  var node2Index = node2.charCodeAt(0)-aAscii
+  return {
+      n1: node1Index,
+      n2: node2Index
+  }
+}
 
 /// kruskal
 
@@ -393,22 +405,18 @@ kruskal(){                                              //refer to CLRS P631 Kru
   var path = [];
 
 
-  this.makeSet();                                                           //MAKE-SET(v)
+  this.makeSets();                                                           //MAKE-SET(v)
   var sortedWeight = this.weights.sort(function(a,b){return a-b});          // sort the edges of G.E into nondecreasing order by weight w
-  var aAscii = "a".charCodeAt(0);
   for(var i = 0; i < sortedWeight.length; i++)                        
   {                                                           // // for each edge (u,v) in G.E, taken in nondecreasing order by weight
     var edges = this.weightEdgeMap.get(sortedWeight[i]);      // (Achieved by mapping weights to the edges in the method createWeightEdgeMap())
     for(var j = 0; j < edges.length; j++){
-      var node1 = (edges[j].split("-"))[0];
-      var node2 = (edges[j].split("-"))[1];
-      var node1Index = node1.charCodeAt(0)-aAscii;
-      var node2Index = node2.charCodeAt(0)-aAscii
+        var nodes = this.getNodes(edges[j])
 
-      if (this.nodeSet[node1Index] !=                             // if FIND-SET(u)!= FIND-SET(v)
-        this.nodeSet[node2Index]){
+      if (this.nodeSet[nodes.n1] !=                             // if FIND-SET(u)!= FIND-SET(v)
+        this.nodeSet[nodes.n2]){
         path.push(edges[j]);                                      // A = A U {(u,v)}
-        this.nodeSet = this.unionFind(node1Index,node2Index);     // Union (u,v)
+        this.nodeSet = this.unionFind(nodes.n1, nodes.n2);     // Union (u,v)
           
     }
   }
