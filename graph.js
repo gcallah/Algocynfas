@@ -428,7 +428,6 @@ class sigmaGraph{
     this.color(result);
   }
 
-
   //var result = await color(result, time);
 }
 
