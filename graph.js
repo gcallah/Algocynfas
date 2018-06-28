@@ -45,7 +45,7 @@ function createGraph(ifEdge){
 }
 
 
-///////////////////////////////////// kruskal algorithm below:
+///////////////////////////////////// kruskal algorithm function below:
 
 function createKGraph(ifEdge){
    var kgraph = new sigmaGraph(ifEdge);
@@ -68,9 +68,7 @@ function graphRefresh(){
 }
 
 
-
-
-
+//////////wrapper class implementation
 
 class sigmaGraph{
 
@@ -81,7 +79,7 @@ class sigmaGraph{
       this.nodes = [];
       this.edges = [];
       this.weights = null;
-      this.nodeFindList = null;
+      this.nodeSet = null;
       this.setGraph(ifEdge);
 
      //only for weighted graph
@@ -320,12 +318,12 @@ class sigmaGraph{
   return -1;
 }
 
- createFindList(){
+ makeSet(){
       var nodeList = [];
       for(var i = 0; i < this.nodes.length; i++){
           nodeList.push(i);
       }
-      this.nodeFindList = nodeList;
+      this.nodeSet = nodeList;
 
     }
 
@@ -348,7 +346,7 @@ class sigmaGraph{
     }
 
     unionFind(node1Index,node2Index){
-    var list = this.nodeFindList;
+    var list = this.nodeSet;
     var afterVal = list[node1Index];
     var beforeVal = list[node2Index];
     for(var i = 0; i < list.length; i++){
@@ -362,70 +360,66 @@ class sigmaGraph{
 
   }
 
-  color(path){
+   async color(path){
     var pathEdges = this.sigma.graph.edges(path);
     for(var i = 0; i < pathEdges.length; i++){
+       
       pathEdges[i].color = "#000";
-
+       kGraph = this;
+       graphRefresh();
+       await this.pause(pauseTime);
+    
     }
-    kGraph = this;
-    graphRefresh();
-
 
   }
 
+    async pause (time) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, time)
+      })
+  }
+
+
+
 /// kruskal
 
- kruskal(){
-      if(this.edges.length == 0){
-        noticeErr("Please input edge first!","edges");
-        return;
-      }
-      correctErr("edges");
-      this.createFindList();
-      this.createWeightEdgeMap();
-      this.kruskalAlgo();
+kruskal(){                                              //refer to CLRS P631 Kruskal's Algorithm
+  if(this.edges.length == 0){                                            
+    noticeErr("Please input edge first!","edges");      // A != []
+    return;
+  }
+  correctErr("edges");
+  this.createWeightEdgeMap();
+  var path = [];
 
 
-    }
-
-   
-
-
-/*async*/ kruskalAlgo(){
-  var result = [];
-
-
-
-  var sortedWeight = this.weights.sort(function(a,b){return a-b});
-  console.log(sortedWeight);
+  this.makeSet();                                                           //MAKE-SET(v)
+  var sortedWeight = this.weights.sort(function(a,b){return a-b});          // sort the edges of G.E into nondecreasing order by weight w
   var aAscii = "a".charCodeAt(0);
-  for(var i = 0; i < sortedWeight.length; i++)
-  {
-    var edges = this.weightEdgeMap.get(sortedWeight[i]);
+  for(var i = 0; i < sortedWeight.length; i++)                        
+  {                                                           // // for each edge (u,v) in G.E, taken in nondecreasing order by weight
+    var edges = this.weightEdgeMap.get(sortedWeight[i]);      // (Achieved by mapping weights to the edges in the method createWeightEdgeMap())
     for(var j = 0; j < edges.length; j++){
       var node1 = (edges[j].split("-"))[0];
       var node2 = (edges[j].split("-"))[1];
       var node1Index = node1.charCodeAt(0)-aAscii;
       var node2Index = node2.charCodeAt(0)-aAscii
 
-      if (this.nodeFindList[node1Index] != 
-          this.nodeFindList[node2Index]){
-        this.nodeFindList = this.unionFind(node1Index,node2Index);
-        result.push(edges[j]);
-      }
+      if (this.nodeSet[node1Index] !=                             // if FIND-SET(u)!= FIND-SET(v)
+        this.nodeSet[node2Index]){
+        path.push(edges[j]);                                      // A = A U {(u,v)}
+        this.nodeSet = this.unionFind(node1Index,node2Index);     // Union (u,v)
+          
     }
-  
   }
+  
+}
 
-  console.log(sortedWeight);
-
-  console.log(result);
 
   var color = true;
-  for(var i = 1; i < this.nodeFindList.length; i++){
-    var final = this.nodeFindList[0];
-    if(this.nodeFindList[i] != final){
+  for(var i = 1; i < this.nodeSet.length; i++){
+    var final = this.nodeSet[0];
+    if(this.nodeSet[i] != final){
       noticeErr("Sorry this is an disconnected graph so no kruskal path!");
       color = false
       break;
@@ -433,33 +427,14 @@ class sigmaGraph{
 
   }
   if (color){
-    this.color(result);
+    this.color(path);
   }
 
-  //var result = await color(result, time);
+
 }
 
   
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
