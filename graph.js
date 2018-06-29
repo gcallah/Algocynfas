@@ -39,31 +39,77 @@ function typeChange(){
 
 }
 
+function clearEdges(){
+  if(document.getElementById("nodeNum").value == ""){
+
+    noticeErr("Please still keep a valid node input!","nodeNum");
+    return;
+  }
+  for(var i =0; i<Graph.edges.length; i++){
+    Graph.sigma.graph.dropEdge(Graph.edges[i]);
+
+
+  }
+  graphRefresh();
+  document.getElementById("edges").value = "";
+  document.getElementById("weights").value = "";
+}
+
+function clearGraph(){
+   $( ".graph" ).empty();
+   document.getElementById("nodeNum").value = "";
+   document.getElementById("edges").value = "";
+   document.getElementById("weights").value = "";
+
+
+}
+/*function clearEdges(){
+   console.log(document.getElementById("nodeNum").value);
+  if(document.getElementById("nodeNum").value == ""){
+
+    noticeErr("Please still keep a valid node input!","nodeNum");
+    return;
+  }
+  correctErr("nodeNum");
+  createGraph(false);
+  document.getElementById("edges").value = null;
+  document.getElementById("weights").value = null;
+
+}*/
+
+
 function createGraph(ifEdge){
    var graph = new ourGraph(ifEdge);
    Graph = graph;
 }
 
 
+
+
 ///////////////////////////////////// kruskal algorithm function below:
 
-function createKGraph(ifEdge){
-   var kgraph = new ourGraph(ifEdge);
-   kGraph = kgraph;
+
+function run(){
+  animeRunning = true;
+  if(document.getElementById("kruskal").checked == true){
+    Graph.kruskal();
+    return;
+  }
+  Graph.prim();
 }
 
-function runKruskal(){
-  kGraph.kruskal();
-}
+
 
 function stopAnime(){
+
+  animeRunning = false;
 
 }
 
 
 function graphRefresh(){
 
-  kGraph.sigma.refresh();
+  Graph.sigma.refresh();
 
 }
 
@@ -108,6 +154,9 @@ class ourGraph{
     }
 
     // begin to do graphing prepare
+    if(inputNum == 0){
+      return;
+    }
 
 
     if(inputNum > 0 && inputNum < 17)
@@ -365,21 +414,37 @@ class ourGraph{
    async color(path){
     var pathEdges = this.sigma.graph.edges(path);
     for(var i = 0; i < pathEdges.length; i++){
-       
+      if(animeRunning){
       pathEdges[i].color = "#000";
-       kGraph = this;
+       Graph= this;
        graphRefresh();
-       await this.pause(pauseTime);
+       await this.pause();
+     }
+     else{
+      break;
+     }
     
     }
 
   }
 
-    async pause (time) {
+ async pause () { 
+
+      var times = document.getElementsByName("speed");
+      console.log(times[0].checked);
+      var time = 1000;
+      if(times[0].checked == true){
+        time = 300;
+      }
+      else if(times[2].checked == true){
+        time = 2000;
+      }
+      
       return new Promise(function (resolve) {
         setTimeout(resolve, time)
       })
   }
+
 
 getNodes(edge) {
   var aAscii = "a".charCodeAt(0);
@@ -428,7 +493,7 @@ kruskal(){                                              //refer to CLRS P631 Kru
   for(var i = 1; i < this.nodeSet.length; i++){
     var final = this.nodeSet[0];
     if(this.nodeSet[i] != final){
-      noticeErr("Sorry this is an disconnected graph so no kruskal path!");
+      noticeErr("Sorry this is an disconnected graph so no kruskal's path!");
       color = false
       break;
     }
@@ -438,6 +503,12 @@ kruskal(){                                              //refer to CLRS P631 Kru
     this.color(path);
   }
 
+
+}
+
+// prim
+
+prim(){
 
 }
 

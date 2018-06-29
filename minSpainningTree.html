@@ -29,10 +29,6 @@
   <script src="graph.js"></script>
 
 
-
-
-
-
 </head>
 
 
@@ -42,16 +38,13 @@
 
   <div class="container" style ="margin-left: 180px">
 
-  <b> Sort Types: 
+    <b> Algorithms: 
 
-           <input type="radio" name="sort" id="insertion" checked = "true"/>
-           <label for="insertion">Insertion Sort</label>
+           <input type="radio" name="algo" id="kruskal" checked = "true"/>
+           <label for="kruskal">Kruskal's Algorithm</label>
 
-           <input type="radio" name="sort" id="bubble"/>
-           <label for="bubble">Bubble Sort</label>
-
-           <input type="radio" name="sort" id="quick"/>
-           <label for="quick">Quick Sort</label>
+           <input type="radio" name="algo" id="prims"/>
+           <label for="prim">Prim's Algorithm</label>
 
            <br>
            </b>
@@ -64,9 +57,8 @@
            <label for="Medium">Medium</label>
            <input type="radio" name="speed" value="2000" id="Slow"/> 
            <label for="Slow">Slow</label>
-
+</b>
             <br>
-          </b>
 
   <input type="text" class="numBox" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes"  >
@@ -78,7 +70,8 @@
 
 
 &emsp;
-<button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="clearGraph()">Clear graph</button>
+<button id = "stop-button" type="button" class="btn btn-danger col-1" 
+style = "max-width: 100px ;width: 100px" onclick="clearGraph()">Clear Graph</button>
 <br> <br>
 
 <input type="text" class="edgeBox" id="edges" 
@@ -94,10 +87,11 @@ onclick="createGraph(true)"> Create Edges
 </button>
 &emsp;
 
-<button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="clearEdges()">Clear edges</button>
+<button id = "stop-button" type="button" class="btn btn-danger col-1" 
+style = "max-width: 100px ;width: 100px" onclick="clearEdges()">Clear Edges</button>
 <br>
 <br>
- <button id = "run-button" type="button" class="btn btn-success col-1" onclick="runKruskal()">Run</button>
+ <button id = "run-button" type="button" class="btn btn-success col-1" onclick="run()">Run</button>
  &emsp;
 <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
 
@@ -112,7 +106,6 @@ onclick="createGraph(true)"> Create Edges
   let dir = 0;       //undirected
   let weight = 1;    //Weighted
   let Graph = null;
-  let pauseTime = 700;
   let animeRunning = true;
 
 
