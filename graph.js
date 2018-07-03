@@ -1,3 +1,34 @@
+function setSample(){
+  let selectedBox = getHTML("sampleChoice");
+  var sampleSelected = selectedBox.selectedIndex;
+
+  if (sampleSelected == 0){
+        clearGraph();
+    }
+
+    if (sampleSelected == 1){
+         $( ".graph" ).empty();
+        getHTML("nodeNum").value = "5";
+        getHTML("edges").value = "a-b,b-c,c-d,d-e,a-e,b-e,a-c,a-d";
+        getHTML("weights").value = "1,2,3,4,5,6,7,8";
+    }
+
+    else if (sampleSelected == 2){
+         $( ".graph" ).empty();
+        getHTML("nodeNum").value = "10";
+        getHTML("edges").value = "d-e,a-d,a-c,e-i,e-g,f-i,f-j,c-i,h-b,b-g,b-a,e-h,d-c,c-e,g-h,g-j";
+        getHTML("weights").value = "2,6,4,7,2,8,1,11,9,2,4,3,12,5,6,1";
+    }
+
+    else if (sampleSelected == 3){
+         $( ".graph" ).empty();
+        getHTML("nodeNum").value = "11";
+        getHTML("edges").value = "a-b,b-e,e-i,b-i,h-i,e-h,c-d,d-g,g-k,j-k,f-j,c-f,c-j";
+        getHTML("weights").value = "1,5,7,2,4,2,2,11,14,8,9,21,10";
+    }
+
+}
+
 
 function setWeight(){
    var choice = getHTML("graphWeight").selectedIndex;
@@ -119,12 +150,18 @@ function createGraph(ifEdge){
 
 
 function run(){
+  if(Graph == null){
+    noticeErr("No graph created!");
+  }
+
+  else{
   animeRunning = true;
   if(getHTML("kruskal").checked == true){
     Graph.kruskal();
     return;
   }
   Graph.prim();
+}
 
 }
 
@@ -566,103 +603,76 @@ kruskal(){
 // prim
 
 
-prim(){
-
-   if(this.edges.length == 0){                                            
-    noticeErr("Please input edge first!","edges");      // G.V != []
-    return;
-  }
-  correctErr("edges");
-
-  var list = []; 
+prim(){                                                // Refer to CLRS P634's prim algorithm
   var path = [];
   var color = true;
   var connectionMap = this.findConnectionMap();
+  if(this.edges.length == 0){                                            
+      noticeErr("Please input edge first!","edges");      // G.V != []
+      return;
+  }
+  correctErr("edges");
+  var Q = [];                                       // Note: In this algorithm, an array is used instead of a minimum piority queue
+  for(var ind = 0; ind < this.nodes.length; ind++){ // for each u in G.V
 
-
-  for(var ind = 0; ind < this.nodes.length; ind++){
-
-    var item ={
-              v:this.nodes[ind], 
-              key:Infinity,
-              parent: null
+    var u ={
+      vertex:this.nodes[ind], 
+              key:Infinity,                     // u.key = infinity
+              parent: null,                     // u.p = NIL
             }
 
-    list.push(item);
-
-
+            Q.push(u);
   }
- var r = list[0];
- r.key = 0;
- var minInd = 0;
- var size = list.length;
+   var r = Q[0];                           //(Choose the first of the list as root)
+   r.key = 0;                                 // r.key = 0;
+   var minInd = 0;
+   var size = Q.length;
 
-  while(size != 0){
+  while(size != 0){                                                //while Q != []
+    var u = Q[minInd];                                              // u = Extract - min(Q)             
     try{
-    var adjU = connectionMap[letterNumConvert(list[minInd].v)];
+      var adjU = connectionMap[letterNumConvert(u.vertex)];                 
     }
     catch(error){
-       noticeErr("Sorry this is an disconnected graph so no Prim's path!");
-      color = false
-      break;
-
-    }
-
-    
-
-    for(var i = 0; i < adjU.length; i++){
-
-
+     noticeErr("Sorry this is an disconnected graph so no Prim's path!");
+     color = false;
+     break;
+   }
+    for(var i = 0; i < adjU.length; i++){                          //for each v in G.adj[u];
       var nodeIndex = letterNumConvert(adjU[i].connectedTo);
-   
-      if(!list[nodeIndex]){ 
-    
-         continue;
-      }
- 
-      else{
-       if(adjU[i].cost <  list[nodeIndex].key){
-         list[nodeIndex].key = adjU[i].cost;
-         list[nodeIndex].parent = list[minInd].v;
-    
+       if(Q[nodeIndex] && adjU[i].cost < Q[nodeIndex].key){     // if v in Q.V and w(u,v) < v.key
+         Q[nodeIndex].parent = u.vertex;                         // v.p = u
+         Q[nodeIndex].key = adjU[i].cost;                        // v.key = w(u,v)
+
        }
+
      }
-     
- }
-
-
- if(size != list.length){
-      path.push(list[minInd].parent + "-" + list[minInd].v);
+     if(size != Q.length){
+      path.push(u.parent + "-" + u.vertex);
     }
 
-    delete list[minInd];
-    minInd = this.findMinIndex(list);
- 
+    delete Q[minInd];
+    minInd = this.findMinIndex(Q);
+
     size -= 1;
-
-
   }
 
-console.log(path);
- if (color){
+  if (color){
     this.color(path);
   }
-
-
 } 
 
 
 
 
 
-
-findMinIndex(list){       // for prim
+findMinIndex(Q){       // for prim
    var min = Infinity;
    var ind = 0;
-   for(var i = 0; i < list.length; i++){
-    if(list[i] != null){
-      if(parseInt(list[i].key) < min){
-        min = list[i].key;
+   for(var i = 0; i < Q.length; i++){
+    if(Q[i] != null){
+      if(parseInt(Q[i].key) < min){
+        min = Q[i].key;
         ind = i;
       }
     }
@@ -670,9 +680,6 @@ findMinIndex(list){       // for prim
 }
 return ind;
 }
-
-
-
 
 
 findConnectionMap(){
@@ -701,9 +708,4 @@ findConnectionMap(){
    return result;
 }
 
-
-
 }
-
-
-

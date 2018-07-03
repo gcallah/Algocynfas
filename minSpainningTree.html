@@ -59,6 +59,21 @@
            <label for="Slow">Slow</label>
 </b>
             <br>
+            <b>
+            Fill the input box with sample values:
+            </b>
+                <select id= sampleChoice onchange="setSample()">
+                <option value="Select" >Select one</option>
+                <option value="sample1" >5 nodes with 8 edges </option>
+                <option value="sample2"> 10 nodes with 16 edges </option>
+                <option value="sample3"> Disconnected graph </option>
+              </select>
+
+
+            <br>
+            <br>
+
+
 
   <input type="text" class="numBox" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes"  >
