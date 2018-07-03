@@ -1,7 +1,7 @@
 
 function setWeight(){
-   var choice = document.getElementById("graphWeight").selectedIndex;
-   var wBox = document.getElementById("weights");
+   var choice = getHTML("graphWeight").selectedIndex;
+   var wBox = getHTML("weights");
     if(choice == 0){
       weight = 0;
       wBox.style.display = "none";
@@ -13,7 +13,7 @@ function setWeight(){
 
 }
 function setDir(){
-    var choice = document.getElementById("graphType").selectedIndex;
+    var choice = getHTML("graphType").selectedIndex;
     if(choice == 0){
       dir = 0;
     }
@@ -23,8 +23,8 @@ function setDir(){
 }
 
 function typeChange(){
-    var choice = document.getElementById("choices").selectedIndex;
-    var inputBox = document.getElementById("nodeNum");
+    var choice = getHTML("choices").selectedIndex;
+    var inputBox = getHTML("nodeNum");
     if(choice == 0){
       inputBox.style.width = 200;
       inputBox.placeholder = "Enter node#, max 16 nodes";
@@ -39,8 +39,37 @@ function typeChange(){
 
 }
 
+function splitInput(input,space = false){
+  if (space){
+    return (input.split(" ").join("")).split(",");
+  }
+  return input.split(",");
+  
+
+}
+
+function getHTML(id){
+  return document.getElementById(id);
+}
+
+function letterNumConvert(key){
+    if(Number.isInteger(key)){
+      var aAlph = {
+        0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h",
+        8: "i", 9: "j", 10: "k", 11: "l", 12: "m", 13: "n", 14: "o", 15: "p"}
+        return aAlph[key];
+
+      }
+    
+    var aNum={
+        a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9, k: 10, 
+        l: 11, m: 12, n: 13,o: 14, p: 15
+    }
+    return aNum[key];
+}
+
 function clearEdges(){
-  if(document.getElementById("nodeNum").value == ""){
+  if(getHTML("nodeNum").value == ""){
 
     noticeErr("Please still keep a valid node input!","nodeNum");
     return;
@@ -51,29 +80,29 @@ function clearEdges(){
 
   }
   graphRefresh();
-  document.getElementById("edges").value = "";
-  document.getElementById("weights").value = "";
+  getHTML("edges").value = "";
+  getHTML("weights").value = "";
 }
 
 function clearGraph(){
    $( ".graph" ).empty();
-   document.getElementById("nodeNum").value = "";
-   document.getElementById("edges").value = "";
-   document.getElementById("weights").value = "";
+   getHTML("nodeNum").value = "";
+   getHTML("edges").value = "";
+   getHTML("weights").value = "";
 
 
 }
 /*function clearEdges(){
-   console.log(document.getElementById("nodeNum").value);
-  if(document.getElementById("nodeNum").value == ""){
+   console.log(getHTML("nodeNum").value);
+  if(getHTML("nodeNum").value == ""){
 
     noticeErr("Please still keep a valid node input!","nodeNum");
     return;
   }
   correctErr("nodeNum");
   createGraph(false);
-  document.getElementById("edges").value = null;
-  document.getElementById("weights").value = null;
+  getHTML("edges").value = null;
+  getHTML("weights").value = null;
 
 }*/
 
@@ -91,11 +120,12 @@ function createGraph(ifEdge){
 
 function run(){
   animeRunning = true;
-  if(document.getElementById("kruskal").checked == true){
+  if(getHTML("kruskal").checked == true){
     Graph.kruskal();
     return;
   }
   Graph.prim();
+
 }
 
 
@@ -125,6 +155,7 @@ class ourGraph{
       this.nodes = [];
 // can we make a map from edges to nodes here so that we can do simple
 // lookups?
+
       this.edges = [];
       this.weights = null;
       this.nodeSet = null;
@@ -133,21 +164,19 @@ class ourGraph{
      //only for weighted graph
       this.weightEdgeMap = null;
     
-  
-    
     }
 
     setGraph(ifEdge){
 
       //Node part
 
-     var rawInput = document.getElementById("nodeNum").value;
+     var rawInput = getHTML("nodeNum").value;
 
      if (inputType == "num"){
       var inputNum = parseInt(rawInput);
     }
     else{
-      var nameList = rawInput.split(",");
+      var nameList = splitInput(rawInput);
       var inputNum = nameList.length;
       this.nodes = nameList;
       
@@ -162,8 +191,25 @@ class ourGraph{
     if(inputNum > 0 && inputNum < 17)
     {
       correctErr("nodeNum");
+
+      if(inputType == "num"){
+        var defaultList = [];
+        var counter = 0;
+
+        while (counter != inputNum){
+          var elem = letterNumConvert(counter)
+          defaultList.push(elem);
+          counter += 1;
+        }
+        this.nodes = defaultList;
+      
+      }
+
+
       var nodeLayout = sixteenArrange[inputNum];
       this.setGraphEdges(ifEdge);
+
+
 
       let g = {
         nodes: nodeLayout,
@@ -173,18 +219,9 @@ class ourGraph{
       this.graph = g;
 
       if(inputType == "name"){
-          this.setName();
-        }
-      else{
-        var defaultList = [];
-        var counter = 0;
-        var aAscii = "a".charCodeAt(0);
-        while (counter != inputNum){
-          var elem = String.fromCharCode(counter+aAscii);
-          defaultList.push(elem);
-          counter += 1;
-        }
-        this.nodes = defaultList;
+    
+
+        this.setName();
       }
 
 
@@ -207,7 +244,7 @@ class ourGraph{
       noticeErr("Please make sure if the nodes existed!", "edges");
     }
 
-    
+
   
      
 
@@ -218,89 +255,101 @@ class ourGraph{
   setGraphEdges(ifEdge){
 
     if(ifEdge == true){
-        var edgeList = (((document.getElementById('edges').value).split(" ")).join("")).split(",");
-        this.edges = edgeList;
+      var edgeList = splitInput(getHTML('edges').value, true);
 
-        var aAscii = "a".charCodeAt(0);
-        var counter = 0;  
+      this.edges = edgeList;
+      var counter = 0;  
 
-        if(dir == 1){
-          var shape = "arrow";
+      if(dir == 1){
+        var shape = "arrow";
+      }
+      else{
+        var shape = "line";
+      }
+      
+
+      for(var i = 0; i < edgeList.length; i++ ){
+       var nodesToConnect = edgeList[i].split("-");
+       if(nodesToConnect.length != 2 || nodesToConnect[0] == nodesToConnect[1]){
+         noticeErr("Please enter edges in valid format (a-b,b-c), no self loop allowed !", "edges");
+         return;
+       }
+       correctErr("edges");
+
+       if (weight == 1){
+        var listWeight =  splitInput((getHTML('weights').value), true);
+        this.weights = listWeight;
+        var WEIGHT = parseInt(listWeight[counter]);
+        if (Number.isInteger(WEIGHT) && WEIGHT >= 0){
+          correctErr("weights");
+          WEIGHT = WEIGHT.toString();
         }
         else{
-          var shape = "line";
-        }
-
-        for(var i = 0; i < edgeList.length; i++ ){
-         var nodesToConnect = edgeList[i].split("-");
-         if(nodesToConnect.length != 2 || nodesToConnect[0] == nodesToConnect[1]){
-           noticeErr("Please enter edges in valid format (a-b,b-c), no self loop allowed !", "edges");
-           return;
-         }
-         correctErr("edges");
-
-
-         for(var j = 0; j < nodesToConnect.length - 1; j++){
-
-
-          if (weight == 1){
-            var listWeight =  (((document.getElementById('weights').value).split(" ")).join("")).split(",");
-            this.weights = listWeight;
-            var WEIGHT = parseInt(listWeight[counter]);
-            if (Number.isInteger(WEIGHT)){
-              correctErr("weights");
-              WEIGHT = WEIGHT.toString();
-            }
-            else{
-              noticeErr("Please make sure the weight input and the number of weight inputs are valid!", "weights");
-              return;
-            }
-          }
-
-          else{
-            WEIGHT = null;
-          }
-          
-
-          correctErr("weights");
-          if (inputType == "num"){
-            this.edgeLayout.push({
-             id: nodesToConnect[j]+"-"+nodesToConnect[j+1],
-             source: (nodesToConnect[0].charCodeAt(0) - aAscii).toString(),
-             target: (nodesToConnect[1].charCodeAt(0) - aAscii).toString(),
-             size :5,
-             label : WEIGHT,
-             type: shape,
-             color: '#ec5148',
-           
-           });
-          }
-          else{
-            this.edgeLayout.push({
-             id: nodesToConnect[j]+"-"+nodesToConnect[j+1],
-             source: this.find(nodesToConnect[j]).toString(),
-             target: this.find(nodesToConnect[j+1]).toString(),
-             size :5,
-             label : WEIGHT,
-             type : shape,
-             color: '#ec5148',
-
-
-           });
-          }
-          counter += 1;
+          noticeErr("Please make sure the weight input and the number of weight inputs are valid!", "weights");
+          return;
         }
       }
-      if(weight == 1){
-        if (counter < this.weights.length){
-           noticeErr("Please make sure if the weight number matches edge number!", "weights");
-         }
-         else{
-           correctErr("weights");
-         }
+
+      else{
+        WEIGHT = null;
       }
+      
+    
+
+
+
+      correctErr("weights");
+
+      if (inputType == "num"){
+
+
+        this.edgeLayout.push({
+         id: edgeList[i],
+         source: letterNumConvert(nodesToConnect[0]).toString(),
+         target: letterNumConvert(nodesToConnect[1]).toString(),
+         size :5,
+         label : WEIGHT,
+         type: shape,
+         color: '#ec5148',
+
+       });
+
+
+
+    
+     
+
+      }
+      else{
+        this.edgeLayout.push({
+         id: edgeList[i],
+         source: this.find(nodesToConnect[0]).toString(),
+         target: this.find(nodesToConnect[1]).toString(),
+         size :5,
+         label : WEIGHT,
+         type : shape,
+         color: '#ec5148',
+
+
+       });
+      }
+
+      counter += 1;
 
     }
+    if(weight == 1){
+      if (counter < this.weights.length){
+       noticeErr("Please make sure if the weight number matches edge number!", "weights");
+     }
+     else{
+       correctErr("weights");
+     }
+   }
+
+ }
+      
+
+
 
 }
 
@@ -310,7 +359,7 @@ class ourGraph{
     let s = new sigma({
       graph: this.graph,
       renderer: {                                                        
-        container: 'graphContainer',   
+        container: 'graphContainer',  
         type: 'canvas'                                                                                 
     },                
       settings: {
@@ -323,8 +372,10 @@ class ourGraph{
         }
 
     });
+
     this.sigma = s;
     this.enableDrag();
+
 
 
   }
@@ -361,7 +412,6 @@ class ourGraph{
   
   for(var i =0; i < this.nodes.length; i++){
     if (name == (this.nodes[i].split(" ").join(""))){
-      console.log(this.nodes[i]);
       return i;
     }
   }
@@ -415,7 +465,14 @@ class ourGraph{
     var pathEdges = this.sigma.graph.edges(path);
     for(var i = 0; i < pathEdges.length; i++){
       if(animeRunning){
+      try{
       pathEdges[i].color = "#000";
+    }
+    catch(error){
+      path[i] = path[i][2] + path[i][1] + path[i][0];
+      pathEdges[i]= this.sigma.graph.edges(path[i]);
+      pathEdges[i].color = "#000";
+    }
        Graph= this;
        graphRefresh();
        await this.pause();
@@ -431,7 +488,7 @@ class ourGraph{
  async pause () { 
 
       var times = document.getElementsByName("speed");
-      console.log(times[0].checked);
+
       var time = 1000;
       if(times[0].checked == true){
         time = 300;
@@ -447,11 +504,10 @@ class ourGraph{
 
 
 getNodes(edge) {
-  var aAscii = "a".charCodeAt(0);
   var node1 = (edge.split("-"))[0];
   var node2 = (edge.split("-"))[1];
-  var node1Index = node1.charCodeAt(0)-aAscii;
-  var node2Index = node2.charCodeAt(0)-aAscii
+  var node1Index = letterNumConvert(node1);
+  var node2Index = letterNumConvert(node2);
   return {
       n1: node1Index,
       n2: node2Index
@@ -460,7 +516,8 @@ getNodes(edge) {
 
 /// kruskal
 
-kruskal(){                                              //refer to CLRS P631 Kruskal's Algorithm
+kruskal(){              
+                                 //refer to CLRS P631 Kruskal's Algorithm
   if(this.edges.length == 0){                                            
     noticeErr("Please input edge first!","edges");      // A != []
     return;
@@ -508,12 +565,142 @@ kruskal(){                                              //refer to CLRS P631 Kru
 
 // prim
 
+
 prim(){
 
+   if(this.edges.length == 0){                                            
+    noticeErr("Please input edge first!","edges");      // G.V != []
+    return;
+  }
+  correctErr("edges");
+
+  var list = []; 
+  var path = [];
+  var color = true;
+  var connectionMap = this.findConnectionMap();
+
+
+  for(var ind = 0; ind < this.nodes.length; ind++){
+
+    var item ={
+              v:this.nodes[ind], 
+              key:Infinity,
+              parent: null
+            }
+
+    list.push(item);
+
+
+  }
+ var r = list[0];
+ r.key = 0;
+ var minInd = 0;
+ var size = list.length;
+
+  while(size != 0){
+
+    var adjU = connectionMap[letterNumConvert(list[minInd].v)];
+    if(adjU.length == 0){
+      noticeErr("Sorry this is an disconnected graph so no Prim's path!");
+      color = false
+      break;
+
+    }
+
+    for(var i = 0; i < adjU.length; i++){
+
+
+      var nodeIndex = letterNumConvert(adjU[i].connectedTo);
+   
+      if(!list[nodeIndex]){ 
+    
+         continue;
+      }
+ 
+      else{
+       if(adjU[i].cost <  list[nodeIndex].key){
+         list[nodeIndex].key = adjU[i].cost;
+         list[nodeIndex].parent = list[minInd].v;
+    
+       }
+     }
+     
+ }
+
+
+ if(size != list.length){
+      path.push(list[minInd].parent + "-" + list[minInd].v);
+    }
+
+    delete list[minInd];
+    minInd = this.findMinIndex(list);
+ 
+    size -= 1;
+
+
+  }
+
+console.log(path);
+ if (color){
+    this.color(path);
+  }
+
+
+} 
+
+
+
+
+
+
+findMinIndex(list){       // for prim
+   var min = Infinity;
+   var ind = 0;
+   for(var i = 0; i < list.length; i++){
+    if(list[i] != null){
+      if(parseInt(list[i].key) < min){
+        min = list[i].key;
+        ind = i;
+      }
+    }
+
+}
+return ind;
 }
 
-  
+
+
+
+
+findConnectionMap(){
+
+  var result = [];
+      for(var j = 0; j < this.nodes.length; j++ ){
+        result.push([]);
+       }
+
+ for(var i = 0; i < this.edges.length; i++ ){
+      var nodesToConnect = this.edges[i].split("-");
+
+
+   result[letterNumConvert(nodesToConnect[0])].push({
+        connectedTo: nodesToConnect[1],
+        cost: parseInt(this.weights[i]),
+      });
+
+      result[letterNumConvert(nodesToConnect[1])].push({
+        connectedTo: nodesToConnect[0],
+        cost: parseInt(this.weights[i]),
+      });
+
+   }
+
+   return result;
+}
+
 
 
 }
+
+
 
