@@ -598,14 +598,17 @@ prim(){
  var size = list.length;
 
   while(size != 0){
-
+    try{
     var adjU = connectionMap[letterNumConvert(list[minInd].v)];
-    if(adjU.length == 0){
-      noticeErr("Sorry this is an disconnected graph so no Prim's path!");
+    }
+    catch(error){
+       noticeErr("Sorry this is an disconnected graph so no Prim's path!");
       color = false
       break;
 
     }
+
+    
 
     for(var i = 0; i < adjU.length; i++){
 
