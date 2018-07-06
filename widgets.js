@@ -1,9 +1,40 @@
+
+function getHTML(id){
+  return document.getElementById(id);
+}
+
+
+
+function splitInput(input,space = false){
+  if (space){
+    return (input.split(" ").join("")).split(",");
+  }
+  return input.split(",");
+
+}
+
+function letterNumConvert(key){
+    if(Number.isInteger(key)){
+      var aAlph = {
+        0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h",
+        8: "i", 9: "j", 10: "k", 11: "l", 12: "m", 13: "n", 14: "o", 15: "p"}
+        return aAlph[key];
+
+      }
+    
+    var aNum={
+        a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9, k: 10, 
+        l: 11, m: 12, n: 13,o: 14, p: 15
+    }
+    return aNum[key];
+}
+
 function check_and_Delay(){
-    if(document.getElementById('Fast').checked)
+    if(getHTML('Fast').checked)
     {
        return 200;
     }
-    else if(document.getElementById('Medium').checked)
+    else if(getHTML('Medium').checked)
     {
        return 500;
     }
@@ -16,13 +47,13 @@ function check_and_Delay(){
 
 function noticeErr(message,id="") {
   if(id!=""){
-      document.getElementById(id).style.background="red";
+      getHTML(id).style.background="red";
    }
    alert(message);
 }
 
 function correctErr(id) {
-    document.getElementById(id).style.background="#FCF5DB";
+    getHTML(id).style.background="#FCF5DB";
 }
 
 
@@ -36,87 +67,25 @@ function stopAnime() {
     }
 
 
-function inputNumberToArray() {
-    clearNumberGroup();
-    list=[]
-    canvas.clear();
-    let an_input = document.getElementById("number-input").value;
-    var list_num = an_input.split(",");
-    if(list_num.length == 0 || list_num.length == 1){
-      alert("Please enter a valid list without '[]' "); 
-      document.getElementById("number-input").value = "";
-      return;
-    } 
-    var all_valid = true;
-    for (var i = 0; i<list_num.length; i++) {
-      list_num[i]=parseInt(list_num[i]);
-      if (!Number.isInteger(list_num[i]) ||list_num[i] < -99 || list_num[i] > 99 ){
-           all_valid= false;
-           alert("The element on index " + i + " is not valid "); 
-      }
-    }
-    if(all_valid){
-      document.getElementById("number-input").value = "";
-      for(var i=0;i<list_num.length;i++){
-        numberGroupTemplate = document.getElementsByClassName("number-group")[0].cloneNode(true);
-        numberGroupTemplate.childNodes[1].innerText = list_num[i];
-        numberGroupTemplate.style.display = "inherit";
-        numbersGroup.appendChild(numberGroupTemplate);
-
-        list.push(list_num[i]);
-      
-       }
-       drawListOnScreen(list);
-    
-      
-    }
-
-}
-
-function clearNumberGroup() {
-    let numbersGroupChildren = numbersGroup.getElementsByClassName("number-group");
-    let size = numbersGroupChildren.length;
-    for (let i = 1; i < size; i++) {
-       numbersGroup.removeChild(numbersGroupChildren[1]);
-    }
-}
-
-function deleteNumberGroup(e) {
-    if (e.target.nodeName === "SPAN") {
-      let clickedNumberGroup = e.target.parentElement.parentElement.parentElement;
-      let number = parseInt(
-        clickedNumberGroup.getElementsByClassName("number-group-number")[0].innerText);
-      let numbersGroupList = numbersGroup.getElementsByClassName("number-group");
-
-      for (let i = 0; i < numbersGroupList.length; i++) {
-        if (clickedNumberGroup === numbersGroupList[i]) {  // Index 0 element always be template, so need to minus one.
-          list.splice(i - 1, 1);
-        }
-      }
-      numbersGroup.removeChild(clickedNumberGroup);
-
-      drawListOnScreen(list);
-    }
-}
 
 
-function create_legend() {
+function create_legend(title1, title2 , c1, c2) {
     const legend = {    
         "data": [{
-                    "title": "Item Swapped",
-                    "color": SWAP_COLOR,
+                    "title": title1,
+                    "color": c1,
                 },
                 {
-                    "title": "Item Being Compared",
-                    "color": DEF_HL_COLOR,
+                    "title": title2,
+                    "color": c2,
                         },]
     };
     return legend;
 }
 
-function display_legend() {
-  var legend = create_legend();
-  return document.getElementById("legend").innerHTML =
+function display_legend(title1, title2, c1= '#ffb380', c2 = '#99ccff') {
+  var legend = create_legend(title1, title2, c1, c2);
+  return getHTML("legend").innerHTML =
   `<div class='list-group col-3'>
     <div class='list-group-item' style = background-color:${legend.data[0].color}>
     ${legend.data[0].title}

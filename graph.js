@@ -1,3 +1,18 @@
+function typeChange(){
+    var choice = getHTML("choices").selectedIndex;
+    var inputBox = getHTML("nodeNum");
+    if(choice == 0){
+      inputBox.style.width = 200;
+      inputBox.placeholder = "Enter node#, max 16 nodes";
+      inputType = "num";
+    }
+    else{
+      inputBox.style.width = 400;
+      inputBox.placeholder = "Enter node names separate by comma, max 16 nodes";
+      inputType = "name";
+    }
+}
+
 function setSample(){
   let selectedBox = getHTML("sampleChoice");
   var sampleSelected = selectedBox.selectedIndex;
@@ -26,10 +41,7 @@ function setSample(){
         getHTML("edges").value = "a-b,b-e,e-i,b-i,h-i,e-h,c-d,d-g,g-k,j-k,f-j,c-f,c-j";
         getHTML("weights").value = "1,5,7,2,4,2,2,11,14,8,9,21,10";
     }
-
 }
-
-
 function setWeight(){
    var choice = getHTML("graphWeight").selectedIndex;
    var wBox = getHTML("weights");
@@ -53,51 +65,6 @@ function setDir(){
     }
 }
 
-function typeChange(){
-    var choice = getHTML("choices").selectedIndex;
-    var inputBox = getHTML("nodeNum");
-    if(choice == 0){
-      inputBox.style.width = 200;
-      inputBox.placeholder = "Enter node#, max 16 nodes";
-      inputType = "num";
-    }
-    else{
-      inputBox.style.width = 400;
-      inputBox.placeholder = "Enter node names separate by comma, max 16 nodes";
-      inputType = "name";
-    }
-
-
-}
-
-function splitInput(input,space = false){
-  if (space){
-    return (input.split(" ").join("")).split(",");
-  }
-  return input.split(",");
-  
-
-}
-
-function getHTML(id){
-  return document.getElementById(id);
-}
-
-function letterNumConvert(key){
-    if(Number.isInteger(key)){
-      var aAlph = {
-        0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h",
-        8: "i", 9: "j", 10: "k", 11: "l", 12: "m", 13: "n", 14: "o", 15: "p"}
-        return aAlph[key];
-
-      }
-    
-    var aNum={
-        a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9, k: 10, 
-        l: 11, m: 12, n: 13,o: 14, p: 15
-    }
-    return aNum[key];
-}
 
 function clearEdges(){
   if(getHTML("nodeNum").value == ""){
@@ -107,7 +74,6 @@ function clearEdges(){
   }
   for(var i =0; i<Graph.edges.length; i++){
     Graph.sigma.graph.dropEdge(Graph.edges[i]);
-
 
   }
   graphRefresh();
@@ -120,7 +86,6 @@ function clearGraph(){
    getHTML("nodeNum").value = "";
    getHTML("edges").value = "";
    getHTML("weights").value = "";
-
 
 }
 /*function clearEdges(){
@@ -165,13 +130,6 @@ function run(){
 
 }
 
-
-
-function stopAnime(){
-
-  animeRunning = false;
-
-}
 
 
 function graphRefresh(){
@@ -224,7 +182,6 @@ class ourGraph{
       return;
     }
 
-
     if(inputNum > 0 && inputNum < 17)
     {
       correctErr("nodeNum");
@@ -242,11 +199,8 @@ class ourGraph{
       
       }
 
-
       var nodeLayout = sixteenArrange[inputNum];
-      this.setGraphEdges(ifEdge);
-
-
+      this.edgeCheck(ifEdge);
 
       let g = {
         nodes: nodeLayout,
@@ -257,13 +211,9 @@ class ourGraph{
 
       if(inputType == "name"){
     
-
         this.setName();
       }
-
-
-    }
-
+}
     else{
       noticeErr("Please give a valid input!", "nodeNum");
 
@@ -280,23 +230,17 @@ class ourGraph{
      catch(error){
       noticeErr("Please make sure if the nodes existed!", "edges");
     }
-
-
-  
-     
+   
+ 
 
   }
 
-   
-
-  setGraphEdges(ifEdge){
+  edgeCheck(ifEdge){
 
     if(ifEdge == true){
       var edgeList = splitInput(getHTML('edges').value, true);
-
       this.edges = edgeList;
       var counter = 0;  
-
       if(dir == 1){
         var shape = "arrow";
       }
@@ -306,12 +250,14 @@ class ourGraph{
       
 
       for(var i = 0; i < edgeList.length; i++ ){
+
        var nodesToConnect = edgeList[i].split("-");
        if(nodesToConnect.length != 2 || nodesToConnect[0] == nodesToConnect[1]){
          noticeErr("Please enter edges in valid format (a-b,b-c), no self loop allowed !", "edges");
-         return;
+         return ;
        }
        correctErr("edges");
+
 
        if (weight == 1){
         var listWeight =  splitInput((getHTML('weights').value), true);
@@ -323,57 +269,19 @@ class ourGraph{
         }
         else{
           noticeErr("Please make sure the weight input and the number of weight inputs are valid!", "weights");
-          return;
+          return ;
         }
       }
-
       else{
         WEIGHT = null;
       }
       
-    
-
-
-
       correctErr("weights");
-
-      if (inputType == "num"){
-
-
-        this.edgeLayout.push({
-         id: edgeList[i],
-         source: letterNumConvert(nodesToConnect[0]).toString(),
-         target: letterNumConvert(nodesToConnect[1]).toString(),
-         size :5,
-         label : WEIGHT,
-         type: shape,
-         color: '#ec5148',
-
-       });
-
-
-
-    
+      this.setGraphEdges(edgeList[i], nodesToConnect, WEIGHT,shape);
      
-
-      }
-      else{
-        this.edgeLayout.push({
-         id: edgeList[i],
-         source: this.find(nodesToConnect[0]).toString(),
-         target: this.find(nodesToConnect[1]).toString(),
-         size :5,
-         label : WEIGHT,
-         type : shape,
-         color: '#ec5148',
-
-
-       });
-      }
-
-      counter += 1;
-
+       counter += 1;
     }
+
     if(weight == 1){
       if (counter < this.weights.length){
        noticeErr("Please make sure if the weight number matches edge number!", "weights");
@@ -381,15 +289,36 @@ class ourGraph{
      else{
        correctErr("weights");
      }
-   }
+    }
 
- }
-      
-
-
-
+  }
 }
 
+  setGraphEdges(edge,nodesToConnect,WEIGHT,shape){
+     
+      if (inputType == "num"){
+        this.edgeLayout.push({
+         id: edge,
+         source: letterNumConvert(nodesToConnect[0]).toString(),
+         target: letterNumConvert(nodesToConnect[1]).toString(),
+         size :5,
+         label : WEIGHT,
+         type: shape,
+         color: '#0039e6',
+       });
+      }
+      else{
+        this.edgeLayout.push({
+         id: edge,
+         source: this.find(nodesToConnect[0]).toString(),
+         target: this.find(nodesToConnect[1]).toString(),
+         size :5,
+         label : WEIGHT,
+         type : shape,
+         color: '#0039e6',
+       });
+      }
+    }
 
   createSigmaGraph(){
     $( ".graph" ).empty();
@@ -400,21 +329,16 @@ class ourGraph{
         type: 'canvas'                                                                                 
     },                
       settings: {
-        defaultNodeColor: '#ec5148',
+        defaultNodeColor: '#0039e6',
         enableCamera: false,
         autoRescale: false,
         defaultEdgeLabelSize: 15,
-  
-
         }
 
     });
 
     this.sigma = s;
     this.enableDrag();
-
-
-
   }
 
   enableDrag(){
@@ -438,12 +362,8 @@ class ourGraph{
   setName(){
     for (var i = 0; i < this.nodes.length; i++){
          this.graph.nodes[i].label = this.nodes[i];
-
     }
   }
-
-
- 
 
   find(name){
   
@@ -456,89 +376,47 @@ class ourGraph{
   return -1;
 }
 
- makeSets() {
-      var nodeList = [];
-      for(var i = 0; i < this.nodes.length; i++){
-          nodeList.push(i);
-      }
-      this.nodeSet = nodeList;
-
-    }
-
-    createWeightEdgeMap(){
-
-      var weMap = new Map();
-      for (var i = 0; i < this.weights.length; i++){
-        try {
-          var list = weMap.get(this.weights[i]);
-          list.push(this.edges[i]);
-          weMap.set(this.weights[i], list);
-        }
-        catch(error){
-          weMap.set(this.weights[i],[this.edges[i]]);
-        }
-
-      }
-      this.weightEdgeMap = weMap;
-
-    }
-
-    unionFind(node1Index,node2Index){
-    var list = this.nodeSet;
-    var afterVal = list[node1Index];
-    var beforeVal = list[node2Index];
-    for(var i = 0; i < list.length; i++){
-
-      if(list[i] == beforeVal){
-          list[i] = afterVal;
-      }
-
-    }
-    return list;
-
+makeSets() {
+  var nodeList = [];
+  for(var i = 0; i < this.nodes.length; i++){
+    nodeList.push(i);
   }
+  this.nodeSet = nodeList;
 
-   async color(path){
-    var pathEdges = this.sigma.graph.edges(path);
-    for(var i = 0; i < pathEdges.length; i++){
-      if(animeRunning){
-      try{
-      pathEdges[i].color = "#000";
+}
+
+createWeightEdgeMap(){
+
+  var weMap = new Map();
+  for (var i = 0; i < this.weights.length; i++){
+    try {
+      var list = weMap.get(this.weights[i]);
+      list.push(this.edges[i]);
+      weMap.set(this.weights[i], list);
     }
     catch(error){
-      path[i] = path[i][2] + path[i][1] + path[i][0];
-      pathEdges[i]= this.sigma.graph.edges(path[i]);
-      pathEdges[i].color = "#000";
-    }
-       Graph= this;
-       graphRefresh();
-       await this.pause();
-     }
-     else{
-      break;
-     }
-    
+      weMap.set(this.weights[i],[this.edges[i]]);
     }
 
   }
+  this.weightEdgeMap = weMap;
 
- async pause () { 
+}
 
-      var times = document.getElementsByName("speed");
+unionFind(node1Index,node2Index){
+  var list = this.nodeSet;
+  var afterVal = list[node1Index];
+  var beforeVal = list[node2Index];
+  for(var i = 0; i < list.length; i++){
 
-      var time = 1000;
-      if(times[0].checked == true){
-        time = 300;
-      }
-      else if(times[2].checked == true){
-        time = 2000;
-      }
-      
-      return new Promise(function (resolve) {
-        setTimeout(resolve, time)
-      })
+    if(list[i] == beforeVal){
+      list[i] = afterVal;
+    }
+
   }
+  return list;
 
+}
 
 getNodes(edge) {
   var node1 = (edge.split("-"))[0];
@@ -546,16 +424,93 @@ getNodes(edge) {
   var node1Index = letterNumConvert(node1);
   var node2Index = letterNumConvert(node2);
   return {
-      n1: node1Index,
-      n2: node2Index
+    n1: node1Index,
+    n2: node2Index
   }
+}
+
+
+findMinIndex(Q){       // for prim
+ var min = Infinity;
+ var ind = 0;
+ for(var i = 0; i < Q.length; i++){
+  if(Q[i] != null){
+    if(parseInt(Q[i].key) < min){
+      min = Q[i].key;
+      ind = i;
+    }
+  }
+
+}
+return ind;
+}
+
+
+findConnectionMap(){
+
+  var connectionMap = [];
+  for(var j = 0; j < this.nodes.length; j++ ){
+    connectionMap.push([]);
+  }
+
+  for(var i = 0; i < this.edges.length; i++ ){
+    var nodesToConnect = this.edges[i].split("-");
+
+
+    connectionMap[letterNumConvert(nodesToConnect[0])].push({
+      connectedTo: nodesToConnect[1],
+      cost: parseInt(this.weights[i]),
+    });
+
+    connectionMap[letterNumConvert(nodesToConnect[1])].push({
+      connectedTo: nodesToConnect[0],
+      cost: parseInt(this.weights[i]),
+    });
+
+  }
+
+  return connectionMap;
+}
+
+
+async color(path, theColor = '#000', pause = true){
+  var pathEdges = this.sigma.graph.edges(path);
+  for(var i = 0; i < pathEdges.length; i++){
+    if(animeRunning){
+      try{
+        pathEdges[i].color = theColor;
+      }
+      catch(error){
+        path[i] = path[i][2] + path[i][1] + path[i][0];
+        pathEdges[i]= this.sigma.graph.edges(path[i]);
+        pathEdges[i].color = theColor;
+      }
+      Graph= this;
+      graphRefresh();
+      if(pause){
+        await this.pause();
+      }
+    }
+    else{
+      break;
+    }
+  }
+}
+
+async pause () { 
+
+  var time = check_and_Delay();
+
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time)
+  })
 }
 
 /// kruskal
 
 kruskal(){              
                                  //refer to CLRS P631 Kruskal's Algorithm
-  if(this.edges.length == 0){                                            
+    if(this.edges.length == 0){                                            
     noticeErr("Please input edge first!","edges");      // A != []
     return;
   }
@@ -570,17 +525,17 @@ kruskal(){
   {                                                           // // for each edge (u,v) in G.E, taken in nondecreasing order by weight
     var edges = this.weightEdgeMap.get(sortedWeight[i]);      // (Achieved by mapping weights to the edges in the method createWeightEdgeMap())
     for(var j = 0; j < edges.length; j++){
-        var nodes = this.getNodes(edges[j])
+      var nodes = this.getNodes(edges[j])
 
       if (this.nodeSet[nodes.n1] !=                             // if FIND-SET(u)!= FIND-SET(v)
         this.nodeSet[nodes.n2]){
         path.push(edges[j]);                                      // A = A U {(u,v)}
         this.nodeSet = this.unionFind(nodes.n1, nodes.n2);     // Union (u,v)
-          
+
+      }
     }
+
   }
-  
-}
 
 
   var color = true;
@@ -602,16 +557,15 @@ kruskal(){
 
 // prim
 
-
-prim(){                                                // Refer to CLRS P634's prim algorithm
-  var path = [];
-  var color = true;
-  var connectionMap = this.findConnectionMap();
-  if(this.edges.length == 0){                                            
+prim(){                                                // Refer to CLRS P634's prim's algorithm
+var path = [];
+var color = true;
+var connectionMap = this.findConnectionMap();
+if(this.edges.length == 0){                                            
       noticeErr("Please input edge first!","edges");      // G.V != []
       return;
-  }
-  correctErr("edges");
+    }
+    correctErr("edges");
   var Q = [];                                       // Note: In this algorithm, an array is used instead of a minimum piority queue
   for(var ind = 0; ind < this.nodes.length; ind++){ // for each u in G.V
 
@@ -622,7 +576,7 @@ prim(){                                                // Refer to CLRS P634's p
             }
 
             Q.push(u);
-  }
+          }
    var r = Q[0];                           //(Choose the first of the list as root)
    r.key = 0;                                 // r.key = 0;
    var minInd = 0;
@@ -662,50 +616,98 @@ prim(){                                                // Refer to CLRS P634's p
   }
 } 
 
+}
 
 
+class tree extends ourGraph{
+
+  constructor(ifEdge){
+    super(ifEdge);
+  
+  }
+
+  setGraph(ifEdge){
+    super.setGraph(ifEdge);
+
+    if(this.edges.length != 0){
+    var result = this.isTree();
+    
+    if(result == "true"){
+      correctErr("edges")
+      return;    
+    }
+
+    else if(result == "cir"){ 
+      noticeErr("A tree cannot has circles!", "edges");
+    }
+
+    else if(result == "disconnected"){ 
+      noticeErr("A tree cannot be disconnected!","edges");
+    }
+
+    else{
+      noticeErr("A tree cannot be disconnected or contains circle!","edges");
+    }
 
 
-findMinIndex(Q){       // for prim
-   var min = Infinity;
-   var ind = 0;
-   for(var i = 0; i < Q.length; i++){
-    if(Q[i] != null){
-      if(parseInt(Q[i].key) < min){
-        min = Q[i].key;
-        ind = i;
+  }
+
+  }
+  
+  isTree(){
+
+    var result = "true";
+    var circledge = [];
+    var circledSet = [];
+    this.makeSets();
+    for(var i = 0; i < this.edges.length; i++){
+      var nodes = this.getNodes(this.edges[i]);
+      console.log(nodes);
+      if (this.nodeSet[nodes.n1] != this.nodeSet[nodes.n2]){
+        var list = this.nodeSet;
+        var afterVal = list[nodes.n1];
+        var beforeVal = list[nodes.n2];
+        for(var j = 0; j < list.length; j++){
+          if(list[j] == beforeVal){
+            list[j] = afterVal;
+          }
+        }
+      }
+      else{
+        result =  "cir";
+        circledge.push(this.edges[i]);
+        circledSet.push(circledge);
+        circledge = [];
+      }
+      circledge.push(this.edges[i]);
+    }
+    
+    
+      var final = this.nodeSet[0];
+    for(var i = 1; i < this.nodeSet.length; i++){
+   
+      if(this.nodeSet[i] != final){
+        if(result == "cir"){
+          result += "disconnected";
+        }
+        else{
+          result = "disconnected";
+        }
+        break;
       }
     }
 
-}
-return ind;
-}
-
-
-findConnectionMap(){
-
-  var result = [];
-      for(var j = 0; j < this.nodes.length; j++ ){
-        result.push([]);
-       }
-
- for(var i = 0; i < this.edges.length; i++ ){
-      var nodesToConnect = this.edges[i].split("-");
-
-
-   result[letterNumConvert(nodesToConnect[0])].push({
-        connectedTo: nodesToConnect[1],
-        cost: parseInt(this.weights[i]),
-      });
-
-      result[letterNumConvert(nodesToConnect[1])].push({
-        connectedTo: nodesToConnect[0],
-        cost: parseInt(this.weights[i]),
-      });
-
-   }
-
-   return result;
+    for(var i = 0; i < circledSet.length; i++){
+       this.color(circledSet[i], '#FF0000',false);
+    }
+    return result;
+  }
 }
 
+function createTree(ifEdge){
+   var graph = new tree(ifEdge);
+   Graph = graph;
 }
+
+
+

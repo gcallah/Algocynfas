@@ -1,4 +1,4 @@
-//test
+/*test
 
 module.exports = { SetupTable: SetupTable, 
                  calculateHashValue: calculateHashValue,
@@ -13,7 +13,7 @@ module.exports = { SetupTable: SetupTable,
 
 function checkInput()
 {
-   var input = document.getElementById("InputValue").value;
+   var input = getHTML("InputValue").value;
   if(parseInt(input) > 999 || parseInt(input) < 0){
         noticeErr("Please enter a positive integer between 0 to 999!",
                 "InputValue");
@@ -22,13 +22,14 @@ function checkInput()
       correctErr("InputValue");
       return true;
 }
+*/
 
 function chooseFunc(){
-  let selectedBox = document.getElementById("funcChoices");
+  let selectedBox = getHTML("funcChoices");
   var funcSelected = selectedBox.selectedIndex;
-  var size= parseInt(document.getElementById("tableSize").value);
+  var size= parseInt(getHTML("tableSize").value);
   var func = document.getElementsByName("func");
-  var input = parseInt(document.getElementById("InputValue").value);
+  var input = parseInt(getHTML("InputValue").value);
   var errorValue = 100;
 
     if (funcSelected == 0){
@@ -60,12 +61,12 @@ function chooseFunc(){
 
 function SetupTable(){
 
-	let size = document.getElementById("tableSize").value;
+	let size = getHTML("tableSize").value;
 	size=parseInt(size);
 	canvas.clear();      
 	if (Number.isInteger(size) && size > 1 && size < 21){
 		correctErr("tableSize");
-		document.getElementById("tableSize").style.background="#FCF5DB";
+		getHTML("tableSize").style.background="#FCF5DB";
 		list=Array.apply(null, {length: size}).map(Number.call, Number); 
 		hashTable= createHashTable(canvas, list);
 	}
@@ -78,22 +79,22 @@ function SetupTable(){
 
 
 function isCustomize(){
-  if (document.getElementById("funcChoices").selectedIndex == 5){
-    document.getElementById("hashFunc").style.visibility = "visible";
-    document.getElementById("text").style.visibility = "visible";
+  if (getHTML("funcChoices").selectedIndex == 5){
+    getHTML("hashFunc").style.visibility = "visible";
+    getHTML("text").style.visibility = "visible";
   }
   else{
-    document.getElementById("hashFunc").style.visibility = "hidden";
-    document.getElementById("text").style.visibility = "hidden";
+    getHTML("hashFunc").style.visibility = "hidden";
+    getHTML("text").style.visibility = "hidden";
   }
 
 }
 
 function calculateHashValue()
 {
-    var func = document.getElementById("hashFunc").value; 
-    var size= document.getElementById("tableSize").value;
-    var input = document.getElementById("InputValue").value;
+    var func = getHTML("hashFunc").value; 
+    var size= getHTML("tableSize").value;
+    var input = getHTML("InputValue").value;
     var errorValue = 100;
     
     if(func&&size&&input){
@@ -133,7 +134,7 @@ function calculateHashValue()
 
 function checkHashType()
 {
-  if(document.getElementById("chaining").checked){
+  if(getHTML("chaining").checked){
       return "CHAIN";
   }
   return "PROB";
@@ -144,7 +145,7 @@ function hash()
 {
   chainOrProbe= checkHashType();
 	var errorValue = 100;
-	var input = document.getElementById("InputValue").value;
+	var input = getHTML("InputValue").value;
 	input = parseInt(input);
 	if(!hashTable){
 		noticeErr("Please set the size first!");
@@ -175,7 +176,7 @@ function hashChaining(input, value)
 
 function hashProbing(input, value)
 {
-	if(probingCounter <= document.getElementById("tableSize").value-1){
+	if(probingCounter <= getHTML("tableSize").value-1){
 		probingCounter += 1;
 		hashTable.setHValue(value, input);
 		
@@ -190,38 +191,10 @@ function hashProbing(input, value)
 function clearTable()
 {
 	canvas.clear();
-	document.getElementById("hashFunc").value="";
-	document.getElementById("InputValue").value="";
+	getHTML("hashFunc").value="";
+	getHTML("InputValue").value="";
   probingCounter=0;
 	
 	
-}
-
-
-function createLegend() {
-    const legend = {    
-        "data": [{
-                    "title": "Table Index",
-                    "color": DEF_HL_COLOR,
-                },
-                {
-                    "title": "Hashed Values",
-                    "color": DEF_BG_COLOR,
-                        },]
-    };
-    return legend;
-}
-
-function displayLegend() {
-  var legend = createLegend();
-  return document.getElementById("legend").innerHTML =
-  `<div class='list-group col-3'>
-    <div class='list-group-item' style = background-color:${legend.data[0].color}>
-    ${legend.data[0].title}
-    </div>
-    <div class='list-group-item' style = background-color:${legend.data[1].color}>
-    ${legend.data[1].title}
-    </div>
-  </div>`;
 }
 

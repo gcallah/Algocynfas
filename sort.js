@@ -1,4 +1,67 @@
- 
+function inputNumberToArray() {
+    clearNumberGroup();
+    list=[]
+    canvas.clear();
+    let an_input = getHTML("number-input").value;
+    var list_num = an_input.split(",");
+    if(list_num.length == 0 || list_num.length == 1){
+      alert("Please enter a valid list without '[]' "); 
+      getHTML("number-input").value = "";
+      return;
+    } 
+    var all_valid = true;
+    for (var i = 0; i<list_num.length; i++) {
+      list_num[i]=parseInt(list_num[i]);
+      if (!Number.isInteger(list_num[i]) ||list_num[i] < -99 || list_num[i] > 99 ){
+           all_valid= false;
+           alert("The element on index " + i + " is not valid "); 
+      }
+    }
+    if(all_valid){
+      getHTML("number-input").value = "";
+      for(var i=0;i<list_num.length;i++){
+        numberGroupTemplate = document.getElementsByClassName("number-group")[0].cloneNode(true);
+        numberGroupTemplate.childNodes[1].innerText = list_num[i];
+        numberGroupTemplate.style.display = "inherit";
+        numbersGroup.appendChild(numberGroupTemplate);
+
+        list.push(list_num[i]);
+      
+       }
+       drawListOnScreen(list);
+    
+      
+    }
+
+}
+
+function clearNumberGroup() {
+    let numbersGroupChildren = numbersGroup.getElementsByClassName("number-group");
+    let size = numbersGroupChildren.length;
+    for (let i = 1; i < size; i++) {
+       numbersGroup.removeChild(numbersGroupChildren[1]);
+    }
+}
+
+function deleteNumberGroup(e) {
+    if (e.target.nodeName === "SPAN") {
+      let clickedNumberGroup = e.target.parentElement.parentElement.parentElement;
+      let number = parseInt(
+        clickedNumberGroup.getElementsByClassName("number-group-number")[0].innerText);
+      let numbersGroupList = numbersGroup.getElementsByClassName("number-group");
+
+      for (let i = 0; i < numbersGroupList.length; i++) {
+        if (clickedNumberGroup === numbersGroupList[i]) {  // Index 0 element always be template, so need to minus one.
+          list.splice(i - 1, 1);
+        }
+      }
+      numbersGroup.removeChild(clickedNumberGroup);
+
+      drawListOnScreen(list);
+    }
+}
+
+
 
 
 
@@ -7,8 +70,8 @@
 
     animeRunning = true;
 
-    let runButton = document.getElementById("run-button");
-    let addNumberButton = document.getElementById("add-number-button");
+    let runButton = getHTML("run-button");
+    let addNumberButton = getHTML("add-number-button");
     let sortType = document.getElementsByName("sort");
     runButton.disabled = true;
     addNumberButton.disabled = true;
