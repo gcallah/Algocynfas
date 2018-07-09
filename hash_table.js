@@ -10,7 +10,7 @@ module.exports = { SetupTable: SetupTable,
                   }
 
 //Bellow are functions-----------------------------------------------
-
+*/
 function checkInput()
 {
    var input = getHTML("InputValue").value;
@@ -22,7 +22,7 @@ function checkInput()
       correctErr("InputValue");
       return true;
 }
-*/
+
 
 function chooseFunc(){
   let selectedBox = getHTML("funcChoices");

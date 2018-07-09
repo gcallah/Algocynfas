@@ -1,3 +1,7 @@
+const EdgeNodeCOLOR = '#0039e6' ;
+const HIGHLIGHT = '#F5B041';
+const ErrorCOLOR = '#FF0000';
+
 function typeChange(){
     var choice = getHTML("choices").selectedIndex;
     var inputBox = getHTML("nodeNum");
@@ -13,129 +17,32 @@ function typeChange(){
     }
 }
 
-function setSample(){
-  let selectedBox = getHTML("sampleChoice");
-  var sampleSelected = selectedBox.selectedIndex;
-
-  if (sampleSelected == 0){
-        clearGraph();
-    }
-
-    if (sampleSelected == 1){
-         $( ".graph" ).empty();
-        getHTML("nodeNum").value = "5";
-        getHTML("edges").value = "a-b,b-c,c-d,d-e,a-e,b-e,a-c,a-d";
-        getHTML("weights").value = "1,2,3,4,5,6,7,8";
-    }
-
-    else if (sampleSelected == 2){
-         $( ".graph" ).empty();
-        getHTML("nodeNum").value = "10";
-        getHTML("edges").value = "d-e,a-d,a-c,e-i,e-g,f-i,f-j,c-i,h-b,b-g,b-a,e-h,d-c,c-e,g-h,g-j";
-        getHTML("weights").value = "2,6,4,7,2,8,1,11,9,2,4,3,12,5,6,1";
-    }
-
-    else if (sampleSelected == 3){
-         $( ".graph" ).empty();
-        getHTML("nodeNum").value = "11";
-        getHTML("edges").value = "a-b,b-e,e-i,b-i,h-i,e-h,c-d,d-g,g-k,j-k,f-j,c-f,c-j";
-        getHTML("weights").value = "1,5,7,2,4,2,2,11,14,8,9,21,10";
-    }
-}
-function setWeight(){
-   var choice = getHTML("graphWeight").selectedIndex;
-   var wBox = getHTML("weights");
-    if(choice == 0){
-      weight = 0;
-      wBox.style.display = "none";
-    }
-    else{
-      weight = 1;
-      wBox.style.display = "inline";
-    }
-
-}
-function setDir(){
-    var choice = getHTML("graphType").selectedIndex;
-    if(choice == 0){
-      dir = 0;
-    }
-    else{
-      dir = 1;
-    }
-}
-
-
-function clearEdges(){
-  if(getHTML("nodeNum").value == ""){
-
-    noticeErr("Please still keep a valid node input!","nodeNum");
-    return;
-  }
-  for(var i =0; i<Graph.edges.length; i++){
-    Graph.sigma.graph.dropEdge(Graph.edges[i]);
-
-  }
-  graphRefresh();
-  getHTML("edges").value = "";
-  getHTML("weights").value = "";
-}
-
-function clearGraph(){
-   $( ".graph" ).empty();
-   getHTML("nodeNum").value = "";
-   getHTML("edges").value = "";
-   getHTML("weights").value = "";
-
-}
-/*function clearEdges(){
-   console.log(getHTML("nodeNum").value);
-  if(getHTML("nodeNum").value == ""){
-
-    noticeErr("Please still keep a valid node input!","nodeNum");
-    return;
-  }
-  correctErr("nodeNum");
-  createGraph(false);
-  getHTML("edges").value = null;
-  getHTML("weights").value = null;
-
-}*/
-
-
 function createGraph(ifEdge){
-   var graph = new ourGraph(ifEdge);
+   var graph = new ourGraph();
+   graph.setGraph(ifEdge);
    Graph = graph;
 }
 
 
-
-
-///////////////////////////////////// kruskal algorithm function below:
-
-
-function run(){
-  if(Graph == null){
-    noticeErr("No graph created!");
-  }
-
-  else{
-  animeRunning = true;
-  if(getHTML("kruskal").checked == true){
-    Graph.kruskal();
-    return;
-  }
-  Graph.prim();
+function createTree(ifEdge){
+   var graph = new tree();
+   graph.setGraph(ifEdge);
+   Graph = graph;
 }
 
-}
-
-
-
-function graphRefresh(){
-
-  Graph.sigma.refresh();
-
+function createBST(type){
+    var graph = new BST();
+   if(getHTML("random").checked == true){
+       graph.random();
+   }
+ 
+   if(type == "single"){
+      graph.insert();
+   }
+   else{
+      graph.setBST();
+   }
+   Graph = graph;
 }
 
 
@@ -143,19 +50,14 @@ function graphRefresh(){
 
 class ourGraph{
 
-    constructor(ifEdge){
+    constructor(){
       this.sigma = null;
       this.graph = null;
       this.edgeLayout = [];
       this.nodes = [];
-// can we make a map from edges to nodes here so that we can do simple
-// lookups?
-
       this.edges = [];
       this.weights = null;
       this.nodeSet = null;
-      this.setGraph(ifEdge);
-
      //only for weighted graph
       this.weightEdgeMap = null;
     
@@ -304,7 +206,7 @@ class ourGraph{
          size :5,
          label : WEIGHT,
          type: shape,
-         color: '#0039e6',
+         color: EdgeNodeCOLOR ,
        });
       }
       else{
@@ -315,7 +217,7 @@ class ourGraph{
          size :5,
          label : WEIGHT,
          type : shape,
-         color: '#0039e6',
+         color: EdgeNodeCOLOR ,
        });
       }
     }
@@ -329,7 +231,7 @@ class ourGraph{
         type: 'canvas'                                                                                 
     },                
       settings: {
-        defaultNodeColor: '#0039e6',
+        defaultNodeColor: EdgeNodeCOLOR ,
         enableCamera: false,
         autoRescale: false,
         defaultEdgeLabelSize: 15,
@@ -473,7 +375,7 @@ findConnectionMap(){
 }
 
 
-async color(path, theColor = '#000', pause = true){
+async color(path, theColor = HIGHLIGHT, pause = true){
   var pathEdges = this.sigma.graph.edges(path);
   for(var i = 0; i < pathEdges.length; i++){
     if(animeRunning){
@@ -621,8 +523,8 @@ if(this.edges.length == 0){
 
 class tree extends ourGraph{
 
-  constructor(ifEdge){
-    super(ifEdge);
+  constructor(){
+    super();
   
   }
 
@@ -698,16 +600,161 @@ class tree extends ourGraph{
     }
 
     for(var i = 0; i < circledSet.length; i++){
-       this.color(circledSet[i], '#FF0000',false);
+       this.color(circledSet[i], ErrorColor,false);
     }
     return result;
   }
 }
 
-function createTree(ifEdge){
-   var graph = new tree(ifEdge);
-   Graph = graph;
+
+class BST extends ourGraph{
+
+    constructor(){
+      super();
+      this.root = null;
+      this.rootPos = [0,-100];
+      this.level = 0;
+      this.nodeLayout = [];
+    }
+
+   setBST(){
+
+
+   }
+   insert(){
+      var input = getHTML("treeNode").value;
+      var parent = this.getParent(input);
+      if(Number.isInteger(input)){
+
+         correctErr("treeNode");
+         var node = new treeNode(input ,parent, this.nodes.length);
+         if(this.root == null){
+            this.root = node;
+         }
+         else{
+           this.connectParentChild(parent, node);
+         }
+         this.nodeArrange.push(node.layout);
+         this.nodes.push(input);  
+         return;  
+      }
+
+      noticeErr("Please input a valid integer", "treeNode");
+   }
+
+  random(){
+    var input = getHTML("treeNode").value;
+    input = splitInput(input, true);
+    var result = [];
+    while(input.length != 0){
+      var index = Math.floor(Math.random() * input.length);
+      var temp = input[input.length-1];
+      input[input.length-1] = input[index];
+      input[index] = temp;
+      result.push(input.pop());
+    }
+    result.join();
+    getHTML("treeNode").value = result;
+
+  }
+
+  connectParentChild(){
+
+  }
+
+  getParent(input){
+    if(!this.root ){
+      return null;
+    }
+    
+  }
+
 }
+
+
+class treeNode{
+
+  constructor(num, parent, counter){
+    this.key = num;
+    this.left = null;
+    this.right = null;
+    this.parent = null;
+    this.layout = null;
+    this.position = null;
+    this.setNode(num,rootPos);
+    this.setNeighbors(left,right);
+  }
+
+  setNode(num, parent, counter){
+    if(!parent){
+      this.layout = {
+      "id": counter.toString(),
+      "label": num,
+      "x": -100,
+      "y": 0,
+      "size": 12,
+    }; 
+
+    this.position = {
+      x: -100,
+      y: 0,
+    };
+      
+    }
+    else{
+      this.position = {
+        x: parent.position.x + 10,
+        y: parent.position.y + 10,
+      }
+      this.parent = parent;
+      this.layout = {
+      "id": counter.toString(),
+      "label": num,
+      "x": this.position.x,
+      "y": this.position.y,
+      "size": 12,
+     }
+   }
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -27,6 +27,7 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
+  <script src = "minSpainningTree.js"></script>
 
 
 </head>
@@ -111,9 +112,16 @@ style = "max-width: 100px ;width: 100px" onclick="clearEdges()">Clear Edges</but
 <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
 
 <br>
-</div> 
+
+
+
 
 <div id="graphContainer" class = "graph" style = "height: 400px ; width: 900px"></div>
+ <footer id="legend">
+        <script> window.display_legend("Graph edge", "Minimum spainning tree path", '#0039e6', '#F5B041') </script>
+</footer>
+
+</div> 
 
 <script>
 

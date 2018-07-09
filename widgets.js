@@ -57,10 +57,42 @@ function correctErr(id) {
 }
 
 
-function drawListOnScreen(currentNumbersList) {
+function drawListOnScreen(currentNumbersList) {                  //sort.js and hashTable.js
     canvas.clear();
     fList = window.createList(canvas, currentNumbersList);
 }
+
+
+function graphRefresh(){
+
+  Graph.sigma.refresh();
+
+}
+
+function setWeight(){
+   var choice = getHTML("graphWeight").selectedIndex;
+   var wBox = getHTML("weights");
+    if(choice == 0){
+      weight = 0;
+      wBox.style.display = "none";
+    }
+    else{
+      weight = 1;
+      wBox.style.display = "inline";
+    }
+
+}
+function setDir(){
+    var choice = getHTML("graphType").selectedIndex;
+    if(choice == 0){
+      dir = 0;
+    }
+    else{
+      dir = 1;
+    }
+}
+
+
 
 function stopAnime() {
     animeRunning = false;

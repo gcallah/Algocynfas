@@ -64,7 +64,6 @@ function deleteNumberGroup(e) {
 
 
 
-
  async function sort() {
     clearNumberGroup();
 
