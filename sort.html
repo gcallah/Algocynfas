@@ -41,12 +41,26 @@
            <label for="Slow">Slow</label>
 
             <br>
+            
+
+            <b>
+            Fill the input box with sample values:
+            </b>
+                <select id= sampleChoice onchange="setSample()">
+                <option value="Select" >Select one</option>
+                <option value="sample1" >More random input </option>
+                <option value="sample2"> More sorted input </option>
+              </select>
+
+
+            <br>
+            <br>
 
            <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
            &emsp;&emsp;&emsp;
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
-           <br>
+           
            </b> 
            
        

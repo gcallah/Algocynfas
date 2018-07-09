@@ -1,3 +1,22 @@
+function setSample(){
+  let selectedBox = getHTML("sampleChoice");
+  var sampleSelected = selectedBox.selectedIndex;
+
+  if (sampleSelected == 0){
+        clearGraph();
+    }
+
+    if (sampleSelected == 1){
+        getHTML("number-input").value = "3,1,6,2,8,5,9";
+        
+    }
+
+    else if (sampleSelected == 2){
+        getHTML("number-input").value = "1,5,3,2,4,8,9";
+        
+    }
+}
+
 function inputNumberToArray() {
     clearNumberGroup();
     list=[]
@@ -91,6 +110,7 @@ runButton.disabled = false;
 addNumberButton.disabled = false;
 
 list = [];   
+getHTML("sampleChoice").selectedIndex = 0;
 }
 
 

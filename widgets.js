@@ -1,4 +1,5 @@
 
+
 function getHTML(id){
   return document.getElementById(id);
 }
@@ -91,6 +92,8 @@ function setDir(){
       dir = 1;
     }
 }
+
+
 
 
 
