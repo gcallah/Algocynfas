@@ -1,0 +1,83 @@
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+ <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+
+  <script src="lib/sigma/sigma.min.js"></script>
+
+  <script src="lib/sigma/sigma.renderers.canvas.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+
+
+  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+  <script src="lib/sigma/setting.js"></script>
+ <script src="lib/sigma/sigma.classes.graph.js"></script>
+  <script src="lib/sigma/graphArrange.js"></script>
+  <script src="lib/sigma/sigma.core.js"></script>
+
+
+
+  <script src="widgets.js"></script>
+  <script src="graph.js"></script>
+  <script src="binarySTree.js"></script>
+
+</head>
+
+
+<body>
+
+  <h1> Binary Search Tree </h1>
+
+  <div class="container">
+
+   
+  <input type="text" class="edgeBox" id="treeList" 
+  placeholder="Enter a list of nums separate by comma, max 31"  >
+
+
+  <button class="btn btn-outline-primary" id="createBST-button" type="button" 
+  onclick="createBST("list")">Create BST
+</button> 
+
+  <input type="checkbox" name="ran" value="randomize" id= "random" checked = true> Randomize
+&emsp;
+
+
+
+<input type="text" class="Box" id="treeNode" 
+placeholder="Enter an integer" >
+
+<button class="btn btn-outline-primary" id="insert-button" type="button" 
+onclick="createBST("sigle")"> Insert
+</button>
+
+<br>
+<div id = "outsideContainer" class = "wrapContainer">
+<div id="bst" class = "insideContainer" >
+  
+</div>
+
+</div>
+<script>
+
+  let inputType = "num";
+  let dir = 0;
+  let weight = 0;
+  let Graph = null;
+
+
+
+</script>
+</div> 
+</body>
+</html>
+
