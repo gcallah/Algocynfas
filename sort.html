@@ -8,6 +8,8 @@
 <script src="lib/fabric.js"></script>
 <script src="algocynfas.js"></script>
 <script src="widgets.js"></script>
+
+
 <script src="sort.js"></script>
 </head>
 <body>
@@ -15,8 +17,7 @@
         <h1>
             Sorting Algorithms
         </h1>
-        <div class="buttons">
-
+        
            <b> Sort Types: 
 
            <input type="radio" name="sort" id="insertion" checked = "true"/>
@@ -30,7 +31,6 @@
 
            <br>
            </b>
-
            <b>Choose Speed:
 
            <input type="radio" name="speed" value="500" id="Fast"/> 
@@ -41,7 +41,7 @@
            <label for="Slow">Slow</label>
 
             <br>
-            
+            </b>
 
             <b>
             Fill the input box with sample values:
@@ -55,19 +55,18 @@
 
             <br>
             <br>
-
-           <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+           
+       
+       <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
            &emsp;&emsp;&emsp;
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
+           <br>
            
-           </b> 
-           
+         
        
-        </div>
-        <br/>
-
-        <div class=numGroup>
+  
+       
            <div class="input-group mb-3">
             <input type="text" class="inputbox" id="number-input" 
             placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
@@ -95,22 +94,17 @@
              </div>
 
           </div>
-        </div>
-
-<canvas id="canvas" width="800" height="144"
-style="border:1px solid #000000"></canvas>
-
-         <script>
-        const numbersGroup = document.getElementsByClassName("numbers-group")[0];
-        let canvas = new fabric.Canvas('canvas');
-        let list = [];
-        let fList = null;
-        drawListOnScreen(list);
-       </script>
-
-    <footer id="legend">
+<p>We attempted to read from templates/sortCanvas.txt but failed.</p>
+<script>
+const numbersGroup = document.getElementsByClassName("numbers-group")[0];
+let canvas = new fabric.Canvas('canvas');
+let list = [];
+let fList = null;
+drawListOnScreen(list);
+</script>
+<footer id="legend">
         <script> window.display_legend("Item Swapped", "Item being Compared") </script>
-    </footer>
+ </footer>
         
     </div>
 

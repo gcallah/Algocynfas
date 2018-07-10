@@ -1,0 +1,9 @@
+                <div class="help-tip">
+                  <p>
+                  This is a Hash Table. Make sure to set size, function and
+                  input before hashing. Also make sure the function is only in
+                  terms of the variable x(lower). For now, it supports the
+                  operators + - * / ^ (**) % ()
+                  </p>
+  
+              </div>

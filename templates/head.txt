@@ -5,4 +5,4 @@
 <script src="lib/fabric.js"></script>
 <script src="algocynfas.js"></script>
 <script src="widgets.js"></script>
-<script src="sort.js"></script>
+

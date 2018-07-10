@@ -31,18 +31,28 @@ function createTree(ifEdge){
 }
 
 function createBST(type){
-    var graph = new BST();
-   if(getHTML("random").checked == true){
-       graph.random();
-   }
+    
  
-   if(type == "single"){
-      graph.insert();
+   if(type == 1){
+     var graph = new BST();
+     if(getHTML("random").checked == true){
+       graph.random();
+     }
+     graph.setBST();
+      
    }
    else{
-      graph.setBST();
+     if(!Graph){
+      var graph = new BST();
+       graph.insert();
+      Graph = graph;
+     }
+     else{
+         $( ".graph" ).empty();
+     Graph.insert();
    }
-   Graph = graph;
+  
+}
 }
 
 
@@ -235,6 +245,7 @@ class ourGraph{
         enableCamera: false,
         autoRescale: false,
         defaultEdgeLabelSize: 15,
+         scalingMode: "outside",
         }
 
     });
@@ -622,27 +633,69 @@ class BST extends ourGraph{
 
    }
    insert(){
-      var input = getHTML("treeNode").value;
-      var parent = this.getParent(input);
+      var input = parseInt(getHTML("treeNode").value);
+      var parentAndSide = this.getParent(input);
+      var parent = parentAndSide[0];
+      var side = parentAndSide[1];
       if(Number.isInteger(input)){
-
          correctErr("treeNode");
-         var node = new treeNode(input ,parent, this.nodes.length);
-         if(this.root == null){
+         var node = new treeNode(input ,parent, side, this.nodes.length);
+         
+         if(!this.root){
             this.root = node;
          }
          else{
-           this.connectParentChild(parent, node);
-         }
-         this.nodeArrange.push(node.layout);
+           this.connectParentChild(node);
+         } 
+         this.nodeLayout.push(node.layout);
          this.nodes.push(input);  
-         return;  
+         let g = {
+          nodes: this.nodeLayout,
+          edges: this.edgeLayout,
+         }; 
+
+        this.graph = g;
+        this.createSigmaGraph();
+        return;  
       }
 
-      noticeErr("Please input a valid integer", "treeNode");
+        noticeErr("Please input a valid integer", "treeNode");
    }
 
-  random(){
+
+  connectParentChild(node){
+    if (!node.parent){
+      return;
+    }
+    var edgeId = (node.parent.id).toString()+ "-" + (node.id).toString();
+    console.log(edgeId);
+    this.edgeLayout.push({
+         id: edgeId,
+         source: (node.parent.id).toString(),
+         target: (node.id).toString(),
+         size :5,
+         label : null,
+         type : "arrow",
+         color: EdgeNodeCOLOR,
+       });
+
+
+  }
+
+  getParent(input){
+    if(!this.root ){
+      return [null,null];
+    }
+    var curr = this.root;
+    var result = binaryS(curr,input);
+    
+    return result;
+    
+
+  }
+    
+
+    random(){
     var input = getHTML("treeNode").value;
     input = splitInput(input, true);
     var result = [];
@@ -658,58 +711,61 @@ class BST extends ourGraph{
 
   }
 
-  connectParentChild(){
-
-  }
-
-  getParent(input){
-    if(!this.root ){
-      return null;
-    }
-    
-  }
-
 }
 
 
 class treeNode{
 
-  constructor(num, parent, counter){
+  constructor(num, parent, side, counter){
     this.key = num;
     this.left = null;
     this.right = null;
     this.parent = null;
     this.layout = null;
     this.position = null;
-    this.setNode(num,rootPos);
-    this.setNeighbors(left,right);
+    this.setNode(num,parent,side,counter);
+    this.id = counter;
   }
 
-  setNode(num, parent, counter){
+  setNode(num, parent, side, id){
     if(!parent){
       this.layout = {
-      "id": counter.toString(),
-      "label": num,
-      "x": -100,
-      "y": 0,
+      "id": id.toString(),
+      "label": num.toString(),
+      "x": 0,
+      "y": -400,
       "size": 12,
     }; 
 
+
     this.position = {
-      x: -100,
-      y: 0,
+      x: 0,
+      y: -400,
     };
-      
+
     }
     else{
-      this.position = {
-        x: parent.position.x + 10,
-        y: parent.position.y + 10,
-      }
       this.parent = parent;
+      if (side == "left"){
+
+        this.position = {
+          x: parent.position.x - 30,
+          y: parent.position.y + 30,
+        }
+        this.parent.left = this;
+      }
+
+      else{
+        this.position = {
+          x: parent.position.x + 30,
+          y: parent.position.y + 30,
+        }
+        this.parent.right = this;
+      }
+  
       this.layout = {
-      "id": counter.toString(),
-      "label": num,
+      "id": id.toString(),
+      "label": num.toString(),
       "x": this.position.x,
       "y": this.position.y,
       "size": 12,
@@ -721,40 +777,4 @@ class treeNode{
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

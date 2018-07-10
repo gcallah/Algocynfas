@@ -270,29 +270,9 @@ p.lead-quote {
 .container{
     margin: 30px; 
 }
-.wrapContainer{
-    width: 800px;
-    height: 450px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    border: 1px;
-    border-style: solid;
-    overflow: scroll;
-   
-  }
 
-.insideContainer{
-    width: 1000px;
-    height: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    overflow: scroll;
-   
-  }
 #graphContainer {
-    width: 500px;
+    width: 800px;
     height: 500px;
     margin-top: 50px;
     border: 1px;

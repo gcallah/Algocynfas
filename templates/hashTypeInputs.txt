@@ -1,31 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="lib/bootstrap.min.css">
-<link rel="stylesheet" href="style.css">
-<script src="lib/bootstrap.min.js"></script>
-<script src="lib/fabric.js"></script>
-<script src="algocynfas.js"></script>
-<script src="widgets.js"></script>
-
-
-<script src="hash_table.js"></script>
-    </head>
-    <body >
-      <div class="container">
-        <h1>
-            Hash Table
-        </h1>
-                <div class="help-tip">
-                  <p>
-                  This is a Hash Table. Make sure to set size, function and
-                  input before hashing. Also make sure the function is only in
-                  terms of the variable x(lower). For now, it supports the
-                  operators + - * / ^ (**) % ()
-                  </p>
-  
-              </div>
             <b>
             Hash Types:
            
@@ -72,21 +44,3 @@
             </b>
               
               <br> <br>
-              <div class="canvasBox"  style="border:1px solid #000000">
-                 <canvas id="canvas" width="1000" height="1400"></canvas>
-              </div>
-              <script>
-                  var canvas = new fabric.Canvas('canvas');
-                  let list = [];
-                  let fList = null;
-                  let Hash_Table = null;
-                  let hashTable = null;
-                  let probingCounter = 0;
-              </script>
-    <footer id="legend">
-        <script> window.display_legend("Table Index", "Hashed Values", '#99ccff','#ffff99') </script>
-    </footer>
-          </div>
-
-      </body>
-</html>

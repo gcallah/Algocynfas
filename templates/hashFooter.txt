@@ -1,0 +1,3 @@
+    <footer id="legend">
+        <script> window.display_legend("Table Index", "Hashed Values", '#99ccff','#ffff99') </script>
+    </footer>

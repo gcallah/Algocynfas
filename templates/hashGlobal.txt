@@ -1,0 +1,8 @@
+              <script>
+                  var canvas = new fabric.Canvas('canvas');
+                  let list = [];
+                  let fList = null;
+                  let Hash_Table = null;
+                  let hashTable = null;
+                  let probingCounter = 0;
+              </script>

@@ -1,0 +1,13 @@
+           <b> Sort Types: 
+
+           <input type="radio" name="sort" id="insertion" checked = "true"/>
+           <label for="insertion">Insertion Sort</label>
+
+           <input type="radio" name="sort" id="bubble"/>
+           <label for="bubble">Bubble Sort</label>
+
+           <input type="radio" name="sort" id="quick"/>
+           <label for="quick">Quick Sort</label>
+
+           <br>
+           </b>

@@ -2,87 +2,18 @@
 <html lang="en">
     <head>
 <!--include head.txt -->
+<!--include hashHead.txt -->
     </head>
     <body >
       <div class="container">
         <h1>
             Hash Table
         </h1>
-                <div class="help-tip">
-                  <p>
-                  This is a Hash Table. Make sure to set size, function and
-                  input before hashing. Also make sure the function is only in
-                  terms of the variable x(lower). For now, it supports the
-                  operators + - * / ^ (**) % ()
-                  </p>
-              </div>
-            <b>
-            Hash Types:
-           
-              <input type="radio" name="hashType" id="chaining" checked="true"> Chaining
-              <input type="radio" name="hashType" id="linearProbing"> Linear Probing
-            
-              <br> <br>
-              <input type="text" class="box" id="tableSize" placeholder="Enter an integer" value="10">
-              <button id = "set-button" type="button" 
-              class="btn btn-success col-1" onclick="SetupTable()">Set Size
-             </button>
-             &emsp; &emsp; 
-
-             <input type="text" class="box" id="InputValue" 
-               placeholder="Enter an interger">
-               <button id = "set-button" type="button"
-                   class="btn btn-success col-1" onclick="checkInput()" >Set Input
-              </button>
-              &emsp; &emsp; 
-
-               <button id = "run-button" type="button"
-                   class="btn btn-success col-1" onclick="hash()">Hash
-              </button>
-            
-               <button id = "stop-button" type="button"
-                   class="btn btn-danger col-1" onclick="clearTable()">Clear
-               </button>
-        
-            </b>
-              
-              <br> <br>
-
-             
-              <b>
-                Choose one function or customize one:
-                 <select id= funcChoices onchange="isCustomize()">
-                <option value="Select" >Select one</option>
-                <option value="f1" >2x % Size (even)</option>
-                <option value="f2"> 2x % Size (prime)</option>
-                <option value="f3"> (x^2) % Size</option>
-                <option value="f4">(x^3) % Size</option>
-                <option value="f5">(7x + 11) % Size</option>
-                <option value="Cus">Customize</option>
-              </select>
-        
-              <input type="text" class="funcBox" id="hashFunc"  
-              placeholder="Enter a function use x as variable" > <b id = "text" class= "funcText"> % Size </b>
-               </b>
-             
-              <br>  
-              <br> 
-           
-              <div class="canvasBox"  style="border:1px solid #000000">
-                 <canvas id="canvas" width="1000" height="1400"></canvas>
-              </div>
-        
-              <script src="hash_table.js"></script>
-              
-              <script>
-                  var canvas = new fabric.Canvas('canvas');
-                  let list = [];
-                  let fList = null;
-                  let Hash_Table = null;
-                  let hashTable = null;
-                  let probingCounter = 0;
-              </script>
-             <!--include footer.txt -->
+        <!--include helpTip.txt -->
+        <!--include hashTypeInputs.txt -->
+        <!--include hashCanvas.txt -->
+        <!--include hashGlobal.txt -->
+        <!--include hashFooter.txt -->
           </div>
 
       </body>

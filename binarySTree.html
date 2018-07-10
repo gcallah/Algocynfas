@@ -37,7 +37,7 @@
 
   <h1> Binary Search Tree </h1>
 
-  <div class="container">
+  <div class="container" style = "margin-left: 200px">
 
    
   <input type="text" class="edgeBox" id="treeList" 
@@ -45,7 +45,7 @@
 
 
   <button class="btn btn-outline-primary" id="createBST-button" type="button" 
-  onclick="createBST("list")">Create BST
+  onclick="createBST(1)">Create BST
 </button> 
 
   <input type="checkbox" name="ran" value="randomize" id= "random" checked = true> Randomize
@@ -57,14 +57,12 @@
 placeholder="Enter an integer" >
 
 <button class="btn btn-outline-primary" id="insert-button" type="button" 
-onclick="createBST("sigle")"> Insert
+onclick="createBST(2)"> Insert
 </button>
 
 <br>
-<div id = "outsideContainer" class = "wrapContainer">
-<div id="bst" class = "insideContainer" >
-  
-</div>
+
+<div id="graphContainer" class = "graph" style = "height: 1000px"></div>
 
 </div>
 <script>

@@ -1,0 +1,11 @@
+           <b>Choose Speed:
+
+           <input type="radio" name="speed" value="500" id="Fast"/> 
+           <label for="Fast">Fast</label>
+           <input type="radio" name="speed" value="1000" id="Medium" checked="true"/>
+           <label for="Medium">Medium</label>
+           <input type="radio" name="speed" value="2000" id="Slow"/> 
+           <label for="Slow">Slow</label>
+
+            <br>
+            </b>
