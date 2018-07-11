@@ -1,0 +1,3 @@
+ <footer id="legend">
+        <script> window.display_legend("Graph edge", "Minimum spanning tree path", '#0039e6', '#F5B041') </script>
+</footer>

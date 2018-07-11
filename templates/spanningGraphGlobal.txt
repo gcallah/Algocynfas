@@ -1,0 +1,7 @@
+  <script>
+  let inputType = "num";  //by giving number as node input
+  let dir = 0;       //undirected
+  let weight = 1;    //Weighted
+  let Graph = null;
+  let animeRunning = true;
+</script>

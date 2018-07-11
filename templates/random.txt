@@ -1,0 +1,2 @@
+  <input type="checkbox" name="ran" value="randomize" id= "random" checked = true> Randomize
+&emsp;

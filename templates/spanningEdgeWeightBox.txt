@@ -1,0 +1,5 @@
+<input type="text" class="edgeBox" id="edges" 
+placeholder="Enter edges (e.g: a-b, e-f-g)" >
+&emsp;
+<input type="text" class="weightBox" id="weights" 
+placeholder="Enter weights in the order of edges, e.g: 1,2"style = "display: inline" >

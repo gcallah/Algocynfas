@@ -1,0 +1,1 @@
+<div id="graphContainer" class = "graph" style = "height: 1000px"></div>

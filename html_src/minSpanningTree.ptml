@@ -1,0 +1,25 @@
+<html>
+<head>
+ <!--include graphHead.txt -->
+ <!--include minSpanningTHead.txt -->
+</head>
+<body>
+  <h1> Find a Minimum Spainning Tree </h1>
+  <div class="container" style ="margin-left: 180px">
+   <!--include spanningType.txt -->
+   <!--include speedButtons.txt -->
+   <!--include spanningSamples.txt -->
+   <!--include nodeNum.txt -->
+   <!--include graphNodeBtn.txt -->
+   <!--include SpanningEdgeWeightBox.txt -->
+   <!--include graphEdgeBtn.txt -->
+   <!--include runStopButtons.txt -->
+   <!--include clearGraphBtn.txt -->
+   <!--include clearEdgeBtn.txt -->
+   <!--include graphContainer.txt -->
+   <!--include minSpanningFooter.txt -->
+
+</div> 
+ <!--include spanningGraphGlobal.txt -->
+</body>
+</html>

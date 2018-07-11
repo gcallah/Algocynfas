@@ -1,0 +1,8 @@
+
+  <button class="btn btn-outline-primary" id="add-node-button" type="button" 
+  onclick="createTree(false)">Create Nodes
+</button> 
+&emsp;
+
+
+<br> <br>

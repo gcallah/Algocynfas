@@ -1,0 +1,4 @@
+   <select id= choices onchange="typeChange()">
+    <option value="Number" >Input number of nodes (Default Name) </option>
+    <option value="f1" >Input by a list of node names</option>
+  </select>

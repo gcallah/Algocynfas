@@ -1,0 +1,17 @@
+<html>
+<head>
+ <!--include graphHead.txt -->
+</head>
+<body>
+  <h1> Tree </h1>
+  <div class="container">
+<!--include nodeNum.txt -->
+<!--include treeNodeBtn.txt -->
+<!--include spanningEdgeWeightBox.txt -->
+<!--include treeEdgeBtn.txt -->
+<!--include graphContainer.txt -->
+<!--include graphGlobal.txt -->
+
+</div> 
+</body>
+</html>

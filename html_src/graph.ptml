@@ -1,0 +1,24 @@
+<html>
+<head>
+ <!--include graphHead.txt -->
+</head>
+
+
+<body>
+
+  <h1> Graph </h1>
+
+  <div class="container">
+    
+<!--include nodeChoice.txt -->
+<!--include nodeNum.txt -->
+<!--include graphNodeBtn.txt -->
+<!--include dirWeight.txt -->
+<!--include edgeWeightBox.txt -->
+<!--include graphEdgeBtn.txt -->
+<!--include graphContainer.txt -->
+<!--include graphGlobal.txt -->
+
+</div> 
+</body>
+</html>

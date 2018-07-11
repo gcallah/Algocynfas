@@ -1,0 +1,2 @@
+  <input type="text" class="numBox" id="nodeNum" 
+  placeholder="Enter node#, max 16 nodes"  >

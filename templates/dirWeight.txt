@@ -1,0 +1,10 @@
+
+<select id= graphType onchange="setDir()">
+  <option value="undir" >Undirected </option>
+  <option value="dir" > Directed </option>
+</select>
+
+<select id= "graphWeight" onchange="setWeight()">
+  <option value="unW" >Unweighted </option>
+  <option value="W" > Weighted </option>
+</select>

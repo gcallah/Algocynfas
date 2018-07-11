@@ -1,0 +1,19 @@
+<html>
+<head>
+ <!--include graphHead.txt -->
+ <!--include binarySHead.txt -->
+</head>
+<body>
+  <h1> Binary Search Tree </h1>
+  <div class="container" style = "margin-left: 200px">
+ <!--include binaryList.txt -->
+ <!--include binaryListBtn.txt -->
+ <!--include random.txt -->
+ <!--include binaryInsert.txt -->
+ <!--include binaryInsertBtn.txt -->
+ <!--include binaryContainer.txt -->
+ <!--include graphGlobal.txt -->
+
+</div> 
+</body>
+</html>

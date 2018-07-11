@@ -1,0 +1,11 @@
+<script>
+
+  let inputType = "num";
+  let dir = 0;
+  let weight = 0;
+  let Graph = null;
+  let animeRunning = true;
+
+
+
+</script>
