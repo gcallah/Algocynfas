@@ -85,7 +85,7 @@ function deleteNumberGroup(e) {
 
 
 
- async function sort() {
+ async function run() {
     clearNumberGroup();
 
     animeRunning = true;

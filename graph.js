@@ -611,7 +611,7 @@ class tree extends ourGraph{
     }
 
     for(var i = 0; i < circledSet.length; i++){
-       this.color(circledSet[i], ErrorColor,false);
+       this.color(circledSet[i], ErrorCOLOR,false);
     }
     return result;
   }

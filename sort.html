@@ -17,7 +17,6 @@
         <h1>
             Sorting Algorithms
         </h1>
-        
            <b> Sort Types: 
 
            <input type="radio" name="sort" id="insertion" checked = "true"/>
@@ -57,7 +56,7 @@
             <br>
            
        
-       <button id = "run-button" type="button" class="btn btn-success col-1" onclick="sort()">Run</button>
+       <button id = "run-button" type="button" class="btn btn-success col-1" onclick="run()">Run</button>
            &emsp;&emsp;&emsp;
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
@@ -94,7 +93,8 @@
              </div>
 
           </div>
-<p>We attempted to read from templates/sortCanvas.txt but failed.</p>
+<canvas id="canvas" width="800" height="144"
+style="border:1px solid #000000"></canvas>
 <script>
 const numbersGroup = document.getElementsByClassName("numbers-group")[0];
 let canvas = new fabric.Canvas('canvas');
@@ -107,6 +107,5 @@ drawListOnScreen(list);
  </footer>
         
     </div>
-
 </body>
 </html>

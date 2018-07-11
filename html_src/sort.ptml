@@ -9,17 +9,15 @@
         <h1>
             Sorting Algorithms
         </h1>
-        
         <!--include sortType.txt -->
         <!--include speedButtons.txt -->
         <!--include sampleInput.txt -->
-        <!--include runButtons.txt -->
+        <!--include runStopButtons.txt -->
         <!--include numberGroup.txt -->
         <!--include sortCanvas.txt -->
         <!--include sortGlobal.txt -->
         <!--include sortFooter.txt -->
         
     </div>
-
 </body>
 </html>
