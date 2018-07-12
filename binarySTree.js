@@ -1,42 +1,60 @@
-function binaryS(curr, input){
-
+function binaryS(curr, input, lastDir = null, adjustList = []){
     if (!curr.left && curr.right){
-      if(input <= curr.key){
-         return [curr,"left"];
+      if(input < curr.key){
+         if(lastDir == "right"){
+            adjustList.push(curr);
+          }
+          return [curr,"left", adjustList]
       }
       else{
-      	return binaryS(curr.right, input);
+      	if(lastDir == "left"){
+          adjustList.push(curr);;
+        }
+          return binaryS(curr.right, input, "right", adjustList);
       }
     }
     else if(curr.left && !curr.right){
-      if(input <= curr.key){
-        return binaryS(curr.left, input);
+      if(input < curr.key){
+        if(lastDir == "right"){
+          adjustList.push(curr);
+        }
+          return binaryS(curr.left, input, "left", adjustList);
       }
       else{
-          return [curr, "right"];
+          if(lastDir == "left"){
+            adjustList.push(curr);
+          }
+          return [curr, "right", adjustList];
       }
     }
-
     else if(!curr.left && !curr.right){
-
-      if(input <= curr.key){
-          return[curr,"left"];
+      if(input < curr.key){
+          if(lastDir == "right"){
+            adjustList.push(curr);
+          }
+          return [curr,"left", adjustList]
       }
       else{
-          return [curr, "right"];
+          if(lastDir == "left"){
+            adjustList.push(curr);
+          }
+          return [curr, "right", adjustList];
       }
     }
-
     else {
-
-      if(input <= curr.key){
-        return binaryS(curr.left, input);
+      if(input < curr.key){
+        if(lastDir == "right"){
+          adjustList.push(curr);
+        }
+          return binaryS(curr.left, input, "left", adjustList);
       }
       else{
-        return binaryS(curr.right, input);
+        if(lastDir == "left"){
+          adjustList.push(curr);
+        }
+          return binaryS(curr.right, input, "right", adjustList);
       }
     }
-
  }
 
  function getBaseLog(x, y) {
