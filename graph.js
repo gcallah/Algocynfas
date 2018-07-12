@@ -36,6 +36,7 @@ function createBST(type){
    if(type == 1){
      getHTML("graphContainer").style.height = 300;
      getHTML("graphContainer").style.width = 800;
+     getHTML("graphContainer").style.marginLeft = "250px";
      var graph = new BST();
      if(getHTML("random").checked == true){
        var input = graph.random();
@@ -237,7 +238,7 @@ class ourGraph{
       }
     }
 
-  createSigmaGraph(){
+  createSigmaGraph(drag){
     $( ".graph" ).empty();
     let s = new sigma({
       graph: this.graph,
@@ -255,7 +256,9 @@ class ourGraph{
     });
 
     this.sigma = s;
+    if(drag){
     this.enableDrag();
+    }
   }
 
   enableDrag(){
@@ -625,100 +628,63 @@ class BST extends ourGraph{
     constructor(){
       super();
       this.root = null;
-      this.level = 0;
       this.nodeLayout = [];
+      this.treeNodes = [];
       this.horiAdjust = false;
       this.vertiAdjust = false;
-      this.treeNodes = [];
-    }
-   adjustPos(dir, node = "all"){
-
-   if( node == "all"){
-     if (dir == "left"){
-      for( var i = 1; i < this.nodeLayout.length; i++){
-       // this.nodeLayout[i].x -= 100;
-       // this.treeNodes[i].position.x -= 100;
-      }
-     }
-      else if (dir == "right"){
-      for( var j = 0; j < this.nodeLayout.length; j++){
-       // this.nodeLayout[j].x += 100;
-      //  this.treeNodes[j].position.x += 100;
-      }
-     }
-
-     else{
-        for(var k = 0; k < this.nodeLayout.length; k++){
-          this.nodeLayout[k].y -= 150;
-          this.treeNodes[k].position.y -= 150;
-        }
-     }
-    }
-
-    else{
-       if (dir == "left"){
-          node.layout.x -= 30;
-          node.position.x -= 30;
-       }
-       else{
-          node.layout.x += 30;
-          node.position.x += 30;
-
-       }
-       if(node.left){
-            this.adjustPos(dir, node.left);
-        }
-       if(node.right){
-            this.adjustPos(dir, node.right);
-        }
-
-    }
-
-   }
-
-   strench(adjustList, node){
-      if(adjustList.length != 0){
-        for(var i = 0; i < adjustList.length; i++){
-          this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-        }
-      }
-
-      if (node.sideToParent == "left"){
-         node.position.x = node.parent.position.x - 30;
-      }
-      else{
-        node.position.x = node.parent.position.x + 30;
-      }
-      node.layout.x = node.position.x
-      return node;
-        
       
-   }
+    }
+    adjustPos(dir, node){
+     console.log(node);
+     if (dir == "left"){
+      node.layout.x -= 30;
+      node.position.x -= 30;
+    }
+    else{
+      node.layout.x += 30;
+      node.position.x += 30;
+
+    }
+    if(node.left){
+      this.adjustPos(dir, node.left);
+    }
+    if(node.right){
+      this.adjustPos(dir, node.right);
+    }
+  }
+
+   strench(adjustList){
+      if(this.treeNodes.length > 1){
+        if(adjustList.length != 0){
+          for(var i = 0; i < adjustList.length; i++){
+            this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
+            
+          }
+        }
+
+      
+      }
+   } 
 
    positionCheck(node){
-     if(Math.abs(node.position.x) > 300 && this.horiAdjust == false){
+     if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
        getHTML("graphContainer").style.width = 1200;
        getHTML("graphContainer").style.marginLeft = "50px";
-       if(node.position.x < 0){
-        this.adjustPos("right");
-      }
-      else{
-        this.adjustPos("left");
-      }
       this.horiAdjust = true;
     }
-    if(Math.abs(node.position.y) > 140 && this.vertiAdjust == false){
+    if(Math.abs(node.position.y) > 130 && this.vertiAdjust == false){
      getHTML("graphContainer").style.height = 800;
-     this.adjustPos("up");
+     for(var k = 0; k < this.nodeLayout.length; k++){
+       // this.nodeLayout[k].y -= 150;
+        this.treeNodes[k].position.y -= 150;
+        this.treeNodes[k].layout.y -= 150;
+     }
      this.vertiAdjust = true;
    }
-    else{
-      if(this.horiAdjust == true){
-    }
-    }
+  
  }
 
-   insert(input){
+   /*insert(input){
       var parentAndSide = this.getParent(input);
       var parent = parentAndSide[0];
       var side = parentAndSide[1];
@@ -746,12 +712,44 @@ class BST extends ourGraph{
          }; 
 
         this.graph = g;
-        this.createSigmaGraph();
+        this.createSigmaGraph(false);
         return;  
       }
 
         noticeErr("Please input a valid integer", "treeNode");
    }
+*/
+   insert(input){
+
+      if(Number.isInteger(input)){
+         correctErr("treeNode");
+         var node = new treeNode(input, this.treeNodes.length);
+         var result = treeInsert(this.root, node);
+          this.root = result.root;
+         node = result.node;
+         var adjustList = result.adj;
+         node.setNode();
+         this.strench(adjustList);
+         this.treeNodes.push(node);
+         this.nodeLayout.push(node.layout);
+         this.positionCheck(node);
+         if(this.treeNodes.length > 1){
+          this.connectParentChild(node);
+         }
+         let g = {
+          nodes: this.nodeLayout,
+          edges: this.edgeLayout,
+         }; 
+
+        this.graph = g;
+        this.createSigmaGraph(false);
+        return;  
+      }
+
+        noticeErr("Please input a valid integer", "treeNode");
+   }
+
+  
 
 
   connectParentChild(node){
@@ -779,7 +777,6 @@ class BST extends ourGraph{
     var curr = this.root;
     var result = binaryS(curr,input);
     return result;
-  
   }
 
     random(){
@@ -798,28 +795,30 @@ class BST extends ourGraph{
     getHTML("treeList").value = result;
     return returnValue;
   }
-
 }
+
+
 
 
 class treeNode{
 
-  constructor(num, parent, side, counter){
+  constructor(num, counter){
     this.key = num;
+    this.id = counter;
     this.left = null;
     this.right = null;
     this.parent = null;
     this.layout = null;
     this.position = null;
-    this.setNode(num,parent,side,counter);
-    this.id = counter;
-    this.sideToParent = side;
+    this.sideToParent = null;
+   // this.setNode(num,parent,side,counter);
+
   }
-  setNode(num, parent, side, id){
-    if(!parent){
+  setNode(){
+    if(!this.parent){
       this.layout = {
-      "id": id.toString(),
-      "label": num.toString(),
+      "id": this.id.toString(),
+      "label": this.key.toString(),
       "x": 0,
       "y": -100,
       "size": 12,
@@ -831,25 +830,21 @@ class treeNode{
 
     }
     else{
-      this.parent = parent;
-      if (side == "left"){
+      if (this.sideToParent == "left"){
         this.position = {
-          x: parent.position.x - 30,
-          y: parent.position.y + 30,
+          x: this.parent.position.x - 30,
+          y: this.parent.position.y + 30,
         }
-        this.parent.left = this;
-      
       }
       else{
         this.position = {
-          x: parent.position.x + 30,
-          y: parent.position.y + 30,
+          x: this.parent.position.x + 30,
+          y: this.parent.position.y + 30,
         }
-        this.parent.right = this;
       }
       this.layout = {
-      "id": id.toString(),
-      "label": num.toString(),
+      "id": this.id.toString(),
+      "label": this.key.toString(),
       "x": this.position.x,
       "y": this.position.y,
       "size": 12,
