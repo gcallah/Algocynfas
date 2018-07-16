@@ -4,7 +4,7 @@
  <!--include minSpanningTHead.txt -->
 </head>
 <body>
-  <h1> Find a Minimum Spainning Tree </h1>
+  <h1> Find a Minimum Spanning Tree </h1>
   <div class="container" style ="margin-left: 180px">
    <!--include spanningType.txt -->
    <!--include speedButtons.txt -->
