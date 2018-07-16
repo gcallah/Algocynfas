@@ -69,6 +69,17 @@ function searchInTree(){
   var input = parseInt(getHTML("searchBox").value);
   Graph.search(input);
 }
+
+function findMinMax(){
+  if(!Graph){
+     noticeErr("The tree is empty, no min or max find!");
+     return;
+  }
+  Graph.find();
+
+}
+
+
 //////////wrapper class implementation
 
 class ourGraph{
@@ -740,7 +751,7 @@ class BST extends ourGraph{
 
    search(input){
     if(Number.isInteger(input)){
-      correctErr("treeNode");
+      correctErr("searchBox");
       var result = treeSearch(this.root, input);     // the binary search algorithm, in binarySTree.js
       if(result){
         this.highLight(result);
@@ -754,24 +765,40 @@ class BST extends ourGraph{
    }
 
 
+  async find(){    
 
-  async highLight(HLNodeLst){
-     console.log(HLNodeLst);
-     var HLEdgeList = [];
+      $( ".graph" ).empty();
+      this.createSigmaGraph(false);
 
-     //create edgeId list:
+      var index = getHTML("minMaxChoice").selectedIndex;
+      if(index == 0){
+        var result = treeMin(this.root);     // the binary search algorithm, in binarySTree.js
+        await this.highLight(result.HLNodeId);
+        var returnValue = "The minimum is " + result.min;
+        alert(returnValue);
+      }
+      else{
+       var result = treeMax(this.root);     // the binary search algorithm, in binarySTree.js
+       await this.highLight(result.HLNodeId);
+       var returnValue = "The maximum is " + result.max;
+       alert(returnValue);
+      }
+      
+      return;
+    }
 
-     for(var i = 0; i < HLNodeLst.length-1; i++){
-         var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
-         HLEdgeList.push(edgeId);
-     }
-    console.log(HLEdgeList);
-    await this.color(HLEdgeList, HLNodeLst);
-  }
 
+
+
+
+     
    delete(input){
 
    }
+
+
+
+
 
   
   connectParentChild(node){
@@ -812,6 +839,21 @@ class BST extends ourGraph{
     result.join();
     getHTML("treeList").value = result;
     return returnValue;
+  }
+
+
+  async highLight(HLNodeLst){
+     console.log(HLNodeLst);
+     var HLEdgeList = [];
+
+     //create edgeId list:
+
+     for(var i = 0; i < HLNodeLst.length-1; i++){
+         var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
+         HLEdgeList.push(edgeId);
+     }
+    console.log(HLEdgeList);
+    await this.color(HLEdgeList, HLNodeLst);
   }
 }
 

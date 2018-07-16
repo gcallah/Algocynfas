@@ -1,4 +1,4 @@
 <button class="btn btn-outline-primary" id="insert-button" type="button" 
-onclick="searchInTree()"> Search
+onclick="findMinMax()"> Find
 </button>
 

@@ -1,0 +1,13 @@
+&emsp;
+            <b>
+            Get
+            </b>
+                <select id= minMaxChoice>
+                <option value="min" >Min </option>
+                <option value="max"> Max </option>
+              </select>
+
+
+ &emsp;
+           
+       

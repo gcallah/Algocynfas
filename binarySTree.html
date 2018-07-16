@@ -45,13 +45,30 @@ onclick="createBST(2)"> Insert
 </button>
 
 <br>
+<br>
 <input type="text" class="Box" id="searchBox" 
 placeholder="Enter an Node">
 <button class="btn btn-outline-primary" id="insert-button" type="button" 
 onclick="searchInTree()"> Search
 </button>
 
-<br>
+&emsp;
+            <b>
+            Get
+            </b>
+                <select id= minMaxChoice>
+                <option value="min" >Min </option>
+                <option value="max"> Max </option>
+              </select>
+
+
+ &emsp;
+           
+       
+<button class="btn btn-outline-primary" id="insert-button" type="button" 
+onclick="findMinMax()"> Find
+</button>
+
 <script>
 
   let inputType = "num";

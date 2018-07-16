@@ -46,8 +46,6 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
 }
 
 
-
-
 function treeSearch( root, target, highLightN = []){
 
   if(!root){
@@ -66,6 +64,39 @@ function treeSearch( root, target, highLightN = []){
   return treeSearch(root.right, target, highLightN);
 
 } 
+
+function treeMin(root){
+   var highLightN = []
+   while (root.left != null){
+    highLightN.push(root.id);
+    root = root.left;
+  }
+  highLightN.push(root.id);
+
+  return ({
+        min: root.layout.label,
+        HLNodeId: highLightN,
+  })
+
+}
+
+function treeMax(root){
+  var highLightN = []
+   while (root.right != null){
+    highLightN.push(root.id);
+    root = root.right;
+  }
+  highLightN.push(root.id);
+  return ({
+        max: root.layout.label,
+        HLNodeId: highLightN,
+  })
+
+
+}
+
+
+
 
 
 
