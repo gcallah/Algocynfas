@@ -250,7 +250,7 @@ class ourGraph{
       }
     }
 
-  createSigmaGraph(drag){
+  createSigmaGraph(drag = true){
     $( ".graph" ).empty();
     let s = new sigma({
       graph: this.graph,
