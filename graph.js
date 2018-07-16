@@ -259,7 +259,7 @@ class ourGraph{
         type: 'canvas'                                                                                 
     },                
       settings: {
-    
+        defaultNodeColor: EdgeNodeCOLOR,
         enableCamera: false,
         autoRescale: false,
         defaultEdgeLabelSize: 15,
