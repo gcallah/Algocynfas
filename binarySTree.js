@@ -3,8 +3,10 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
   var curr = null;                    // y = NIL
   var LastDir = null;
   var adjustList = [];
+  var highLightN = [];
   while (r != null){                    // while x != NIL
     curr = r;                          // y = x
+    highLightN.push(curr.id);
     if (newNode.key < r.key){          // if z.key < x.key
       if(LastDir == "right"){
          adjustList.push(r);
@@ -37,76 +39,56 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
           root: root,
           node: newNode, 
           adj: adjustList,
+          hlNodeId: highLightN,
          };
- 
-  
 
   return result;
 }
- 
 
-/*function binaryS(curr, input, lastDir = null, adjustList = []){
-    if (!curr.left && curr.right){
-      if(input < curr.key){
-         if(lastDir == "right"){
-            adjustList.push(curr);
-          }
-          return [curr,"left", adjustList]
-      }
-      else{
-        if(lastDir == "left"){
-          adjustList.push(curr);;
-        }
-          return binaryS(curr.right, input, "right", adjustList);
-      }
-    }
-    else if(curr.left && !curr.right){
-      if(input < curr.key){
-        if(lastDir == "right"){
-          adjustList.push(curr);
-        }
-          return binaryS(curr.left, input, "left", adjustList);
-      }
-      else{
-          if(lastDir == "left"){
-            adjustList.push(curr);
-          }
-          return [curr, "right", adjustList];
-      }
-    }
-    else if(!curr.left && !curr.right){
-      if(input < curr.key){
-          if(lastDir == "right"){
-            adjustList.push(curr);
-          }
-          return [curr,"left", adjustList]
-      }
-      else{
-          if(lastDir == "left"){
-            adjustList.push(curr);
-          }
-          return [curr, "right", adjustList];
-      }
-    }
-    else {
-      if(input < curr.key){
-        if(lastDir == "right"){
-          adjustList.push(curr);
-        }
-          return binaryS(curr.left, input, "left", adjustList);
-      }
-      else{
-        if(lastDir == "left"){
-          adjustList.push(curr);
-        }
-          return binaryS(curr.right, input, "right", adjustList);
-      }
-    }
- }
 
- function getBaseLog(x, y) {
-  return Math.log(y) / Math.log(x);
-}
-*/
+
+
+function treeSearch( root, target, highLightN = []){
+
+  if(!root){
+    return null;
+  }
+  
+  highLightN.push(root.id);
+
+  if(root.key == target){
+    return highLightN;
+  }
+
+  if (target < root.key){
+    return treeSearch(root.left, target, highLightN);
+  }
+  return treeSearch(root.right, target, highLightN);
+
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
