@@ -49,13 +49,18 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
 function treeSearch( root, target, highLightN = []){
 
   if(!root){
+    noticeErr("Node not found!");
     return null;
   }
   
   highLightN.push(root.id);
 
   if(root.key == target){
-    return highLightN;
+    var result = {
+      node: root,
+      path: highLightN,
+    }
+    return result;
   }
 
   if (target < root.key){
@@ -73,11 +78,10 @@ function treeMin(root){
   }
   highLightN.push(root.id);
 
-  return ({
-        min: root.layout.label,
+  return {
+        min: root.key,
         HLNodeId: highLightN,
-  })
-
+  }
 }
 
 function treeMax(root){
@@ -87,24 +91,156 @@ function treeMax(root){
     root = root.right;
   }
   highLightN.push(root.id);
-  return ({
-        max: root.layout.label,
+  return {
+        max: root.key,
         HLNodeId: highLightN,
-  })
+  }
+}
 
+function treeSuccessor(node){
+   if (node.right){
+     var result = treeMin(node.right);
+     result.HLNodeId.unshift(node.id);
+     return {
+      HLNodeId: result.HLNodeId,
+      suc: result.min,
+   };
+  }
+  var highLightN = [];
+  highLightN.push(node.id);
+  suc = node.parent;
+
+  while (suc && node == suc.right){
+    node = suc;
+    highLightN.push(node.id);
+    suc = suc.parent; 
+  }
+
+  if(suc){
+    highLightN.push(suc.id);
+    return  {
+      HLNodeId: highLightN,
+      suc: suc.key,
+    };
+  }
+  else{
+    noticeErr("This node is already the largest in the tree!")
+
+  }
 
 }
 
+function treePredecessor(node){
+  if (node.left){
+     var result = treeMax(node.left);
+     result.HLNodeId.unshift(node.id);
+     return  {
+      HLNodeId: result.HLNodeId,
+      pre: result.max,
+   };
+  }
+  var highLightN = [];
+  highLightN.push(node.id);
+  pre = node.parent;
 
+  while (pre && node == pre.left){
+    node = pre;
+    highLightN.push(node.id);
+    pre = pre.parent; 
+  }
 
+  if(pre){
+    highLightN.push(pre.id);
+    return  {
+      HLNodeId: highLightN,
+      pre: pre.key,
+    };
+  }
+  else{
+    noticeErr("This node is already the smallest in the tree!")
 
+  }
+}
 
+function inorderTreeWalk(root){
+   if(root){
+    var node = root.id+",";
+    var edge = "";
+    var left = inorderTreeWalk(root.left);
+    var right = inorderTreeWalk(root.right);
+    node = left.node + node +right.node
+   if(root.leftEdge){    
+      edge += left.edge;
+      edge = edge + root.leftEdge.id + ",";
+    } 
+    if(root.rightEdge){
+      edge = edge + root.rightEdge.id + ",";
+      edge += right.edge;
+    }
+    return {
+      node: node,
+      edge: edge,
+  }
+}
+  return {
+    node: [],
+    edge: [],
+  };
+}
 
+function preorderTreeWalk(root){
+  if(root){
+    var node = root.id+",";
+    var edge = "";
+    var left = preorderTreeWalk(root.left);
+    var right = preorderTreeWalk(root.right);
+    node = node+left.node +right.node
+    if(root.leftEdge){
+      edge = edge + root.leftEdge.id + ",";
+      edge += left.edge;
+    } 
+    if(root.rightEdge){
+      edge = edge + root.rightEdge.id + ",";
+      edge += right.edge;
+    }
+    return {
+      node: node,
+      edge: edge,
+  }
+}
+  return {
+    node: [],
+    edge: [],
+  };
+}
 
-
-
-
-
+function postorderTreeWalk(root){
+  if(root){
+    var node = root.id+",";
+    var edge = "";
+    var left = postorderTreeWalk(root.left);
+    var right = postorderTreeWalk(root.right);
+    node = left.node +right.node+node;
+    if(root.leftEdge){
+      
+      edge += left.edge;
+      edge = edge + root.leftEdge.id + ",";
+    } 
+    if(root.rightEdge){
+      
+      edge += right.edge;
+      edge = edge + root.rightEdge.id + ",";
+    }
+    return {
+      node: node,
+      edge: edge,
+  }
+}
+  return {
+    node: [],
+    edge: [],
+  };
+}
 
 
 

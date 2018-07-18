@@ -32,7 +32,7 @@
   <h1> Binary Search Tree </h1>
   <div class="container" style = "margin-left: 250">
 <input type="text" class="edgeBox" id="treeList" 
-  placeholder="Enter a list of nums separate by comma, max 31"  >
+  placeholder="Enter a list of nums separate by comma"  >
  <button class="btn btn-outline-primary" id="createBST-button" type="button" 
   onclick="createBST(1)">Create BST
 </button> 
@@ -52,6 +52,7 @@ placeholder="Enter an Node">
 onclick="searchInTree()"> Search
 </button>
 
+
 &emsp;
             <b>
             Get
@@ -62,11 +63,61 @@ onclick="searchInTree()"> Search
               </select>
 
 
- &emsp;
+
            
        
 <button class="btn btn-outline-primary" id="insert-button" type="button" 
 onclick="findMinMax()"> Find
+</button>
+
+
+&emsp;
+            <b>
+            Get
+            </b>
+                <select id= preSucChoice>
+                <option value="pre" >Predecessor </option>
+                <option value="suc"> Successor </option>
+              </select>
+
+           <b>
+           of
+           </b>
+
+
+
+           
+       
+
+<input type="text" class="Box" id="preSucBox" 
+placeholder="Enter an Node">
+<button class="btn btn-outline-primary" id="insert-button" type="button" 
+onclick="findPreSuc()"> Find
+</button>
+
+<br>
+<br>
+<input type="text" class="Box" id="deleteBox" 
+placeholder="Enter an Node">
+<button class="btn btn-outline-primary" id="insert-button" type="button" 
+onclick="deleteNode()"> Delete
+</button>
+
+
+&emsp;
+
+                <select id= treeWalkChoice>
+                <option value="pre" >Preorder Traversal </option>
+                <option value="in"> Inorder Traversal</option>
+                <option value="post"> Postorder Traversal </option>
+              </select>
+
+
+
+           
+       
+<button class="btn btn-outline-primary" id="insert-button" type="button" 
+onclick="PreInPost()"> Run
 </button>
 
 <script>

@@ -60,23 +60,56 @@ function createBST(type){
      else{
          $( ".graph" ).empty();
         Graph.insert(input,true);
+        Graph = graph;
       }
 
    }
 }
 
+function bstCheck(){
+  if(!Graph){
+    noticeErr("The tree is empty!");
+    return;
+  }
+   $( ".graph" ).empty();
+
+   Graph.createSigmaGraph(false);
+}
+
 function searchInTree(){
+  bstCheck();
   var input = parseInt(getHTML("searchBox").value);
-  Graph.search(input);
+   if(Number.isInteger(input)){
+      correctErr("searchBox");
+      Graph.search(input);
+      return;
+   }
+    noticeErr("Please input a valid integer", "searchBox");
+
 }
 
 function findMinMax(){
-  if(!Graph){
-     noticeErr("The tree is empty, no min or max find!");
-     return;
-  }
-  Graph.find();
+  bstCheck();
+  Graph.minMax();
 
+}
+
+function findPreSuc(){
+  bstCheck();
+  Graph.preSuc();
+
+}
+
+function PreInPost(){
+  bstCheck();
+  Graph.traversal();
+
+  
+}
+
+function deleteNode(){
+  bstCheck();
+  Graph.delete();
 }
 
 
@@ -415,7 +448,13 @@ async color(path, nodes = null, theColor = HIGHLIGHT, pause = true){
       try{
         if(nodes){
           pathNodes[i].color = theColor;
-        }
+          Graph = this;
+          graphRefresh();
+         if(pause){
+           await this.pause();
+          }
+        } 
+
         pathEdges[i].color = theColor;
       }
       catch(error){
@@ -745,31 +784,26 @@ class BST extends ourGraph{
 
         return;  
       }
-        noticeErr("Please input a valid integer", "treeNode");
+
+        if(single){
+          var errorBox = "treeNode";
+        }
+        else{
+          var errorBox = "treeList";
+        }
+        noticeErr("Please input a valid integer", errorBox);
    }
 
 
    search(input){
-    if(Number.isInteger(input)){
-      correctErr("searchBox");
       var result = treeSearch(this.root, input);     // the binary search algorithm, in binarySTree.js
-      if(result){
-        this.highLight(result);
-      }
-      else{
-        noticeErr("There is no such node!", "searchBox")
-      }
-      return;
-    }
-      noticeErr("Please input a valid integer", "searchBox");
+          if(result){
+            this.highLight(result.path);
+          }
    }
 
 
-  async find(){    
-
-      $( ".graph" ).empty();
-      this.createSigmaGraph(false);
-
+  async minMax(){    
       var index = getHTML("minMaxChoice").selectedIndex;
       if(index == 0){
         var result = treeMin(this.root);     // the binary search algorithm, in binarySTree.js
@@ -783,22 +817,67 @@ class BST extends ourGraph{
        var returnValue = "The maximum is " + result.max;
        alert(returnValue);
       }
-      
       return;
     }
 
 
 
+   async preSuc(){
+      var input = parseInt(getHTML("preSucBox").value);
+      if(Number.isInteger(input)){
+        var searched = treeSearch(this.root, input);
 
+        if(searched){
+          var node = searched.node;
+          var index = getHTML("preSucChoice").selectedIndex;
 
-     
-   delete(input){
+          if(index == 0){
+            var result = treePredecessor(node);     // the binary search algorithm, in binarySTree.js
+            await this.highLight(result.HLNodeId);
+              var returnValue = "The predecessor is " + result.pre;
+              alert(returnValue);   
+          }
+          else{
+           var result = treeSuccessor(node);     // the binary search algorithm, in binarySTree.js
+           await this.highLight(result.HLNodeId);
+
+              var returnValue = "The successor is " + result.suc;
+              alert(returnValue);
+          }
+          return;
+        }
+        return;
+    }
+    noticeErr("Please give a valid input!", "preSucBox");
 
    }
+  
+  traversal(){
 
+      var index = getHTML("treeWalkChoice").selectedIndex;
+       if(index == 0){
+         var result = preorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
+         
+      }
+      else if (index == 1) {
+        var result = inorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
+        
+      }
+      else{
+        var result = postorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
+      }
+      result.node = result.node.split(",");
+      result.node.pop();
+      result.edge = result.edge.split(",,").join(",").split(",");
+      result.edge.pop();
 
+      this.highLight(result.node,result.edge);
+      return;
+  }
+     
+   delete(){
 
-
+   }
 
   
   connectParentChild(node){
@@ -812,7 +891,6 @@ class BST extends ourGraph{
          target: (node.id).toString(),
          size :5,
          label : null,
-         type : "arrow",
          color: EdgeNodeCOLOR,
        }
     this.edgeLayout.push(newEdge);
@@ -842,23 +920,19 @@ class BST extends ourGraph{
   }
 
 
-  async highLight(HLNodeLst){
-     console.log(HLNodeLst);
-     var HLEdgeList = [];
+  async highLight(HLNodeLst, HLEdgeList = null){
+     if(!HLEdgeList){
+       var HLEdgeList = [];
+       //create edgeId list:
 
-     //create edgeId list:
-
-     for(var i = 0; i < HLNodeLst.length-1; i++){
-         var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
-         HLEdgeList.push(edgeId);
-     }
-    console.log(HLEdgeList);
+       for(var i = 0; i < HLNodeLst.length-1; i++){
+           var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
+           HLEdgeList.push(edgeId);
+       }
+      }
     await this.color(HLEdgeList, HLNodeLst);
   }
 }
-
-
-
 
 class treeNode{
 

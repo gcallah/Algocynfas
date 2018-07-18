@@ -1,0 +1,4 @@
+<br>
+<br>
+<input type="text" class="Box" id="deleteBox" 
+placeholder="Enter an Node">

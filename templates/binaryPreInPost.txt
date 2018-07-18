@@ -1,0 +1,13 @@
+
+&emsp;
+
+                <select id= treeWalkChoice>
+                <option value="pre" >Preorder Traversal </option>
+                <option value="in"> Inorder Traversal</option>
+                <option value="post"> Postorder Traversal </option>
+              </select>
+
+
+
+           
+       
