@@ -162,20 +162,113 @@ function treePredecessor(node){
   }
 }
 
+function treeDelete(root, node, treeNodes){
+  console.log(treeNodes);
+  var returnNode = null;
+  if (!node.left){
+    treeNodes = transplant(root,node,node.right,treeNodes);
+    if(!node.right){
+      returnNode = node.parent.key;
+    }
+    returnNode = node.right.key;
+  }
+  else if(!node.right){
+    treeNodes = transplant(root,node,node.left,treeNodes);
+    returnNode = node.left.key;
+  }
+  else{
+    var replaceNode = treeMin(node.right);
+    returnNode = replaceNode.parent.key;
+    if (replaceNode.parent != node){
+      treeNodes = transplant(root,replaceNode,replaceNode.right,treeNodes);
+      replaceNode.right = node.right;  
+      replaceNode.right.parent = replaceNode;
+      treeNodes[replaceNode.right.id] = replaceNode.right; 
+
+    }
+    treeNodes = transplant(root,node,replaceNode,treeNodes);
+    replaceNode.left = node.left;
+    treeNodes[replaceNode.id] = replaceNode;  
+    replaceNode.left.parent = replaceNode;
+    treeNodes[replaceNode.left.id] = replaceNode.left; 
+
+  }
+
+  return{
+    adjust: returnNode;
+    newLayout: trreeNodes;
+  }
+}
+
+
+function transplant(root,toDelete,replace,treeNodes){
+  var node = toDelete.parent;
+  if(!toDelete.parent){
+    root = replace;
+  }
+  else if (toDelete = node.left){
+    node.left = replace;
+    node.leftEdge =  
+    resetEdge(node.leftEdge,node.leftEdge.source,replace.id.toString());
+    treeNodes[toDelete.parent.id] = node;
+  }
+  else{
+    node.right = replace;
+    node.rightEdge = 
+    resetEdge(node.rightEdge, node.rightEdge.source, replace.id.toString());
+
+    treeNodes[node.id] = node;
+  }
+  if(replace){
+    if(toDelete != replace.parent){
+      if(toDelete.leftEdge){
+        replace.leftEdge =  toDelete.leftEdge;
+        replace.leftEdge = 
+        resetEdge(replace.leftEdge,replace.id.toString(),replace.leftEdge.target);
+      }
+      if(toDelete.rightEdge){
+        replace.rightEdge = toDelete.rightEdge;
+        replace.rightEdge = 
+        resetEdge(replace.rightEdge,replace.id.toString(),replace.rightEdge.target);
+      }
+    }
+    replace.parent = node;
+    replace = resetReplace(replace, toDelete);
+    treeNodes[replace.id] = replace;
+    
+  }
+  return treeNodes;
+}
+
+
+function resetReplace(replace, toDelete){
+  replace.position = toDelete.position;
+  replace.sideToParent = toDelete.sideToParent;
+}
+
+function resetEdge(edge, source, target){
+   edge.id = source + "-" + target;
+   edge.source = source;
+   edge.target = target;
+   return edge;
+}
+
+
+
 function inorderTreeWalk(root){
    if(root){
-    var node = root.id+",";
-    var edge = "";
+    var node = [root.id];
+    var edge = [];
     var left = inorderTreeWalk(root.left);
     var right = inorderTreeWalk(root.right);
-    node = left.node + node +right.node
+    node = left.node.concat(node).concat(right.node);
    if(root.leftEdge){    
-      edge += left.edge;
-      edge = edge + root.leftEdge.id + ",";
+      edge = edge.concat(left.edge);
+      edge.push(root.leftEdge.id);
     } 
     if(root.rightEdge){
-      edge = edge + root.rightEdge.id + ",";
-      edge += right.edge;
+      edge.push(root.rightEdge.id);
+      edge = edge.concat(right.edge);
     }
     return {
       node: node,
@@ -190,18 +283,18 @@ function inorderTreeWalk(root){
 
 function preorderTreeWalk(root){
   if(root){
-    var node = root.id+",";
-    var edge = "";
+    var node = [root.id];
+    var edge = [];
     var left = preorderTreeWalk(root.left);
     var right = preorderTreeWalk(root.right);
-    node = node+left.node +right.node
+    node = node.concat(left.node).concat(right.node);
     if(root.leftEdge){
-      edge = edge + root.leftEdge.id + ",";
-      edge += left.edge;
+      edge.push(root.leftEdge.id);
+      edge = edge.concat(left.edge);
     } 
     if(root.rightEdge){
-      edge = edge + root.rightEdge.id + ",";
-      edge += right.edge;
+      edge.push(root.rightEdge.id);
+      edge = edge.concat(right.edge);
     }
     return {
       node: node,
@@ -216,20 +309,20 @@ function preorderTreeWalk(root){
 
 function postorderTreeWalk(root){
   if(root){
-    var node = root.id+",";
-    var edge = "";
+    var node = [root.id];
+    var edge = [];
     var left = postorderTreeWalk(root.left);
     var right = postorderTreeWalk(root.right);
-    node = left.node +right.node+node;
+    node = left.node.concat(right.node).concat(node);
+
     if(root.leftEdge){
-      
-      edge += left.edge;
-      edge = edge + root.leftEdge.id + ",";
+      edge = edge.concat(left.edge);
+      edge.push(root.leftEdge.id);
     } 
     if(root.rightEdge){
       
-      edge += right.edge;
-      edge = edge + root.rightEdge.id + ",";
+      edge = edge.concat(right.edge);
+      edge.push(root.rightEdge.id);
     }
     return {
       node: node,

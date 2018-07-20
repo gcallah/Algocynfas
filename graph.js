@@ -716,18 +716,12 @@ class BST extends ourGraph{
     }
   }
 
-   strench(adjustList){
-      if(this.treeNodes.length > 1){
-        if(adjustList.length != 0){
-          for(var i = 0; i < adjustList.length; i++){
-            this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-            
-          }
-        }
+  strench(adjustList){
+    for(var i = 0; i < adjustList.length; i++){
+      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
+    }
+  } 
 
-      
-      }
-   } 
 
    positionCheck(node){
      if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
@@ -743,8 +737,7 @@ class BST extends ourGraph{
         this.treeNodes[k].layout.y -= 150;
      }
      this.vertiAdjust = true;
-   }
-  
+   } 
  }
 
    
@@ -762,7 +755,9 @@ class BST extends ourGraph{
          var hlNodeId = result.hlNodeId;
 
          node.setNode();
-         this.strench(adjustList);              
+         if(this.treeNodes.length > 1 && adjustList.length != 0){
+            this.strench(adjustList);
+          }              
          this.treeNodes.push(node);
          this.nodeLayout.push(node.layout);
          this.positionCheck(node);
@@ -770,11 +765,9 @@ class BST extends ourGraph{
          if(this.treeNodes.length > 1){
           this.connectParentChild(node); 
           if(single){
-            console.log("true");
             await this.highLight(hlNodeId); 
           }   
          }
-
          let g = {
           nodes: this.nodeLayout,
           edges: this.edgeLayout,
@@ -853,7 +846,6 @@ class BST extends ourGraph{
    }
   
   traversal(){
-
       var index = getHTML("treeWalkChoice").selectedIndex;
        if(index == 0){
          var result = preorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
@@ -866,18 +858,34 @@ class BST extends ourGraph{
       else{
         var result = postorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
       }
-      result.node = result.node.split(",");
-      result.node.pop();
-      result.edge = result.edge.split(",,").join(",").split(",");
-      result.edge.pop();
 
       this.highLight(result.node,result.edge);
-      return;
   }
      
-   delete(){
+   async delete(){
+    var input = parseInt(getHTML("deleteBox").value);
+      if(Number.isInteger(input)){
+        var searched = treeSearch(this.root, input);
+        if(searched){
+          await this.highLight(searched.path);
+          await this.highLight([searched.node.id]);
+          var node = searched.node;
+          var result = treeDelete(this.root,node,this.treeNodes);
+          await this.highLight(result.path);
+          await this.highLight([result.node.id]);
+          searched.path.shift();
+          result.path.shift();
+          var adjustList =  searched.concat(result);
+          this.strench(adjustList); 
+
+        }
+        return;
+    }
+    noticeErr("Please give a valid input!", "deleteBox");
 
    }
+
+   
 
   
   connectParentChild(node){
@@ -947,7 +955,6 @@ class treeNode{
     this.sideToParent = null;
     this.leftEdge = null;
     this.rightEdge = null;
-   // this.setNode(num,parent,side,counter);
 
   }
   setNode(){
@@ -984,7 +991,7 @@ class treeNode{
       "label": this.key.toString(),
       "x": this.position.x,
       "y": this.position.y,
-      "size": 12,
+      "size": 12, 
       "color" : EdgeNodeCOLOR,
      }
    }
