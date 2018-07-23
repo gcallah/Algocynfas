@@ -54,14 +54,14 @@ function createBST(type){
      var input = parseInt(getHTML("treeNode").value);
      if(!Graph){
       var graph = new BST();
-       graph.insert(input,true);
-      Graph = graph;
      }
      else{
          $( ".graph" ).empty();
-        Graph.insert(input,true);
-        Graph = graph;
+         var graph = Graph;
+        
       }
+      graph.insert(input,true);
+      Graph = graph;
 
    }
 }
@@ -132,7 +132,6 @@ class ourGraph{
     setGraph(ifEdge){
 
       //Node part
-
      var rawInput = getHTML("nodeNum").value;
 
      if (inputType == "num"){
@@ -454,11 +453,14 @@ async color(path, nodes = null, theColor = HIGHLIGHT, pause = true){
            await this.pause();
           }
         } 
-
         pathEdges[i].color = theColor;
       }
       catch(error){
-        path[i] = path[i][2] + path[i][1] + path[i][0];
+
+        var str = path[i];
+        str = str.split("-");
+        path[i] = str[1] + "-" + str[0];
+
         pathEdges[i]= this.sigma.graph.edges(path[i]);
         pathEdges[i].color = theColor;
       }
@@ -699,15 +701,18 @@ class BST extends ourGraph{
       
     }
     adjustPos(dir, node){
-     if (dir == "left"){
-      node.layout.x -= 30;
-      node.position.x -= 30;
-    }
-    else{
-      node.layout.x += 30;
-      node.position.x += 30;
 
-    }
+
+       if (dir == "left"){
+        node.layout.x -= 30;
+        node.position.x -= 30;
+      }
+      else{
+        node.layout.x += 30;
+        node.position.x += 30;
+      }
+    
+
     if(node.left){
       this.adjustPos(dir, node.left);
     }
@@ -718,11 +723,10 @@ class BST extends ourGraph{
 
   strench(adjustList){
     for(var i = 0; i < adjustList.length; i++){
+      adjustList[i].strenchTimes += 1;
       this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
     }
   } 
-
-
    positionCheck(node){
      if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
        getHTML("graphContainer").style.width = 1200;
@@ -739,10 +743,7 @@ class BST extends ourGraph{
      this.vertiAdjust = true;
    } 
  }
-
-   
    async insert(input,single = false){
-
       if(Number.isInteger(input)){
          correctErr("treeNode");
          this.createSigmaGraph(false);
@@ -801,13 +802,13 @@ class BST extends ourGraph{
       if(index == 0){
         var result = treeMin(this.root);     // the binary search algorithm, in binarySTree.js
         await this.highLight(result.HLNodeId);
-        var returnValue = "The minimum is " + result.min;
+        var returnValue = "The minimum is " + result.min.key;
         alert(returnValue);
       }
       else{
        var result = treeMax(this.root);     // the binary search algorithm, in binarySTree.js
        await this.highLight(result.HLNodeId);
-       var returnValue = "The maximum is " + result.max;
+       var returnValue = "The maximum is " + result.max.key;
        alert(returnValue);
       }
       return;
@@ -865,30 +866,47 @@ class BST extends ourGraph{
    async delete(){
     var input = parseInt(getHTML("deleteBox").value);
       if(Number.isInteger(input)){
+        correctErr("deleteBox");
         var searched = treeSearch(this.root, input);
         if(searched){
           await this.highLight(searched.path);
-          await this.highLight([searched.node.id]);
           var node = searched.node;
           var result = treeDelete(this.root,node,this.treeNodes);
-          await this.highLight(result.path);
-          await this.highLight([result.node.id]);
-          searched.path.shift();
-          result.path.shift();
-          var adjustList =  searched.concat(result);
-          this.strench(adjustList); 
-
+          this.root = result.root;
+          if(result.path.length != 0){
+            result.path.unshift(node.id);
+            await this.highLight(result.path);
+          }
+          this.treeNodes = result.newTreeNodes;
+          this.treeNodes[node.id] = null;
+          this.nodeLayout = [];
+          this.edgeLayout = [];
+          for(var i = 0; i < this.treeNodes.length; i++){
+            if(this.treeNodes[i]){
+              this.nodeLayout.push(this.treeNodes[i].layout);
+              if(this.treeNodes[i].leftEdge){
+                this.edgeLayout.push(this.treeNodes[i].leftEdge);
+              }
+              if(this.treeNodes[i].rightEdge){
+                this.edgeLayout.push(this.treeNodes[i].rightEdge);
+              }
+            }
+          }
+        let g = {
+          nodes: this.nodeLayout,
+          edges: this.edgeLayout,
+         }; 
+        this.graph = g;
+        this.createSigmaGraph();
+         return;
         }
-        return;
+        return; 
     }
     noticeErr("Please give a valid input!", "deleteBox");
 
    }
 
-   
-
-  
-  connectParentChild(node){
+    connectParentChild(node){
     if (!node.parent){
       return;
     }
@@ -929,16 +947,18 @@ class BST extends ourGraph{
 
 
   async highLight(HLNodeLst, HLEdgeList = null){
-     if(!HLEdgeList){
-       var HLEdgeList = [];
-       //create edgeId list:
+     if(HLNodeLst.length != 0){
+       if(!HLEdgeList){
+         var HLEdgeList = [];
+         //create edgeId list:
 
-       for(var i = 0; i < HLNodeLst.length-1; i++){
-           var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
-           HLEdgeList.push(edgeId);
-       }
-      }
-    await this.color(HLEdgeList, HLNodeLst);
+         for(var i = 0; i < HLNodeLst.length-1; i++){
+             var edgeId = HLNodeLst[i].toString() + "-" + HLNodeLst[i+1].toString();
+             HLEdgeList.push(edgeId);
+         }
+        }
+      await this.color(HLEdgeList, HLNodeLst);
+    }
   }
 }
 
@@ -955,6 +975,7 @@ class treeNode{
     this.sideToParent = null;
     this.leftEdge = null;
     this.rightEdge = null;
+    this.strenchTimes = 0;
 
   }
   setNode(){

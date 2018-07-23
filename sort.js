@@ -198,19 +198,16 @@ async function insertionSort(myList) {                // Refer to CLRS P18
     }
 }
 
+
+
+
 // bubble sort below
-
-async function bubbleSort(myList) {                      // Refer to CLRS P 40
-
-    
+async function bubbleSort(myList) {                      // Refer to CLRS P 40  
     var delayTime = check_and_Delay();
-    myList.setDelay(delayTime);
-    
+    myList.setDelay(delayTime);  
     for(let i = 0; i < myList.size(); i++) {                    // for i = 0 to A.length -1 
         for(let j = myList.size() - 1; j > i; j--) {               // for j= A.length downto i+1
             if (!animeRunning) break;
-   
-
             myList.highlightSwap(j);
             await myList.draw();
             if(myList.elemAt(j).getKey() < myList.elemAt(j - 1).getKey()) {     // if A[j] < A [j-1]
@@ -223,7 +220,6 @@ async function bubbleSort(myList) {                      // Refer to CLRS P 40
             await myList.draw();
         }
     }
-
 }
 
 
