@@ -1,3 +1,5 @@
+// below are binary search tree algorithms
+
 function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, curr == y, newNode == z 
   var r = root;                        
   var curr = null;                    // y = NIL
@@ -387,7 +389,77 @@ function postorderTreeWalk(root){
 
 
 
+// below are facilitate functions
 
+function bstCheck(){
+  if(!Graph){
+    noticeErr("The tree is empty!");
+    return;
+  }
+   $( ".graph" ).empty();
+
+   Graph.createSigmaGraph();
+}
+ async function searchInTree(){
+  disableButtons(true);
+  bstCheck();
+  var input = parseInt(getHTML("searchBox").value);
+   if(Number.isInteger(input)){
+      correctErr("searchBox");
+      await Graph.search(input);
+      disableButtons(false);
+      return;
+   }
+    noticeErr("Please input a valid integer", "searchBox");
+ 
+}
+
+async function findMinMax(){
+  disableButtons(true);
+  bstCheck();
+  await Graph.minMax();
+  disableButtons(false);
+
+}
+
+async function findPreSuc(){
+  disableButtons(true);
+  bstCheck();
+  await Graph.preSuc();
+  disableButtons(false);
+
+}
+
+async function PreInPost(){
+  disableButtons(true);
+  bstCheck();
+  await Graph.traversal();
+  disableButtons(false);
+
+  
+}
+
+async function deleteNode(){
+  disableButtons(true);
+  bstCheck();
+  await Graph.delete();
+  disableButtons(false);
+}
+
+function disableButtons(ifDisable){
+    
+      getHTML("createBST-button").disabled = ifDisable;
+      getHTML("insert-button").disabled = ifDisable;
+      getHTML("search-button").disabled = ifDisable;
+      getHTML("minmax-button").disabled = ifDisable;
+      getHTML("presuc-button").disabled = ifDisable;
+      getHTML("delete-button").disabled = ifDisable;
+      getHTML("traversal-button").disabled = ifDisable;
+
+ 
+
+  
+}
 
 
 
