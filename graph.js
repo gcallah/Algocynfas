@@ -33,7 +33,8 @@ function createTree(ifEdge){
    Graph = graph;
 }
 
-function createBST(type){
+async function createBST(type){
+  
    if(type == 1){
      getHTML("graphContainer").style.height = 300;
      getHTML("graphContainer").style.width = 800;
@@ -51,6 +52,7 @@ function createBST(type){
      Graph = graph;  
    }
    else{
+     disableButtons(true);
      var input = parseInt(getHTML("treeNode").value);
      if(!Graph){
       var graph = new BST();
@@ -60,10 +62,12 @@ function createBST(type){
          var graph = Graph;
         
       }
-      graph.insert(input,true);
+      await graph.insert(input,true);
+      disableButtons(false);
       Graph = graph;
 
    }
+   
 }
 
 function bstCheck(){
@@ -73,45 +77,68 @@ function bstCheck(){
   }
    $( ".graph" ).empty();
 
-   Graph.createSigmaGraph(false);
+   Graph.createSigmaGraph();
 }
-
-function searchInTree(){
+ async function searchInTree(){
+  disableButtons(true);
   bstCheck();
   var input = parseInt(getHTML("searchBox").value);
    if(Number.isInteger(input)){
       correctErr("searchBox");
-      Graph.search(input);
+      await Graph.search(input);
+      disableButtons(false);
       return;
    }
     noticeErr("Please input a valid integer", "searchBox");
+ 
+}
+
+async function findMinMax(){
+  disableButtons(true);
+  bstCheck();
+  await Graph.minMax();
+  disableButtons(false);
 
 }
 
-function findMinMax(){
+async function findPreSuc(){
+  disableButtons(true);
   bstCheck();
-  Graph.minMax();
+  await Graph.preSuc();
+  disableButtons(false);
 
 }
 
-function findPreSuc(){
+async function PreInPost(){
+  disableButtons(true);
   bstCheck();
-  Graph.preSuc();
-
-}
-
-function PreInPost(){
-  bstCheck();
-  Graph.traversal();
+  await Graph.traversal();
+  disableButtons(false);
 
   
 }
 
-function deleteNode(){
+async function deleteNode(){
+  disableButtons(true);
   bstCheck();
-  Graph.delete();
+  await Graph.delete();
+  disableButtons(false);
 }
 
+function disableButtons(ifDisable){
+    
+      getHTML("createBST-button").disabled = ifDisable;
+      getHTML("insert-button").disabled = ifDisable;
+      getHTML("search-button").disabled = ifDisable;
+      getHTML("minmax-button").disabled = ifDisable;
+      getHTML("presuc-button").disabled = ifDisable;
+      getHTML("delete-button").disabled = ifDisable;
+      getHTML("traversal-button").disabled = ifDisable;
+
+ 
+
+  
+}
 
 //////////wrapper class implementation
 
@@ -282,7 +309,7 @@ class ourGraph{
       }
     }
 
-  createSigmaGraph(drag = true){
+  createSigmaGraph(){
     $( ".graph" ).empty();
     let s = new sigma({
       graph: this.graph,
@@ -300,9 +327,9 @@ class ourGraph{
     });
 
     this.sigma = s;
-    if(drag){
+  
     this.enableDrag();
-    }
+    
   }
 
   enableDrag(){
@@ -751,7 +778,7 @@ class BST extends ourGraph{
       if(Number.isInteger(input)){
          correctErr("treeNode");
          correctErr("treeList");
-         this.createSigmaGraph(false);
+         this.createSigmaGraph();
          await this.pause();
          var node = new treeNode(input, this.treeNodes.length);
          var result = treeInsert(this.root, node);   // the binary insert algorithm, in binarySTree.js
@@ -781,7 +808,7 @@ class BST extends ourGraph{
           edges: this.edgeLayout,
          }; 
         this.graph = g;
-        this.createSigmaGraph(false);
+        this.createSigmaGraph();
 
         return;  
       }

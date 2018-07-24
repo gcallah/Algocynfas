@@ -46,81 +46,73 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
 }
 
 
-function treeSearch( root, target, highLightN = []){
+function treeSearch( root, target, highLightN = []){   //CLRS p291, x == root, k == target
 
-  if(!root){
+  if(!root){                               // if x == NIL or k == x.key(line 56)
     noticeErr("Node not found!");
-    return null;
+    return root;                           //   return x (line 58)
   }
-  
   highLightN.push(root.id);
-
   if(root.key == target){
-    var result = {
+    return {
       node: root,
       path: highLightN,
-    }
-    return result;
+    };
   }
-
-  if (target < root.key){
-    return treeSearch(root.left, target, highLightN);
+  if (target < root.key){                               // if k < x.key 
+    return treeSearch(root.left, target, highLightN);   // return Tree-Search(x.left, k)
   }
-  return treeSearch(root.right, target, highLightN);
+  return treeSearch(root.right, target, highLightN);     // return Tree-Search(x.right, k)
 
 } 
 
-function treeMin(root){
+function treeMin(root){                   // CLRS p291, x == root
    var highLightN = []
-   while (root.left != null){
+   while (root.left){                 // while(x.left != NIL)
     highLightN.push(root.id);
-    root = root.left;
+    root = root.left;                        // x = x.left
   }
   highLightN.push(root.id);
-
   return {
-        min: root,
+        min: root,                           // return x
         HLNodeId: highLightN,
   }
 }
 
-function treeMax(root){
+function treeMax(root){                 // CLRS p291, x == root
   var highLightN = []
-   while (root.right != null){
+   while (root.right){               // while(x.right != NIL)
     highLightN.push(root.id);
-    root = root.right;
+    root = root.right;                    // x = x.right
   }
   highLightN.push(root.id);
   return {
-        max: root,
+        max: root,                          // return x
         HLNodeId: highLightN,
   }
 }
 
-function treeSuccessor(node){
-   if (node.right){
-     var result = treeMin(node.right);
+function treeSuccessor(node){             // CLRS p292 x == node   y == suc 
+   if (node.right){                        // if(x.right != NIL)
+     var result = treeMin(node.right);       // return Tree-Minimum(x.right)  (line 97-101)
      result.HLNodeId.unshift(node.id);
      return {
       HLNodeId: result.HLNodeId,
       suc: result.min.key,
    };
   }
-  var highLightN = [];
-  highLightN.push(node.id);
-  suc = node.parent;
-
-  while (suc && node == suc.right){
-    node = suc;
+  var highLightN = [node.id];             
+  suc = node.parent;                   // y = x.p
+  while (suc && node == suc.right){   // while(y != NIL and x == y.right )
+    node = suc;                       // x = y
     highLightN.push(node.id);
-    suc = suc.parent; 
+    suc = suc.parent;              // y = y.p
   }
-
   if(suc){
     highLightN.push(suc.id);
     return  {
       HLNodeId: highLightN,
-      suc: suc.key,
+      suc: suc.key,               // return y
     };
   }
   else{
@@ -162,46 +154,38 @@ function treePredecessor(node){
   }
 }
 
-function treeDelete(root, node, treeNodes){
+function treeDelete(root, node, treeNodes){                    //CLRS p298   (z == node,T == this.root,y == replaceNode )
 
   var highLightN = [];
   var result = [];
-  if (!node.left){
-    result = transplant(root,node,node.right,treeNodes);
+  if (!node.left){                                           // if(z.left == NIL)
+    result = transplant(root,node,node.right,treeNodes);   // transplant(T,z,z.right)
     treeNodes = result.treeNodes;
     root = result.root;
-    if(!node.right){
-    }
-    else{
-
-    }
   }
-  else if(!node.right){
-    result = transplant(root,node,node.left,treeNodes);
+  else if(!node.right){                                      // else if(z.right == NIL)
+    result = transplant(root,node,node.left,treeNodes);       // transplant(T,z,z.left)
     treeNodes = result.treeNodes;
     root = result.root;
   }
   else{ 
-    var minNode = treeMin(node.right);
+    var minNode = treeMin(node.right);                        // else y = Tree-Minimum(z.right)
     var replaceNode = minNode.min;
     highLightN = minNode.HLNodeId;
-
-    returnNode = replaceNode.parent.key;
-    if (replaceNode.parent != node){
-      result = transplant(root,replaceNode,replaceNode.right,treeNodes);
+    if (replaceNode.parent != node){                         // if(y.p != z)
+      result = transplant(root,replaceNode,replaceNode.right,treeNodes);    //transplant(T,y,y.right)
       treeNodes = result.treeNodes;
       root = result.root;
-      replaceNode.right = node.right;  
-      replaceNode.right.parent = replaceNode;
+      replaceNode.right = node.right;                             // y.right = z.right
+      replaceNode.right.parent = replaceNode;                    // y.right.p = y
       treeNodes[replaceNode.right.id] = replaceNode.right; 
-
     }
-    result = transplant(root,node,replaceNode,treeNodes,false);
+    result = transplant(root,node,replaceNode,treeNodes,false);    //transplant(T,z,y)
     treeNodes = result.treeNodes;
     root = result.root;
-    replaceNode.left = node.left;
+    replaceNode.left = node.left;                              // y.left = z.left
     treeNodes[replaceNode.id] = replaceNode;  
-    replaceNode.left.parent = replaceNode;
+    replaceNode.left.parent = replaceNode;                   // y.left.p = y
     treeNodes[replaceNode.left.id] = replaceNode.left; 
 
   }
@@ -210,8 +194,6 @@ function treeDelete(root, node, treeNodes){
     path: highLightN,
     newTreeNodes: treeNodes,
     root: root,
-
-
   };
 }
 
@@ -302,15 +284,34 @@ function resetEdge(edge, source, target){
    return edge;
 }
 
+function afterDeletePosition(node, x, y){
+  console.log("true");
+    node.layout.x += x;
+    node.position.x += x;
+      
+    node.layout.y += y;
+    node.position.y += y;
+
+    if(node.left){
+      this.afterDeletePosition(node.left,x,y);
+    }
+    if(node.right){
+      this.afterDeletePosition(node.right,x,y);
+    }
+    
+
+    return node;
+}
 
 
-function inorderTreeWalk(root){
+
+function inorderTreeWalk(root){                 // derived from CLRS P288
    if(root){
     var node = [root.id];
     var edge = [];
     var left = inorderTreeWalk(root.left);
     var right = inorderTreeWalk(root.right);
-    node = left.node.concat(node).concat(right.node);
+    node = left.node.concat(node).concat(right.node);   //inorderTreeWalk(node.left)+ print(node) + inorderTreeWalk(node.right)
    if(root.leftEdge){    
       edge = edge.concat(left.edge);
       edge.push(root.leftEdge.id);
@@ -384,52 +385,6 @@ function postorderTreeWalk(root){
   };
 }
 
-/*
-function findAdjustList(root, target, highLightN = []){
-  var LastDir = null;
-  if(root){
-    while (root){
-      if(target < root.key){
-       if(LastDir == "right"){
-         highLightN.push(root.id);
-         LastDir = "left"
-       }
-       root = root.left;
-      }
-
-      else{
-        if(LastDir == "left"){
-         highLightN.push(root.id);
-         LastDir = "right"
-        }
-       root = root.right;
-      }
-
-    }
-  }
-  return highLightN;
-} 
-
-*/
-
-function afterDeletePosition(node, x, y){
-  console.log("true");
-    node.layout.x += x;
-    node.position.x += x;
-      
-    node.layout.y += y;
-    node.position.y += y;
-
-    if(node.left){
-      this.afterDeletePosition(node.left,x,y);
-    }
-    if(node.right){
-      this.afterDeletePosition(node.right,x,y);
-    }
-    
-
-    return node;
-}
 
 
 

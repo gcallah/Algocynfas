@@ -1,4 +1,4 @@
-<button class="btn btn-outline-primary" id="insert-button" type="button" 
+<button class="btn btn-outline-primary" id="delete-button" type="button" 
 onclick="deleteNode()"> Delete
 </button>
 

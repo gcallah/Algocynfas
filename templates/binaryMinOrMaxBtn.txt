@@ -1,4 +1,4 @@
-<button class="btn btn-outline-primary" id="insert-button" type="button" 
+<button class="btn btn-outline-primary" id="minmax-button" type="button" 
 onclick="findMinMax()"> Find
 </button>
 
