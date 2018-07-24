@@ -5,7 +5,8 @@
 </head>
 <body>
   <h1> Binary Search Tree </h1>
-  <div class="container" style = "margin-left: 250">
+  <div class="container" style = "margin-left: 10em">
+ <!--include speedButtons.txt -->
  <!--include binaryList.txt -->
  <!--include binaryListBtn.txt -->
  <!--include random.txt -->
@@ -25,5 +26,6 @@
  <!--include graphGlobal.txt -->
 </div> 
  <!--include binaryContainer.txt -->
+ <!--include bstFooter.txt -->
 </body>
 </html>

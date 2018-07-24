@@ -1,1 +1,1 @@
-<div id="graphContainer" class = "graph" style = "height: 300; margin-left: 250"></div>
+<div id="graphContainer" class = "graph" style = "height: 300; margin-left: 10em"></div>

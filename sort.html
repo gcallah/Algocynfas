@@ -69,7 +69,7 @@
            <div class="input-group mb-3">
             <input type="text" class="inputbox" id="number-input" 
             placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
-            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 500px">
+            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 30em">
             <div class="input-group-append">
                 <button class="btn btn-outline-primary" id="add-number-button" type="button" 
                 onclick="inputNumberToArray()">Create a List
@@ -94,7 +94,7 @@
 
           </div>
 <canvas id="canvas" width="800" height="144"
-style="border:1px solid #000000"></canvas>
+style="border:0.1em solid #000000"></canvas>
 <script>
 const numbersGroup = document.getElementsByClassName("numbers-group")[0];
 let canvas = new fabric.Canvas('canvas');
@@ -102,6 +102,7 @@ let list = [];
 let fList = null;
 drawListOnScreen(list);
 </script>
+        
 <footer id="legend">
         <script> window.display_legend("Item Swapped", "Item being Compared") </script>
  </footer>

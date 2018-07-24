@@ -208,7 +208,6 @@ function treeDelete(root, node, treeNodes){
 
   return{
     path: highLightN,
-    adjust: returnNode,
     newTreeNodes: treeNodes,
     root: root,
 

@@ -37,7 +37,7 @@ function createBST(type){
    if(type == 1){
      getHTML("graphContainer").style.height = 300;
      getHTML("graphContainer").style.width = 800;
-     getHTML("graphContainer").style.marginLeft = "250px";
+     getHTML("graphContainer").style.marginLeft = "10em";
      var graph = new BST();
      if(getHTML("random").checked == true){
        var input = graph.random();
@@ -483,8 +483,7 @@ async color(path, nodes = null, theColor = HIGHLIGHT, pause = true){
 }
 
 async pause () { 
- // var time = check_and_Delay();
-  var time = 1000;
+  var time = check_and_Delay();
   return new Promise(function (resolve) {
     setTimeout(resolve, time)
   })
@@ -612,30 +611,22 @@ class tree extends ourGraph{
 
   setGraph(ifEdge){
     super.setGraph(ifEdge);
-
     if(this.edges.length != 0){
-    var result = this.isTree();
-    
-    if(result == "true"){
-      correctErr("edges")
-      return;    
+      var result = this.isTree();
+      if(result == "true"){
+        correctErr("edges")
+        return;    
+      }
+      else if(result == "cir"){ 
+        noticeErr("A tree cannot has circles!", "edges");
+      }
+      else if(result == "disconnected"){ 
+        noticeErr("A tree cannot be disconnected!","edges");
+      }
+      else{
+        noticeErr("A tree cannot be disconnected or contains circle!","edges");
+      }
     }
-
-    else if(result == "cir"){ 
-      noticeErr("A tree cannot has circles!", "edges");
-    }
-
-    else if(result == "disconnected"){ 
-      noticeErr("A tree cannot be disconnected!","edges");
-    }
-
-    else{
-      noticeErr("A tree cannot be disconnected or contains circle!","edges");
-    }
-
-
-  }
-
   }
   
   isTree(){
@@ -698,6 +689,7 @@ class BST extends ourGraph{
       this.treeNodes = [];
       this.horiAdjust = false;
       this.vertiAdjust = false;
+      this.position = true;
       
     }
     adjustPos(dir, node){
@@ -711,6 +703,15 @@ class BST extends ourGraph{
         node.layout.x += 30;
         node.position.x += 30;
       }
+
+       if(node.position.x >= 550 || node.position.x <= -550){
+      
+       if(this.position){
+        noticeErr("Sorry the graph is too big to fit in the container, try randomize!");
+        this.position = false;
+       }
+
+     }
     
 
     if(node.left){
@@ -728,24 +729,28 @@ class BST extends ourGraph{
     }
   } 
    positionCheck(node){
+
+
      if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
        getHTML("graphContainer").style.width = 1200;
-       getHTML("graphContainer").style.marginLeft = "50px";
+       getHTML("graphContainer").style.marginLeft = "5em";
+       getHTML("legend").style.marginLeft = "5em";
       this.horiAdjust = true;
     }
     if(Math.abs(node.position.y) > 130 && this.vertiAdjust == false){
      getHTML("graphContainer").style.height = 800;
      for(var k = 0; k < this.nodeLayout.length; k++){
-       // this.nodeLayout[k].y -= 150;
         this.treeNodes[k].position.y -= 150;
         this.treeNodes[k].layout.y -= 150;
      }
      this.vertiAdjust = true;
+
    } 
  }
    async insert(input,single = false){
       if(Number.isInteger(input)){
          correctErr("treeNode");
+         correctErr("treeList");
          this.createSigmaGraph(false);
          await this.pause();
          var node = new treeNode(input, this.treeNodes.length);
@@ -761,7 +766,9 @@ class BST extends ourGraph{
           }              
          this.treeNodes.push(node);
          this.nodeLayout.push(node.layout);
+
          this.positionCheck(node);
+    
 
          if(this.treeNodes.length > 1){
           this.connectParentChild(node); 
@@ -944,7 +951,6 @@ class BST extends ourGraph{
     getHTML("treeList").value = result;
     return returnValue;
   }
-
 
   async highLight(HLNodeLst, HLEdgeList = null){
      if(HLNodeLst.length != 0){

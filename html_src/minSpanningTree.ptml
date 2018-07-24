@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1> Find a Minimum Spanning Tree </h1>
-  <div class="container" style ="margin-left: 180px">
+  <div class="container" style ="margin-left: 10em">
    <!--include spanningType.txt -->
    <!--include speedButtons.txt -->
    <!--include spanningSamples.txt -->
