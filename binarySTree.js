@@ -127,7 +127,7 @@ function treeSuccessor(node){             // CLRS p292 x == node   y == suc
 function treePredecessor(node){
   if (node.left){
      var result = treeMax(node.left);
-     result.HLNodeId.unshift(node.id);
+     result.HLNodeId.unshift(node.id);  // Yujia: what does this do?
      return  {
       HLNodeId: result.HLNodeId,
       pre: result.max.key,
@@ -175,6 +175,7 @@ function treeDelete(root, node, treeNodes){                    //CLRS p298   (z 
     var replaceNode = minNode.min;
     highLightN = minNode.HLNodeId;
     if (replaceNode.parent != node){                         // if(y.p != z)
+    // Yujia: maybe here: (treeNodes, root) = transplant(....
       result = transplant(root,replaceNode,replaceNode.right,treeNodes);    //transplant(T,y,y.right)
       treeNodes = result.treeNodes;
       root = result.root;
