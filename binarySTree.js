@@ -157,7 +157,7 @@ function treePredecessor(node){
 }
 
 function treeDelete(root, node, treeNodes){                    //CLRS p298   (z == node,T == this.root,y == replaceNode )
-
+ 
   var highLightN = [];
   var result = [];
   if (!node.left){                                           // if(z.left == NIL)
@@ -207,50 +207,33 @@ function transplant(root,toDelete,replace,treeNodes,ifPosition=true){
   }
   else if (toDelete == node.left){
     node.left = replace;
-    if(replace){
-      node.leftEdge =  
-      resetEdge(node.leftEdge,node.leftEdge.source,replace.id.toString());
-    }
-    else{
-      node.leftEdge = null;
-    }
+    node.leftEdge =  resetEdge(node.leftEdge,node,replace); 
     treeNodes[node.id] = node;
   }
   else{
     node.right = replace;
-    if (replace) {
-      node.rightEdge = 
-      resetEdge(node.rightEdge, node.rightEdge.source, replace.id.toString());
-    }
-     else{
-      node.rightEdge = null;
-    }
+    node.rightEdge = resetEdge(node.rightEdge,node,replace);   
     treeNodes[node.id] = node;
   }
   if(replace){
       if(toDelete.leftEdge && toDelete.left != replace){
         replace.leftEdge =  toDelete.leftEdge;
-        replace.leftEdge = 
-        resetEdge(replace.leftEdge,replace.id.toString(),replace.leftEdge.target);
+        replace.leftEdge = resetEdge(replace.leftEdge,replace,toDelete.left);  
       }
       if(toDelete.rightEdge && toDelete.right != replace){
         replace.rightEdge = toDelete.rightEdge;
-        replace.rightEdge = 
-        resetEdge(replace.rightEdge,replace.id.toString(),replace.rightEdge.target);
+        replace.rightEdge = resetEdge(replace.rightEdge,replace,toDelete.right);
       }
-
-
     replace.parent = node;
-    if(ifPosition){
+   if(!ifPosition){
     replace = resetReplace(replace, toDelete);
-    }
+   } /*
     else{
       replace.position = toDelete.position;
       replace.layout.x = replace.position.x;
       replace.layout.y = replace.position.y;
-    }
+    }*/
     treeNodes[replace.id] = replace;
-    
   }
   return {
           treeNodes: treeNodes,
@@ -259,11 +242,22 @@ function transplant(root,toDelete,replace,treeNodes,ifPosition=true){
 }
 
 
+function resetEdge(edge, sourceNode, targetNode){
+   if(targetNode){
+     var source = sourceNode.id.toString();
+     var target = targetNode.id.toString();
+     edge.id = source + "-" + target;
+     edge.source = source;
+     edge.target = target;
+     return edge;
+   }
+   return null;
+}
+
 function resetReplace(replace, toDelete){
   var x = toDelete.position.x - replace.position.x;
   var y = toDelete.position.y - replace.position.y;
-
-  if(toDelete.strenchTimes != 0 ){
+ /* if(toDelete.strenchTimes != 0 ){
     if (toDelete.sideToParent == "left"){
        x += 30;
     }
@@ -271,37 +265,24 @@ function resetReplace(replace, toDelete){
        x -= 30;
     }
      toDelete.strenchTimes -= 1;
-  }
+  }  */
   replace.sideToParent = toDelete.sideToParent;
   replace.strenchTimes = toDelete.strenchTimes;
- 
   return  afterDeletePosition(replace,x,y);
-
-}
-
-function resetEdge(edge, source, target){
-   edge.id = source + "-" + target;
-   edge.source = source;
-   edge.target = target;
-   return edge;
 }
 
 function afterDeletePosition(node, x, y){
   console.log("true");
     node.layout.x += x;
     node.position.x += x;
-      
     node.layout.y += y;
     node.position.y += y;
-
     if(node.left){
       this.afterDeletePosition(node.left,x,y);
     }
     if(node.right){
       this.afterDeletePosition(node.right,x,y);
     }
-    
-
     return node;
 }
 
@@ -447,18 +428,13 @@ async function deleteNode(){
 }
 
 function disableButtons(ifDisable){
-    
-      getHTML("createBST-button").disabled = ifDisable;
-      getHTML("insert-button").disabled = ifDisable;
-      getHTML("search-button").disabled = ifDisable;
-      getHTML("minmax-button").disabled = ifDisable;
-      getHTML("presuc-button").disabled = ifDisable;
-      getHTML("delete-button").disabled = ifDisable;
-      getHTML("traversal-button").disabled = ifDisable;
-
- 
-
-  
+  getHTML("createBST-button").disabled = ifDisable;
+  getHTML("insert-button").disabled = ifDisable;
+  getHTML("search-button").disabled = ifDisable;
+  getHTML("minmax-button").disabled = ifDisable;
+  getHTML("presuc-button").disabled = ifDisable;
+  getHTML("delete-button").disabled = ifDisable;
+  getHTML("traversal-button").disabled = ifDisable;
 }
 
 
