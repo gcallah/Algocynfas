@@ -1,4 +1,4 @@
-  <button class="btn btn-outline-primary" id="add-node-button" type="button" 
+  <button class="btn btn-primary" id="add-node-button" type="button" 
   onclick="createGraph(false)">Create Nodes
  </button> 
 

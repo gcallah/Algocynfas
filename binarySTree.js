@@ -1,6 +1,6 @@
 // below are binary search tree algorithms
 
-function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, curr == y, newNode == z 
+function treeInsert(root, newNode){      // CLRS P294 root == T.root, r == x, curr == y, newNode == z 
   var r = root;                        
   var curr = null;                    // y = NIL
   var LastDir = null;
@@ -50,14 +50,14 @@ function treeInsert(root, newNode){      // CRLS P294 root == T.root, r == x, cu
 
 function treeSearch( root, target, highLightN = []){   //CLRS p291, x == root, k == target
 
-  if(!root){                               // if x == NIL or k == x.key(line 56)
-    noticeErr("Node not found!");
-    return root;                           //   return x (line 58)
+  try{
+    highLightN.push(root.id);
   }
-  highLightN.push(root.id);
-  if(root.key == target){
+  catch(error){}
+  
+  if(!root || target == root.key){                               // if x == NIL or k == x.key(line 56)
     return {
-      node: root,
+      node: root,                                              // return x
       path: highLightN,
     };
   }
@@ -201,7 +201,7 @@ function treeDelete(root, node, treeNodes){                    //CLRS p298   (z 
 }
 
 
-function transplant(root,toDelete,replace,treeNodes,ifPosition=true){
+function transplant(root,toDelete,replace,treeNodes,ifPosition = true){
   var node = toDelete.parent;
   if(!toDelete.parent){
     root = replace;
@@ -226,14 +226,14 @@ function transplant(root,toDelete,replace,treeNodes,ifPosition=true){
         replace.rightEdge = resetEdge(replace.rightEdge,replace,toDelete.right);
       }
     replace.parent = node;
-   if(!ifPosition){
-    replace = resetReplace(replace, toDelete);
-   } /*
+   if(ifPosition || toDelete.right.key == replace.key){
+       replace = resetReplace(replace, toDelete);
+   } 
     else{
       replace.position = toDelete.position;
       replace.layout.x = replace.position.x;
       replace.layout.y = replace.position.y;
-    }*/
+    }
     treeNodes[replace.id] = replace;
   }
   return {
@@ -258,15 +258,27 @@ function resetEdge(edge, sourceNode, targetNode){
 function resetReplace(replace, toDelete){
   var x = toDelete.position.x - replace.position.x;
   var y = toDelete.position.y - replace.position.y;
- /* if(toDelete.strenchTimes != 0 ){
-    if (toDelete.sideToParent == "left"){
+  if(toDelete.strenchTimes != 0 ){
+   if (toDelete.sideToParent == "left"){
        x += 30;
     }
     else{
        x -= 30;
     }
-     toDelete.strenchTimes -= 1;
-  }  */
+   toDelete.strenchTimes -= 1;
+  }
+  if(replace.strenchTimes != 0){
+    console.log(toDelete);
+    console.log(replace);
+     if (replace == toDelete.left){
+       x -= 30 * (replace.strenchTimes);
+     }
+     else if(replace == toDelete.right){
+       x += 30 * (replace.strenchTimes);
+     
+     }
+  }
+  
   replace.sideToParent = toDelete.sideToParent;
   replace.strenchTimes = toDelete.strenchTimes;
   return  afterDeletePosition(replace,x,y);
@@ -374,6 +386,7 @@ function postorderTreeWalk(root){
 // below are facilitate functions
 
 function bstCheck(){
+  disableButtons(true);
   if(!Graph){
     noticeErr("The tree is empty!");
     return;
@@ -383,7 +396,6 @@ function bstCheck(){
    Graph.createSigmaGraph();
 }
  async function searchInTree(){
-  disableButtons(true);
   bstCheck();
   var input = parseInt(getHTML("searchBox").value);
    if(Number.isInteger(input)){
@@ -395,34 +407,25 @@ function bstCheck(){
     noticeErr("Please input a valid integer", "searchBox");
  
 }
-
 async function findMinMax(){
-  disableButtons(true);
   bstCheck();
   await Graph.minMax();
   disableButtons(false);
-
 }
 
 async function findPreSuc(){
-  disableButtons(true);
   bstCheck();
   await Graph.preSuc();
   disableButtons(false);
-
 }
 
 async function PreInPost(){
-  disableButtons(true);
   bstCheck();
   await Graph.traversal();
   disableButtons(false);
-
-  
 }
 
 async function deleteNode(){
-  disableButtons(true);
   bstCheck();
   await Graph.delete();
   disableButtons(false);

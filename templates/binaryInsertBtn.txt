@@ -1,4 +1,4 @@
-<button class="btn btn-outline-primary" id="insert-button" type="button" 
+<button class="btn btn-primary" id="insert-button" type="button" 
 onclick="createBST(2)"> Insert
 </button>
 
