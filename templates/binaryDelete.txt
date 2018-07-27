@@ -1,4 +1,3 @@
-<br>
-<br>
+&emsp;
 <input type="text" class="Box" id="deleteBox" 
 placeholder="Enter an Node">

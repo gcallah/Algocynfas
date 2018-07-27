@@ -13,7 +13,8 @@
    <!--include graphNodeBtn.txt -->
    <!--include SpanningEdgeWeightBox.txt -->
    <!--include graphEdgeBtn.txt -->
-   <!--include runStopButtons.txt -->
+   <!--include runButton.txt --> 
+   <!--include stopButton.txt -->
    <!--include clearGraphBtn.txt -->
    <!--include clearEdgeBtn.txt -->
    <!--include graphContainer.txt -->

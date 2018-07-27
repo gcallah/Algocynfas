@@ -195,7 +195,6 @@ function treeDelete(root, node, treeNodes){                    //CLRS p298   (z 
 
   return{
     path: highLightN,
-    newTreeNodes: treeNodes,
     root: root,
   };
 }
@@ -258,7 +257,7 @@ function resetEdge(edge, sourceNode, targetNode){
 function resetReplace(replace, toDelete){
   var x = toDelete.position.x - replace.position.x;
   var y = toDelete.position.y - replace.position.y;
-  if(toDelete.strenchTimes != 0 ){
+  /*if(toDelete.strenchTimes != 0 ){
    if (toDelete.sideToParent == "left"){
        x += 30;
     }
@@ -267,9 +266,8 @@ function resetReplace(replace, toDelete){
     }
    toDelete.strenchTimes -= 1;
   }
-  if(replace.strenchTimes != 0){
-    console.log(toDelete);
-    console.log(replace);
+  */
+  if(replace.strenchTimes != 0 && toDelete.parent){
      if (replace == toDelete.left){
        x -= 30 * (replace.strenchTimes);
      }
@@ -285,7 +283,6 @@ function resetReplace(replace, toDelete){
 }
 
 function afterDeletePosition(node, x, y){
-  console.log("true");
     node.layout.x += x;
     node.position.x += x;
     node.layout.y += y;
@@ -384,19 +381,52 @@ function postorderTreeWalk(root){
 
 
 // below are facilitate functions
+function setSample(){
+  let selectedBox = getHTML("sampleChoice");
+  var sampleSelected = selectedBox.selectedIndex;
+  $(".graph").empty();
 
-function bstCheck(){
+  if (sampleSelected == 0){
+        getHTML("treeList").value = "";
+    }
+
+    if (sampleSelected == 1){
+
+        getHTML("treeList").value = "15,4,29,1,63,17";
+    }
+
+    else if (sampleSelected == 2){
+        getHTML("treeList").value = "10,7,15,3,21,5,11,18,8,9,4,6,19,2,1";
+        
+    }
+  getHTML("random").checked == false;
+}
+
+ async function bstCheck(){
+  console.log(animeRunning);
+  if(!animeRunning){
+    var graph = new BST();
+    for(var i = 0; i < Graph.nodes.length; i++){
+       graph.insert(parseInt(Graph.nodes[i]),false,false);
+    }
+    Graph = graph;
+  }
+  console.log(graph);
+  animeRunning = true;
   disableButtons(true);
   if(!Graph){
     noticeErr("The tree is empty!");
-    return;
+    disableButtons(false);
+    return false;
   }
    $( ".graph" ).empty();
 
    Graph.createSigmaGraph();
+   await Graph.pause(1000);
+   return true;
 }
  async function searchInTree(){
-  bstCheck();
+  if (await bstCheck()){
   var input = parseInt(getHTML("searchBox").value);
    if(Number.isInteger(input)){
       correctErr("searchBox");
@@ -405,30 +435,37 @@ function bstCheck(){
       return;
    }
     noticeErr("Please input a valid integer", "searchBox");
+    disableButtons(false);
+  }
  
 }
 async function findMinMax(){
-  bstCheck();
+  if (await bstCheck()){
   await Graph.minMax();
   disableButtons(false);
 }
+}
 
 async function findPreSuc(){
-  bstCheck();
+  if (await bstCheck()){
   await Graph.preSuc();
   disableButtons(false);
+ }
 }
 
 async function PreInPost(){
-  bstCheck();
+ if (await bstCheck()){
   await Graph.traversal();
   disableButtons(false);
 }
+}
 
 async function deleteNode(){
-  bstCheck();
+  if (await bstCheck()){
   await Graph.delete();
   disableButtons(false);
+}
+
 }
 
 function disableButtons(ifDisable){
@@ -439,9 +476,14 @@ function disableButtons(ifDisable){
   getHTML("presuc-button").disabled = ifDisable;
   getHTML("delete-button").disabled = ifDisable;
   getHTML("traversal-button").disabled = ifDisable;
+  getHTML("clear-button").disabled = ifDisable;
 }
 
-
+function clearGraph(){
+   $( ".graph" ).empty();
+   let selectedBox = getHTML("sampleChoice");
+   selectedBox.selectedIndex = 0;
+}
 
 
 

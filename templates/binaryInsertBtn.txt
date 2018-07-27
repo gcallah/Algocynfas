@@ -1,5 +1,3 @@
 <button class="btn btn-primary" id="insert-button" type="button" 
 onclick="createBST(2)"> Insert
 </button>
-
-<br>

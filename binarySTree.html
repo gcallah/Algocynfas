@@ -31,6 +31,27 @@
 <body>
   <h1> Binary Search Tree </h1>
   <div class="container" style = "margin-left: 10em">
+ <h5 style = "margin-left: 0em">1. Create a Binary Search Tree: </h5>
+<input type="text" class="edgeBox" id="treeList" 
+  placeholder="Enter a list of nums separate by comma"  >
+ <button class="btn btn-primary" id="createBST-button" type="button" 
+  onclick="createBST(1)">Create BST
+</button> 
+ &emsp;
+            <b>
+            sample values:
+            </b>
+                <select id= sampleChoice onchange="setSample()">
+                <option value="Select" >Customize</option>
+                <option value="sample1" >6 nodes </option>
+                <option value="sample2" >15 nodes </option>
+                </select>
+&emsp; 
+  <input type="checkbox" name="ran" value="randomize" id= "random" checked = true> Randomize
+<br>
+<br>
+ <hr>
+ <h5 style = "margin-left: 0em">2. Choose an algorithm: </h5>
            <b>Choose Speed:
 
            <input type="radio" name="speed" value="500" id="Fast"/> 
@@ -42,20 +63,37 @@
 
             <br>
             </b>
-<input type="text" class="edgeBox" id="treeList" 
-  placeholder="Enter a list of nums separate by comma"  >
- <button class="btn btn-primary" id="createBST-button" type="button" 
-  onclick="createBST(1)">Create BST
-</button> 
-  <input type="checkbox" name="ran" value="randomize" id= "random" checked = true> Randomize
-&emsp;
+<br>
 <input type="text" class="Box" id="treeNode" 
 placeholder="Enter an integer" >
 <button class="btn btn-primary" id="insert-button" type="button" 
 onclick="createBST(2)"> Insert
 </button>
+&emsp;
+<input type="text" class="Box" id="deleteBox" 
+placeholder="Enter an Node">
+<button class="btn btn-primary" id="delete-button" type="button" 
+onclick="deleteNode()"> Delete
+</button>
 
+
+&emsp;
+
+                <select id= treeWalkChoice>
+                <option value="pre" >Preorder Traversal </option>
+                <option value="in"> Inorder Traversal</option>
+                <option value="post"> Postorder Traversal </option>
+              </select>
+
+
+
+           
+       
+<button class="btn btn-primary" id="traversal-button" type="button" 
+onclick="PreInPost()"> Traverse
+</button>
 <br>
+
 <br>
 <input type="text" class="Box" id="searchBox" 
 placeholder="Enter an Node">
@@ -105,32 +143,18 @@ placeholder="Enter an Node">
 <button class="btn btn-primary" id="presuc-button" type="button" 
 onclick="findPreSuc()"> Find
 </button>
-
 <br>
 <br>
-<input type="text" class="Box" id="deleteBox" 
-placeholder="Enter an Node">
-<button class="btn btn-primary" id="delete-button" type="button" 
-onclick="deleteNode()"> Delete
-</button>
 
-
-&emsp;
-
-                <select id= treeWalkChoice>
-                <option value="pre" >Preorder Traversal </option>
-                <option value="in"> Inorder Traversal</option>
-                <option value="post"> Postorder Traversal </option>
-              </select>
-
-
+<button id = "clear-button" type="button" class="btn btn-danger col-1" 
+style = "max-width: 150 ;width: 130" onclick="clearGraph()">Clear Graph</button>
+ &emsp;&emsp;&emsp;
+           <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+           <br>
+           <br>
 
            
-       
-<button class="btn btn-primary" id="traversal-button" type="button" 
-onclick="PreInPost()"> Traverse
-</button>
-
+         
 <script>
 
   let inputType = "num";

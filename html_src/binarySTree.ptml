@@ -6,12 +6,20 @@
 <body>
   <h1> Binary Search Tree </h1>
   <div class="container" style = "margin-left: 10em">
- <!--include speedButtons.txt -->
+ <h5 style = "margin-left: 0em">1. Create a Binary Search Tree: </h5>
  <!--include binaryList.txt -->
  <!--include binaryListBtn.txt -->
+ <!--include binarySample.txt -->
  <!--include random.txt -->
+ <hr>
+ <h5 style = "margin-left: 0em">2. Choose an algorithm: </h5>
+ <!--include speedButtons.txt -->
  <!--include binaryInsert.txt -->
  <!--include binaryInsertBtn.txt -->
+ <!--include binaryDelete.txt -->
+ <!--include binaryDeleteBtn.txt -->
+ <!--include binaryPreInPost.txt -->
+ <!--include binaryPreInPostBtn.txt -->
  <!--include binarySearch.txt -->
  <!--include binarySearchBtn.txt -->
  <!--include binaryMinOrMax.txt -->
@@ -19,10 +27,8 @@
  <!--include binaryPreOrSuc.txt -->
  <!--include binaryPreOrSucBox.txt -->
  <!--include binaryPreOrSucBtn.txt -->
- <!--include binaryDelete.txt -->
- <!--include binaryDeleteBtn.txt -->
- <!--include binaryPreInPost.txt -->
- <!--include binaryPreInPostBtn.txt -->
+ <!--include clearGraphBtn.txt -->
+ <!--include stopButton.txt -->
  <!--include graphGlobal.txt -->
 </div> 
  <!--include binaryContainer.txt -->

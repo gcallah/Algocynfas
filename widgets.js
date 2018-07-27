@@ -33,15 +33,15 @@ function letterNumConvert(key){
 function check_and_Delay(){
     if(getHTML('Fast').checked)
     {
-       return 200;
+       return 300;
     }
     else if(getHTML('Medium').checked)
     {
-       return 500;
+       return 800;
     }
     else
     {
-       return 1000;
+       return 2000;
     }
     
 }

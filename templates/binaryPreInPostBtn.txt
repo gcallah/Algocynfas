@@ -1,4 +1,5 @@
 <button class="btn btn-primary" id="traversal-button" type="button" 
 onclick="PreInPost()"> Traverse
 </button>
+<br>
 
