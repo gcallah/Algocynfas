@@ -97,7 +97,7 @@ function treeMax(root){                 // CLRS p291, x == root
 function treeSuccessor(node){             // CLRS p292 x == node   y == suc 
    if (node.right){                        // if(x.right != NIL)
      var result = treeMin(node.right);       // return Tree-Minimum(x.right)  (line 97-101)
-     result.HLNodeId.unshift(node.id);
+     result.HLNodeId.unshift(node.id);   //This line ensure the highlighting path starts with the node (unshift is push to stack)
      return {
       HLNodeId: result.HLNodeId,
       suc: result.min.key,
@@ -127,7 +127,7 @@ function treeSuccessor(node){             // CLRS p292 x == node   y == suc
 function treePredecessor(node){
   if (node.left){
      var result = treeMax(node.left);
-     result.HLNodeId.unshift(node.id);  // Yujia: what does this do?
+     result.HLNodeId.unshift(node.id);  // This make sure the highlighting path starts with node (unshift is push to stack)
      return  {
       HLNodeId: result.HLNodeId,
       pre: result.max.key,
@@ -161,31 +161,22 @@ function treeDelete(root, node, treeNodes){                    //CLRS p298   (z 
   var highLightN = [];
   var result = [];
   if (!node.left){                                           // if(z.left == NIL)
-    result = transplant(root,node,node.right,treeNodes);   // transplant(T,z,z.right)
-    treeNodes = result.treeNodes;
-    root = result.root;
+    root = transplant(root,node,node.right,treeNodes);   // transplant(T,z,z.right)
   }
   else if(!node.right){                                      // else if(z.right == NIL)
-    result = transplant(root,node,node.left,treeNodes);       // transplant(T,z,z.left)
-    treeNodes = result.treeNodes;
-    root = result.root;
+    root = transplant(root,node,node.left,treeNodes);       // transplant(T,z,z.left)
   }
   else{ 
     var minNode = treeMin(node.right);                        // else y = Tree-Minimum(z.right)
     var replaceNode = minNode.min;
     highLightN = minNode.HLNodeId;
     if (replaceNode.parent != node){                         // if(y.p != z)
-    // Yujia: maybe here: (treeNodes, root) = transplant(....
-      result = transplant(root,replaceNode,replaceNode.right,treeNodes);    //transplant(T,y,y.right)
-      treeNodes = result.treeNodes;
-      root = result.root;
+      root = transplant(root,replaceNode,replaceNode.right,treeNodes);    //transplant(T,y,y.right)
       replaceNode.right = node.right;                             // y.right = z.right
       replaceNode.right.parent = replaceNode;                    // y.right.p = y
       treeNodes[replaceNode.right.id] = replaceNode.right; 
     }
-    result = transplant(root,node,replaceNode,treeNodes,false);    //transplant(T,z,y)
-    treeNodes = result.treeNodes;
-    root = result.root;
+    root = transplant(root,node,replaceNode,treeNodes,false);    //transplant(T,z,y)
     replaceNode.left = node.left;                              // y.left = z.left
     treeNodes[replaceNode.id] = replaceNode;  
     replaceNode.left.parent = replaceNode;                   // y.left.p = y
@@ -235,10 +226,8 @@ function transplant(root,toDelete,replace,treeNodes,ifPosition = true){
     }
     treeNodes[replace.id] = replace;
   }
-  return {
-          treeNodes: treeNodes,
-          root: root,
-        };
+  return root;
+      
 }
 
 
@@ -257,16 +246,6 @@ function resetEdge(edge, sourceNode, targetNode){
 function resetReplace(replace, toDelete){
   var x = toDelete.position.x - replace.position.x;
   var y = toDelete.position.y - replace.position.y;
-  /*if(toDelete.strenchTimes != 0 ){
-   if (toDelete.sideToParent == "left"){
-       x += 30;
-    }
-    else{
-       x -= 30;
-    }
-   toDelete.strenchTimes -= 1;
-  }
-  */
   if(replace.strenchTimes != 0 && toDelete.parent){
      if (replace == toDelete.left){
        x -= 30 * (replace.strenchTimes);
@@ -304,7 +283,7 @@ function inorderTreeWalk(root){                 // derived from CLRS P288
     var edge = [];
     var left = inorderTreeWalk(root.left);
     var right = inorderTreeWalk(root.right);
-    node = left.node.concat(node).concat(right.node);   //inorderTreeWalk(node.left)+ print(node) + inorderTreeWalk(node.right)
+    node = left.node.concat(node).concat(right.node);   //inorderTreeWalk(node.left); print(node); inorderTreeWalk(node.right);
    if(root.leftEdge){    
       edge = edge.concat(left.edge);
       edge.push(root.leftEdge.id);
@@ -402,8 +381,7 @@ function setSample(){
   getHTML("random").checked == false;
 }
 
- async function bstCheck(){
-  console.log(animeRunning);
+ function bstCheck(){
   if(!animeRunning){
     var graph = new BST();
     for(var i = 0; i < Graph.nodes.length; i++){
@@ -411,7 +389,6 @@ function setSample(){
     }
     Graph = graph;
   }
-  console.log(graph);
   animeRunning = true;
   disableButtons(true);
   if(!Graph){
@@ -422,11 +399,10 @@ function setSample(){
    $( ".graph" ).empty();
 
    Graph.createSigmaGraph();
-   await Graph.pause(1000);
    return true;
 }
  async function searchInTree(){
-  if (await bstCheck()){
+  if ( bstCheck()){
   var input = parseInt(getHTML("searchBox").value);
    if(Number.isInteger(input)){
       correctErr("searchBox");
@@ -440,28 +416,28 @@ function setSample(){
  
 }
 async function findMinMax(){
-  if (await bstCheck()){
+  if ( bstCheck()){
   await Graph.minMax();
   disableButtons(false);
 }
 }
 
 async function findPreSuc(){
-  if (await bstCheck()){
+  if (bstCheck()){
   await Graph.preSuc();
   disableButtons(false);
  }
 }
 
 async function PreInPost(){
- if (await bstCheck()){
+ if ( bstCheck()){
   await Graph.traversal();
   disableButtons(false);
 }
 }
 
 async function deleteNode(){
-  if (await bstCheck()){
+  if (bstCheck()){
   await Graph.delete();
   disableButtons(false);
 }

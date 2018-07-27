@@ -607,7 +607,6 @@ class tree extends ourGraph{
     this.makeSets();
     for(var i = 0; i < this.edges.length; i++){
       var nodes = this.getNodes(this.edges[i]);
-      console.log(nodes);
       if (this.nodeSet[nodes.n1] != this.nodeSet[nodes.n2]){
         var list = this.nodeSet;
         var afterVal = list[nodes.n1];
