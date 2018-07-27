@@ -1,0 +1,9 @@
+
+            <input type="text" class="inputbox" id="number-input" 
+            placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
+            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 30em">
+           
+                <button class="btn btn-primary" id="add-number-button" type="button" 
+                onclick="inputNumberToArray()">Create a List
+               </button>
+          <br>
