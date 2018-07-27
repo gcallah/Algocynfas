@@ -12,12 +12,11 @@
         <!--include sortType.txt -->
         <!--include speedButtons.txt -->
         <!--include sampleInput.txt -->
+        <!--include sortBoxBtn.txt -->
         <!--include runButton.txt --> 
         <!--include stopButton.txt -->
-        <!--include numberGroup.txt -->
         <!--include sortCanvas.txt -->
         <!--include sortGlobal.txt -->
-        
         <!--include sortFooter.txt -->
         
     </div>

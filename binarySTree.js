@@ -170,7 +170,7 @@ function treeDelete(root, node, treeNodes){                    //CLRS p298   (z 
     var minNode = treeMin(node.right);                        // else y = Tree-Minimum(z.right)
     var replaceNode = minNode.min;
     highLightN = minNode.HLNodeId;
-    if (replaceNode.parent != node){                         // if(y.p != z)
+    if (replaceNode.parent != node){                                      // if(y.p != z)
       root = transplant(root,replaceNode,replaceNode.right,treeNodes);    //transplant(T,y,y.right)
       replaceNode.right = node.right;                             // y.right = z.right
       replaceNode.right.parent = replaceNode;                    // y.right.p = y
@@ -227,7 +227,6 @@ function transplant(root,toDelete,replace,treeNodes,ifPosition = true){
     treeNodes[replace.id] = replace;
   }
   return root;
-      
 }
 
 

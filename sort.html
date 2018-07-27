@@ -56,6 +56,15 @@
             <br>
            
        
+
+            <input type="text" class="inputbox" id="number-input" 
+            placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
+            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 30em">
+           
+                <button class="btn btn-primary" id="add-number-button" type="button" 
+                onclick="inputNumberToArray()">Create a List
+               </button>
+          <br>
        <button id = "run-button" type="button" class="btn btn-success col-1" onclick="run()">Run</button>
                  
   
@@ -67,33 +76,6 @@
 
            
          
-           <div class="input-group mb-3">
-            <input type="text" class="inputbox" id="number-input" 
-            placeholder="Enter a list of Integers between -99 to 99 separate by comma" 
-            aria-label="Enter a list of Integers between -99 to 99 separate by comma" style="width: 30em">
-            <div class="input-group-append">
-                <button class="btn btn-primary" id="add-number-button" type="button" 
-                onclick="inputNumberToArray()">Create a List
-               </button>
-           </div>
-           </div>
-
-          <div class="input-group form-inline mb-3 numbers-group"
-          onclick="deleteNumberGroup(event)">
-          <!--This is a template. Only use for create and display-->
-              <div class="input-group mx-2 border number-group" style="display:none">
-                  <label class="input-group-text number-group-number">
-                  This is just a template
-                 </label>
-                 <div class="input-group-append mx-1">
-                    <button type="button" class="close close-button" aria-label="Close">
-                    <span aria-hidden="true">&times;
-                    </span>
-                   </button>
-                </div>
-             </div>
-
-          </div>
 <canvas id="canvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
 <script>
@@ -103,7 +85,6 @@ let list = [];
 let fList = null;
 drawListOnScreen(list);
 </script>
-        
 <footer id="legend">
         <script> window.display_legend("Item Swapped", "Item being Compared") </script>
  </footer>

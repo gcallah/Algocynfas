@@ -20,7 +20,6 @@ function setSample(){
 }
 
 function inputNumberToArray() {
-    clearNumberGroup();
     list=[]
     canvas.clear();
     let an_input = getHTML("number-input").value;
@@ -39,12 +38,8 @@ function inputNumberToArray() {
       }
     }
     if(all_valid){
-      getHTML("number-input").value = "";
+ 
       for(var i=0;i<list_num.length;i++){
-        numberGroupTemplate = document.getElementsByClassName("number-group")[0].cloneNode(true);
-        numberGroupTemplate.childNodes[1].innerText = list_num[i];
-        numberGroupTemplate.style.display = "inherit";
-        numbersGroup.appendChild(numberGroupTemplate);
 
         list.push(list_num[i]);
       
@@ -56,37 +51,7 @@ function inputNumberToArray() {
 
 }
 
-function clearNumberGroup() {
-    let numbersGroupChildren = numbersGroup.getElementsByClassName("number-group");
-    let size = numbersGroupChildren.length;
-    for (let i = 1; i < size; i++) {
-       numbersGroup.removeChild(numbersGroupChildren[1]);
-    }
-}
-
-function deleteNumberGroup(e) {
-    if (e.target.nodeName === "SPAN") {
-      let clickedNumberGroup = e.target.parentElement.parentElement.parentElement;
-      let number = parseInt(
-        clickedNumberGroup.getElementsByClassName("number-group-number")[0].innerText);
-      let numbersGroupList = numbersGroup.getElementsByClassName("number-group");
-
-      for (let i = 0; i < numbersGroupList.length; i++) {
-        if (clickedNumberGroup === numbersGroupList[i]) {  // Index 0 element always be template, so need to minus one.
-          list.splice(i - 1, 1);
-        }
-      }
-      numbersGroup.removeChild(clickedNumberGroup);
-
-      drawListOnScreen(list);
-    }
-}
-
-
-
-
  async function run() {
-    clearNumberGroup();
 
     animeRunning = true;
 
