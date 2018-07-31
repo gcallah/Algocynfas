@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
   <link rel="stylesheet" href="lib/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="userInterface.css">
  <script src="lib/jquery.min.js"></script>
   <script src="lib/bootstrap.min.js"></script>
 
@@ -26,6 +26,7 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
+ <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
 </head>
 
 
@@ -39,8 +40,8 @@
     <option value="Number" >Input number of nodes (Default Name) </option>
     <option value="f1" >Input by a list of node names</option>
   </select>
-  <input type="text" class="numBox" id="nodeNum" 
-  placeholder="Enter node#, max 16 nodes"  >
+  <input type="text" class="box" id="nodeNum" 
+  placeholder="Enter node#, max 16 nodes">
   <button class="btn btn-primary" id="add-node-button" type="button" 
   onclick="createGraph(false)">Create Nodes
  </button> 

@@ -2,6 +2,7 @@
 <head>
  <!--include graphHead.txt -->
  <!--include binarySHead.txt -->
+ <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
 </head>
 <body>
   <h1> Binary Search Tree </h1>
@@ -10,7 +11,7 @@
  <!--include binaryList.txt -->
  <!--include binaryListBtn.txt -->
  <!--include binarySample.txt -->
- <!--include random.txt -->
+ <!--include random.txt --> 
  <hr>
  <h5 style = "margin-left: 0em">2. Choose an algorithm: </h5>
  <!--include speedButtons.txt -->

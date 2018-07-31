@@ -1,6 +1,7 @@
 <html>
 <head>
  <!--include graphHead.txt -->
+ <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
 </head>
 
 
