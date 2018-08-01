@@ -11,16 +11,14 @@
    <!--include speedButtons.txt -->
    <!--include spanningSamples.txt -->
    <!--include nodeNum.txt -->
-   <!--include graphNodeBtn.txt -->
-   <!--include SpanningEdgeWeightBox.txt -->
-   <!--include graphEdgeBtn.txt -->
+   <!--include spanningNodeBtn.txt -->
+   <!--include spanningEdgeWeightBox.txt -->
+   <!--include spanningEdgeBtn.txt -->
    <!--include runButton.txt --> 
    <!--include stopButton.txt -->
-   <!--include clearGraphBtn.txt -->
-   <!--include clearEdgeBtn.txt -->
-   <!--include graphContainer.txt -->
+   <!--include clearSpanningBtn.txt -->
+   <!--include spanningContainer.txt -->
    <!--include minSpanningFooter.txt -->
-
 </div> 
  <!--include spanningGraphGlobal.txt -->
 </body>

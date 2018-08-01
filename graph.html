@@ -28,14 +28,9 @@
   <script src="graph.js"></script>
  <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
 </head>
-
-
 <body>
-
   <h1> Graph </h1>
-
-  <div class="container">
-    
+  <div class="container">    
    <select id= choices onchange="typeChange()">
     <option value="Number" >Input number of nodes (Default Name) </option>
     <option value="f1" >Input by a list of node names</option>
@@ -43,7 +38,7 @@
   <input type="text" class="box" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes">
   <button class="btn btn-primary" id="add-node-button" type="button" 
-  onclick="createGraph(false)">Create Nodes
+  onclick="createGraph(false,'graphContainer')">Create Nodes
  </button> 
 
 &emsp;
@@ -64,12 +59,13 @@ placeholder="Enter edges (e.g: a-b, e-f-g)" >
 <input type="text" class="weightBox" id="weights" 
 placeholder="Enter weights in the order of edges, e.g: 1,2" >
 <button class="btn btn-primary" id="add-node-button" type="button" 
-onclick="createGraph(true)"> Create Edges
+onclick="createGraph(true,'graphContainer')"> Create Edges
 </button>
 <br>
 <br>
 
-<div id="graphContainer" class = "graph"></div>
+<br>
+<div id="graphContainer"  class = "graphContainer" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
 <script>
 
   let inputType = "num";
@@ -81,7 +77,6 @@ onclick="createGraph(true)"> Create Edges
 
 
 </script>
-
 </div> 
 </body>
 </html>

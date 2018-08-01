@@ -46,7 +46,7 @@
             <b>
             Fill the input box with sample values:
             </b>
-                <select id= sampleChoice onchange="setSample()">
+                <select id= sortSample onchange="setSortSample()">
                 <option value="Select" >Select one</option>
                 <option value="sample1" >More random input </option>
                 <option value="sample2"> More sorted input </option>
@@ -86,8 +86,8 @@ let list = [];
 let fList = null;
 drawListOnScreen(list);
 </script>
-<footer id="legend">
-        <script> window.display_legend("Item Swapped", "Item being Compared") </script>
+<footer id="sortLegend">
+        <script> window.display_legend("sortLegend", "Item Swapped", "Item being Compared") </script>
  </footer>
         
     </div>

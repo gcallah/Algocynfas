@@ -1,3 +1,3 @@
-<footer id="legend">
-        <script> window.display_legend("Item Swapped", "Item being Compared") </script>
+<footer id="sortLegend">
+        <script> window.display_legend("sortLegend", "Item Swapped", "Item being Compared") </script>
  </footer>

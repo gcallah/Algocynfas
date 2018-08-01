@@ -20,16 +20,16 @@ function typeChange(){
   }
 }
 
-function createGraph(ifEdge){
+function createGraph(ifEdge,container){
  var graph = new ourGraph();
- graph.setGraph(ifEdge);
+ graph.setGraph(ifEdge,container);
  Graph = graph;
 }
 
 
 function createTree(ifEdge){
  var graph = new tree();
- graph.setGraph(ifEdge);
+ graph.setGraph(ifEdge, 'treeGraphContainer');
  Graph = graph;
 }
 
@@ -43,10 +43,10 @@ async function createBST(type){
   }
  animeRunning = true;
  if(type == 1){
-   getHTML("graphContainer").style.height = 300;
-   getHTML("graphContainer").style.width = 800;
-   getHTML("graphContainer").style.marginLeft = "10em";
-   getHTML("legend").style.marginLeft = "10em";
+   getHTML("bstGraphContainer").style.height = 300;
+   getHTML("bstGraphContainer").style.width = 800;
+   getHTML("bstGraphContainer").style.marginLeft = "10em";
+   getHTML("bstLegend").style.marginLeft = "10em";
    var graph = new BST();
 
    if(getHTML("random").checked == true){
@@ -99,7 +99,7 @@ class ourGraph{
     this.weightEdgeMap = null;
    }
 
-   setGraph(ifEdge){
+   setGraph(ifEdge,container){
 
       //Node part
       var rawInput = getHTML("nodeNum").value;
@@ -154,7 +154,8 @@ class ourGraph{
     }
 
     try{
-      this.createSigmaGraph();
+      console.log(container);
+      this.createSigmaGraph(container);
       if(this.edges.length==0){
 
         correctErr("edges");
@@ -163,7 +164,7 @@ class ourGraph{
     }
     catch(error){
       noticeErr("Please make sure if the nodes existed!", "edges");
-    }
+   }
 
 
 
@@ -251,12 +252,13 @@ setGraphEdges(edge,nodesToConnect,WEIGHT,shape){
   }
 }
 
-createSigmaGraph(){
-  $( ".graph" ).empty();
+createSigmaGraph(containerName){
+  var container = '.'+ containerName;
+  $(container).empty();
   let s = new sigma({
     graph: this.graph,
     renderer: {                                                        
-      container: 'graphContainer',  
+      container: containerName,  
       type: 'canvas'                                                                                 
     },                
     settings: {
@@ -580,8 +582,8 @@ class tree extends ourGraph{
 
   }
 
-  setGraph(ifEdge){
-    super.setGraph(ifEdge);
+  setGraph(ifEdge,container){
+    super.setGraph(ifEdge,container);
     if(this.edges.length != 0){
       var result = this.isTree();
       if(result == "true"){
@@ -692,13 +694,13 @@ strench(adjustList){
 } 
 positionCheck(node){
  if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
-   getHTML("graphContainer").style.width = 1200;
-   getHTML("graphContainer").style.marginLeft = "5em";
-   getHTML("legend").style.marginLeft = "5em";
+   getHTML("bstGraphContainer").style.width = 1200;
+   getHTML("bstGraphContainer").style.marginLeft = "5em";
+   getHTML("bstLegend").style.marginLeft = "5em";
    this.horiAdjust = true;
  }
  if(Math.abs(node.position.y) > 130 && this.vertiAdjust == false){
-   getHTML("graphContainer").style.height = 800;
+   getHTML("bstGraphContainer").style.height = 800;
    for(var k = 0; k < this.nodeLayout.length; k++){
     this.treeNodes[k].position.y -= 150;
     this.treeNodes[k].layout.y -= 150;
@@ -712,7 +714,7 @@ async insert(input,single = false,draw = true){
    correctErr("treeNode");
    correctErr("treeList");
    if(single && draw){
-     this.createSigmaGraph();
+     this.createSigmaGraph('bstGraphContainer');
      await this.pause();
     }
    var node = new treeNode(input, this.treeNodes.length);
@@ -747,7 +749,7 @@ async insert(input,single = false,draw = true){
         }; 
         this.graph = g;
         if(draw && animeRunning){
-        this.createSigmaGraph();
+        this.createSigmaGraph('bstGraphContainer');
       }
 
         return;  
@@ -882,7 +884,7 @@ async insert(input,single = false,draw = true){
           }; 
           this.graph = g;
           if(animeRunning){
-          this.createSigmaGraph();
+          this.createSigmaGraph('bstGraphContainer');
           }
         
           return;

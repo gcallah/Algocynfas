@@ -1,5 +1,5 @@
 <button class="btn btn-primary" id="add-node-button" type="button" 
-onclick="createGraph(true,'graphContainer')"> Create Edges
+onclick="createGraph(true,'spanningGraphContainer')"> Create Edges
 </button>
 <br>
 <br>

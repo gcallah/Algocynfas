@@ -1,7 +1,5 @@
-
-
-function setSample(){
-  let selectedBox = getHTML("sampleChoice");
+function setSpanningSample(){
+  let selectedBox = getHTML("spanningSample");
   var sampleSelected = selectedBox.selectedIndex;
 
   if (sampleSelected == 0){
@@ -47,28 +45,15 @@ function clearEdges(){
   selectedBox.selectedIndex = 0;
 }
 
-function clearGraph(){
-   $( ".graph" ).empty();
+function clearSpanningGraph(){
+   $( ".spanningGraphContainer" ).empty();
    getHTML("nodeNum").value = "";
    getHTML("edges").value = "";
    getHTML("weights").value = "";
-   let selectedBox = getHTML("sampleChoice");
+   let selectedBox = getHTML("spanningSample");
   selectedBox.selectedIndex = 0;
 
 }
-/*function clearEdges(){
-   console.log(getHTML("nodeNum").value);
-  if(getHTML("nodeNum").value == ""){
-
-    noticeErr("Please still keep a valid node input!","nodeNum");
-    return;
-  }
-  correctErr("nodeNum");
-  createGraph(false);
-  getHTML("edges").value = null;
-  getHTML("weights").value = null;
-
-}*/
 
 
 function run(){

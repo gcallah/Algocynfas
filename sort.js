@@ -1,9 +1,8 @@
 
 
-function setSample(){
-  let selectedBox = getHTML("sampleChoice");
+function setSortSample(){
+  let selectedBox = getHTML("sortSample");
   var sampleSelected = selectedBox.selectedIndex;
-
   if (sampleSelected == 0){
         clearGraph();
     }

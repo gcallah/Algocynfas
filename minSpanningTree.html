@@ -56,7 +56,7 @@
             <b>
             Fill the input box with sample values:
             </b>
-                <select id= sampleChoice onchange="setSample()">
+                <select id= spanningSample onchange="setSpanningSample()">
                 <option value="Select" >Select one</option>
                 <option value="sample1" >5 nodes with 8 edges </option>
                 <option value="sample2"> 10 nodes with 16 edges </option>
@@ -69,7 +69,7 @@
   <input type="text" class="box" id="nodeNum" 
   placeholder="Enter node#, max 16 nodes">
   <button class="btn btn-primary" id="add-node-button" type="button" 
-  onclick="createGraph(false)">Create Nodes
+  onclick="createGraph(false,'spanningGraphContainer')">Create Nodes
  </button> 
 
 &emsp;
@@ -80,7 +80,7 @@ placeholder="Enter edges (e.g: a-b, e-f-g)" >
 <input type="text" class="weightBox" id="weights" 
 placeholder="Enter weights in the order of edges, e.g: 1,2"style = "display: inline" >
 <button class="btn btn-primary" id="add-node-button" type="button" 
-onclick="createGraph(true)"> Create Edges
+onclick="createGraph(true,'spanningGraphContainer')"> Create Edges
 </button>
 <br>
 <br>
@@ -97,16 +97,14 @@ onclick="createGraph(true)"> Create Edges
          
 
 <button id = "clear-button" type="button" class="btn btn-danger col-1" 
-style = "max-width: 150 ;width: 130" onclick="clearGraph()">Clear Graph</button>
-&emsp;
-<button id = "stop-button" type="button" class="btn btn-danger col-1" 
-style = "max-width: 150 ;width: 130" onclick="clearEdges()">Clear Edges</button>
+style = "max-width: 150 ;width: 130" onclick="clearSpanningGraph()">Clear Graph</button>
 
-<div id="graphContainer" class = "graph"></div>
- <footer id="legend">
-        <script> window.display_legend("Graph edge", "Minimum spanning tree path", '#0039e6', '#F5B041') </script>
+<br>
+<br>
+<div id="spanningGraphContainer" class = "spanningGraphContainer" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
+ <footer id="minSpanLegend">
+        <script> window.display_legend("minSpanLegend", "Graph edge", "Minimum spanning tree path", '#0039e6', '#F5B041') </script>
 </footer>
-
 </div> 
   <script>
   let inputType = "num";  //by giving number as node input

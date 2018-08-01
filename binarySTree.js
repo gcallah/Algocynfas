@@ -359,8 +359,8 @@ function postorderTreeWalk(root){
 
 
 // below are facilitate functions
-function setSample(){
-  let selectedBox = getHTML("sampleChoice");
+function setBstSample(){
+  let selectedBox = getHTML("bstSample");
   var sampleSelected = selectedBox.selectedIndex;
   $(".graph").empty();
 
@@ -395,9 +395,9 @@ function setSample(){
     disableButtons(false);
     return false;
   }
-   $( ".graph" ).empty();
+   $( ".bstGraphContainer" ).empty();
 
-   Graph.createSigmaGraph();
+   Graph.createSigmaGraph('bstGraphContainer');
    return true;
 }
  async function searchInTree(){
@@ -454,9 +454,9 @@ function disableButtons(ifDisable){
   getHTML("clear-button").disabled = ifDisable;
 }
 
-function clearGraph(){
-   $( ".graph" ).empty();
-   let selectedBox = getHTML("sampleChoice");
+function clearBstGraph(){
+   $( ".bstGraphContainer" ).empty();
+   let selectedBox = getHTML("bstSample");
    selectedBox.selectedIndex = 0;
 }
 

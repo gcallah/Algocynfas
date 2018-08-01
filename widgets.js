@@ -118,9 +118,9 @@ function create_legend(title1, title2 , c1, c2) {
     return legend;
 }
 
-function display_legend(title1, title2, c1= '#ffb380', c2 = '#99ccff') {
+function display_legend(id,title1, title2, c1= '#ffb380', c2 = '#99ccff') {
   var legend = create_legend(title1, title2, c1, c2);
-  return getHTML("legend").innerHTML =
+  return getHTML(id).innerHTML =
   `<div class='list-group col-3'>
     <div class='list-group-item' style = background-color:${legend.data[0].color}>
     ${legend.data[0].title}
