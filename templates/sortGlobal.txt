@@ -1,6 +1,6 @@
 <script>
 const numbersGroup = document.getElementsByClassName("numbers-group")[0];
-let canvas = new fabric.Canvas('canvas');
+let canvas = new fabric.Canvas('sortCanvas');
 let list = [];
 let fList = null;
 drawListOnScreen(list);
