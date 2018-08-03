@@ -119,9 +119,7 @@ function treeSuccessor(node){             // CLRS p292 x == node   y == suc
   }
   else{
     noticeErr("This node is already the largest in the tree!")
-
   }
-
 }
 
 function treePredecessor(node){
@@ -136,13 +134,11 @@ function treePredecessor(node){
   var highLightN = [];
   highLightN.push(node.id);
   pre = node.parent;
-
   while (pre && node == pre.left){
     node = pre;
     highLightN.push(node.id);
     pre = pre.parent; 
   }
-
   if(pre){
     highLightN.push(pre.id);
     return  {
@@ -152,7 +148,6 @@ function treePredecessor(node){
   }
   else{
     noticeErr("This node is already the smallest in the tree!")
-
   }
 }
 
@@ -440,7 +435,6 @@ async function deleteNode(){
   await Graph.delete();
   disableButtons(false);
 }
-
 }
 
 function disableButtons(ifDisable){
@@ -459,8 +453,3 @@ function clearBstGraph(){
    let selectedBox = getHTML("bstSample");
    selectedBox.selectedIndex = 0;
 }
-
-
-
-
-

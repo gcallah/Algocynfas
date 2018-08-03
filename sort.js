@@ -1,21 +1,19 @@
-
-
 function setSortSample(){
   let selectedBox = getHTML("sortSample");
   var sampleSelected = selectedBox.selectedIndex;
   if (sampleSelected == 0){
-        clearGraph();
-    }
+    clearGraph();
+}
 
-    if (sampleSelected == 1){
-        getHTML("number-input").value = "3,1,6,2,8,5,9";
-        
-    }
+if (sampleSelected == 1){
+    getHTML("number-input").value = "3,1,6,2,8,5,9";
 
-    else if (sampleSelected == 2){
-        getHTML("number-input").value = "1,5,3,2,4,8,9";
-        
-    }
+}
+
+else if (sampleSelected == 2){
+    getHTML("number-input").value = "1,5,3,2,4,8,9";
+
+}
 }
 
 function inputNumberToArray() {
@@ -27,56 +25,54 @@ function inputNumberToArray() {
       alert("Please enter a valid list without '[]' "); 
       getHTML("number-input").value = "";
       return;
-    } 
-    var all_valid = true;
-    for (var i = 0; i<list_num.length; i++) {
+  } 
+  var all_valid = true;
+  for (var i = 0; i<list_num.length; i++) {
       list_num[i]=parseInt(list_num[i]);
       if (!Number.isInteger(list_num[i]) ||list_num[i] < -99 || list_num[i] > 99 ){
-           all_valid= false;
-           alert("The element on index " + i + " is not valid "); 
-      }
-    }
-    if(all_valid){
- 
-      for(var i=0;i<list_num.length;i++){
+         all_valid= false;
+         alert("The element on index " + i + " is not valid "); 
+     }
+ }
+ if(all_valid){
 
-        list.push(list_num[i]);
-      
-       }
-       drawListOnScreen(list);
-    
-      
-    }
+  for(var i=0;i<list_num.length;i++){
+
+    list.push(list_num[i]);
+
+  }
+  drawListOnScreen(list);
+}
 
 }
 
- async function run() {
-
+async function run() {
     animeRunning = true;
-
     let runButton = getHTML("run-button");
     let addNumberButton = getHTML("add-number-button");
     let sortType = document.getElementsByName("sort");
     runButton.disabled = true;
     addNumberButton.disabled = true;
-    
     if(sortType[0].checked){
         await window.insertionSort(fList);
     }
     else if( sortType[1].checked){
         await window. bubbleSort(fList);
     }
-    else{ //sortType[2].checked
+    else if(sortType[2].checked){
         await window.quickSort(fList);
     }
+    else if(sortType[3].checked){
+        await window.selectionSort(fList);
+    }
+    else{
+        await window.mergeSort(fList);
+    }
     
-
-
-runButton.disabled = false;
-addNumberButton.disabled = false;
-
-list = [];   
-getHTML("sampleChoice").selectedIndex = 0;
+    runButton.disabled = false;
+    addNumberButton.disabled = false;
+    list = [];   
+    getHTML("sortSample").selectedIndex = 0;
 }
 
 
@@ -84,7 +80,7 @@ let animeRunning = false;
 //quick sort below
 
 async function quickSort(myList) {
-    
+
     var delayTime = check_and_Delay();
     myList.setDelay(delayTime);
     await mySort(myList, 0, myList.size() - 1);
@@ -101,7 +97,7 @@ async function mySort(myList, low, high) {                    // Refer to CLRS P
       await myList.draw();
       await mySort(myList, low, pIndex - 1);                 // QuickSort(A, p, q-1)
       await mySort(myList, pIndex + 1, high);                // QuickSort(A, q+1, r)
-    }
+  }
 
 }
 
@@ -138,7 +134,6 @@ async function partition(myList, low, high) {                //partition(A, p, r
 async function insertionSort(myList) {                // Refer to CLRS P18
     var j = 0;
     var i = 0;
-
     var delayTime = check_and_Delay();
     myList.setDelay(delayTime);
     for (let dataElem of myList) {                  
@@ -162,9 +157,6 @@ async function insertionSort(myList) {                // Refer to CLRS P18
     }
 }
 
-
-
-
 // bubble sort below
 async function bubbleSort(myList) {                      // Refer to CLRS P 40  
     var delayTime = check_and_Delay();
@@ -185,6 +177,59 @@ async function bubbleSort(myList) {                      // Refer to CLRS P 40
         }
     }
 }
+
+// selectionSort below
+async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SORT(A)
+    var delayTime = check_and_Delay();
+    myList.setDelay(delayTime);
+    for(var i = 0; i < myList.size() - 1; i++){   // for i = 1 to A.length - 1
+        if (!animeRunning) break;
+        var min = i;                          // min = i
+        myList.highlight(i);
+        await myList.draw();
+        for(var j = i+1; j < myList.size(); j++){   //for j = i + 1 to A.length
+            if (!animeRunning) break;
+            if(myList.elemAt(j).getKey() < myList.elemAt(min).getKey()){    //if A[j] < A[min]
+                if(min != i){
+                  myList.unhighlight(minInd);
+                }
+                min = j;                        // min = j
+                myList.highlightSwap(j);
+                await myList.draw();
+            }
+            else{
+                myList.highlight(j);
+                await myList.draw();
+                myList.unhighlight(j);
+            }
+        }
+        myList.swap(i,min);                  //swap (i,min)
+        await myList.draw();
+        myList.unhighlight(i, min);
+
+    }
+}
+
+
+async function mergeSort(myList){
+
+
+
+
+
+}
+async function heapSort(myList){
+
+
+
+
+}
+
+
+
+
+
+
 
 
 

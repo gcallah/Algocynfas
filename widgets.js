@@ -1,10 +1,6 @@
-
-
 function getHTML(id){
   return document.getElementById(id);
 }
-
-
 
 function splitInput(input,space = false){
   if (space){
