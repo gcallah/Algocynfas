@@ -145,6 +145,7 @@ class DataStructure extends DataElem {
       });
   }
 
+
   getDSPos() {
       return this.orientation === HORIZ ?
           (this.canvas.width / 2 - DEF_ELEM_WIDTH * (this.size() / 2)):
@@ -157,6 +158,10 @@ class DataStructure extends DataElem {
 
   size() {
       return this.dataElems.length;
+  }
+
+  sliceToHalf(){
+  
   }
 
   swap(i, j) {
@@ -220,10 +225,12 @@ class List extends DataStructure {
       if(init) {
           this.orientation = orientation;
       }
+      if(this.dataElems != []){
       for (var i in this.dataElems) {
           [x, y] = this.positionElem(i);
           await this.dataElems[i].draw(this.canvas, x, y, init);
       }
+    }
       this.canvas.renderAll();
       await super.pause(this.delayTime);
   }
@@ -236,6 +243,7 @@ class List extends DataStructure {
       }
       while (k <= j);
   }
+
 
   unhighlight(i, j=0) {
       var k = i;
@@ -253,6 +261,10 @@ class List extends DataStructure {
   async pause (time) {
       this.delayTime = time;
       await super.pause(this.delayTime);
+  }
+
+  removeAll(){
+    this.canvas.clear();
   }
 }
 

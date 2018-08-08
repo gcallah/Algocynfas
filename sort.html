@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="lib/bootstrap.min.css">
 <link rel="stylesheet" href="userInterface.css">
+ <script src="lib/jquery.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/fabric.js"></script>
 <script src="algocynfas.js"></script>
@@ -11,7 +12,7 @@
 
 
 <script src="sort.js"></script>
-     <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
+     <link rel="stylesheet" href="style.css">   <!--algocynfas webpage css, independent from the user interface css -->
 </head>
 <body>
     <div class="container">
@@ -72,31 +73,37 @@
                 <button class="btn btn-primary" id="add-number-button" type="button" 
                 onclick="inputNumberToArray()">Create a List
                </button>
-          <br>
+
+               &emsp;
+               
        <button id = "run-button" type="button" class="btn btn-success col-1" onclick="run()">Run</button>
                  
   
        
- &emsp;&emsp;&emsp;
+
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
            <br>
 
            
          
+<footer id="sortLegend">
+        <script> window.display_legend("sortLegend", "Item Swapped", "Item being Compared") </script>
+ </footer>
+
 <canvas id="sortCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
+
+ <canvas id="mergeCanvas" width="800" height="144"
+style="border:0.1em solid #000000; display:none"></canvas>
 <script>
-const numbersGroup = document.getElementsByClassName("numbers-group")[0];
 let canvas = new fabric.Canvas('sortCanvas');
 let list = [];
 let fList = null;
 drawListOnScreen(list);
+ let mergeCanvas = new fabric.Canvas('mergeCanvas');
+ let mer = createList(mergeCanvas,[])
 </script>
-<footer id="sortLegend">
-        <script> window.display_legend("sortLegend", "Item Swapped", "Item being Compared") </script>
- </footer>
-        
     </div>
 </body>
 </html>

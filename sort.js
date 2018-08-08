@@ -1,19 +1,24 @@
 function setSortSample(){
   let selectedBox = getHTML("sortSample");
   var sampleSelected = selectedBox.selectedIndex;
-  if (sampleSelected == 0){
+/*  if (sampleSelected == 0){
     clearGraph();
-}
+}*/
 
 if (sampleSelected == 1){
     getHTML("number-input").value = "3,1,6,2,8,5,9";
 
 }
-
-else if (sampleSelected == 2){
+ if (sampleSelected == 2){
     getHTML("number-input").value = "1,5,3,2,4,8,9";
 
 }
+}
+
+function clearGraph(){
+
+
+
 }
 
 function inputNumberToArray() {
@@ -65,8 +70,11 @@ async function run() {
     else if(sortType[3].checked){
         await window.selectionSort(fList);
     }
-    else{
-        await window.mergeSort(fList);
+    else if(sortType[4].checked){
+        var mergeList = mergePrepare();
+        var delayTime = check_and_Delay();
+        mer.setDelay(delayTime);
+       await window.mergeSort(fList,mergeList);
     }
     
     runButton.disabled = false;
@@ -202,22 +210,71 @@ async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SO
                 await myList.draw();
                 myList.unhighlight(j);
             }
-        }
+        }    
         myList.swap(i,min);                  //swap (i,min)
         await myList.draw();
         myList.unhighlight(i, min);
+        await myList.draw();
 
     }
 }
+function mergeClear(){
+     mergeCanvas.clear();
+     mer.dataElems = [];
+}
 
 
-async function mergeSort(myList){
+ async function mergeSort(myList,list){
 
-
-
-
+   if(list.length != 1){
+       var leftHalf = list;
+       var rightHalf = list.splice((list.length+1) / 2);
+       var left = await mergeSort(myList,leftHalf);
+       var right = await mergeSort(myList,rightHalf);
+       var result = await merge(left,right);
+       return result;
+   } 
+       return list;
+    
 
 }
+ 
+ async function merge(left,right){
+   var displayList = [];
+    var sortedList = [];
+    while(left.length != 0){
+        while(right.length != 0 && right[0].key < left[0].key){
+          displayList.push(right[0].key);
+          sortedList.push(right[0]);
+          right.shift();
+          mergeClear();
+          mer.list = displayList;
+          mer.setList(displayList);
+          await mer.draw(true);
+     
+        }
+        displayList.push(left[0].key);
+        sortedList.push(left[0]);
+        left.shift();
+        mergeClear();
+        mer.list = displayList;
+        mer.setList(displayList);
+        await mer.draw(true);
+       }
+    
+    while(right.length != 0){
+          displayList.push(right[0].key);
+          sortedList.push(right[0]);
+          right.shift();
+          mergeClear();
+          mer.list = displayList;
+          mer.setList(displayList);
+          await mer.draw(true);
+         }
+    return sortedList;
+}
+
+
 async function heapSort(myList){
 
 
@@ -227,9 +284,24 @@ async function heapSort(myList){
 
 
 
+function mergePrepare(){
+    getHTML("mergeCanvas").style.display = "block";
+    var mergeList = [];
+    for(var i = 0; i < list.length; i++){
+        mergeList.push({
+            key:   list[i],
+            originalInd: i,
+        });
+    }
+    return mergeList;
 
+}
 
-
+ async function pause () {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, 1000)
+      })
+  }
 
 
 

@@ -6,4 +6,6 @@
                 <button class="btn btn-primary" id="add-number-button" type="button" 
                 onclick="inputNumberToArray()">Create a List
                </button>
-          <br>
+
+               &emsp;
+               

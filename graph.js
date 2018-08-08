@@ -432,6 +432,7 @@ async color(path, nodes = null, theColor = HIGHLIGHT, pause = true){
       str = str.split("-");
       path[i] = str[1] + "-" + str[0];
 
+      console.log(pathEdges[i]);
       pathEdges[i]= this.sigma.graph.edges(path[i]);
       pathEdges[i].color = theColor;
     }

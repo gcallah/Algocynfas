@@ -3,7 +3,7 @@
 <head>
     <!--include head.txt -->
     <!--include sortHead.txt -->
-     <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
+     <link rel="stylesheet" href="style.css">   <!--algocynfas webpage css, independent from the user interface css -->
 </head>
 <body>
     <div class="container">
@@ -16,10 +16,9 @@
         <!--include sortBoxBtn.txt -->
         <!--include runButton.txt --> 
         <!--include stopButton.txt -->
+        <!--include sortFooter.txt -->
         <!--include sortCanvas.txt -->
         <!--include sortGlobal.txt -->
-        <!--include sortFooter.txt -->
-        
     </div>
 </body>
 </html>

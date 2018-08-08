@@ -1,4 +1,4 @@
- &emsp;&emsp;&emsp;
+
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
            <br>
