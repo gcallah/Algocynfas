@@ -54,17 +54,22 @@ class ListElem extends DataElem {
   constructor(key, shape = null) {
       super('ListElem', key, 'Rect');
       this.shape = this.setShape();
-      this.group = this.setGroup(this.shape, this.setText(this.key),
-          this.key);
+      this.text = this.setText(this.key);
+      this.group = this.setGroup(this.shape, this.text, this.key);
   }
-
   draw(canvas, x, y, init=false) {
-      this.shape.set('fill', this.color)
+      if(init) {
+        this.shape.set('fill', this.color);
+        this.text = this.setText(this.key);
+        this.group = this.setGroup(this.shape, this.text, this.key);
+        this.group.left = x;
+        this.group.top = y;
+        canvas.add(this.group);
+        return;
+      }
+      this.shape.set('fill', this.color);
       this.group.left = x;
       this.group.top = y;
-      if(init) {
-        canvas.add(this.group);
-      }
   }
 
   setShape() {
