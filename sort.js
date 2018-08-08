@@ -233,61 +233,72 @@ async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SO
 
 
    async function mergeSort(myList,list){
-
-     if(list.length != 1){
-       var leftHalf = list;
-       var rightHalf = list.splice((list.length+1) / 2);
-       var left = await mergeSort(myList,leftHalf);
-       var right = await mergeSort(myList,rightHalf);
-       var leftAndRight = left.concat(right);
-       for(var i = 0; i < leftAndRight.length; i++){
-        myList.highlight(leftAndRight[i].originalInd);
-        await myList.draw(true);
-      } 
-      var result = await merge(left,right);
-      for(var i = 0; i < leftAndRight.length; i++){
-        leftAndRight[i].key = result[i];
-        myList.highlightSwap(leftAndRight[i].originalInd);
-        console.log( myList.dataElems[leftAndRight[i].originalInd]);
-        myList.dataElems[leftAndRight[i].originalInd].key = result[i];
-        await myList.draw(true);
-
-      }
-
-      return leftAndRight;
-    } 
-    return list;
-    
-
-  }
-
-  async function merge(left,right){
-   var displayList = [];
-   while(left.length != 0){
-    while(right.length != 0 && right[0].key < left[0].key){
-      displayList.push(right[0].key);
-      right.shift();
-      mergeClear();                         
-      mer.list = displayList;
-      mer.setList(displayList);
-      await mer.draw(true);
+     if(!animeRunning){
+      return;
     }
-    displayList.push(left[0].key);
-    left.shift();
-    mergeClear();
-    mer.list = displayList;
-    mer.setList(displayList);
-    await mer.draw(true);
+    if(list.length != 1){
+     var leftHalf = list;
+     var rightHalf = list.splice((list.length+1) / 2);
+     var left = await mergeSort(myList,leftHalf);
+     var right = await mergeSort(myList,rightHalf);
+     var leftAndRight = left.concat(right);
+     for(var i = 0; i < leftAndRight.length; i++){
+      myList.highlight(leftAndRight[i].originalInd);
+      await myList.draw(true);
+    } 
+    var result = await merge(left,right);
+    for(var i = 0; i < leftAndRight.length; i++){
+     if(!animeRunning){
+      break;
+    }
+    leftAndRight[i].key = result[i];
+    myList.highlightSwap(leftAndRight[i].originalInd);
+    console.log( myList.dataElems[leftAndRight[i].originalInd]);
+    myList.dataElems[leftAndRight[i].originalInd].key = result[i];
+    await myList.draw(true);
+
   }
-  while(right.length != 0){
+
+  return leftAndRight;
+} 
+return list;
+
+
+}
+
+async function merge(left,right){
+ var displayList = [];
+ while(left.length != 0){
+  if(!animeRunning){
+    break;
+  }
+  while(right.length != 0 && right[0].key < left[0].key){
     displayList.push(right[0].key);
     right.shift();
-    mergeClear();
+    mergeClear();                         
     mer.list = displayList;
     mer.setList(displayList);
     await mer.draw(true);
   }
-  return displayList;
+  displayList.push(left[0].key);
+  left.shift();
+  mergeClear();
+  mer.list = displayList;
+  mer.setList(displayList);
+  await mer.draw(true);
+}
+while(right.length != 0){
+ if(!animeRunning){
+  break;
+}
+displayList.push(right[0].key);
+right.shift();
+mergeClear();
+mer.list = displayList;
+mer.setList(displayList);
+await mer.draw(true);
+}
+return displayList;
 }
 
 
