@@ -6,11 +6,11 @@ function setSortSample(){
   }*/
 
   if (sampleSelected == 1){
-    getHTML("number-input").value = "3,1,6,2,8,5,9";
+    getHTML("number-input").value = "3,1,6,2,8,5,9,7";
 
   }
   if (sampleSelected == 2){
-    getHTML("number-input").value = "1,5,3,2,4,8,9";
+    getHTML("number-input").value = "1,5,3,2,4,8,9,10";
 
   }
 }
@@ -75,13 +75,21 @@ async function run() {
     var delayTime = check_and_Delay();
     fList.setDelay(delayTime);
     mer.setDelay(delayTime);
-    await window.mergeSort(fList,mergeList);
-    fList.unhighlight(0,fList.size()-1);
-    await fList.draw();
-    mergeClear();
-    mer.setList([]);
-    mer.draw();
-    getHTML("mergeCanvas").style.display = "none";
+    try{
+      await window.mergeSort(fList,mergeList);
+    }
+    catch(error){
+    }
+    if(animeRunning){
+      fList.unhighlight(0,fList.size()-1);
+      await fList.draw();
+    }
+      mergeClear();
+      mer.setList([]);
+      mer.draw();
+      getHTML("mergeCanvas").style.display = "none";
+      getHTML("mergeTitle").style.display = "none";
+    
   }
 
   runButton.disabled = false;
@@ -244,7 +252,7 @@ async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SO
      var leftAndRight = left.concat(right);
      for(var i = 0; i < leftAndRight.length; i++){
       myList.highlight(leftAndRight[i].originalInd);
-      await myList.draw(true);
+      await myList.draw();
     } 
     var result = await merge(left,right);
     for(var i = 0; i < leftAndRight.length; i++){
@@ -253,8 +261,8 @@ async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SO
     }
     leftAndRight[i].key = result[i];
     myList.highlightSwap(leftAndRight[i].originalInd);
-    console.log( myList.dataElems[leftAndRight[i].originalInd]);
     myList.dataElems[leftAndRight[i].originalInd].key = result[i];
+    canvas.clear();
     await myList.draw(true);
 
   }
@@ -313,6 +321,7 @@ async function heapSort(myList){
 
 function mergePrepare(){
   getHTML("mergeCanvas").style.display = "block";
+  getHTML("mergeTitle").style.display = "block";
   var mergeList = [];
   for(var i = 0; i < list.length; i++){
     mergeList.push({

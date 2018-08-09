@@ -1,6 +1,9 @@
 
 <canvas id="sortCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
+<br>
 
+<h6 id = "mergeTitle" style = "display:none"> <b>This box is for sorting the copy of unsorted list recursively </b></h6>
  <canvas id="mergeCanvas" width="800" height="144"
 style="border:0.1em solid #000000; display:none"></canvas>
+

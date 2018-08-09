@@ -10,6 +10,7 @@
         <h1>
             Sorting Algorithms
         </h1>
+        
         <!--include sortType.txt -->
         <!--include speedButtons.txt -->
         <!--include sampleInput.txt -->

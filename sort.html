@@ -19,6 +19,7 @@
         <h1>
             Sorting Algorithms
         </h1>
+        
            <b> Sort Types: 
 
            <input type="radio" name="sort" id="insertion" checked = "true"/>
@@ -56,8 +57,8 @@
             </b>
                 <select id= sortSample onchange="setSortSample()">
                 <option value="Select" >Select one</option>
-                <option value="sample1" >More random input </option>
-                <option value="sample2"> More sorted input </option>
+                <option value="sample1" >Unsorted input </option>
+                <option value="sample2"> Partially sorted input </option>
               </select>
 
 
@@ -93,9 +94,12 @@
 
 <canvas id="sortCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
+<br>
 
+<h6 id = "mergeTitle" style = "display:none"> <b>This box is for sorting the copy of unsorted list recursively </b></h6>
  <canvas id="mergeCanvas" width="800" height="144"
 style="border:0.1em solid #000000; display:none"></canvas>
+
 <script>
 let canvas = new fabric.Canvas('sortCanvas');
 let list = [];
