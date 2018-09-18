@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="lib/bootstrap.min.css">
-<link rel="stylesheet" href="userInterface.css">
+ <meta charset="UTF-8">
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
  <script src="lib/jquery.min.js"></script>
-<script src="lib/bootstrap.min.js"></script>
-<script src="lib/fabric.js"></script>
-<script src="algocynfas.js"></script>
-<script src="widgets.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
 
+  <script src="lib/sigma/sigma.min.js"></script>
+
+  <script src="lib/sigma/sigma.renderers.canvas.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+
+
+  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+  <script src="lib/sigma/setting.js"></script>
+  <script src="lib/sigma/sigma.classes.graph.js"></script>
+  <script src="lib/sigma/graphArrange.js"></script>
+  <script src="lib/sigma/sigma.core.js"></script>
+
+  <script src="widgets.js"></script>
+  <script src="graph.js"></script>
 <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
     </head>
     <body >
@@ -26,17 +42,17 @@
 	<br> <br>
 
 
-	<input type="text" class="box" id="heap-push-value" placeholder="Enter a value">
-    <button id = "heap-push" type="button" 
-   		class="btn btn-success col-1" onclick="#">Push
+	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
+    <button id = "heap-insert" type="button" 
+   		class="btn btn-success col-1" onclick="#">Insert
     </button>
     
     &emsp; &emsp; 
 
-    <input type="text" class="box" id="heap-pop-value" placeholder="Enter a value">
+    <input type="text" class="box" id="heap-remove-value" placeholder="Enter a value">
 
-    <button id = "heap-pop" type="button"
-       class="btn btn-success col-1" onclick="#">Pop
+    <button id = "heap-remove" type="button"
+       class="btn btn-success col-1" onclick="#">Remove
   	</button>
 
    	<button id = "heap-clear" type="button"
