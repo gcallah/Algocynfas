@@ -7,17 +7,17 @@
 	<br> <br>
 
 
-	<input type="text" class="box" id="heap-push-value" placeholder="Enter a value">
-    <button id = "heap-push" type="button" 
-   		class="btn btn-success col-1" onclick="#">Push
+	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
+    <button id = "heap-insert" type="button" 
+   		class="btn btn-success col-1" onclick="#">Insert
     </button>
     
     &emsp; &emsp; 
 
-    <input type="text" class="box" id="heap-pop-value" placeholder="Enter a value">
+    <input type="text" class="box" id="heap-remove-value" placeholder="Enter a value">
 
-    <button id = "heap-pop" type="button"
-       class="btn btn-success col-1" onclick="#">Pop
+    <button id = "heap-remove" type="button"
+       class="btn btn-success col-1" onclick="#">Remove
   	</button>
 
    	<button id = "heap-clear" type="button"
