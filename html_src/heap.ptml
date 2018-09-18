@@ -9,6 +9,8 @@
         <h1>
             Heap
         </h1>
+        <!--include heapInputs.txt -->
+        <!--include heapCanvas.txt -->
        </div>
       </body>
 </html>
