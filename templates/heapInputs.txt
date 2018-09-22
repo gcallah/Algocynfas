@@ -9,15 +9,13 @@
 
 	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
     <button id = "heap-insert" type="button" 
-   		class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Insert
+   		class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Add
     </button>
     
     &emsp; &emsp; 
 
-    <input type="text" class="box" id="heap-remove-value" placeholder="Enter a value">
-
     <button id = "heap-remove" type="button"
-       class="btn btn-success col-1" onclick="heapRemove(false)">Remove
+       class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
 
    	<button id = "heap-clear" type="button"
