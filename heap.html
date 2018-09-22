@@ -26,6 +26,7 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
+<script src="heap.js"></script>
 <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
     </head>
     <body >
@@ -36,15 +37,15 @@
 <b>
 	Heap Types:
 
-	<input type="radio" name="heapType" id="maxHeap" checked="true"> Max-Heap
-	<input type="radio" name="heapType" id="minHeap"> Min-Heap
+	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapChange()" checked="true"> Max-Heap
+	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapChange()"> Min-Heap
 
 	<br> <br>
 
 
 	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
     <button id = "heap-insert" type="button" 
-   		class="btn btn-success col-1" onclick="#">Insert
+   		class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Insert
     </button>
     
     &emsp; &emsp; 
@@ -52,7 +53,7 @@
     <input type="text" class="box" id="heap-remove-value" placeholder="Enter a value">
 
     <button id = "heap-remove" type="button"
-       class="btn btn-success col-1" onclick="#">Remove
+       class="btn btn-success col-1" onclick="heapRemove(false)">Remove
   	</button>
 
    	<button id = "heap-clear" type="button"
@@ -62,9 +63,20 @@
     <br> <br>
 
 </b>
-<div class="canvasBox"  style="border:0.1em solid #000000">
-	<canvas id="heapCanvas" width="1000" height="1400"></canvas>
-</div>
+
+<div id="heapCanvas"  class = "heapCanvas" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
+
+<script>
+
+  let inputType = "num";
+  let dir = 0;
+  let weight = 0;
+  let Graph = null;
+  let animeRunning = true;
+
+
+
+</script>
        </div>
       </body>
 </html>
