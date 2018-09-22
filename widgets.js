@@ -1,15 +1,22 @@
-function getHTML(id){
-  return document.getElementById(id);       // daisy
+//test jest
+function a(a, b) {
+    return a + b;
 }
+module.exports = a;
 
+function getHTML(id) {
+  return document.getElementById(id);       // daisy
+}                                
+
+//formats inputs
 function splitInput(input,space = false){
   if (space){
     return (input.split(" ").join("")).split(",");     //daisy
   }
   return input.split(",");
-
 }
 
+//graph.js
 function letterNumConvert(key){
     if(Number.isInteger(key)){
       var aAlph = {
@@ -25,9 +32,9 @@ function letterNumConvert(key){
     }
     return aNum[key];
 }
-
+//check what is clicked
 function check_and_Delay(){        //daisy
-    if(getHTML('Fast').checked)
+    if(getHTML('Fast').checked)        //returned fast button
     {
        return 300;   
     }
