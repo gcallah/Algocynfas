@@ -1,10 +1,12 @@
-function createCanvas(title='canvas') {
-    return (new fabric.Canvas(title))
+function createCanvas( title = 'canvas'){
+    return new fabric.Canvas(title);
 }
+
 
 function createCircle(x=500, y=500, radius=20)
 {
-    return new fabric.Circle(
+   
+return new fabric.Circle(
     {
         radius: radius,
         left: x,
@@ -13,6 +15,8 @@ function createCircle(x=500, y=500, radius=20)
         originY: 'center',
         fill: 'white'
     });
+  
+
 }
 
 function createRectangle(x=500, y=500, height=20, width=20)
@@ -25,4 +29,14 @@ function createRectangle(x=500, y=500, height=20, width=20)
         width: width,
         fill: 'white'
     });
+}
+
+
+
+
+function create(){
+    let circle = createCircle();
+    let canvas = createCanvas();
+    canvas.add(circle);
+
 }
