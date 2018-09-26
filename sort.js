@@ -188,7 +188,7 @@ async function bubbleSort(myList) {                      // Refer to CLRS P 40
         for(let j = myList.size() - 1; j > i; j--) {               // for j= A.length downto i+1
           if (!animeRunning) break;
           myList.highlightSwap(j);
-          await myList.draw();f
+          await myList.draw();
             if(myList.elemAt(j).getKey() < myList.elemAt(j - 1).getKey()) {     // if A[j] < A [j-1]
               myList.highlight(j - 1);
               await myList.draw();
