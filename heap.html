@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lib/bootstrap.min.css">
+<link rel="stylesheet" href="userInterface.css">
+ <script src="lib/jquery.min.js"></script>
+<script src="lib/bootstrap.min.js"></script>
+<script src="lib/fabric.js"></script>
+<script src="algocynfas.js"></script>
+<script src="widgets.js"></script>
+
  <meta charset="UTF-8">
   <link rel="stylesheet" href="lib/bootstrap.min.css">
   <link rel="stylesheet" href="userInterface.css">
@@ -61,9 +70,9 @@
     <br> <br>
 
 </b>
-
+<canvas id="heapArrayCanvas" width="800" height="144"
+style="border:0.1em solid #000000"></canvas>
 <div id="heapCanvas"  class = "heapCanvas" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
-
 <script>
 
   let inputType = "num";
@@ -74,6 +83,12 @@
 
 
 
+</script>
+<script>
+  let canvas = new fabric.Canvas('heapArrayCanvas');
+  let list = [];
+  let fList = null;
+  drawListOnScreen(list);
 </script>
        </div>
       </body>

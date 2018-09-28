@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+<!--include head.txt -->
 <!--include graphHead.txt -->
 <!--include heapHead.txt -->
 <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
@@ -12,8 +13,8 @@
         </h1>
         <!--include heapInputs.txt -->
         <!--include heapCanvas.txt -->
-
          <!--include graphGlobal.txt -->
+         <!--include heapGlobal.txt -->
        </div>
       </body>
 </html>

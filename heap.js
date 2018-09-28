@@ -88,7 +88,7 @@ class heap extends BST {
 
 	insert(val) {
 		var node = new treeNode(val, this.id++);
-		
+
 		this.data.push(node);
 		var l = this.data.length-1;
 		if(l != 1) {
@@ -122,8 +122,8 @@ class heap extends BST {
 	}
 
 	startGraph(ifEdge, container) {
-		
-		
+
+
 		var nodes = [];
 		var edges = [];
 
@@ -135,7 +135,7 @@ class heap extends BST {
 
 
 		for(var i = 1; i < this.data.length; i++) {
-			
+
 			if(this.has_left(i)){
 				edges.push(
 					{
@@ -180,14 +180,14 @@ class heap extends BST {
 				for( var k = 0; k < this.data[j].strenchTimes; k++) {
 					if (j % 2 == 0)
 						this.adjustPos("left", this.data[j]);
-					else 
+					else
 						this.adjustPos("right", this.data[j]);
 				}
 			}
-			
+
 		}
 
-		
+
 		let g = {
   			"nodes": nodes,
   			"edges": edges
@@ -197,20 +197,26 @@ class heap extends BST {
 
 		let s = new sigma({
 		    graph: g,
-		    renderer: {                                                        
-		      container: container,  
-		      type: 'canvas'                                                                                 
-		    },                
+		    renderer: {
+		      container: container,
+		      type: 'canvas'
+		    },
 		    settings: {
 		      defaultNodeColor: EdgeNodeCOLOR,
 		      enableCamera: false,
 		      autoRescale: false,
 		      defaultEdgeLabelSize: 15,
-		      
+
 		    }
 		});
 
 		s.refresh();
+
+		list = [];
+		for(var i = 1; i < this.data.length; i++) {
+			list.push(this.data[i].key);
+		}
+		drawListOnScreen(list);
 	}
 }
 

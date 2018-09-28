@@ -1,0 +1,6 @@
+<script>
+  let canvas = new fabric.Canvas('heapArrayCanvas');
+  let list = [];
+  let fList = null;
+  drawListOnScreen(list);
+</script>
