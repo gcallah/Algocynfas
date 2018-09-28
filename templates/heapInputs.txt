@@ -1,8 +1,8 @@
 <b>
 	Heap Types:
 
-	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapChange()" checked="true"> Max-Heap
-	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapChange()"> Min-Heap
+	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapChange()" checked="true"> Min-Heap
+	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapChange()"> Max-Heap
 
 	<br> <br>
 

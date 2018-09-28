@@ -231,9 +231,9 @@ function heapChange() {
 		 if (radios[i].checked)
 		 {
 		 	if (radios[i].value == "maxHeap")
-		 		graph = new heap(heap_less);
+		 		graph = new heap(heap_greater);
 		 	else
-		 		graph = new heap(heap_greater)
+		 		graph = new heap(heap_less)
 		 }
 	}
 
