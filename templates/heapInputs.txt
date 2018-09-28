@@ -7,7 +7,7 @@
 	<br> <br>
 
 
-	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
+	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value (between -99 and 99)">
     <button id = "heap-insert" type="button" 
    		class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Add
     </button>
@@ -19,7 +19,7 @@
   	</button>
 
    	<button id = "heap-clear" type="button"
-       class="btn btn-danger col-1" onclick="#">Clear
+       class="btn btn-danger col-1" onclick="heapChange()">Clear
     </button>
 
     <br> <br>
