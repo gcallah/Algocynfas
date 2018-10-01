@@ -37,21 +37,21 @@ function createText(text, x = 50, y = 50, color = 'black', fontSize = 30) {
 }
 
 function createTextCircle(text, x=50, y=50, radius = 50, textColor = 'black', circleColor = 'red') {
-  var circle = createCircle(0, 0, radius, circleColor);
-  var text = createText(text, 0, 0, textColor, radius / 2);
+  var circle = createCircle(x, y, radius, circleColor);
+  var text = createText(text, x, y, textColor, radius / 2);
   var group = new fabric.Group([circle, text], {
-    left: x-50,
-    top: y-50,
+    left: x,
+    top: y,
   });
   return group;
 }
 
 function createTextRectangle(text, x=50, y=50, height=50, width=50, textColor = 'black', rectColor = 'blue') {
-  var rect = createRectangle(0, 0, height, width, rectColor);
-  var text = createText(text, 0, 0, textColor, height/2);
+  var rect = createRectangle(x, y, height, width, rectColor);
+  var text = createText(text, x, y, textColor, height/2);
   var group = new fabric.Group([rect, text], {
-    left: x-50,
-    top: y-50,
+    left: x,
+    top: y,
   });
   return group;
 }
