@@ -18,46 +18,34 @@ function getLink(linkText) {
 function getById(id) {
     return browser.findElement(webdriver.By.id(id));
 }
-/*
+
 function generateInvalidInput() {
     //invalidInput = any non-integers || size(input) < 2
-
+    do {
+        var charNum = Math.random() * 126;
+    } while (charNum <= 32);
+    return String.fromCharCode(charNum);
 }
-*/
 
-browser.get('https://gcallah.github.io/Algocynfas/').
-    then(function () {
-        return getLink('Sorting Algorithms');
-    }).
-    then(function (link) {
-        return link.click();
-    }).
-    then(function(){
-        return getById('number-input');
-    }).
-    then(function (numberInput) {
-        return numberInput.sendKeys('hi');
-    }).
-    then(function () {
-        return getById('add-number-button');
-    }).
-    then(function (runButton) {
-        return runButton.click();
-    }).
-    then(function () {
-        /*
-        //test whether alert pops up when invalid input is given
-        browser.wait(function () {
-            try {
-                driver.switchTo().alert().accept();
-                console.log('alert');
-                return true;
-            }
-            catch (err) {
-                console.log('err');
-                return false;
-            }
-        }, 10);
-        */
-        closeBrowser();
+
+browser.get('https://gcallah.github.io/Algocynfas/');
+getLink('Sorting Algorithms').click().then(function () {
+    getById('number-input').sendKeys(generateInvalidInput());
+    return getById('add-number-button').click();
+}).then(function () {
+    /*
+    //trying to test whether alert pops up when invalid input is given
+    try {
+        driver.switchTo().alert().accept();
+        console.log('alert');
+        return true;
+    }
+    catch (err) {
+        console.log('err');
+        return false;
+    }
+}).then(function() {*/
+    return closeBrowser();
 });
+
+
