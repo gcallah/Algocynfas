@@ -13,7 +13,11 @@
     </button>
     
     &emsp; &emsp; 
-
+    
+    <input type="text" class="box" id="heap-insert-list" placeholder="Enter a list of numbers">
+    
+    &emsp; &emsp; 
+    
     <button id = "heap-remove" type="button"
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
