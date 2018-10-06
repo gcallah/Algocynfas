@@ -87,7 +87,6 @@ class heap extends BST {
 				this.startGraph(false, 'heapCanvas');
 				await this.pause();
 			} else {
-				this.highLight = [];
 				this.startGraph(false, 'heapCanvas');
 				await this.pause();
 				return;
@@ -265,15 +264,21 @@ function heapChange() {
 
 
 function heapInsert(ifEdge) {
+
+<<<<<<< HEAD
+	var val = document.getElementById("heap-insert-value").value;
+	graph.insert(val);
+ 	//graph.startGraph(ifEdge, 'heapCanvas');
+=======
 	
     var val = document.getElementById("heap-insert-value").value;
-	if (isNaN(val))
+	if (isNan(val))
     {
         noticeErr("Please enter a number","heap-insert-value")
-        return;
     }
     graph.insert(val);
  	graph.startGraph(ifEdge, 'heapCanvas');
+>>>>>>> a129743a8a38176bcfab1be2bc715577f6604feb
 }
 
 function heapRemove(ifEdge) {
