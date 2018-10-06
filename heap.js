@@ -17,7 +17,8 @@ class heap extends BST {
 		this.data.push(null);
 		this.cmp = cmp;
 		this.id = 0;
-		this.highLight = [];
+		this.highLightNodes = [];
+		this.highLightEdges = [];
 	}
 
 	parent(i) {
@@ -73,28 +74,38 @@ class heap extends BST {
 	}
 
 	async up_heap(i) {
-		this.highLight.push(i);
+		this.highLightNodes.push(i);
 		this.startGraph(false, 'heapCanvas');
 		await this.pause();
 
 		while(i > 1) {
 			var p = this.parent(i);
-			this.highLight.push(p);
+			this.highLightNodes.push(p);
+			this.startGraph(false, 'heapCanvas');
+			await this.pause();
 			if( this.cmp(this.data[i], this.data[p])) {
+
+				this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
+
 				[this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
 				[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
 				i = p;
+
 				this.startGraph(false, 'heapCanvas');
 				await this.pause();
 			} else {
-				this.highLight = [];
+				this.highLightNodes = [];
+				this.highLightEdges = [];
 				this.startGraph(false, 'heapCanvas');
 				await this.pause();
 				return;
 			}
 		}
 
-		this.highLight = [];
+		this.highLightNodes = [];
+		this.highLightEdges = [];
 		this.startGraph(false, 'heapCanvas');
 	}
 
@@ -152,8 +163,8 @@ class heap extends BST {
 			nodes.push(this.data[i].layout);
 		}
 
-		for (var i = 0; i < this.highLight.length; i++){
-			nodes[this.highLight[i]-1].color = HIGHLIGHT;
+		for (var i = 0; i < this.highLightNodes.length; i++){
+			nodes[this.highLightNodes[i]-1].color = HIGHLIGHT;
 		}
 
 
@@ -189,6 +200,20 @@ class heap extends BST {
 			)
 			}else
 				break;
+		}
+
+		for (var i = 0; i < edges.length; i++){
+			for (var j = 0;  j < this.highLightEdges.length; j++) {
+
+				if (edges[i].source == this.highLightEdges[j][0] && edges[i].target == this.highLightEdges[j][1]) {
+					edges[i].color = HIGHLIGHT;
+				}
+
+				else if (edges[i].source == this.highLightEdges[j][1] && edges[i].target == this.highLightEdges[j][0]) {
+					edges[i].color = HIGHLIGHT;
+				}	
+
+			}
 		}
 
 		for (var i = 4; i < this.data.length; i *= 2) {
