@@ -17,6 +17,7 @@ class heap extends BST {
 		this.data.push(null);
 		this.cmp = cmp;
 		this.id = 0;
+		this.highLight = [];
 	}
 
 	parent(i) {
@@ -71,19 +72,29 @@ class heap extends BST {
 
 	}
 
-	up_heap(i) {
+	async up_heap(i) {
+		this.highLight.push(i);
+		this.startGraph(false, 'heapCanvas');
+		await this.pause();
 
 		while(i > 1) {
 			var p = this.parent(i);
-
+			this.highLight.push(p);
 			if( this.cmp(this.data[i], this.data[p])) {
 				[this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
 				[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
 				i = p;
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
 			} else {
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
 				return;
 			}
 		}
+
+		this.highLight = [];
+		this.startGraph(false, 'heapCanvas');
 	}
 
 	insert(val) {
@@ -121,6 +132,12 @@ class heap extends BST {
 		return result;
 	}
 
+	async pause (time = 1000) { 
+	  return new Promise(function (resolve) {
+	    setTimeout(resolve, time)
+	  });
+	}
+
 	startGraph(ifEdge, container) {
 
 
@@ -130,7 +147,12 @@ class heap extends BST {
 		for(var i = 1; i < this.data.length; i++) {
 			this.data[i].setNode();
 			this.data[i].strenchTimes = 0;
+			this.data[i].layout.color = EdgeNodeCOLOR;
 			nodes.push(this.data[i].layout);
+		}
+
+		for (var i = 0; i < this.highLight.length; i++){
+			nodes[this.highLight[i]-1].color = HIGHLIGHT;
 		}
 
 
@@ -169,14 +191,12 @@ class heap extends BST {
 		}
 
 		for (var i = 4; i < this.data.length; i *= 2) {
-
 			for (var j = 2; j < i; j++) {
 				if (this.data[j].strenchTimes == 0) {
 					this.data[j].strenchTimes = 1;
 				} else {
 					this.data[j].strenchTimes *= 2;
 				}
-
 				for( var k = 0; k < this.data[j].strenchTimes; k++) {
 					if (j % 2 == 0)
 						this.adjustPos("left", this.data[j]);
@@ -184,7 +204,6 @@ class heap extends BST {
 						this.adjustPos("right", this.data[j]);
 				}
 			}
-
 		}
 
 
@@ -193,9 +212,10 @@ class heap extends BST {
   			"edges": edges
 		}
 
+
 		$("#heapCanvas").empty();
 
-		let s = new sigma({
+		this.sigma = new sigma({
 		    graph: g,
 		    renderer: {
 		      container: container,
@@ -210,7 +230,8 @@ class heap extends BST {
 		    }
 		});
 
-		s.refresh();
+
+		this.sigma.refresh();
 
 		list = [];
 		for(var i = 1; i < this.data.length; i++) {
@@ -246,7 +267,7 @@ function heapInsert(ifEdge) {
 
 	var val = document.getElementById("heap-insert-value").value;
 	graph.insert(val);
- 	graph.startGraph(ifEdge, 'heapCanvas');
+ 	//graph.startGraph(ifEdge, 'heapCanvas');
 }
 
 function heapRemove(ifEdge) {

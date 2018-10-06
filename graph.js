@@ -466,8 +466,8 @@ async pause (time = 0) {
 /// kruskal
 
 kruskal(){              
-                                 //refer to CLRS P631 Kruskal's Algorithm
-                                 if(this.edges.length == 0){                                            
+ //refer to CLRS P631 Kruskal's Algorithm
+ if(this.edges.length == 0){                                            
     noticeErr("Please input edge first!","edges");      // A != []
     return;
   }
