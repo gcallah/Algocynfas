@@ -83,14 +83,14 @@ class heap extends BST {
 			this.highLightNodes.push(p);
 			this.startGraph(false, 'heapCanvas');
 			await this.pause();
-			if( this.cmp(this.data[i], this.data[p])) {
+			if( this.cmp(this.data[i], this.data[p]) ) {
 
 				this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
 				this.startGraph(false, 'heapCanvas');
 				await this.pause();
 
 				[this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
-				[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
+				//[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
 				i = p;
 
 				this.startGraph(false, 'heapCanvas');
@@ -136,7 +136,7 @@ class heap extends BST {
 		var result = this.data[1];
 
 		[this.data[1].key, this.data[this.data.length-1].key] = [this.data[this.data.length-1].key, this.data[1].key];
-		[this.data[1].id, this.data[this.data.length-1].id] = [this.data[this.data.length-1].id, this.data[1].id];
+		//[this.data[1].id, this.data[this.data.length-1].id] = [this.data[this.data.length-1].id, this.data[1].id];
 		this.data.pop();
 
 		this.down_heap(1);
@@ -204,7 +204,6 @@ class heap extends BST {
 
 		for (var i = 0; i < edges.length; i++){
 			for (var j = 0;  j < this.highLightEdges.length; j++) {
-
 				if (edges[i].source == this.highLightEdges[j][0] && edges[i].target == this.highLightEdges[j][1]) {
 					edges[i].color = HIGHLIGHT;
 				}
