@@ -244,8 +244,13 @@ function heapChange() {
 
 function heapInsert(ifEdge) {
 
-	var val = document.getElementById("heap-insert-value").value;
-	graph.insert(val);
+	
+    var val = document.getElementById("heap-insert-value").value;
+	if (isNan(val))
+    {
+        noticeErr("Please enter a number","heap-insert-value")
+    }
+    graph.insert(val);
  	graph.startGraph(ifEdge, 'heapCanvas');
 }
 
