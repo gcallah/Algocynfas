@@ -2,7 +2,6 @@
 function a(a, b) {
     return a + b;
 }
-module.exports = a;
 
 function getHTML(id) {
   return document.getElementById(id);       // daisy
@@ -132,3 +131,29 @@ function display_legend(id,title1, title2, c1= '#ffb380', c2 = '#99ccff') {
     </div>
   </div>`;
 }
+
+
+
+
+module.exports = {
+  func1: function letterNumConvert(key){
+    if(Number.isInteger(key)){
+      var aAlph = {
+        0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h",
+        8: "i", 9: "j", 10: "k", 11: "l", 12: "m", 13: "n", 14: "o", 15: "p"}    // daisy
+        return aAlph[key];
+
+      }
+    
+    var aNum={
+        a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9, k: 10, 
+        l: 11, m: 12, n: 13,o: 14, p: 15
+    }
+    return aNum[key];
+},
+
+};
+
+
+
+

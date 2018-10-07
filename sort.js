@@ -181,7 +181,7 @@ async function insertionSort(myList) {                // Refer to CLRS P18
     }
 
 // bubble sort below
-async function bubbleSort(myList) {                      // Refer to CLRS P 40  
+ async function bubbleSort(myList) {                      // Refer to CLRS P 40  
   var delayTime = check_and_Delay();
   myList.setDelay(delayTime);  
     for(let i = 0; i < myList.size(); i++) {                    // for i = 0 to A.length -1 
