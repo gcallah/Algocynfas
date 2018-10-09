@@ -56,18 +56,26 @@ function createTextRectangle(text, x=50, y=50, height=50, width=50, textColor = 
   return group;
 }
 
+function rotate(fabricObject, angle = 15)
+{
+    fabricObject.rotate(angle)
+}
+
 function create() {
   var canvas = createCanvas();
 
-  var circle = createCircle(50, 50, 50, 'white');
-  canvas.add(circle);
-  var text = createText('text', 50, 50, 'black', 50/2);
-  canvas.add(text);
-  var textCircle = createTextCircle('textCircle', 200, 50);
-  canvas.add(textCircle);
+  //var circle = createCircle(50, 50, 50, 'white');
+  //canvas.add(circle);
+  //var text = createText('text', 50, 50, 'black', 50/2);
+  //canvas.add(text);
+  //var textCircle = createTextCircle('textCircle', 200, 50);
+  //canvas.add(textCircle);
   var textRectangle = createTextRectangle('textRect', 300, 50);
   canvas.add(textRectangle);
 
   var rect = createRectangle();
   canvas.add(rect);
+    
+  rotate(rect);
+  rotate(textRectangle, 90);
 }
