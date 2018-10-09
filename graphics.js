@@ -56,8 +56,19 @@ function createTextRectangle(text, x=50, y=50, height=50, width=50, textColor = 
   return group;
 }
 
-function rotate(fabricObject, angle = 15)
-{
+function createTriangle(x = 50, y = 50, width = 50, height = 50, color = 'red') {
+    return new fabric.Triangle({
+    left: x,
+    top: y,
+    height: height,
+    width: width,
+    fill: color,
+    originX: 'originX',
+    originY: 'originY',
+  });
+}
+
+function rotate(fabricObject, angle = 15) {
     fabricObject.rotate(angle)
 }
 
@@ -73,9 +84,9 @@ function create() {
   var textRectangle = createTextRectangle('textRect', 300, 50);
   canvas.add(textRectangle);
 
-  var rect = createRectangle();
-  canvas.add(rect);
+  var tri = createTriangle();
+  canvas.add(tri);
     
-  rotate(rect);
+  rotate(tri);
   rotate(textRectangle, 90);
 }
