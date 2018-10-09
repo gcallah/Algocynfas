@@ -25,6 +25,17 @@ function createRectangle(x = 50, y = 50, height = 50, width = 50, color='blue') 
   });
 }
 
+function createSolidArrow(x = 50, y = 50, height = 50, length = 100, color = 'black') {
+    var rectangle = createRectangle(x, y, height / 2, length, color);
+    var triangle = createTriangle(x / 2 + length, y, 50, height, color);
+    rotate(triangle, 90);
+    var group = new fabric.Group([rectangle, triangle], {
+        left: x,
+        top: y
+    });
+    return group;
+}
+
 function createText(text, x = 50, y = 50, color = 'black', fontSize = 30) {
   return new fabric.Text(text, {
     fontSize: fontSize,
@@ -84,9 +95,7 @@ function create() {
   var textRectangle = createTextRectangle('textRect', 300, 50);
   canvas.add(textRectangle);
 
-  var tri = createTriangle();
-  canvas.add(tri);
-    
-  rotate(tri);
+  var arrow = createSolidArrow();
+  canvas.add(arrow);
   rotate(textRectangle, 90);
 }
