@@ -25,6 +25,17 @@ function createRectangle(x = 50, y = 50, height = 50, width = 50, color='blue') 
   });
 }
 
+function createSolidArrow(x = 50, y = 50, height = 50, length = 100, color = 'black') {
+    var rectangle = createRectangle(x, y, height / 2, length, color);
+    var triangle = createTriangle(x / 2 + length, y, 50, height, color);
+    rotate(triangle, 90);
+    var group = new fabric.Group([rectangle, triangle], {
+        left: x,
+        top: y
+    });
+    return group;
+}
+
 function createText(text, x = 50, y = 50, color = 'black', fontSize = 30) {
   return new fabric.Text(text, {
     fontSize: fontSize,
@@ -56,18 +67,35 @@ function createTextRectangle(text, x=50, y=50, height=50, width=50, textColor = 
   return group;
 }
 
+function createTriangle(x = 50, y = 50, width = 50, height = 50, color = 'red') {
+    return new fabric.Triangle({
+    left: x,
+    top: y,
+    height: height,
+    width: width,
+    fill: color,
+    originX: 'originX',
+    originY: 'originY',
+  });
+}
+
+function rotate(fabricObject, angle = 15) {
+    fabricObject.rotate(angle)
+}
+
 function create() {
   var canvas = createCanvas();
 
-  var circle = createCircle(50, 50, 50, 'white');
-  canvas.add(circle);
-  var text = createText('text', 50, 50, 'black', 50/2);
-  canvas.add(text);
-  var textCircle = createTextCircle('textCircle', 200, 50);
-  canvas.add(textCircle);
+  //var circle = createCircle(50, 50, 50, 'white');
+  //canvas.add(circle);
+  //var text = createText('text', 50, 50, 'black', 50/2);
+  //canvas.add(text);
+  //var textCircle = createTextCircle('textCircle', 200, 50);
+  //canvas.add(textCircle);
   var textRectangle = createTextRectangle('textRect', 300, 50);
   canvas.add(textRectangle);
 
-  var rect = createRectangle();
-  canvas.add(rect);
+  var arrow = createSolidArrow();
+  canvas.add(arrow);
+  rotate(textRectangle, 90);
 }
