@@ -262,7 +262,13 @@ class heap extends BST {
 		for(var i = 1; i < this.data.length; i++) {
 			list.push(this.data[i].key);
 		}
-		drawListOnScreen(list);
+
+		canvas.clear();
+		l = new List(canvas, list);
+		for (var i = 0; i < this.highLightNodes.length; i++){
+			l.highlight(this.highLightNodes[i]-1, this.highLightNodes[i]-1);
+		}
+		l.draw(true);
 	}
 }
 
