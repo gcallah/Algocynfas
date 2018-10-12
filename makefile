@@ -13,6 +13,7 @@ HTMLFILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/
 	git add $@
 
 website: $(INCS) $(HTMLFILES)
+# run tests here!
 	-git commit -a 
 	git pull origin master
 	git push origin master
