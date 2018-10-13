@@ -1,13 +1,8 @@
-function setSortSample(){
+function setSortSample(){                                          // Display layer
   let selectedBox = getHTML("sortSample");
   var sampleSelected = selectedBox.selectedIndex;
-/*  if (sampleSelected == 0){
-    clearGraph();
-  }*/
-
   if (sampleSelected == 1){
     getHTML("number-input").value = "3,1,6,2,8,5,9,7";
-
   }
   if (sampleSelected == 2){
     getHTML("number-input").value = "1,5,3,2,4,8,9,10";
@@ -15,43 +10,48 @@ function setSortSample(){
   }
 }
 
-function clearGraph(){
 
-
-
-}
-
-function inputNumberToArray() {
+function inputNumberToArray(){                                  // Display layer
   list=[]
   canvas.clear();
   let an_input = getHTML("number-input").value;
-  var list_num = an_input.split(",");
-  if(list_num.length == 0 || list_num.length == 1){
+  var result = checkInput(an_input);
+  if(result == "invalid list"){
     alert("Please enter a valid list without '[]' "); 
     getHTML("number-input").value = "";
     return;
   } 
-  var all_valid = true;
+  if(Number.isInteger(result)){
+    alert("The element on index " + result.toString() + " is not valid "); 
+    return;
+  }
+    list = result;
+    drawListOnScreen(list);
+}
+
+
+function checkInput(an_input){                            // Logic layer: to test
+  var list_num = an_input.split(",");
+  if(list_num.length == 0 || list_num.length == 1){
+    return "invalid list"
+  }
   for (var i = 0; i<list_num.length; i++) {
     list_num[i]=parseInt(list_num[i]);
     if (!Number.isInteger(list_num[i]) ||list_num[i] < -99 || list_num[i] > 99 ){
-     all_valid= false;
-     alert("The element on index " + i + " is not valid "); 
+       return i;
    }
  }
- if(all_valid){
-
+  var v_list = []
   for(var i=0;i<list_num.length;i++){
-
-    list.push(list_num[i]);
-
+    v_list.push(list_num[i]);
   }
-  drawListOnScreen(list);
+  return v_list;
 }
 
-}
 
-async function run() {
+
+
+async function run() {                                    // Display layer
   animeRunning = true;
   let runButton = getHTML("run-button");
   let addNumberButton = getHTML("add-number-button");
@@ -102,9 +102,9 @@ async function run() {
 let animeRunning = false;
 //quick sort below
 
-async function quickSort(myList) {
+async function quickSort(myList) {                                    // Logic layer: to test
 
-  var delayTime = check_and_Delay();
+  var delayTime = check_and_Delay   
   myList.setDelay(delayTime);
   await mySort(myList, 0, myList.size() - 1);
 }
@@ -328,6 +328,28 @@ async function pause () {
   return new Promise(function (resolve) {
     setTimeout(resolve, 1000)
   })
+}
+
+module.exports = {
+  func1: function checkInput(an_input){                            // Logic layer: to test
+  var list_num = an_input.split(",");
+  if(list_num.length == 0 || list_num.length == 1){
+    return "invalid list"
+  }
+  for (var i = 0; i<list_num.length; i++) {
+    list_num[i]=parseInt(list_num[i]);
+    if (!Number.isInteger(list_num[i]) ||list_num[i] < -99 || list_num[i] > 99 ){
+       return i;
+   }
+ }
+  var v_list = []
+  for(var i=0;i<list_num.length;i++){
+    v_list.push(list_num[i]);
+  }
+  return v_list;
+}
+
+
 }
 
 
