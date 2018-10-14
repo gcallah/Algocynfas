@@ -128,7 +128,6 @@ async function partition(myList, low, high) {                //partition(A, p, r
   if (!animeRunning) {
     return;
   }
-
     var pivot = myList.elemAt(high).getKey();                // x = A[r]
     myList.highlightSwap(high);
     await myList.draw();
@@ -168,7 +167,7 @@ async function insertionSort(myList) {                // Refer to CLRS P18
         while(i >= 0 && myList.elemAt(i).getKey() > key) {   //while i > 0 and A[i] > key
           if (!animeRunning) break;
           myList.highlight(i);
-          await myList.draw();
+          await myList.draw(); 
             myList.swap(i, i + 1)                           // A [i+1] = A [i]
             i = i - 1;                                     // i = i -1
             await myList.draw();
@@ -313,7 +312,7 @@ return displayList;
 function mergePrepare(){
   getHTML("mergeCanvas").style.display = "block";
   getHTML("mergeTitle").style.display = "block";
-  var mergeList = [];
+  var mergeList = [];   
   for(var i = 0; i < list.length; i++){
     mergeList.push({
       key:   list[i],
@@ -329,6 +328,8 @@ async function pause () {
     setTimeout(resolve, 1000)
   })
 }
+
+//tests
 
 module.exports = {
   func1: function checkInput(an_input){                            // Logic layer: to test
