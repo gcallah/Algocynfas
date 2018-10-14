@@ -143,9 +143,9 @@ class heap extends BST {
 	}
 
 	async pause (time = 1000) { 
-	  return new Promise(function (resolve) {
-	    setTimeout(resolve, time)
-	  });
+		return new Promise(function (resolve) {
+			setTimeout(resolve, time)
+		});
 	}
 
 	startGraph(ifEdge, container) {
@@ -170,34 +170,34 @@ class heap extends BST {
 
 			if(this.has_left(i)){
 				edges.push(
-					{
-				     id: this.id++,
-				     source: this.data[i].id,
-				     target: this.data[this.left(i)].id,
-				     size :5,
-				     label : 0,
-				     type: 'line',
-				     color: EdgeNodeCOLOR
-				   }
+				{
+					id: this.id++,
+					source: this.data[i].id,
+					target: this.data[this.left(i)].id,
+					size :5,
+					label : 0,
+					type: 'line',
+					color: EdgeNodeCOLOR
+				}
 				)
 			}else
-				break;
+			break;
 
 
 			if(this.has_right(i)){
-			edges.push(
+				edges.push(
 				{
-			     id: this.id++,
-			     source: this.data[i].id,
-			     target: this.data[this.right(i)].id,
-			     size :5,
-			     label : 0,
-			     type: 'line',
-			     color: EdgeNodeCOLOR
-			   }
-			)
+					id: this.id++,
+					source: this.data[i].id,
+					target: this.data[this.right(i)].id,
+					size :5,
+					label : 0,
+					type: 'line',
+					color: EdgeNodeCOLOR
+				}
+				)
 			}else
-				break;
+			break;
 		}
 
 		for (var i = 0; i < edges.length; i++){
@@ -231,26 +231,26 @@ class heap extends BST {
 
 
 		let g = {
-  			"nodes": nodes,
-  			"edges": edges
+			"nodes": nodes,
+			"edges": edges
 		}
 
 
 		$("#heapCanvas").empty();
 
 		this.sigma = new sigma({
-		    graph: g,
-		    renderer: {
-		      container: container,
-		      type: 'canvas'
-		    },
-		    settings: {
-		      defaultNodeColor: EdgeNodeCOLOR,
-		      enableCamera: false,
-		      autoRescale: false,
-		      defaultEdgeLabelSize: 15,
+			graph: g,
+			renderer: {
+				container: container,
+				type: 'canvas'
+			},
+			settings: {
+				defaultNodeColor: EdgeNodeCOLOR,
+				enableCamera: false,
+				autoRescale: false,
+				defaultEdgeLabelSize: 15,
 
-		    }
+			}
 		});
 
 
@@ -278,13 +278,13 @@ function heapChange() {
 
 	for (var i = 0, length = radios.length; i < length; i++)
 	{
-		 if (radios[i].checked)
-		 {
-		 	if (radios[i].value == "maxHeap")
-		 		graph = new heap(heap_greater);
-		 	else
-		 		graph = new heap(heap_less)
-		 }
+		if (radios[i].checked)
+		{
+			if (radios[i].value == "maxHeap")
+				graph = new heap(heap_greater);
+			else
+				graph = new heap(heap_less)
+		}
 	}
 
 	graph.startGraph(false, 'heapCanvas');
@@ -294,17 +294,17 @@ function heapChange() {
 
 function heapInsert(ifEdge ) {
 
-	    var val = document.getElementById("heap-insert-value").value;
-		if (isNaN(val))
-	    {
-	        noticeErr("Please enter a number","heap-insert-value")
-	        return;
-	    }
-	    correctErr("heap-insert-value");
-	 
+	var val = document.getElementById("heap-insert-value").value;
+	if (isNaN(val))
+	{
+		noticeErr("Please enter a number","heap-insert-value")
+		return;
+	}
+	correctErr("heap-insert-value");
+	
 
-    graph.insert(val);
- 	graph.startGraph(ifEdge, 'heapCanvas');
+	graph.insert(val);
+	graph.startGraph(ifEdge, 'heapCanvas');
 }
 
 
@@ -314,22 +314,22 @@ function heapInsertList(){
 	
 	var an_input = getHTML("heap-insert-list").value;
 	var list_num = splitInput(an_input, true);
-    if(list_num.length == 0 || list_num.length == 1){
-    noticeErr("Invalid List!", "heap-insert-list");
-    return;
-  }
-  for (var i = 0; i<list_num.length; i++) {
-    list_num[i]=parseInt(list_num[i]);
-    if (!Number.isInteger(list_num[i])){
-     noticeErr("The number at index" + i + "is invalid! ", "heap-insert-list");
-     return;
-   }
- }
- correctErr("heap-insert-list");
- for(var i = 0; i<list_num.length; i++){
- 	graph.insert(list_num[i]);
- 	graph.startGraph(false, 'heapCanvas');
- }
+	if(list_num.length == 0 || list_num.length == 1){
+		noticeErr("Invalid List!", "heap-insert-list");
+		return;
+	}
+	for (var i = 0; i<list_num.length; i++) {
+		list_num[i]=parseInt(list_num[i]);
+		if (!Number.isInteger(list_num[i])){
+			noticeErr("The number at index" + i + "is invalid! ", "heap-insert-list");
+			return;
+		}
+	}
+	correctErr("heap-insert-list");
+	for(var i = 0; i<list_num.length; i++){
+		graph.insert(list_num[i]);
+		graph.startGraph(false, 'heapCanvas');
+	}
 
 
 }
@@ -341,5 +341,5 @@ function heapInsertList(){
 function heapRemove(ifEdge) {
 
 	graph.remove();
- 	graph.startGraph(ifEdge, 'heapCanvas');
+	graph.startGraph(ifEdge, 'heapCanvas');
 }
