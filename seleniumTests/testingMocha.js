@@ -1,11 +1,25 @@
 var assert = require('assert');
-describe('Math', function () {
-    describe('#indexOf()', function () {
-        it('should return 9 as answer of 3*3', function () {
-            assert.equal(9, 3 * 3);
-        });
-        it('should return -8 as answer of (3 – 4)*8', function () {
-            assert.equal(-8, (3 - 4) * 8);
-        });
+var webdriver = require('selenium-webdriver');
+var browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'firefox' }).build();
+
+describe('Test Suite', function () {
+
+    before(function () {
+        browser.get('https://gcallah.github.io/Algocynfas/');
     });
+
+    after(function () {
+        browser.quit();
+    });
+
+    it('Test Case', function () {
+
+        browser.getTitle().then(function (title) {
+            assert.equal(title, 'Algocynfas');
+        }).catch((err) => {
+            console.log('Error:', err);
+        });
+        browser.sleep();
+    });
+
 });
