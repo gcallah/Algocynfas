@@ -5,6 +5,13 @@ var webdriver = require('selenium-webdriver');
 var browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'firefox' }).build();
 
 
+var validInputBool = true;
+var validOrInvalid = Math.random() * 100; 
+if (validOrInvalid > 50) {
+    validInputBool = false;
+}
+
+console.log(validOrInvalid, validInputBool);
 function closeBrowser() {
     browser.quit();
 }
@@ -18,33 +25,48 @@ function getById(id) {
 }
 
 function generateInvalidInput() {
-    //invalidInput = any non-integers || size(input) < 2
+    //invalidInput = any non-integers || input.length < 2 
     var charNum = Math.random() * 126;
-    if (charNum <= 32) { //size(input) = 0
+    if (charNum <= 32) { //input.length = 0
         return '';
-    } else { //size(input) = 1
+    } else { //input.length = 1
         return String.fromCharCode(charNum);
     }
 }
 
+function enterInputs(inputBox) {
+    if (validInputBool) {
+        inputBox.sendKeys(2, ',', 3, ',', 4);
+    } else {
+        var num = generateInvalidInput();
+        inputBox.sendKeys(num);
+    }
+    return validInputBool;
+}
+
+var alertPopUp = true;
 browser.get('https://gcallah.github.io/Algocynfas/');
 getLink('Sorting Algorithms').click().then(function () {
-    getById('number-input').sendKeys(generateInvalidInput());
+    var inputBox = getById('number-input');
+    enterInputs(inputBox);
     return getById('add-number-button').click();
 }).then(function () {
-    //trying to test whether alert pops up when invalid input is given
-    /*
     try {
-        browser.switchTo().alert().then(function (alert) {
-            console.log('alert');
-            return alert.accept();
-        });
+        //invalid input is given & alert pops up
+        return browser.switchTo().alert().accept();
     }
     catch (err) {
-        console.log('err');
-        return false;
+        //valid input is given & alert doesn't pop up
+        return err;
     }
-}).then(function () {*/
+}).catch(function (err) {
+    alertPopUp = false;
+}).then(function () {
+    console.log('Valid Input:', validInputBool, 'Alert Popup:', alertPopUp);
+    if (!validInputBool && !alertPopUp) {
+        console.log('Error: Invalid input is given and alert doesn\'t pops up');
+    } else if (validInputBool && alertPopUp) {
+        console.log('Error: Valid input is given and alert pops up');
+    }
     return closeBrowser();
 });
-
