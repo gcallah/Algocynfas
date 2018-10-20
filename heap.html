@@ -52,17 +52,14 @@
 	<br> <br>
 
 
-    <input type="text" class="box" id="heap-insert-list" placeholder="Enter a list of numbers">
-    <button id = "heap-insert-list" type="button" 
-      class="btn btn-success col-1 btn-primary" onclick="heapInsertList()">Create
+	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
+    <button id = "heap-insert" type="button" 
+   		class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Add
     </button>
     
     &emsp; &emsp; 
-
-    <input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
-    <button id = "heap-insert" type="button" 
-      class="btn btn-success col-1 btn-primary" onclick="heapInsert(false)">Insert
-    </button>
+    
+    <input type="text" class="box" id="heap-insert-list" placeholder="Enter a list of numbers">
     
     &emsp; &emsp; 
     
@@ -80,6 +77,17 @@
 <canvas id="heapArrayCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
 <div id="heapCanvas"  class = "heapCanvas" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
+           <b>Choose Speed:
+
+           <input type="radio" name="speed" value="500" id="Fast"/> 
+           <label for="Fast">Fast</label>
+           <input type="radio" name="speed" value="1000" id="Medium" checked="true"/>
+           <label for="Medium">Medium</label>
+           <input type="radio" name="speed" value="2000" id="Slow"/> 
+           <label for="Slow">Slow</label>
+
+            <br>
+            </b>
 <script>
 
   let inputType = "num";
