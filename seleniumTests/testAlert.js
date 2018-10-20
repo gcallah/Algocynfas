@@ -35,31 +35,28 @@ function generateInvalidInput() {
         return String.fromCharCode(charNum);
     }
 }
-/*
-function enterValidInput() {
-    //valid input = 3,5,7,8, || num < 99
-    //problem: numbers gets inputted out of order
+
+function enterValidInput(inputBox) {
+    //valid input = 3,5,7,8, || -99 < num < 99
     var num = Math.ceil(Math.random() * 5);
-    console.log("num:", num);
+    var keys = '';
     var randInput = Math.round(Math.random() * 99);
-    for (var i = 0; i < num - 1; i++) {
-        console.log(i, randInput)
-        inputBox.sendKeys(randInput, ',');
+    for (var i = 0; i < num; i++) {
+        keys += randInput + ',';
         randInput = Math.round(Math.random() * 99);
-        if (i + 1 == num - 1) {
-            inputBox.sendKeys(randInput);
-            console.log('+1', randInput);
+        if (randInput % i == 1) { //randomize negative inputs
+            randInput *= -1;
         }
     }
-}*/
+    keys += randInput;
+    inputBox.sendKeys(keys);
+}
 
 function enterInputs(inputBox) {
     if (validInputBool) {
-        inputBox.sendKeys(2, ',', 3, ',', 4);
-        //enterValidInput()
+        enterValidInput(inputBox);
     } else {
         var num = generateInvalidInput();
-        console.log('error', num);
         inputBox.sendKeys(num);
     }
 }
@@ -92,3 +89,4 @@ getLink('Sorting Algorithms').click().then(function () {
     }
     return closeBrowser();
 });
+
