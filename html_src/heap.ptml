@@ -12,8 +12,8 @@
             Heap
         </h1>
         <!--include heapInputs.txt -->
-        <!--include heapCanvas.txt -->
         <!--include speedButtons.txt -->
+        <!--include heapCanvas.txt -->
          <!--include graphGlobal.txt -->
          <!--include heapGlobal.txt -->
        </div>
