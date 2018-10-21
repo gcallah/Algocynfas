@@ -1,8 +1,7 @@
 var assert = require('assert');
 var webdriver = require('selenium-webdriver');
 var browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'firefox' }).build();
-
-describe('Test Suite', function () {
+describe('Test Alert', function () {
 
     before(function () {
         browser.get('https://gcallah.github.io/Algocynfas/');
@@ -12,14 +11,25 @@ describe('Test Suite', function () {
         browser.quit();
     });
 
-    it('Test Case', function () {
+    function getLink(linkText) {
+        return browser.findElement(webdriver.By.linkText(linkText));
+    }
 
-        browser.getTitle().then(function (title) {
-            assert.equal(title, 'Algocynfas');
+    //tests if open to correct link
+    it('should open to Website', function () {
+        return browser.getTitle().then(function (title) {
+            assert.equal(title, 'Algocynfasss');
+        });
+        //need to implement: break out everything if err here
+    });
+    /*
+    
+    it('should open to Sorting Algortihms', function () {
+        getLink('Sorting Algorithms').click();
+        browser.getCurrentUrl().then(function (title) {
+            assert.equal(title, 'Sorting Algorithms'); //find way to compare; title returns Algocynfas
         }).catch((err) => {
             console.log('Error:', err);
         });
-        browser.sleep();
-    });
-
+    });*/
 });

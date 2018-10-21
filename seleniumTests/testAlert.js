@@ -12,7 +12,6 @@ var validOrInvalid = Math.random() * 100;
 if (validOrInvalid > 50) {
     validInputBool = false;
 }
-console.log(validOrInvalid, validInputBool);
 
 function closeBrowser() {
     browser.quit();
@@ -29,14 +28,19 @@ function getById(id) {
 function generateInvalidInput() {
     //invalidInput = any non-integers || input.length < 2 
     var charNum = Math.random() * 126;
+    console.log(charNum);
     if (charNum <= 32) { //input.length = 0
         return '';
-    } else { //input.length = 1
-        return String.fromCharCode(charNum);
+    } else {
+        if (charNum % 2 == 0) { //input.length = 1
+            return String.fromCharCode(charNum);
+        } else { //input.length > 1
+            return (generateValidInput() + ',' + String.fromCharCode(charNum));
+        }
     }
 }
 
-function enterValidInput(inputBox) {
+function generateValidInput() {
     //valid input = 3,5,7,8, || -99 < num < 99
     var num = Math.ceil(Math.random() * 5);
     var keys = '';
@@ -49,16 +53,17 @@ function enterValidInput(inputBox) {
         }
     }
     keys += randInput;
-    inputBox.sendKeys(keys);
+    return keys;
 }
 
 function enterInputs(inputBox) {
+    var input;
     if (validInputBool) {
-        enterValidInput(inputBox);
+        input = generateValidInput();
     } else {
-        var num = generateInvalidInput();
-        inputBox.sendKeys(num);
+        input = generateInvalidInput();
     }
+    inputBox.sendKeys(input);
 }
 
 var alertPopUp = true;
