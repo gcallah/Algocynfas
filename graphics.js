@@ -1,5 +1,7 @@
-function Canvas(title = 'canvas') {
+function Canvas(title = 'canvas', height = 800, width = 1000) {
     this.fabricObject = new fabric.Canvas(title);
+    this.fabricObject.setHeight(height);
+    this.fabricObject.setWidth(width);
 }
 
 function Circle(x = 50, y = 50, radius = 50, color = 'red') {
@@ -34,20 +36,20 @@ function Shape(object) {
     };
 }
 
-function Group(shapeArray, left, top) {
-    this.object = new fabric.Group(shapeArray, {
-    left: x,
-    top: y,
+function Group(array, left, top) {
+    Shape.call(this);
+    this.object = new fabric.Group(array, {
+    left: left,
+    top: top,
   });
 }
 
-
 function SolidArrow(x = 50, y = 50, height = 50, length = 100, color = 'black') {
     Shape.call(this);
-    var rectangle = new Rectangle(x, y, height / 2, length, color);
-    var triangle = new Triangle(x / 2 + length, y, 50, height, color);
+    var rectangle = new Rectangle(x, y, height / 2, length, color).object;
+    var triangle = new Triangle(x / 2 + length, y, 50, height, color).object;
     triangle.rotate(90);
-    this.object = new Group([rectangle, triangle], x, y)
+    this.object = new Group([rectangle, triangle], x, y).object
 }
 
 function Triangle(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
@@ -61,12 +63,6 @@ function Triangle(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
     originX: 'originX',
     originY: 'originY',
   });
-}
-
-function createSolidArrow(x = 50, y = 50, height = 50, length = 100, color = 'black') {
-    var rectangle = createRectangle(x, y, height / 2, length, color);
-    var triangle = createTriangle(x / 2 + length, y, 50, height, color);
-    rotate(triangle, 90);
 }
 
 function createText(text, x = 50, y = 50, color = 'black', fontSize = 30) {
@@ -118,14 +114,20 @@ function create() {
   canvas.add(circle);
     
   var rectangle = new Rectangle(x = 200, y = 100).object;
-  rectangle.rotate(30);
   canvas.add(rectangle);
   
   var triangle = new Triangle(x = 300, y = 75).object;
   triangle.rotate(100);
   canvas.add(triangle);
     
-  //ar arrow = new SolidArrow().object;
+  // Testing group
+  var group = new Group([circle, rectangle], 300, 300).object;
+  group.rotate(25);
+  canvas.add(group);
+    
+  var arrow = new SolidArrow().object;
+  arrow.rotate(10);
+  canvas.add(arrow);
     
   //var text = createText('text', 50, 50, 'black', 50/2);
   //canvas.add(text);
