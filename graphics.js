@@ -4,8 +4,9 @@ function Canvas(title = 'canvas', height = 800, width = 1000) {
     this.fabricObject.setWidth(width);
 }
 
-function Circle(x = 50, y = 50, radius = 50, color = 'red') {
-    Shape.call(this);
+function Circle(canvas, x = 50, y = 50, radius = 50, color = 'red') {
+    Shape.call(this);  
+    this.canvas = canvas;
     this.object = new fabric.Circle({
     radius: radius,
     left: x,
@@ -16,8 +17,18 @@ function Circle(x = 50, y = 50, radius = 50, color = 'red') {
   });
 }
 
-function Rectangle(x = 50, y = 50, height = 50, width = 50, color='blue') {
+function Group(canvas, array, left, top) {
     Shape.call(this);
+    this.canvas = canvas;
+    this.object = new fabric.Group(array, {
+    left: left,
+    top: top,
+  });
+}
+
+function Rectangle(canvas, x = 50, y = 50, height = 50, width = 50, color='blue') {
+    Shape.call(this);
+    this.canvas = canvas;
     this.object = new fabric.Rect({
     left: x,
     top: y,
@@ -29,31 +40,52 @@ function Rectangle(x = 50, y = 50, height = 50, width = 50, color='blue') {
   });
 }
 
-function Shape(object) {
+function Shape(canvas, object) {
     this.object = object;
+    this.canvas = canvas;
+    
+    this.addText = function(text, color = 'black', fontSize = 30) {
+        var text = new Text(canvas, text, this.object.left, y = this.object.top, color, fontSize).object;
+        this.canvas.add(text);
+        this.object = new Group([this.object, text], this.object.left, this.object.top)
+    }
+        
     this.rotate = function(angle) {
         this.object.rotate(angle)
     };
+    
+    this.updateCanvas = function() {
+        this.canvas.add(this.object);
+    }
 }
 
-function Group(array, left, top) {
+function SolidArrow(canvas, x = 50, y = 50, height = 50, length = 100, color = 'black') {
     Shape.call(this);
-    this.object = new fabric.Group(array, {
-    left: left,
-    top: top,
+    
+    var rectangle = new Rectangle(canvas, x, y, height / 2, length, color);
+    var triangle = new Triangle(canvas, x / 2 + length, y, 50, height, color);
+    triangle.rotate(90);
+    
+    this.canvas = canvas;
+    this.object = new Group(canvas, [rectangle.object, triangle.object], x, y).object
+}
+
+function Text(canvas, text, x = 50, y = 50, color = 'black', fontSize = 30) {
+    Shape.call(this);
+    this.canvas = canvas;
+    this.object = new fabric.Text(text, {
+    fontSize: fontSize,
+    left: x,
+    top: y,
+    originX: 'originX',
+    originY: 'originY',
+    fill: color
   });
 }
 
-function SolidArrow(x = 50, y = 50, height = 50, length = 100, color = 'black') {
+function Triangle(canvas, x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
     Shape.call(this);
-    var rectangle = new Rectangle(x, y, height / 2, length, color).object;
-    var triangle = new Triangle(x / 2 + length, y, 50, height, color).object;
-    triangle.rotate(90);
-    this.object = new Group([rectangle, triangle], x, y).object
-}
-
-function Triangle(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
-    Shape.call(this);
+    this.canvas = canvas;
     this.object = new fabric.Triangle({
     left: x,
     top: y,
@@ -65,78 +97,41 @@ function Triangle(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
   });
 }
 
-function createText(text, x = 50, y = 50, color = 'black', fontSize = 30) {
-  return new fabric.Text(text, {
-    fontSize: fontSize,
-    left: x,
-    top: y,
-    originX: 'originX',
-    originY: 'originY',
-    fill: color
-  });
-}
-
-function createTextCircle(text, x=50, y=50, radius = 50, textColor = 'black', circleColor = 'red') {
-  var circle = createCircle(x, y, radius, circleColor);
-  var text = createText(text, x, y, textColor, radius / 2);
-  var group = new fabric.Group([circle, text], {
-    left: x,
-    top: y,
-  });
-  return group;
-}
-
-function createTextRectangle(text, x=50, y=50, height=50, width=50, textColor = 'black', rectColor = 'blue') {
-  var rect = createRectangle(x, y, height, width, rectColor);
-  var text = createText(text, x, y, textColor, height/2);
-  var group = new fabric.Group([rect, text], {
-    left: x,
-    top: y,
-  });
-  return group;
-}
-
 function create() {
   var canvas = new Canvas().fabricObject;
  
   //Testing parent class
-  var shape = new Shape(new fabric.Circle({
+  var shape = new Shape(canvas, new fabric.Circle({
     radius: 10,
     left: 20,
     top: 20,
     originX: 'center',
     originY: 'center',
     fill: 'white',
-  })).object;
-  canvas.add(shape);
+  }));
+  shape.updateCanvas();
     
-  var circle = new Circle(x = 100).object;
-  canvas.add(circle);
+  var circle = new Circle(canvas, x = 100);
+  circle.updateCanvas();
     
-  var rectangle = new Rectangle(x = 200, y = 100).object;
-  canvas.add(rectangle);
+  var rectangle = new Rectangle(canvas, x = 200, y = 100);
+  rectangle.updateCanvas();
   
-  var triangle = new Triangle(x = 300, y = 75).object;
+  var triangle = new Triangle(canvas, x = 300, y = 75);
   triangle.rotate(100);
-  canvas.add(triangle);
+  triangle.updateCanvas();
     
   // Testing group
-  var group = new Group([circle, rectangle], 300, 300).object;
+  var group = new Group(canvas, [circle.object, rectangle.object], 300, 300);
   group.rotate(25);
-  canvas.add(group);
+  group.updateCanvas();
     
-  var arrow = new SolidArrow().object;
+  var arrow = new SolidArrow(canvas);
   arrow.rotate(10);
-  canvas.add(arrow);
+  arrow.updateCanvas();
     
-  //var text = createText('text', 50, 50, 'black', 50/2);
-  //canvas.add(text);
-  //var textCircle = createTextCircle('textCircle', 200, 50);
-  //canvas.add(textCircle);
-  //var textRectangle = createTextRectangle('textRect', 300, 50);
-  //canvas.add(textRectangle);
-
-  //
-  //canvas.add(arrow);
-  //rotate(textRectangle, 90);
+  var text = new Text(canvas, 'Text Class Test', x = 500, y = 200);
+  text.updateCanvas();
+    
+  triangle.addText("Add Text Test");
 }
