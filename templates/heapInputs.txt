@@ -6,6 +6,12 @@
 
 	<br> <br>
 
+<input type="text" class="box" id="heap-insert-list" placeholder="Enter a list of numbers">
+    <button id = "heap-insert-list" type="button" 
+      class="btn btn-success col-1 btn-primary" onclick="heapInsertList()">Create
+    </button>
+
+    &emsp; &emsp; 
 
 	<input type="text" class="box" id="heap-insert-value" placeholder="Enter a value">
     <button id = "heap-insert" type="button" 
@@ -14,9 +20,6 @@
     
     &emsp; &emsp; 
     
-    <input type="text" class="box" id="heap-insert-list" placeholder="Enter a list of numbers">
-    
-    &emsp; &emsp; 
     
     <button id = "heap-remove" type="button"
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
