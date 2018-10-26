@@ -156,6 +156,14 @@ class heap extends BST {
 		this.startGraph(false, 'heapCanvas');
 		await this.pause();
 
+		if (this.data.length == 2) {
+			this.data.pop();
+			this.highLightNodes.pop();
+			this.startGraph(false, 'heapCanvas');
+			return;
+		}
+
+
 		this.highLightNodes.push(this.data.length-1);
 		this.startGraph(false, 'heapCanvas');
 		await this.pause();
