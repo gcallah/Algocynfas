@@ -49,8 +49,10 @@ class heap extends BST {
 		return this.right(i) < this.data.length;
 	}
 
-	down_heap(i) {
-
+	async down_heap(i) {
+		this.highLightNodes.push(i);
+		this.startGraph(false, 'heapCanvas');
+		await this.pause();
 		while (this.has_left(i)) {
 			var min_child = this.left(i);
 
@@ -60,16 +62,33 @@ class heap extends BST {
 				}
 			}
 
+			this.highLightNodes.push(min_child);
+			this.startGraph(false, 'heapCanvas');
+			await this.pause();
+
 			if( this.cmp(this.data[min_child], this.data[i])) {
+
+				this.highLightEdges.push([this.data[i].id, this.data[min_child].id ]);
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
+
 				[this.data[i].key, this.data[min_child].key] = [this.data[min_child].key, this.data[i].key];
 				[this.data[i].id, this.data[min_child].id] = [this.data[min_child].id, this.data[i].id];
 
 				i = min_child;
 			} else {
+				this.highLightNodes = [];
+				this.highLightEdges = [];
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
 				return;
 			}
 
 		}
+
+		this.highLightNodes = [];
+		this.highLightEdges = [];
+		this.startGraph(false, 'heapCanvas');
 
 	}
 
@@ -127,15 +146,26 @@ class heap extends BST {
 		this.up_heap(l);
 	}
 
-	remove() {
+	async remove() {
 
 		if(this.data.length == 1)
 			return;
 		var result = this.data[1];
 
+		this.highLightNodes.push(1);
+		this.startGraph(false, 'heapCanvas');
+		await this.pause();
+
+		this.highLightNodes.push(this.data.length-1);
+		this.startGraph(false, 'heapCanvas');
+		await this.pause();
+
 		[this.data[1].key, this.data[this.data.length-1].key] = [this.data[this.data.length-1].key, this.data[1].key];
 		//[this.data[1].id, this.data[this.data.length-1].id] = [this.data[this.data.length-1].id, this.data[1].id];
+
 		this.data.pop();
+
+		this.highLightNodes.pop();
 
 		this.down_heap(1);
 
