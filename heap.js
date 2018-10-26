@@ -69,11 +69,12 @@ class heap extends BST {
 			if( this.cmp(this.data[min_child], this.data[i])) {
 
 				this.highLightEdges.push([this.data[i].id, this.data[min_child].id ]);
-				this.startGraph(false, 'heapCanvas');
-				await this.pause();
 
 				[this.data[i].key, this.data[min_child].key] = [this.data[min_child].key, this.data[i].key];
 				[this.data[i].id, this.data[min_child].id] = [this.data[min_child].id, this.data[i].id];
+
+				this.startGraph(false, 'heapCanvas');
+				await this.pause();
 
 				i = min_child;
 			} else {
