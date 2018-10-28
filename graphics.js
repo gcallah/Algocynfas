@@ -22,6 +22,7 @@ class GrapicElems { // an abstract class
   getY() {
     return this.object.top;
   }
+
 }
 
 class Circle extends GrapicElems {
@@ -92,26 +93,21 @@ class Triangle extends GrapicElems {
 }
 
 class Group extends GrapicElems {
-
   constructor(shapeArray, left = 50, top = 50) {
     super();
-    var group = this.group(shapeArray, left, top);
+    var group = new fabric.Group(shapeArray, {
+      left: left,
+      top: top,
+    });
+
     this.object = group;
     this.left = left;
     this.top = top;
   }
 
-  group(objectArray, left, top) {
-    var objectGroup = new fabric.Group(objectArray, {
-      left: left,
-      top: top,
-    });
-    return objectGroup;
-  }
 }
 
 class Text extends GrapicElems {
-
   constructor(text, x = 50, y = 50, color = 'black', fontSize = 30) {
     super();
     var textElem = new fabric.Text(text, {
@@ -128,7 +124,12 @@ class Text extends GrapicElems {
     this.top = y;
     this.color = color;
     this.fontSize = fontSize;
-    super(textElem);
+  }
+}
+
+class Line extends GrapicElems {
+  constructor(){
+
   }
 }
 // functions below:
@@ -138,9 +139,30 @@ function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
   canvas.setHeight(canvasHeight);
   canvas.setWidth(canvasWidth);
   return canvas;
-  console.log('canvas created');
 }
 
+function create() {
+  var canvas = createCanvas(800, 800);
+
+  var circle = new Circle();
+  var text = new Text('aaa');
+  circle.draw(canvas)
+  text.draw(canvas)
+  var group = new Group([circle.object, text.object]);
+  group.draw(canvas);
+
+  var rectangle = new Rectangle();
+  rectangle.draw(canvas);
+  rectangle.rotate(15);
+
+  var triangle = new Triangle(x = 300, y = 75);
+  triangle.rotate(100);
+  triangle.draw(canvas);
+
+}
+
+
+// Untested Functions:
 function createSolidArrow() {
   var rectangle = new Rectangle(height = 25);
   var triangle = new Triangle();
@@ -157,31 +179,4 @@ function SolidArrow(canvas, x = 50, y = 50, height = 50, length = 100, color = '
   triangle.rotate(90);
   this.canvas = canvas;
   this.object = new Group(canvas, [rectangle.object, triangle.object], x, y).object
-}
-
-function create() {
-  var canvas = createCanvas(800, 800);
-
-  var circle = new Circle();
-  circle.draw(canvas);
-
-  var rectangle = new Rectangle();
-  rectangle.draw(canvas);
-  rectangle.rotate(15);
-
-  var triangle = new Triangle(x = 300, y = 75);
-  triangle.rotate(100);
-  triangle.draw(canvas);
-
-
-  // Testing group
-  //createSolidArrow();
-  //var arrow = new SolidArrow(canvas);
-  //arrow.rotate(10);
-  //arrow.updateCanvas();
-
-  //var text = new Text(canvas, 'Text Class Test', x = 500, y = 200);
-  //text.updateCanvas();
-
-  //triangle.addText("Add Text Test");
 }
