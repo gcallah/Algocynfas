@@ -39,18 +39,15 @@ function checkInput(an_input) { // Logic layer: to test
     }
 
     for (var i = 0; i < list_num.length; i++) {
-        console.log(list_num[i], Number.isInteger(list_num[i]));
         for (var j = 0; j < list_num[i].length; j++) {
-            console.log("inner loop", list_num[i][j].charCodeAt(0));
-            if (list_num[i][j].charCodeAt(0) < 48 ||
-                list_num[i][j].charCodeAt(0) > 57) {
-                console.log("hi", list_num[i][j].charCodeAt(0));
+            if ((list_num[i][j].charCodeAt(0) < 48 ||
+                list_num[i][j].charCodeAt(0) > 57) &&
+                list_num[i][j] != '-') {
                 return i;
             }
         }
 
         list_num[i] = parseInt(list_num[i]);
-        console.log(list_num[i], Number.isInteger(list_num[i]));
         if (!Number.isInteger(list_num[i]) || list_num[i] < -99 || list_num[i] > 99) {
             return i;
         }

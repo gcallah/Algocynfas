@@ -1,0 +1,2 @@
+selenium==3.14.1
+jslint == 0.6.0

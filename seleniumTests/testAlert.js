@@ -6,7 +6,6 @@ var webdriver = require('selenium-webdriver');
 var assert = require('assert');
 var browser = new webdriver.Builder().usingServer().withCapabilities({ 'browserName': 'firefox' }).build();
 
-
 var validInputBool = true;
 var validOrInvalid = Math.random() * 100;
 if (validOrInvalid > 50) {

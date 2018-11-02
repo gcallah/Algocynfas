@@ -5,12 +5,16 @@ UTILS_DIR = utils
 
 INCS = $(TEMPLATE_DIR)/head.txt
 
+
 HTMLFILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
 
 %.html: $(PTML_DIR)/%.ptml $(INCS)
 	python3 $(UTILS_DIR)/html_checker.py $< 
 	$(UTILS_DIR)/html_include.awk <$< >$@
 	git add $@
+
+container:
+	docker build -t algo docker
 
 website: $(INCS) $(HTMLFILES)
 # run tests here!
@@ -22,4 +26,7 @@ local: $(HTMLFILES)
 
 clean:
 	touch $(PTML_DIR)/*.ptml; make local
+
+
+
 

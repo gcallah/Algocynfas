@@ -18,7 +18,7 @@ describe('Test Alert', function () {
     //tests if open to correct link
     it('should open to Website', function () {
         return browser.getTitle().then(function (title) {
-            assert.equal(title, 'Algocynfasss');
+            assert.equal(title, 'Algocynfas');
         });
         //need to implement: break out everything if err here
     });
