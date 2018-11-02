@@ -183,7 +183,8 @@ class heap extends BST {
 
 	async pause (time = 1000) { 
 		return new Promise(function (resolve) {
-			setTimeout(resolve, time)
+			time = document.querySelector('input[name=speed]:checked').value;
+			setTimeout(resolve, time);
 		});
 	}
 
