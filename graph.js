@@ -41,8 +41,8 @@ async function createBST(type){
     }
     Graph = graph;
   }
- animeRunning = true;
- if(type == 1){
+  animeRunning = true;
+  if(type == 1){
    getHTML("bstGraphContainer").style.height = 300;
    getHTML("bstGraphContainer").style.width = 800;
    getHTML("bstGraphContainer").style.marginLeft = "10em";
@@ -73,7 +73,7 @@ else{
 }
 await graph.insert(input,true);
 if(animeRunning){
-   Graph = graph;
+ Graph = graph;
 }
 disableButtons(false);
 
@@ -96,7 +96,7 @@ class ourGraph{
     this.weights = null;
     this.nodeSet = null;
      //only for weighted graph
-    this.weightEdgeMap = null;
+     this.weightEdgeMap = null;
    }
 
    setGraph(ifEdge,container){
@@ -164,7 +164,7 @@ class ourGraph{
     }
     catch(error){
       noticeErr("Please make sure if the nodes existed!", "edges");
-   }
+    }
 
 
 
@@ -717,7 +717,7 @@ async insert(input,single = false,draw = true){
    if(single && draw){
      this.createSigmaGraph('bstGraphContainer');
      await this.pause();
-    }
+   }
    var node = new treeNode(input, this.treeNodes.length);
          var result = treeInsert(this.root, node);   // the binary insert algorithm, in binarySTree.js
          this.root = result.root;
@@ -742,7 +742,7 @@ async insert(input,single = false,draw = true){
           }   
         }
         if(animeRunning|| !draw ){
-        this.nodes.push(input);
+          this.nodes.push(input);
         }
         let g = {
           nodes: this.nodeLayout,
@@ -750,8 +750,8 @@ async insert(input,single = false,draw = true){
         }; 
         this.graph = g;
         if(draw && animeRunning){
-        this.createSigmaGraph('bstGraphContainer');
-      }
+          this.createSigmaGraph('bstGraphContainer');
+        }
 
         return;  
       }
@@ -763,8 +763,8 @@ async insert(input,single = false,draw = true){
         var errorBox = "treeList";
       }
       noticeErr("Please input a valid integer", errorBox);
-    
-  }
+
+    }
 
 
     async search(input){
@@ -792,12 +792,12 @@ async insert(input,single = false,draw = true){
      if(animeRunning){
       alert(returnValue);
     }
-     return;
-   }
+    return;
+  }
 
 
 
-   async preSuc(){
+  async preSuc(){
     var input = parseInt(getHTML("preSucBox").value);
     if(Number.isInteger(input)){
       var searched = treeSearch(this.root, input);
@@ -810,7 +810,7 @@ async insert(input,single = false,draw = true){
             var result = treePredecessor(node);     // the binary search algorithm, in binarySTree.js
             await this.highLight(result.HLNodeId);
             var returnValue = "The predecessor is " + result.pre;
-           
+
           }
           else{
            var result = treeSuccessor(node);     // the binary search algorithm, in binarySTree.js
@@ -821,17 +821,17 @@ async insert(input,single = false,draw = true){
          }
          if(animeRunning){
           alert(returnValue);
-         }
-         return;
-       }
-       noticeErr("Node is not in this tree", "preSucBox");
-       return;
-     }
-     noticeErr("Please give a valid input!", "preSucBox");
+        }
+        return;
+      }
+      noticeErr("Node is not in this tree", "preSucBox");
+      return;
+    }
+    noticeErr("Please give a valid input!", "preSucBox");
 
-   }
+  }
 
-   async traversal(){
+  async traversal(){
     var index = getHTML("treeWalkChoice").selectedIndex;
     if(index == 0){
          var result = preorderTreeWalk(this.root);     // the binary search algorithm, in binarySTree.js
@@ -885,14 +885,14 @@ async insert(input,single = false,draw = true){
           }; 
           this.graph = g;
           if(animeRunning){
-          this.createSigmaGraph('bstGraphContainer');
+            this.createSigmaGraph('bstGraphContainer');
           }
-        
+
           return;
         }
-       
+
         noticeErr("Node is not in this tree", "deleteBox");
-      
+
         return; 
       }
       noticeErr("Please give a valid input!", "deleteBox");
@@ -1007,27 +1007,31 @@ async insert(input,single = false,draw = true){
 
 }
 
-class heap extends BST {
+class heap extends BST {    // this doesn't make sense! shouldn't inherit from bst.  Also, the display level and the logic level should be seperated. Check bst.js to see
 
   constructor(cmp = heap_less) {
     super();
     this.data = [];
     this.data.push(null);
-    this.cmp = cmp;
+    this.cmp = cmp;        // what is this
     this.id = 0;
     this.highLightNodes = [];
     this.highLightEdges = [];
   }
 
-  parent(i) {
+  parent(i) {      // this probably need to be named as parentIndex
     return Math.floor(i / 2);
   }
 
-  left(i) {
+  left(i) {       // leftIndex
     return 2 * i;
   }
 
-  is_left(i) {
+  right(i) {      //rightIndex
+    return 2 * i + 1;
+  }
+
+  is_left(i) {                                          // does the following really needed?
     return this.parent(i) * 2 == i;
   }
 
@@ -1037,10 +1041,6 @@ class heap extends BST {
 
   has_left(i) {
     return this.left(i) < this.data.length;
-  }
-
-  right(i) {
-    return 2 * i + 1;
   }
 
   has_right(i) {
@@ -1181,12 +1181,12 @@ class heap extends BST {
 
   async pause (time = 1000) { 
     return new Promise(function (resolve) {
-      time = document.querySelector('input[name=speed]:checked').value;
+      time = document.querySelector('input[name=speed]:checked').value;   // this should be able to use the pause
       setTimeout(resolve, time);
     });
   }
 
-  startGraph(ifEdge, container) {
+  startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
 
 
     var nodes = [];
@@ -1206,7 +1206,7 @@ class heap extends BST {
 
     for(var i = 1; i < this.data.length; i++) {
 
-      if(this.has_left(i)){
+      if(this.has_left(i)){          // the following 20 lines redudent!
         edges.push(
         {
           id: this.id++,
@@ -1241,11 +1241,11 @@ class heap extends BST {
     for (var i = 0; i < edges.length; i++){
       for (var j = 0;  j < this.highLightEdges.length; j++) {
         if (edges[i].source == this.highLightEdges[j][0] && edges[i].target == this.highLightEdges[j][1]) {
-          edges[i].color = HIGHLIGHT;
+          edges[i].color = HIGHLIGHT;  // why two condition do the same thing?
         }
 
         else if (edges[i].source == this.highLightEdges[j][1] && edges[i].target == this.highLightEdges[j][0]) {
-          edges[i].color = HIGHLIGHT;
+          edges[i].color = HIGHLIGHT;   // why two condition do the same thing?
         } 
 
       }
