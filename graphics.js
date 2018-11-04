@@ -1,3 +1,4 @@
+
 class GraphicElems { // an abstract class
 
   constructor() {
@@ -28,20 +29,6 @@ class GraphicElems { // an abstract class
   }
 }
 
-class Group extends GraphicElems {
-  constructor(shapeArray, left = 50, top = 50) {
-    super();
-    var group = new fabric.Group(shapeArray, {
-      left: left,
-      top: top,
-    });
-
-    this.object = group;
-    this.left = left;
-    this.top = top;
-  }
-}
-
 class Circle extends GraphicElems {
     
   constructor(x = 50, y = 50, radius = 50, color = 'red') {
@@ -60,6 +47,20 @@ class Circle extends GraphicElems {
     this.top = y;
     this.radius = radius;
     this.color = color;
+  }
+}
+
+class Group extends GraphicElems {
+  constructor(shapeArray, left = 50, top = 50) {
+    super();
+    var group = new fabric.Group(shapeArray, {
+      left: left,
+      top: top,
+    });
+
+    this.object = group;
+    this.left = left;
+    this.top = top;
   }
 }
 
@@ -90,40 +91,6 @@ class Rectangle extends GraphicElems {
     this.height = height;
     this.width = width;
     this.color = color;
-  }
-}
-
-class SolidArrow extends GraphicElems {
-  
-  constructor(x = 50, y = 50, height = 50, length = 100, color = 'black') {
-  
-    super();
-    var rectangle = new Rectangle(x, y, height / 2, length, color);
-    var triangle = new Triangle(x + length - height / 2, y, height, height, color);
-    triangle.rotate(90);
-      
-    triangle.draw(canvas);
-    rectangle.draw(canvas);
-    var group = new Group([rectangle.object, triangle.object], x, y);
-      
-    this.object = group.object;
-    this.left = x;
-    this.top = y;
-    this.color = color;
-  }
-
-  point(from, to) {
-      var originX = from.getX();
-      var originY = from.getY();
-      var finalX = to.getX();
-      var finalY = to.getY();
-      
-      var slope = (finalY - originY)/(finalX - originX);
-      var radian = Math.atan(slope);
-      var degree = radian * (180 / Math.PI);
-      this.object.angle = degree;
-      this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
-      this.object.left = (finalX - originX) / 2;
   }
 }
 
@@ -170,6 +137,77 @@ class Triangle extends GraphicElems {
   }
 }
 
+// Derived Classes
+class Arc extends GraphicElems {
+  constructor(x = 50, y = 50, radius = 50, color = 'black', angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
+    super();
+    var arc = new fabric.Circle({
+      radius: radius,
+      left: x,
+      top: y,
+      angle: angle,
+      startAngle: startAngle,
+      endAngle: endAngle,
+      stroke: color,
+      originX: 'center',
+      originY: 'center',
+      fill: '',
+      strokeWidth: width
+    });
+
+    this.object = arc;
+    this.left = x;
+    this.top = y;
+    this.radius = radius;
+    this.color = color;
+  }
+}
+
+class CircleChart extends Group {
+  constructor() {
+    super();
+      
+  }
+}
+
+class SolidArrow extends GraphicElems {
+  
+  constructor(x = 50, y = 50, height = 50, length = 100, color = 'black') {
+  
+    super();
+    var rectangle = new Rectangle(x, y, height / 2, length, color);
+    var triangle = new Triangle(x + length - height / 2, y, height, height, color);
+    triangle.rotate(90);
+      
+    triangle.draw(canvas);
+    rectangle.draw(canvas);
+    var group = new Group([rectangle.object, triangle.object], x, y);
+      
+    this.object = group.object;
+    this.left = x;
+    this.top = y;
+    this.color = color;
+    this.from = null;
+    this.to = null;
+  }
+
+  point(from, to) {
+      this.from = from;
+      this.to = to;
+      var originX = from.getX();
+      var originY = from.getY();
+      var finalX = to.getX();
+      var finalY = to.getY();
+      
+      var slope = (finalY - originY)/(finalX - originX);
+      var radian = Math.atan(slope);
+      var degree = radian * (180 / Math.PI);
+      this.object.angle = degree;
+      this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
+      this.object.left = (finalX - originX) / 2;
+  }
+}
+
 // Global Variables
 var canvas = createCanvas(800, 800);
 
@@ -203,5 +241,8 @@ function create() {
   arrow.draw(canvas);
   arrow.point(rectangle, triangle);
   arrow.draw(canvas);
+    
+  var arc = new Arc(x = 500, y = 500, radius = 250, color = 'green', angle = 0, startAngle = 0, endAngle = Math.PI / 5, width = 5);
+  arc.draw(canvas);
 }
   
