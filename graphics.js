@@ -7,10 +7,6 @@ class GraphicElems { // an abstract class
     this.object = null;
   }
 
-  rotate(angle) {
-    this.object.rotate(angle);
-  }
-
   draw(canvas) {
     canvas.add(this.object);
   }
@@ -21,6 +17,14 @@ class GraphicElems { // an abstract class
 
   getY() {
     return this.object.top;
+  }
+    
+  rotate(angle) {
+    this.object.rotate(angle);
+  }
+
+  setAngle(angle) {
+      this.object.angle = angle;
   }
 }
 
@@ -107,6 +111,20 @@ class SolidArrow extends GraphicElems {
     this.top = y;
     this.color = color;
   }
+
+  point(from, to) {
+      var originX = from.getX();
+      var originY = from.getY();
+      var finalX = to.getX();
+      var finalY = to.getY();
+      
+      var slope = (finalY - originY)/(finalX - originX);
+      var radian = Math.atan(slope);
+      var degree = radian * (180 / Math.PI);
+      this.object.angle = degree;
+      this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
+      this.object.left = (finalX - originX) / 2;
+  }
 }
 
 class Text extends GraphicElems {
@@ -170,18 +188,20 @@ function create() {
   var text = new Text('aaa');
   circle.draw(canvas)
   text.draw(canvas)
-  var group = new Group([circle.object, text.object]);
+  var group = new Group([circle.object, text.object], 200, 300);
   group.draw(canvas);
 
   var rectangle = new Rectangle();
   rectangle.draw(canvas);
-  rectangle.rotate(15);
+  rectangle.setAngle(45);
 
-  var triangle = new Triangle(x = 300, y = 75);
+  var triangle = new Triangle(x = 300, y = 200);
   triangle.rotate(100);
   triangle.draw(canvas);
 
   var arrow = new SolidArrow(x = 500, y = 500);
+  arrow.draw(canvas);
+  arrow.point(rectangle, triangle);
   arrow.draw(canvas);
 }
   
