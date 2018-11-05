@@ -1,14 +1,11 @@
-class GrapicElems { // an abstract class
+
+class GraphicElems { // an abstract class
 
   constructor() {
-    if (this.constructor === GrapicElems) {
+    if (this.constructor === GraphicElems) {
       throw new TypeError('Abstract class "GrapicElems" cannot be instantiated directly.');
     }
     this.object = null;
-  }
-
-  rotate(angle) {
-    this.object.rotate(angle);
   }
 
   draw(canvas) {
@@ -22,10 +19,18 @@ class GrapicElems { // an abstract class
   getY() {
     return this.object.top;
   }
+    
+  rotate(angle) {
+    this.object.rotate(angle);
+  }
 
+  setAngle(angle) {
+      this.object.angle = angle;
+  }
 }
 
-class Circle extends GrapicElems {
+class Circle extends GraphicElems {
+    
   constructor(x = 50, y = 50, radius = 50, color = 'red') {
     super();
     var circle = new fabric.Circle({
@@ -45,7 +50,27 @@ class Circle extends GrapicElems {
   }
 }
 
-class Rectangle extends GrapicElems {
+class Group extends GraphicElems {
+  constructor(shapeArray, left = 50, top = 50) {
+    super();
+    var group = new fabric.Group(shapeArray, {
+      left: left,
+      top: top,
+    });
+
+    this.object = group;
+    this.left = left;
+    this.top = top;
+  }
+}
+
+class Line extends GraphicElems {
+  constructor(){
+
+  }
+}
+
+class Rectangle extends GraphicElems {
 
   constructor(x = 50, y = 50, height = 50, width = 50, color = 'blue') {
 
@@ -66,11 +91,31 @@ class Rectangle extends GrapicElems {
     this.height = height;
     this.width = width;
     this.color = color;
-
   }
 }
 
-class Triangle extends GrapicElems {
+class Text extends GraphicElems {
+  constructor(text, x = 50, y = 50, color = 'black', fontSize = 30) {
+    super();
+    var textElem = new fabric.Text(text, {
+      fontSize: fontSize,
+      left: x,
+      top: y,
+      originX: 'originX',
+      originY: 'originY',
+      fill: color
+    });
+
+    this.object = textElem;
+    this.left = x;
+    this.top = y;
+    this.color = color;
+    this.fontSize = fontSize;
+  }
+}
+
+class Triangle extends GraphicElems {
+    
   constructor(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
     super();
     var triangle = new fabric.Triangle({
@@ -92,46 +137,80 @@ class Triangle extends GrapicElems {
   }
 }
 
-class Group extends GrapicElems {
-  constructor(shapeArray, left = 50, top = 50) {
+// Derived Classes
+class Arc extends GraphicElems {
+  constructor(x = 50, y = 50, radius = 50, color = 'black', angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
     super();
-    var group = new fabric.Group(shapeArray, {
-      left: left,
-      top: top,
-    });
-
-    this.object = group;
-    this.left = left;
-    this.top = top;
-  }
-
-}
-
-class Text extends GrapicElems {
-  constructor(text, x = 50, y = 50, color = 'black', fontSize = 30) {
-    super();
-    var textElem = new fabric.Text(text, {
-      fontSize: fontSize,
+    var arc = new fabric.Circle({
+      radius: radius,
       left: x,
       top: y,
-      originX: 'originX',
-      originY: 'originY',
-      fill: color
+      angle: angle,
+      startAngle: startAngle,
+      endAngle: endAngle,
+      stroke: color,
+      originX: 'center',
+      originY: 'center',
+      fill: '',
+      strokeWidth: width
     });
 
-    this.object = textElem;
+    this.object = arc;
+    this.left = x;
+    this.top = y;
+    this.radius = radius;
+    this.color = color;
+  }
+}
+
+class CircleChart extends Group {
+  constructor() {
+    super();
+      
+  }
+}
+
+class SolidArrow extends GraphicElems {
+  
+  constructor(x = 50, y = 50, height = 50, length = 100, color = 'black') {
+  
+    super();
+    var rectangle = new Rectangle(x, y, height / 2, length, color);
+    var triangle = new Triangle(x + length - height / 2, y, height, height, color);
+    triangle.rotate(90);
+      
+    triangle.draw(canvas);
+    rectangle.draw(canvas);
+    var group = new Group([rectangle.object, triangle.object], x, y);
+      
+    this.object = group.object;
     this.left = x;
     this.top = y;
     this.color = color;
-    this.fontSize = fontSize;
+    this.from = null;
+    this.to = null;
+  }
+
+  point(from, to) {
+      this.from = from;
+      this.to = to;
+      var originX = from.getX();
+      var originY = from.getY();
+      var finalX = to.getX();
+      var finalY = to.getY();
+      
+      var slope = (finalY - originY)/(finalX - originX);
+      var radian = Math.atan(slope);
+      var degree = radian * (180 / Math.PI);
+      this.object.angle = degree;
+      this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
+      this.object.left = (finalX - originX) / 2;
   }
 }
 
-class Line extends GrapicElems {
-  constructor(){
+// Global Variables
+var canvas = createCanvas(800, 800);
 
-  }
-}
 // functions below:
 
 function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
@@ -142,41 +221,28 @@ function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
 }
 
 function create() {
-  var canvas = createCanvas(800, 800);
 
   var circle = new Circle();
   var text = new Text('aaa');
   circle.draw(canvas)
   text.draw(canvas)
-  var group = new Group([circle.object, text.object]);
+  var group = new Group([circle.object, text.object], 200, 300);
   group.draw(canvas);
 
   var rectangle = new Rectangle();
   rectangle.draw(canvas);
-  rectangle.rotate(15);
+  rectangle.setAngle(45);
 
-  var triangle = new Triangle(x = 300, y = 75);
+  var triangle = new Triangle(x = 300, y = 200);
   triangle.rotate(100);
   triangle.draw(canvas);
 
+  var arrow = new SolidArrow(x = 500, y = 500);
+  arrow.draw(canvas);
+  arrow.point(rectangle, triangle);
+  arrow.draw(canvas);
+    
+  var arc = new Arc(x = 500, y = 500, radius = 250, color = 'green', angle = 0, startAngle = 0, endAngle = Math.PI / 5, width = 5);
+  arc.draw(canvas);
 }
-
-
-// Untested Functions:
-function createSolidArrow() {
-  var rectangle = new Rectangle(height = 25);
-  var triangle = new Triangle();
-  triangle.rotate(90);
-  var solidArrow = new Group([rectangle, triangle]);
-  var canvas = createCanvas(500, 800); // this canvas can be moved out as a global variable, too
-  solidArrow.draw(canvas);
-}
-
-function SolidArrow(canvas, x = 50, y = 50, height = 50, length = 100, color = 'black') {
-  Shape.call(this);
-  var rectangle = new Rectangle(canvas, x, y, height / 2, length, color);
-  var triangle = new Triangle(canvas, x / 2 + length, y, 50, height, color);
-  triangle.rotate(90);
-  this.canvas = canvas;
-  this.object = new Group(canvas, [rectangle.object, triangle.object], x, y).object
-}
+  
