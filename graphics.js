@@ -19,7 +19,7 @@ class GraphicElems { // an abstract class
   getY() {
     return this.object.top;
   }
-    
+
   rotate(angle) {
     this.object.rotate(angle);
   }
@@ -30,8 +30,8 @@ class GraphicElems { // an abstract class
 }
 
 class Circle extends GraphicElems {
-    
-  constructor(x = 50, y = 50, radius = 50, color = 'red') {
+
+  constructor(x = 0, y = 0, radius = 50, color = 'red') {
     super();
     var circle = new fabric.Circle({
       radius: radius,
@@ -45,22 +45,33 @@ class Circle extends GraphicElems {
     this.object = circle;
     this.left = x;
     this.top = y;
+    this.originX = 'center';
+    this.originY = 'center';
     this.radius = radius;
     this.color = color;
   }
 }
 
 class Group extends GraphicElems {
-  constructor(shapeArray, left = 50, top = 50) {
+  constructor(shapeArray, left = 0, top = 0) {
     super();
+
     var group = new fabric.Group(shapeArray, {
       left: left,
       top: top,
+      originX: 'center',
+      originY: 'center',
     });
 
     this.object = group;
     this.left = left;
     this.top = top;
+  }
+
+  add(shape) {
+    shape.set('left',this.left+shape.left)
+    shape.set('top',this.top+shape.top)
+    this.object.addWithUpdate(shape)
   }
 }
 
@@ -72,7 +83,7 @@ class Line extends GraphicElems {
 
 class Rectangle extends GraphicElems {
 
-  constructor(x = 50, y = 50, height = 50, width = 50, color = 'blue') {
+  constructor(x = 0, y = 0, height = 50, width = 50, color = 'blue') {
 
     super();
     var rectangle = new fabric.Rect({
@@ -95,7 +106,7 @@ class Rectangle extends GraphicElems {
 }
 
 class Text extends GraphicElems {
-  constructor(text, x = 50, y = 50, color = 'black', fontSize = 30) {
+  constructor(text, x = 0, y = 0, color = 'black', fontSize = 30) {
     super();
     var textElem = new fabric.Text(text, {
       fontSize: fontSize,
@@ -115,8 +126,8 @@ class Text extends GraphicElems {
 }
 
 class Triangle extends GraphicElems {
-    
-  constructor(x = 50, y = 50, width = 50, height = 50, color = 'yellow') {
+
+  constructor(x = 0, y = 0, width = 50, height = 50, color = 'yellow') {
     super();
     var triangle = new fabric.Triangle({
       left: x,
@@ -139,7 +150,7 @@ class Triangle extends GraphicElems {
 
 // Derived Classes
 class Arc extends GraphicElems {
-  constructor(x = 50, y = 50, radius = 50, color = 'black', angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
+  constructor(x = 0, y = 0, radius = 50, color = 'black', angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
     super();
     var arc = new fabric.Circle({
       radius: radius,
@@ -164,25 +175,33 @@ class Arc extends GraphicElems {
 }
 
 class CircleChart extends Group {
-  constructor() {
+  constructor( nodes = ['A', 'B', 'C'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, radius = 200,) {
     super();
-      
+    length = nodes.length
+
+    for (var i=0; i<length; i++) {
+      var circle = new Circle(50,50,80,color[i])
+      var text = new Text(nodes[i])
+      var group = new Group([circle.object, text.object], 300, 100)
+      this.add(group)
+    }
+
   }
 }
 
 class SolidArrow extends GraphicElems {
-  
-  constructor(x = 50, y = 50, height = 50, length = 100, color = 'black') {
-  
+
+  constructor(x = 0, y = 0, height = 50, length = 100, color = 'black') {
+
     super();
     var rectangle = new Rectangle(x, y, height / 2, length, color);
     var triangle = new Triangle(x + length - height / 2, y, height, height, color);
     triangle.rotate(90);
-      
+
     triangle.draw(canvas);
     rectangle.draw(canvas);
     var group = new Group([rectangle.object, triangle.object], x, y);
-      
+
     this.object = group.object;
     this.left = x;
     this.top = y;
@@ -198,7 +217,7 @@ class SolidArrow extends GraphicElems {
       var originY = from.getY();
       var finalX = to.getX();
       var finalY = to.getY();
-      
+
       var slope = (finalY - originY)/(finalX - originX);
       var radian = Math.atan(slope);
       var degree = radian * (180 / Math.PI);
@@ -241,8 +260,18 @@ function create() {
   arrow.draw(canvas);
   arrow.point(rectangle, triangle);
   arrow.draw(canvas);
-    
-  var arc = new Arc(x = 500, y = 500, radius = 250, color = 'green', angle = 0, startAngle = 0, endAngle = Math.PI / 5, width = 5);
-  arc.draw(canvas);
+
+  // var group1 = new Group()
+  // var circle = new Circle(50,50,80,'red')
+  // var text = new Text('aaa')
+  // var group = new Group([circle.object, text.object], 300, 100)
+  // group1.add(group)
+  // group1.draw(canvas)
+
+  // var chart = new CircleChart()
+  // chart.draw(canvas)
+
+
+  // var arc = new Arc(x = 300, y = 300, radius = 200, color = 'orange', angle = 270, startAngle = 0, endAngle = Math.PI/5, width = 10);
+  // arc.draw(canvas);
 }
-  
