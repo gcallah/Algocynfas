@@ -1,4 +1,3 @@
-
 class GraphicElems { // an abstract class
 
   constructor() {
@@ -25,7 +24,7 @@ class GraphicElems { // an abstract class
   }
 
   setAngle(angle) {
-      this.object.angle = angle;
+    this.object.angle = angle;
   }
 }
 
@@ -69,14 +68,15 @@ class Group extends GraphicElems {
   }
 
   add(shape) {
-    shape.set('left',this.left+shape.left)
-    shape.set('top',this.top+shape.top)
+    shape.set('left', this.left + shape.left)
+    shape.set('top', this.top + shape.top)
     this.object.addWithUpdate(shape)
   }
+
 }
 
 class Line extends GraphicElems {
-  constructor(){
+  constructor() {
 
   }
 }
@@ -175,15 +175,19 @@ class Arc extends GraphicElems {
 }
 
 class CircleChart extends Group {
-  constructor( nodes = ['A', 'B', 'C'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, radius = 200,) {
+  constructor(nodes = ['A', 'B', 'C', 'D', 'E'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, circleRadius = 80, chartRadius = 200, arcWidth = 20) {
     super();
     length = nodes.length
-
-    for (var i=0; i<length; i++) {
-      var circle = new Circle(50,50,80,color[i])
-      var text = new Text(nodes[i])
-      var group = new Group([circle.object, text.object], 300, 100)
-      this.add(group)
+    for (var i = 0; i < length; i++) {
+      var currX = x + Math.sin(2*Math.PI*i/length)*chartRadius;
+      var currY = y - Math.cos(2*Math.PI*i/length)*chartRadius;
+      var offset = Math.atan(circleRadius/chartRadius)
+      var arc = new Arc(x, y, chartRadius, color[i], 0,2*Math.PI*i/length-Math.PI/2 - offset, 2*Math.PI*(i+1)/length-Math.PI/2 - offset , arcWidth);
+      this.add(arc.object)
+      var circle = new Circle(currX, currY, circleRadius, color[i])
+      this.add(circle.object)
+      var text = new Text(nodes[i], currX, currY)
+      this.add(text.object)
     }
 
   }
@@ -211,19 +215,19 @@ class SolidArrow extends GraphicElems {
   }
 
   point(from, to) {
-      this.from = from;
-      this.to = to;
-      var originX = from.getX();
-      var originY = from.getY();
-      var finalX = to.getX();
-      var finalY = to.getY();
+    this.from = from;
+    this.to = to;
+    var originX = from.getX();
+    var originY = from.getY();
+    var finalX = to.getX();
+    var finalY = to.getY();
 
-      var slope = (finalY - originY)/(finalX - originX);
-      var radian = Math.atan(slope);
-      var degree = radian * (180 / Math.PI);
-      this.object.angle = degree;
-      this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
-      this.object.left = (finalX - originX) / 2;
+    var slope = (finalY - originY) / (finalX - originX);
+    var radian = Math.atan(slope);
+    var degree = radian * (180 / Math.PI);
+    this.object.angle = degree;
+    this.object.top = (finalY - originY) / 2 + (from.object.height - to.object.height) / 2;
+    this.object.left = (finalX - originX) / 2;
   }
 }
 
@@ -241,37 +245,27 @@ function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
 
 function create() {
 
-  var circle = new Circle();
-  var text = new Text('aaa');
-  circle.draw(canvas)
-  text.draw(canvas)
-  var group = new Group([circle.object, text.object], 200, 300);
-  group.draw(canvas);
+  // var circle = new Circle();
+  // var text = new Text('aaa');
+  // circle.draw(canvas)
+  // text.draw(canvas)
+  // var group = new Group([circle.object, text.object], 200, 300);
+  // group.draw(canvas);
+  //
+  // var rectangle = new Rectangle();
+  // rectangle.draw(canvas);
+  // rectangle.setAngle(45);
+  //
+  // var triangle = new Triangle(x = 300, y = 200);
+  // triangle.rotate(100);
+  // triangle.draw(canvas);
+  //
+  // var arrow = new SolidArrow(x = 500, y = 500);
+  // arrow.draw(canvas);
+  // arrow.point(rectangle, triangle);
+  // arrow.draw(canvas);
 
-  var rectangle = new Rectangle();
-  rectangle.draw(canvas);
-  rectangle.setAngle(45);
+  var chart = new CircleChart()
+  chart.draw(canvas)
 
-  var triangle = new Triangle(x = 300, y = 200);
-  triangle.rotate(100);
-  triangle.draw(canvas);
-
-  var arrow = new SolidArrow(x = 500, y = 500);
-  arrow.draw(canvas);
-  arrow.point(rectangle, triangle);
-  arrow.draw(canvas);
-
-  // var group1 = new Group()
-  // var circle = new Circle(50,50,80,'red')
-  // var text = new Text('aaa')
-  // var group = new Group([circle.object, text.object], 300, 100)
-  // group1.add(group)
-  // group1.draw(canvas)
-
-  // var chart = new CircleChart()
-  // chart.draw(canvas)
-
-
-  // var arc = new Arc(x = 300, y = 300, radius = 200, color = 'orange', angle = 270, startAngle = 0, endAngle = Math.PI/5, width = 10);
-  // arc.draw(canvas);
 }
