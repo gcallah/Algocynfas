@@ -187,6 +187,21 @@ class CircleChart extends Group {
   }
 }
 
+class CurvedArrow extends Group {
+  constructor(x = 250, y = 250, radius = 50, color = 'black', angle = Math.PI, width = 25) {
+
+    super();
+    var arc = new Arc(x, y, radius, color, 0, 0, angle, width);
+    var triangle = new Triangle(x + radius, y - width / 2, width, width, color);
+
+    triangle.draw(canvas);
+    arc.draw(canvas);
+    var group = new Group([arc.object, triangle.object], x, y);
+
+    this.object = group.object;
+  }
+}
+
 class Line extends Rectangle {
   constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = 'black') {
     var length = Math.sqrt(Math.pow(Math.abs(initialX - finalX), 2) + Math.pow(Math.abs(initialY - finalY), 2))
@@ -276,5 +291,8 @@ function create() {
  
   var line = new Line();
   line.draw(canvas);
+    
+  var curvedArrow = new CurvedArrow(250, 250, 50, 'black', angle = Math.PI / 2, width = 25);
+  curvedArrow.draw(canvas);
 
 }
