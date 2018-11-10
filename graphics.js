@@ -75,12 +75,6 @@ class Group extends GraphicElems {
 
 }
 
-class Line extends GraphicElems {
-  constructor() {
-
-  }
-}
-
 class Rectangle extends GraphicElems {
 
   constructor(x = 0, y = 0, height = 50, width = 50, color = 'blue') {
@@ -193,6 +187,18 @@ class CircleChart extends Group {
   }
 }
 
+class Line extends Rectangle {
+  constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = 'black') {
+    var length = Math.sqrt(Math.pow(Math.abs(initialX - finalX), 2) + Math.pow(Math.abs(initialY - finalY), 2))
+    var slope = (finalY - initialY) / (finalX - initialX);
+    var radian = Math.atan(slope);
+    var degree = radian * (180 / Math.PI);
+      
+    super(initialX, initialY, width, length, color);
+    this.setAngle(degree);
+  }
+}
+
 class SolidArrow extends GraphicElems {
 
   constructor(x = 0, y = 0, height = 50, length = 100, color = 'black') {
@@ -265,7 +271,10 @@ function create() {
   // arrow.point(rectangle, triangle);
   // arrow.draw(canvas);
 
-  var chart = new CircleChart()
-  chart.draw(canvas)
+  //var chart = new CircleChart()
+  //chart.draw(canvas)
+ 
+  var line = new Line();
+  line.draw(canvas);
 
 }
