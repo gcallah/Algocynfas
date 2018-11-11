@@ -14,7 +14,7 @@ function heapChange() {
 
 	var radios = document.getElementsByName('heapType');
 
-	for (var i = 0, length = radios.length; i < length; i++)
+	for (var i = 0;  i < radios.length; i++)
 	{
 		if (radios[i].checked)
 		{
