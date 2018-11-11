@@ -1009,11 +1009,11 @@ async insert(input,single = false,draw = true){
 }
 
 class heap extends ourGraph {   // changed to extend from graph
-constructor(cmp = heap_less) {
-  super();
-  this.data = [];
-  this.data.push(null);
-    this.cmp = cmp;        // what is this
+  constructor(cmp = heap_less) {
+    super();
+    this.data = [];
+    this.data.push(null);
+    this.cmp = cmp;        // compare function, determine min/max-heap
     this.id = 0;
     this.highLightNodes = [];
     this.highLightEdges = [];
