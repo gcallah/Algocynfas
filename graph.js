@@ -97,6 +97,7 @@ class ourGraph{
     this.nodeSet = null;
      //only for weighted graph
      this.weightEdgeMap = null;
+     this.position = true;
    }
 
    setGraph(ifEdge,container){
@@ -274,6 +275,29 @@ createSigmaGraph(containerName){
   
   this.enableDrag();
 
+}
+
+adjustPos(dir, node){
+  if (dir == "left"){
+    node.layout.x -= 30;
+    node.position.x -= 30;
+  }
+  else{
+    node.layout.x += 30;
+    node.position.x += 30;
+  }
+  if(node.position.x >= 550 || node.position.x <= -550){
+   if(this.position){
+    noticeErr("Sorry the graph is too big to fit in the container, try randomize!");
+    this.position = false;
+  }
+}
+if(node.left){
+  this.adjustPos(dir, node.left);
+}
+if(node.right){
+  this.adjustPos(dir, node.right);
+}
 }
 
 enableDrag(){
@@ -661,54 +685,31 @@ class BST extends ourGraph{
     this.treeNodes = [];
     this.horiAdjust = false;
     this.vertiAdjust = false;
-    this.position = true;
 
   }
-  adjustPos(dir, node){
-    if (dir == "left"){
-      node.layout.x -= 30;
-      node.position.x -= 30;
-    }
-    else{
-      node.layout.x += 30;
-      node.position.x += 30;
-    }
-    if(node.position.x >= 550 || node.position.x <= -550){
-     if(this.position){
-      noticeErr("Sorry the graph is too big to fit in the container, try randomize!");
-      this.position = false;
-    }
-  }
-  if(node.left){
-    this.adjustPos(dir, node.left);
-  }
-  if(node.right){
-    this.adjustPos(dir, node.right);
-  }
-}
 
-strench(adjustList){
-  for(var i = 0; i < adjustList.length; i++){
-    adjustList[i].strenchTimes += 1;
-    this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-  }
-} 
-positionCheck(node){
- if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
-   getHTML("bstGraphContainer").style.width = 1200;
-   getHTML("bstGraphContainer").style.marginLeft = "5em";
-   getHTML("bstLegend").style.marginLeft = "5em";
-   this.horiAdjust = true;
- }
- if(Math.abs(node.position.y) > 130 && this.vertiAdjust == false){
-   getHTML("bstGraphContainer").style.height = 800;
-   for(var k = 0; k < this.nodeLayout.length; k++){
-    this.treeNodes[k].position.y -= 150;
-    this.treeNodes[k].layout.y -= 150;
-  }
-  this.vertiAdjust = true;
+  strench(adjustList){
+    for(var i = 0; i < adjustList.length; i++){
+      adjustList[i].strenchTimes += 1;
+      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
+    }
+  } 
+  positionCheck(node){
+   if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
+     getHTML("bstGraphContainer").style.width = 1200;
+     getHTML("bstGraphContainer").style.marginLeft = "5em";
+     getHTML("bstLegend").style.marginLeft = "5em";
+     this.horiAdjust = true;
+   }
+   if(Math.abs(node.position.y) > 130 && this.vertiAdjust == false){
+     getHTML("bstGraphContainer").style.height = 800;
+     for(var k = 0; k < this.nodeLayout.length; k++){
+      this.treeNodes[k].position.y -= 150;
+      this.treeNodes[k].layout.y -= 150;
+    }
+    this.vertiAdjust = true;
 
-} 
+  } 
 }
 async insert(input,single = false,draw = true){
   if(Number.isInteger(input)){
@@ -1007,12 +1008,11 @@ async insert(input,single = false,draw = true){
 
 }
 
-class heap extends BST {    // this doesn't make sense! shouldn't inherit from bst.  Also, the display level and the logic level should be seperated. Check bst.js to see
-
-  constructor(cmp = heap_less) {
-    super();
-    this.data = [];
-    this.data.push(null);
+class heap extends ourGraph {   // changed to extend from graph
+constructor(cmp = heap_less) {
+  super();
+  this.data = [];
+  this.data.push(null);
     this.cmp = cmp;        // what is this
     this.id = 0;
     this.highLightNodes = [];
