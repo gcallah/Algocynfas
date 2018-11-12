@@ -1106,7 +1106,6 @@ class heap extends ourGraph {   // changed to extend from graph
         this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
 
         [this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
-        //[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
         i = p;
 
         this.startGraph(false, 'heapCanvas');
@@ -1168,7 +1167,6 @@ class heap extends ourGraph {   // changed to extend from graph
     await this.pause();
 
     [this.data[1].key, this.data[this.data.length-1].key] = [this.data[this.data.length-1].key, this.data[1].key];
-    //[this.data[1].id, this.data[this.data.length-1].id] = [this.data[this.data.length-1].id, this.data[1].id];
 
     this.data.pop();
 
