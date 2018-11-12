@@ -1031,7 +1031,7 @@ class heap extends ourGraph {   // changed to extend from graph
     return 2 * i + 1;
   }
 
-  is_left(i) {                                          // does the following really needed?
+  is_left(i) {                                 // does the following really needed?
     return this.parent(i) * 2 == i;
   }
 
@@ -1177,13 +1177,6 @@ class heap extends ourGraph {   // changed to extend from graph
     this.down_heap(1);
 
     return result;
-  }
-
-  async pause (time = 1000) { 
-    return new Promise(function (resolve) {
-      time = document.querySelector('input[name=speed]:checked').value;   // this should be able to use the pause
-      setTimeout(resolve, time);
-    });
   }
 
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
