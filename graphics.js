@@ -173,10 +173,10 @@ class CircleChart extends Group {
     super();
     length = nodes.length
     for (var i = 0; i < length; i++) {
-      var currX = x + Math.sin(2*Math.PI*i/length)*chartRadius;
-      var currY = y - Math.cos(2*Math.PI*i/length)*chartRadius;
+      var currX = x + Math.sin(2 * Math.PI * i / length) * chartRadius;
+      var currY = y - Math.cos(2 * Math.PI * i / length) * chartRadius;
       var offset = Math.atan(circleRadius/chartRadius)
-      var arc = new Arc(x, y, chartRadius, color[i], 0,2*Math.PI*i/length-Math.PI/2 - offset, 2*Math.PI*(i+1)/length-Math.PI/2 - offset , arcWidth);
+      var arc = new Arc(x, y, chartRadius, color[i], 0,2 * Math.PI * i / length-Math.PI / 2 - offset, 2 * Math.PI * (i + 1) / length - Math.PI / 2 - offset , arcWidth);
       this.add(arc.object)
       var circle = new Circle(currX, currY, circleRadius, color[i])
       this.add(circle.object)
@@ -199,6 +199,27 @@ class CurvedArrow extends Group {
     var group = new Group([arc.object, triangle.object], x, y);
 
     this.object = group.object;
+  }
+}
+
+class InfinitySymbol extends Group {
+  constructor(x = 250, y = 250, radius = 50, color = 'black', width = 25) {
+    super();
+    var circleLeft = new Arc(x + 1.5 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleRight = new Arc (x - 1.5 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    circleRight.rotate(45);
+    circleLeft.rotate(225);
+    var length = Math.PI * radius * 3 / 5;
+    var rect1 = new Rectangle(x, y, length, width, color);
+    var rect2 = new Rectangle(x, y, length, width, color);
+    rect1.rotate(-45);
+    rect2.rotate(45);
+    
+    
+    this.add(circleLeft.object);
+    this.add(circleRight.object);
+    this.add(rect1.object);
+    this.add(rect2.object);
   }
 }
 
@@ -289,10 +310,12 @@ function create() {
   //var chart = new CircleChart()
   //chart.draw(canvas)
  
-  var line = new Line();
-  line.draw(canvas);
+  // var line = new Line();
+  // line.draw(canvas);
     
-  var curvedArrow = new CurvedArrow(250, 250, 50, 'black', angle = Math.PI / 2, width = 25);
-  curvedArrow.draw(canvas);
+  // var curvedArrow = new CurvedArrow(250, 250, 50, 'black', angle = Math.PI / 2, width = 25);
+  // curvedArrow.draw(canvas);
 
+  var infinitySymbol = new InfinitySymbol();
+  infinitySymbol.draw(canvas);
 }
