@@ -1009,11 +1009,11 @@ async insert(input,single = false,draw = true){
 }
 
 class heap extends ourGraph {   // changed to extend from graph
-constructor(cmp = heap_less) {
-  super();
-  this.data = [];
-  this.data.push(null);
-    this.cmp = cmp;        // what is this
+  constructor(cmp = heap_less) {
+    super();
+    this.data = [];
+    this.data.push(null);
+    this.cmp = cmp;        // compare function, determine min/max-heap
     this.id = 0;
     this.highLightNodes = [];
     this.highLightEdges = [];
@@ -1031,7 +1031,7 @@ constructor(cmp = heap_less) {
     return 2 * i + 1;
   }
 
-  is_left(i) {                                          // does the following really needed?
+  is_left(i) {                                 // does the following really needed?
     return this.parent(i) * 2 == i;
   }
 
@@ -1106,7 +1106,6 @@ constructor(cmp = heap_less) {
         this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
 
         [this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
-        //[this.data[i].id, this.data[p].id] = [this.data[p].id, this.data[i].id];
         i = p;
 
         this.startGraph(false, 'heapCanvas');
@@ -1168,7 +1167,6 @@ constructor(cmp = heap_less) {
     await this.pause();
 
     [this.data[1].key, this.data[this.data.length-1].key] = [this.data[this.data.length-1].key, this.data[1].key];
-    //[this.data[1].id, this.data[this.data.length-1].id] = [this.data[this.data.length-1].id, this.data[1].id];
 
     this.data.pop();
 
@@ -1177,13 +1175,6 @@ constructor(cmp = heap_less) {
     this.down_heap(1);
 
     return result;
-  }
-
-  async pause (time = 1000) { 
-    return new Promise(function (resolve) {
-      time = document.querySelector('input[name=speed]:checked').value;   // this should be able to use the pause
-      setTimeout(resolve, time);
-    });
   }
 
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
