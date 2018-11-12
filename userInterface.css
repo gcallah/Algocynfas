@@ -6,6 +6,14 @@
     
 }
 
+.boxLarge{
+    font-size:15px;
+    width:150px;
+    height:25px;
+    background:#FCF5DB;
+
+}
+
 .weightBox{
     font-size:15px;
     width:270px;
@@ -37,6 +45,7 @@
     background:#FCF5DB;
     visibility: hidden;
 }
+    
 .funcText{
     display:inline;
     visibility: hidden;
