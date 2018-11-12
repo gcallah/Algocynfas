@@ -23,10 +23,10 @@ def getById(_id):
 
 def generateInvalidInput():
         #invalidInput = < 2 || > 20
-        randInput = randint(20, 100) 
-        if randInput % 2 == 0:
-            randInput = randint(-50, 1)
-        return randInput
+        invalidInput = randint(21, 100) 
+        if invalidInput % 2 == 0:
+            invalidInput = randint(-50, 1)
+        return invalidInput
     
 def testAlert():
     loadPage()
@@ -40,3 +40,4 @@ def testAlert():
     except:
         print("Error: invalid input is given and alert doesn\'t pop up")
     closePage()
+    
