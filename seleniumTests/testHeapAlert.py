@@ -7,7 +7,9 @@ from selenium.common.exceptions import NoSuchElementException
 from unittest import TestCase, main
 from random import randint
 
-mydriver = webdriver.Chrome()
+path = r'C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe'
+mydriver = webdriver.Chrome(executable_path=path)
+
 
 def loadPage():
         mydriver.get('https://gcallah.github.io/Algocynfas/')
@@ -40,4 +42,5 @@ def testAlert():
     except:
         print("Error: invalid input is given and alert doesn\'t pop up")
     closePage()
-    
+
+testAlert()

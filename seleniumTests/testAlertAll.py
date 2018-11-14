@@ -17,19 +17,20 @@ def validOrInvalid():
 
 validInputBool = validOrInvalid()
 
+def closePage():
+    mydriver.quit()
+        
 class TestAlert(TestCase):
     def loadPage(self):
         mydriver.get('https://gcallah.github.io/Algocynfas/')
-    
-    def closePage(self):
-        mydriver.quit()
     
     def getLink(self, linkText):
         return mydriver.find_element_by_link_text(linkText)
     
     def getById(self, _id):
         return mydriver.find_element_by_id(_id)
-    
+
+class TestAlertSort(TestAlert):
     def generateValidInput(self):
         #valid input = any list of nums (-99 < num < 99)
         keys = '';
@@ -79,7 +80,30 @@ class TestAlert(TestCase):
                print('Ran as expected: Valid input is given and alert doesn\'t pop up')
             else:
                print("Error: invalid input is given and alert doesn\'t pop up")
-        self.closePage()
-
-if __name__ == '__main__':
-    main()
+        
+class TestAlertHeap(TestAlert):
+    def generateInvalidInput(self):
+            #invalidInput = < 2 || > 20
+            invalidInput = randint(21, 100) 
+            if invalidInput % 2 == 0:
+                invalidInput = randint(-50, 1)
+            print(invalidInput)
+            return invalidInput
+        
+    def testAlert(self):
+        self.loadPage()
+        self.getLink('Hash table').click()
+        inputBox = self.getById('InputValue')
+        inputBox.send_keys(self.generateInvalidInput())
+        self.getById('run-button').click()
+        try:
+            mydriver.switch_to.alert.accept()    
+            print("Ran as expected: Invalid input is given and alert pops up")
+        except:
+            print("Error: invalid input is given and alert doesn\'t pop up")
+        
+sort = TestAlertSort()
+sort.testAlert()
+heap = TestAlertHeap()
+heap.testAlert()
+closePage()
