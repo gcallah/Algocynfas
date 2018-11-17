@@ -1127,19 +1127,21 @@ class heap extends ourGraph {   // changed to extend from graph
   insert(val) {
     var node = new treeNode(val, this.id++);
 
-    this.data.push(node);
-    var l = this.data.length-1;
+   
+    var l = this.data.length;
     if(l != 1) {
-      this.data[l].parent = this.data[this.parent(l)];
+      node.parent = this.data[this.parent(l)];
 
       if(this.is_left(l)) {
-        this.data[l].sideToParent = "left";
-        this.data[l].parent.left = this.data[l];
+        node.sideToParent = "left";
+        node.parent.left = node;
       } else {
-        this.data[l].sideToParent = "right";
-        this.data[l].parent.right = this.data[l];
+        node.sideToParent = "right";
+        node.parent.right = node;
       }
     }
+
+    this.data.push(node);
 
     this.up_heap(l);
   }
