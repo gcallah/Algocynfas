@@ -1017,6 +1017,7 @@ class heap extends ourGraph {   // changed to extend from graph
     this.id = 0;
     this.highLightNodes = [];
     this.highLightEdges = [];
+    this.adjustList = [];
   }
 
   parent(i) {      // this probably need to be named as parentIndex
@@ -1046,6 +1047,7 @@ class heap extends ourGraph {   // changed to extend from graph
   has_right(i) {
     return this.right(i) < this.data.length;
   }
+
 
   async down_heap(i) {
     this.highLightNodes.push(i);
@@ -1091,8 +1093,10 @@ class heap extends ourGraph {   // changed to extend from graph
 
   }
 
+
   async up_heap(i) {
     this.highLightNodes.push(i);
+
     this.startGraph(false, 'heapCanvas');
     await this.pause();
 
@@ -1124,9 +1128,16 @@ class heap extends ourGraph {   // changed to extend from graph
     this.startGraph(false, 'heapCanvas');
   }
 
+  strench(adjustList){
+    for(var i = 0; i < adjustList.length; i++){
+      adjustList[i].strenchTimes += 1;
+      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
+    }
+  }
+
+
   insert(val) {
     var node = new treeNode(val, this.id++);
-
    
     var l = this.data.length;
     if(l != 1) {
@@ -1135,13 +1146,32 @@ class heap extends ourGraph {   // changed to extend from graph
       if(this.is_left(l)) {
         node.sideToParent = "left";
         node.parent.left = node;
+        
       } else {
         node.sideToParent = "right";
         node.parent.right = node;
       }
     }
 
+
+    node.setNode();
     this.data.push(node);
+    
+
+    var cur = node
+    this.adjustList = [];
+
+    while(cur && cur.parent ) {
+      console.log(cur.sideToParent, " ", cur.parent.sideToParent);
+      if(cur.parent.sideToParent && cur.sideToParent != cur.parent.sideToParent){
+        this.adjustList.push(cur.parent);
+      }
+
+      cur = cur.parent;
+    }
+   this.strench(this.adjustList);
+
+   this.startGraph(false, 'heapCanvas');
 
     this.up_heap(l);
   }
@@ -1186,11 +1216,11 @@ class heap extends ourGraph {   // changed to extend from graph
     var edges = [];
 
     for(var i = 1; i < this.data.length; i++) {
-      this.data[i].setNode();
-      this.data[i].strenchTimes = 0;
+      this.data[i].layout.label = this.data[i].key.toString(),
       this.data[i].layout.color = EdgeNodeCOLOR;
       nodes.push(this.data[i].layout);
     }
+
 
     for (var i = 0; i < this.highLightNodes.length; i++){
       nodes[this.highLightNodes[i]-1].color = HIGHLIGHT;
@@ -1244,21 +1274,6 @@ class heap extends ourGraph {   // changed to extend from graph
       }
     }
 
-    for (var i = 4; i < this.data.length; i *= 2) {
-      for (var j = 2; j < i; j++) {
-        if (this.data[j].strenchTimes == 0) {
-          this.data[j].strenchTimes = 1;
-        } else {
-          this.data[j].strenchTimes *= 2;
-        }
-        for( var k = 0; k < this.data[j].strenchTimes; k++) {
-          if (j % 2 == 0)
-            this.adjustPos("left", this.data[j]);
-          else
-            this.adjustPos("right", this.data[j]);
-        }
-      }
-    }
 
 
     let g = {
