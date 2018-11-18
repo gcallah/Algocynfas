@@ -300,6 +300,13 @@ if(node.right){
 }
 }
 
+strench(adjustList){
+    for(var i = 0; i < adjustList.length; i++){
+      adjustList[i].strenchTimes += 1;
+      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
+    }
+  }
+
 enableDrag(){
   var dragListener = sigma.plugins.dragNodes(this.sigma, this.sigma.renderers[0]);
 
@@ -688,12 +695,6 @@ class BST extends ourGraph{
 
   }
 
-  strench(adjustList){
-    for(var i = 0; i < adjustList.length; i++){
-      adjustList[i].strenchTimes += 1;
-      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-    }
-  } 
   positionCheck(node){
    if(Math.abs(node.position.x) > 200 && this.horiAdjust == false){
      getHTML("bstGraphContainer").style.width = 1200;
@@ -1126,13 +1127,6 @@ class heap extends ourGraph {   // changed to extend from graph
     this.highLightNodes = [];
     this.highLightEdges = [];
     this.startGraph(false, 'heapCanvas');
-  }
-
-  strench(adjustList){
-    for(var i = 0; i < adjustList.length; i++){
-      adjustList[i].strenchTimes += 1;
-      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-    }
   }
 
 
