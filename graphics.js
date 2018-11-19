@@ -192,10 +192,10 @@ class SolidArrow extends GraphicElems {
   point(from, to) {
     this.from = from;
     this.to = to;
-    var originX = from.getX();
-    var originY = from.getY();
-    var finalX = to.getX();
-    var finalY = to.getY();
+    var originX = from.getX() + from.width / 2;
+    var originY = from.getY() + from.height / 2;
+    var finalX = to.getX() + to.width / 2;
+    var finalY = to.getY() + to.height / 2;
 
     var slope = (finalY - originY) / (finalX - originX);
     var radian = Math.atan(slope);
@@ -291,9 +291,13 @@ class PathChart extends Group {
       var pathCenterBottomText = new Text(pathCenter[1], x, y - rectangleHeight * 2.5, 'black', fontSize);
       this.add(pathCenterBottomText.object);
       
-      var pathCenterArrowTop = new SolidArrow(x, y - rectangleHeight * 2, 50, rectangleHeight, 'black');
-      pathCenterArrowTop.point(pathCenterTop, pathCenterBottom);
+      var pathCenterArrowTop = new SolidArrow(x, y - rectangleHeight, 50, rectangleHeight, 'black');
+      pathCenterArrowTop.rotate(90);
       this.add(pathCenterArrowTop.object);
+      
+      var pathCenterArrowBottom = new SolidArrow(x, y - rectangleHeight * 3.5, 50, rectangleHeight, 'black');
+      pathCenterArrowBottom.rotate(90);
+      this.add(pathCenterArrowBottom.object);
     }
 }
 
