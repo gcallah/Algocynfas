@@ -168,73 +168,6 @@ class Arc extends GraphicElems {
   }
 }
 
-class CircleChart extends Group {
-  constructor(nodes = ['A', 'B', 'C', 'D', 'E'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, circleRadius = 80, chartRadius = 200, arcWidth = 20) {
-    super();
-    length = nodes.length
-    for (var i = 0; i < length; i++) {
-      var currX = x + Math.sin(2 * Math.PI * i / length) * chartRadius;
-      var currY = y - Math.cos(2 * Math.PI * i / length) * chartRadius;
-      var offset = Math.atan(circleRadius/chartRadius)
-      var arc = new Arc(x, y, chartRadius, color[i], 0,2 * Math.PI * i / length-Math.PI / 2 - offset, 2 * Math.PI * (i + 1) / length - Math.PI / 2 - offset , arcWidth);
-      this.add(arc.object)
-      var circle = new Circle(currX, currY, circleRadius, color[i])
-      this.add(circle.object)
-      var text = new Text(nodes[i], currX, currY)
-      this.add(text.object)
-    }
-
-  }
-}
-
-class CurvedArrow extends Group {
-  constructor(x = 250, y = 250, radius = 50, color = 'black', angle = Math.PI, width = 25) {
-
-    super();
-    var arc = new Arc(x, y, radius, color, 0, 0, angle, width);
-    var triangle = new Triangle(x + radius, y - width / 2, width, width, color);
-
-    triangle.draw(canvas);
-    arc.draw(canvas);
-    var group = new Group([arc.object, triangle.object], x, y);
-
-    this.object = group.object;
-  }
-}
-
-class InfinitySymbol extends Group {
-  constructor(x = 250, y = 250, radius = 50, color = 'black', width = 25) {
-    super();
-    var circleLeft = new Arc(x + 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
-    var circleRight = new Arc (x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
-    circleRight.rotate(45);
-    circleLeft.rotate(225);
-    var length = Math.PI * radius * 3.5 / 5;
-    var rect1 = new Rectangle(x, y, length, width, color);
-    var rect2 = new Rectangle(x, y, length, width, color);
-    rect1.rotate(-45);
-    rect2.rotate(45);
-    
-    
-    this.add(circleLeft.object);
-    this.add(circleRight.object);
-    this.add(rect1.object);
-    this.add(rect2.object);
-  }
-}
-
-class Line extends Rectangle {
-  constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = 'black') {
-    var length = Math.sqrt(Math.pow(Math.abs(initialX - finalX), 2) + Math.pow(Math.abs(initialY - finalY), 2))
-    var slope = (finalY - initialY) / (finalX - initialX);
-    var radian = Math.atan(slope);
-    var degree = radian * (180 / Math.PI);
-      
-    super(initialX, initialY, width, length, color);
-    this.setAngle(degree);
-  }
-}
-
 class SolidArrow extends GraphicElems {
 
   constructor(x = 0, y = 0, height = 50, length = 100, color = 'black') {
@@ -272,6 +205,99 @@ class SolidArrow extends GraphicElems {
     this.object.left = (finalX - originX) / 2;
   }
 }
+
+class CircleChart extends Group {
+  constructor(nodes = ['A', 'B', 'C', 'D', 'E'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, circleRadius = 80, chartRadius = 200, arcWidth = 20) {
+    super();
+    length = nodes.length
+    for (var i = 0; i < length; i++) {
+      var currX = x + Math.sin(2 * Math.PI * i / length) * chartRadius;
+      var currY = y - Math.cos(2 * Math.PI * i / length) * chartRadius;
+      var offset = Math.atan(circleRadius/chartRadius)
+      var arc = new Arc(x, y, chartRadius, color[i], 0,2 * Math.PI * i / length-Math.PI / 2 - offset, 2 * Math.PI * (i + 1) / length - Math.PI / 2 - offset , arcWidth);
+      this.add(arc.object)
+      var circle = new Circle(currX, currY, circleRadius, color[i])
+      this.add(circle.object)
+      var text = new Text(nodes[i], currX, currY)
+      this.add(text.object)
+    }
+
+  }
+}
+
+class CurvedArrow extends Group {
+  constructor(x = 250, y = 250, radius = 50, color = 'black', angle = Math.PI, width = 25) {
+
+    super();
+    var arc = new Arc(x, y, radius, color, 0, 0, angle, width);
+    var triangle = new Triangle(x + radius, y - width / 2, width, width, color);
+
+    triangle.draw(canvas);
+    arc.draw(canvas);
+    var group = new Group([arc.object, triangle.object], x, y);
+
+    this.object = group.object;
+  }
+}
+
+class InfinitySymbol extends Group {
+  constructor(x = 250, y = 250, radius = 75, color = 'black', width = 25) {
+    super();
+    var circleLeft = new Arc(x + 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleRight = new Arc (x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    circleRight.rotate(45);
+    circleLeft.rotate(225);
+    var length = Math.PI * radius * 3.5 / 5;
+    var rect1 = new Rectangle(x, y, length, width, color);
+    var rect2 = new Rectangle(x, y, length, width, color);
+    rect1.rotate(-45);
+    rect2.rotate(45);
+    
+    
+    this.add(circleLeft.object);
+    this.add(circleRight.object);
+    this.add(rect1.object);
+    this.add(rect2.object);
+  }
+}
+
+class Line extends Rectangle {
+  constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = 'black') {
+    var length = Math.sqrt(Math.pow(Math.abs(initialX - finalX), 2) + Math.pow(Math.abs(initialY - finalY), 2))
+    var slope = (finalY - initialY) / (finalX - initialX);
+    var radian = Math.atan(slope);
+    var degree = radian * (180 / Math.PI);
+      
+    super(initialX, initialY, width, length, color);
+    this.setAngle(degree);
+  }
+}
+
+class PathChart extends Group {
+  constructor(pathLeft = ['A', 'B', 'C'], pathRight = ['D', 'E', 'F'], pathCenter = ['G', 'H'], goal = "DevOp Services!", x = 300, y = 300, rectangleHeight = 50, rectangleWidth = 150, fontSize = 15) {
+    super();
+      var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth);
+      this.add(goalBox.object);
+      var goalText = new Text(goal, x, y, 'black', fontSize);
+      this.add(goalText.object);
+      
+      var pathCenterTop = new Rectangle(x, y - rectangleHeight * 5, rectangleHeight, rectangleWidth);
+      this.add(pathCenterTop.object);
+      var pathCenterTopText = new Text(pathCenter[0], x, y - rectangleHeight * 5, 'black', fontSize);
+      this.add(pathCenterTopText.object);
+      
+      var pathCenterBottom = new Rectangle(x, y - rectangleHeight * 2.5, rectangleHeight, rectangleWidth);
+      this.add(pathCenterBottom.object);
+      var pathCenterBottomText = new Text(pathCenter[1], x, y - rectangleHeight * 2.5, 'black', fontSize);
+      this.add(pathCenterBottomText.object);
+      
+      var pathCenterArrowTop = new SolidArrow(x, y - rectangleHeight * 2, 50, rectangleHeight, 'black');
+      pathCenterArrowTop.point(pathCenterTop, pathCenterBottom);
+      this.add(pathCenterArrowTop.object);
+    }
+}
+
+
 
 // Global Variables
 var canvas = createCanvas(800, 800);
@@ -316,6 +342,9 @@ function create() {
   // var curvedArrow = new CurvedArrow(250, 250, 50, 'black', angle = Math.PI / 2, width = 25);
   // curvedArrow.draw(canvas);
 
-  var infinitySymbol = new InfinitySymbol();
-  infinitySymbol.draw(canvas);
+  //var infinitySymbol = new InfinitySymbol();
+  //infinitySymbol.draw(canvas);
+    
+  var pathChart = new PathChart();
+  pathChart.draw(canvas);
 }
