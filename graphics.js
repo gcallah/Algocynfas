@@ -205,11 +205,11 @@ class CurvedArrow extends Group {
 class InfinitySymbol extends Group {
   constructor(x = 250, y = 250, radius = 50, color = 'black', width = 25) {
     super();
-    var circleLeft = new Arc(x + 1.5 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
-    var circleRight = new Arc (x - 1.5 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleLeft = new Arc(x + 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleRight = new Arc (x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
     circleRight.rotate(45);
     circleLeft.rotate(225);
-    var length = Math.PI * radius * 3 / 5;
+    var length = Math.PI * radius * 3.5 / 5;
     var rect1 = new Rectangle(x, y, length, width, color);
     var rect2 = new Rectangle(x, y, length, width, color);
     rect1.rotate(-45);
