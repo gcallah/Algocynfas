@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from unittest import TestCase, main
 from random import randint
 
+#change path to path of chromedriver.exe
 path = r'C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe'
 mydriver = webdriver.Chrome(executable_path=path)
 
@@ -16,9 +17,6 @@ def validOrInvalid():
     return True
 
 validInputBool = validOrInvalid()
-
-def closePage():
-    mydriver.quit()
         
 class TestAlert(TestCase):
     def loadPage(self):
@@ -82,28 +80,41 @@ class TestAlertSort(TestAlert):
                print("Error: invalid input is given and alert doesn\'t pop up")
         
 class TestAlertHeap(TestAlert):
-    def generateInvalidInput(self):
-            #invalidInput = < 2 || > 20
-            invalidInput = randint(21, 100) 
+    def generateInvalidInput(self, low, high):
+            invalidInput = randint(high + 1, high * 10) 
             if invalidInput % 2 == 0:
-                invalidInput = randint(-50, 1)
+                #negative invalidInput
+                invalidInput = randint(high * -1 , low-1)
             print(invalidInput)
             return invalidInput
         
     def testAlert(self):
         self.loadPage()
         self.getLink('Hash table').click()
-        inputBox = self.getById('InputValue')
-        inputBox.send_keys(self.generateInvalidInput())
+        if (randint(0, 100) > 50):
+            inputBox = self.getById('tableSize')
+            inputBox.clear()
+            #invalidInput = < 2 || > 20
+            low = 2
+            high = 20
+        else:
+            inputBox = self.getById('InputValue')
+            #invalidInput = < 0 || > 999
+            low = 0
+            high = 999
+        inputBox.send_keys(self.generateInvalidInput(low,high))
+        
         self.getById('run-button').click()
         try:
             mydriver.switch_to.alert.accept()    
             print("Ran as expected: Invalid input is given and alert pops up")
         except:
             print("Error: invalid input is given and alert doesn\'t pop up")
-        
+
+       
 sort = TestAlertSort()
 sort.testAlert()
 heap = TestAlertHeap()
 heap.testAlert()
-closePage()
+    
+
