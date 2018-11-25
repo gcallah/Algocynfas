@@ -1268,30 +1268,12 @@ class heap extends ourGraph {   // changed to extend from graph
 
 
 
-    let g = {
+    this.graph = {
       "nodes": this.nodeLayout,
       "edges": this.edgeLayout
     }
 
-
-    $("#heapCanvas").empty();
-
-    this.sigma = new sigma({
-      graph: g,
-      renderer: {
-        container: container,
-        type: 'canvas'
-      },
-      settings: {
-        defaultNodeColor: EdgeNodeCOLOR,
-        enableCamera: false,
-        autoRescale: false,
-        defaultEdgeLabelSize: 15,
-
-      }
-    });
-
-
+    this.createSigmaGraph(container);
     this.sigma.refresh();
 
     list = [];
