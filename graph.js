@@ -1019,6 +1019,7 @@ class heap extends ourGraph {   // changed to extend from graph
     this.highLightNodes = [];
     this.highLightEdges = [];
     this.adjustList = [];
+    this.nodeLayout = []
   }
 
   parent(i) {      // this probably need to be named as parentIndex
@@ -1215,23 +1216,38 @@ class heap extends ourGraph {   // changed to extend from graph
     });
   }
 
+  highlightEdge(s, t) {
+
+    for (var i = 0; i < this.edgeLayout.length; i++){
+
+       if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
+          this.edgeLayout[i].color = HIGHLIGHT;  
+        } else if (this.edgeLayout[i].source == t && this.edgeLayout[i].target == s) {
+          this.edgeLayout[i].color = HIGHLIGHT;   
+        } 
+    }
+
+
+  }
+
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
 
-    this.nodes = [];
-    var edges = [];
+    this.nodeLayout = [];
+    this.edgeLayout = [];
 
+    //add nodeLayout
     for(var i = 1; i < this.data.length; i++) {
       this.data[i].layout.label = this.data[i].key.toString(),
       this.data[i].layout.color = EdgeNodeCOLOR;
-      this.nodes.push(this.data[i].layout);
+      this.nodeLayout.push(this.data[i].layout);
     }
 
-
+    //highlight nodes
     for (var i = 0; i < this.highLightNodes.length; i++){
-      this.nodes[this.highLightNodes[i]-1].color = HIGHLIGHT;
+      this.nodeLayout[this.highLightNodes[i]-1].color = HIGHLIGHT;
     }
 
-
+    //add edges
     for(var i = 1; i < this.data.length; i++) {
 
       if(this.has_left(i)){     
@@ -1244,23 +1260,16 @@ class heap extends ourGraph {   // changed to extend from graph
 
     }
 
-    for (var i = 0; i < edges.length; i++){
-      for (var j = 0;  j < this.highLightEdges.length; j++) {
-        if (edges[i].source == this.highLightEdges[j][0] && edges[i].target == this.highLightEdges[j][1]) {
-          edges[i].color = HIGHLIGHT;  // why two condition do the same thing?
-        }
-
-        else if (edges[i].source == this.highLightEdges[j][1] && edges[i].target == this.highLightEdges[j][0]) {
-          edges[i].color = HIGHLIGHT;   // why two condition do the same thing?
-        } 
-
-      }
+   
+    //highlight edges
+    for (var i = 0;  i < this.highLightEdges.length; i++) {
+        this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
     }
 
 
 
     let g = {
-      "nodes": this.nodes,
+      "nodes": this.nodeLayout,
       "edges": this.edgeLayout
     }
 
