@@ -1203,56 +1203,45 @@ class heap extends ourGraph {   // changed to extend from graph
     return result;
   }
 
+  connectEdge(s, t) {
+    this.edgeLayout.push({
+      id: this.id++,
+      source: s,
+      target: t,
+      size :5,
+      label : 0,
+      type: 'line',
+      color: EdgeNodeCOLOR
+    });
+  }
+
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
 
-
-    var nodes = [];
+    this.nodes = [];
     var edges = [];
 
     for(var i = 1; i < this.data.length; i++) {
       this.data[i].layout.label = this.data[i].key.toString(),
       this.data[i].layout.color = EdgeNodeCOLOR;
-      nodes.push(this.data[i].layout);
+      this.nodes.push(this.data[i].layout);
     }
 
 
     for (var i = 0; i < this.highLightNodes.length; i++){
-      nodes[this.highLightNodes[i]-1].color = HIGHLIGHT;
+      this.nodes[this.highLightNodes[i]-1].color = HIGHLIGHT;
     }
 
 
     for(var i = 1; i < this.data.length; i++) {
 
-      if(this.has_left(i)){          // the following 20 lines redudent!
-        edges.push(
-        {
-          id: this.id++,
-          source: this.data[i].id,
-          target: this.data[this.left(i)].id,
-          size :5,
-          label : 0,
-          type: 'line',
-          color: EdgeNodeCOLOR
-        }
-        )
-      }else
-      break;
-
+      if(this.has_left(i)){     
+        this.connectEdge(this.data[i].id, this.data[this.left(i)].id);
+      } 
 
       if(this.has_right(i)){
-        edges.push(
-        {
-          id: this.id++,
-          source: this.data[i].id,
-          target: this.data[this.right(i)].id,
-          size :5,
-          label : 0,
-          type: 'line',
-          color: EdgeNodeCOLOR
-        }
-        )
-      }else
-      break;
+        this.connectEdge(this.data[i].id, this.data[this.right(i)].id);
+      }
+
     }
 
     for (var i = 0; i < edges.length; i++){
@@ -1271,8 +1260,8 @@ class heap extends ourGraph {   // changed to extend from graph
 
 
     let g = {
-      "nodes": nodes,
-      "edges": edges
+      "nodes": this.nodes,
+      "edges": this.edgeLayout
     }
 
 
