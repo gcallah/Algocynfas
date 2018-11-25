@@ -1260,13 +1260,10 @@ class heap extends ourGraph {   // changed to extend from graph
 
     }
 
-   
     //highlight edges
     for (var i = 0;  i < this.highLightEdges.length; i++) {
         this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
     }
-
-
 
     this.graph = {
       "nodes": this.nodeLayout,
@@ -1274,8 +1271,8 @@ class heap extends ourGraph {   // changed to extend from graph
     }
 
     this.createSigmaGraph(container);
-    this.sigma.refresh();
 
+    //draw heap array form
     list = [];
     for(var i = 1; i < this.data.length; i++) {
       list.push(this.data[i].key);
