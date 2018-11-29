@@ -1050,6 +1050,27 @@ class heap extends ourGraph {   // changed to extend from graph
     return this.right(i) < this.data.length;
   }
 
+  heapify(i) {
+    var l = left(i);
+    var r = right(i);
+
+    var largest = i;
+
+    if (l < this.data.size && cmp(this.data[l], this.data[i])) {
+        largest = l;
+    }
+
+    if (r < this.data.size && cmp(this.data[r], this.data[i])) {
+        largest = r;
+    }
+
+    if (largest != i) {
+      swap(this.data[i], this.data[largest]);
+      this.startGraph(false, 'heapCanvas');
+      this.heapify(largest);
+    }
+  }
+
 
   async down_heap(i) {
     this.highLightNodes.push(i);
