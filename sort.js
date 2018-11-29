@@ -335,6 +335,24 @@ function mergePrepare(){
 
 }
 
+
+// heapSort below
+async function selectionSort(myList){           //CLRS P 160
+
+  var h = new heap();
+
+  h.build_heap(myList);
+  
+  for(var i = h.data.length-1; i >= 2; i--) {
+    swap(h.data[1], h.data[i]);
+    h.heapify(i);
+  }
+
+
+
+
+}
+
 async function pause () {
   return new Promise(function (resolve) {
     setTimeout(resolve, 1000)

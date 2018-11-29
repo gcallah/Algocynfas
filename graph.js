@@ -1071,6 +1071,16 @@ class heap extends ourGraph {   // changed to extend from graph
     }
   }
 
+  build_heap(lst) {
+    for (var i = 0; i <lst.length;i++) {
+      this.data.push(new treeNode(lst[i], this.id++);
+    }
+
+    for(var i = this.data.length/2; i >= 1; i--) {
+        this.heapify(i);
+    }
+  }
+
 
   async down_heap(i) {
     this.highLightNodes.push(i);
