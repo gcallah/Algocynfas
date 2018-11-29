@@ -4,5 +4,5 @@ let list = [];
 let fList = null;
 drawListOnScreen(list);
  let mergeCanvas = new fabric.Canvas('mergeCanvas');
- let mer = createList(mergeCanvas,[])
+ let mer = createList(mergeCanvas,[]);
 </script>

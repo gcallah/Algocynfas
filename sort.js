@@ -104,6 +104,8 @@ async function run() {                                    // Display layer
       getHTML("mergeTitle").style.display = "none";
     
   } else if(sortType[5].checked){
+    document.getElementsByClassName("canvas-container")[0].style.height = "0px";
+    getHTML("heapCanvas").style.display = "block";
     await window.heapSort(fList);
   }
 
@@ -352,7 +354,7 @@ async function heapSort(myList){           //CLRS P 160
 
   console.log( h.getDataList());
   
-  for(var i = h.data.length-1; i >= 2; i--) {
+  for(var i = h.data.length - 1; i >= 2; i--) {
     [h.data[1].key, h.data[i].key] =  [h.data[i].key, h.data[1].key];
     h.heapify(i, 1);
     console.log( h.getDataList());
@@ -361,6 +363,8 @@ async function heapSort(myList){           //CLRS P 160
   }
 
 
+   document.getElementsByClassName("canvas-container")[0].style.height = "144px";
+  getHTML("heapCanvas").style.display = "none";
 
 }
 
