@@ -1050,34 +1050,43 @@ class heap extends ourGraph {   // changed to extend from graph
     return this.right(i) < this.data.length;
   }
 
-  heapify(i) {
-    var l = left(i);
-    var r = right(i);
+  getDataList(){
+    list = [];
+    for(var i = 1; i < this.data.length; i++) {
+      list.push(this.data[i].key);
+    }
+
+    return list;
+  }
+
+  heapify(end, i) {
+
+    var l = this.left(i);
+    var r = this.right(i);
 
     var largest = i;
 
-    if (l < this.data.size && cmp(this.data[l], this.data[i])) {
+    if (l < end && this.cmp(this.data[l], this.data[largest])) {
         largest = l;
     }
 
-    if (r < this.data.size && cmp(this.data[r], this.data[i])) {
+    if (r < end && this.cmp(this.data[r], this.data[largest])) {
         largest = r;
     }
 
     if (largest != i) {
-      swap(this.data[i], this.data[largest]);
-      this.startGraph(false, 'heapCanvas');
-      this.heapify(largest);
+      [this.data[i].key, this.data[largest].key] = [this.data[largest].key, this.data[i].key];
+      this.heapify(end, largest);
     }
   }
 
   build_heap(lst) {
     for (var i = 0; i <lst.length;i++) {
-      this.data.push(new treeNode(lst[i], this.id++);
+      this.data.push(new treeNode(lst[i], this.id++));
     }
 
-    for(var i = this.data.length/2; i >= 1; i--) {
-        this.heapify(i);
+    for(var i = Math.floor(this.data.length/2); i >= 1; i--) {
+        this.heapify(this.data.length, i);
     }
   }
 

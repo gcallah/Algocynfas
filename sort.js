@@ -103,6 +103,8 @@ async function run() {                                    // Display layer
       getHTML("mergeCanvas").style.display = "none";
       getHTML("mergeTitle").style.display = "none";
     
+  } else if(sortType[5].checked){
+    await window.heapSort(fList);
   }
 
   runButton.disabled = false;
@@ -335,19 +337,28 @@ function mergePrepare(){
 
 }
 
+function heap_greater(t1, t2) {
+  return parseInt(t1.key) > parseInt(t2.key);
+}
 
 // heapSort below
-async function selectionSort(myList){           //CLRS P 160
+async function heapSort(myList){           //CLRS P 160
+  
 
-  var h = new heap();
+  var h = new heap(heap_greater);
+  h.build_heap(myList.list);
 
-  h.build_heap(myList);
+  await myList.draw();
+
+  console.log( h.getDataList());
   
   for(var i = h.data.length-1; i >= 2; i--) {
-    swap(h.data[1], h.data[i]);
-    h.heapify(i);
+    [h.data[1].key, h.data[i].key] =  [h.data[i].key, h.data[1].key];
+    h.heapify(i, 1);
+    console.log( h.getDataList());
+    myList = new List(canvas, h.getDataList());
+    await myList.draw(true);
   }
-
 
 
 
