@@ -29,7 +29,6 @@ class GraphicElems { // an abstract class
 }
 
 class Circle extends GraphicElems {
-
   constructor(x = 0, y = 0, radius = 50, color = 'red') {
     super();
     var circle = new fabric.Circle({
@@ -213,8 +212,8 @@ class CircleChart extends Group {
     for (var i = 0; i < length; i++) {
       var currX = x + Math.sin(2 * Math.PI * i / length) * chartRadius;
       var currY = y - Math.cos(2 * Math.PI * i / length) * chartRadius;
-      var offset = Math.atan(circleRadius/chartRadius)
-      var arc = new Arc(x, y, chartRadius, color[i], 0,2 * Math.PI * i / length-Math.PI / 2 - offset, 2 * Math.PI * (i + 1) / length - Math.PI / 2 - offset , arcWidth);
+      var offset = Math.atan(circleRadius / chartRadius)
+      var arc = new Arc(x, y, chartRadius, color[i], 0, 2 * Math.PI * i / length - Math.PI / 2 - offset, 2 * Math.PI * (i + 1) / length - Math.PI / 2 - offset, arcWidth);
       this.add(arc.object)
       var circle = new Circle(currX, currY, circleRadius, color[i])
       this.add(circle.object)
@@ -244,7 +243,7 @@ class InfinitySymbol extends Group {
   constructor(x = 250, y = 250, radius = 75, color = 'black', width = 25) {
     super();
     var circleLeft = new Arc(x + 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
-    var circleRight = new Arc (x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleRight = new Arc(x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
     circleRight.rotate(45);
     circleLeft.rotate(225);
     var length = Math.PI * radius * 3.5 / 5;
@@ -252,8 +251,8 @@ class InfinitySymbol extends Group {
     var rect2 = new Rectangle(x, y, length, width, color);
     rect1.rotate(-45);
     rect2.rotate(45);
-    
-    
+
+
     this.add(circleLeft.object);
     this.add(circleRight.object);
     this.add(rect1.object);
@@ -267,7 +266,7 @@ class Line extends Rectangle {
     var slope = (finalY - initialY) / (finalX - initialX);
     var radian = Math.atan(slope);
     var degree = radian * (180 / Math.PI);
-      
+
     super(initialX, initialY, width, length, color);
     this.setAngle(degree);
   }
@@ -276,31 +275,52 @@ class Line extends Rectangle {
 class PathChart extends Group {
   constructor(pathLeft = ['A', 'B', 'C'], pathRight = ['D', 'E', 'F'], pathCenter = ['G', 'H'], goal = "DevOp Services!", x = 300, y = 300, rectangleHeight = 50, rectangleWidth = 150, fontSize = 15) {
     super();
-      var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth);
-      this.add(goalBox.object);
-      var goalText = new Text(goal, x, y, 'black', fontSize);
-      this.add(goalText.object);
-      
-      var pathCenterTop = new Rectangle(x, y - rectangleHeight * 5, rectangleHeight, rectangleWidth);
-      this.add(pathCenterTop.object);
-      var pathCenterTopText = new Text(pathCenter[0], x, y - rectangleHeight * 5, 'black', fontSize);
-      this.add(pathCenterTopText.object);
-      
-      var pathCenterBottom = new Rectangle(x, y - rectangleHeight * 2.5, rectangleHeight, rectangleWidth);
-      this.add(pathCenterBottom.object);
-      var pathCenterBottomText = new Text(pathCenter[1], x, y - rectangleHeight * 2.5, 'black', fontSize);
-      this.add(pathCenterBottomText.object);
-      
-      var pathCenterArrowTop = new SolidArrow(x, y - rectangleHeight, 50, rectangleHeight, 'black');
-      pathCenterArrowTop.rotate(90);
-      this.add(pathCenterArrowTop.object);
-      
-      var pathCenterArrowBottom = new SolidArrow(x, y - rectangleHeight * 3.5, 50, rectangleHeight, 'black');
-      pathCenterArrowBottom.rotate(90);
-      this.add(pathCenterArrowBottom.object);
-    }
+    var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth);
+    this.add(goalBox.object);
+    var goalText = new Text(goal, x, y, 'black', fontSize);
+    this.add(goalText.object);
+
+    var pathCenterTop = new Rectangle(x, y - rectangleHeight * 5, rectangleHeight, rectangleWidth);
+    this.add(pathCenterTop.object);
+    var pathCenterTopText = new Text(pathCenter[0], x, y - rectangleHeight * 5, 'black', fontSize);
+    this.add(pathCenterTopText.object);
+
+    var pathCenterBottom = new Rectangle(x, y - rectangleHeight * 2.5, rectangleHeight, rectangleWidth);
+    this.add(pathCenterBottom.object);
+    var pathCenterBottomText = new Text(pathCenter[1], x, y - rectangleHeight * 2.5, 'black', fontSize);
+    this.add(pathCenterBottomText.object);
+
+    var pathCenterArrowTop = new SolidArrow(x, y - rectangleHeight, 50, rectangleHeight, 'black');
+    pathCenterArrowTop.rotate(90);
+    this.add(pathCenterArrowTop.object);
+
+    var pathCenterArrowBottom = new SolidArrow(x, y - rectangleHeight * 3.5, 50, rectangleHeight, 'black');
+    pathCenterArrowBottom.rotate(90);
+    this.add(pathCenterArrowBottom.object);
+  }
 }
 
+class Person extends Group {
+  constructor() {
+    super();
+    var head = new Circle(50, 50, 20, 'black');
+    this.add(head.object);
+    var body = new Rectangle(50, 100, 100, 10, 'black');
+    this.add(body.object);
+    var leftHand = new Rectangle(30, 100, 50, 10, 'black');
+    leftHand.rotate(45);
+    this.add(leftHand.object);
+    var rightHand = new Rectangle(70, 100, 50, 10, 'black');
+    rightHand.rotate(-45);
+    this.add(rightHand.object);
+    var leftLeg = new Rectangle(30, 160, 50, 10, 'black');
+    leftLeg.rotate(45);
+    this.add(leftLeg.object);
+    var rightLeg = new Rectangle(70, 160, 50, 10, 'black');
+    rightLeg.rotate(-45);
+    this.add(rightLeg.object);
+  }
+}
 
 
 // Global Variables
@@ -316,7 +336,8 @@ function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
 }
 
 function create() {
-
+  var person = new Person();
+  person.draw(canvas);
   // var circle = new Circle();
   // var text = new Text('aaa');
   // circle.draw(canvas)
@@ -339,16 +360,16 @@ function create() {
 
   //var chart = new CircleChart()
   //chart.draw(canvas)
- 
+
   // var line = new Line();
   // line.draw(canvas);
-    
+
   // var curvedArrow = new CurvedArrow(250, 250, 50, 'black', angle = Math.PI / 2, width = 25);
   // curvedArrow.draw(canvas);
 
   //var infinitySymbol = new InfinitySymbol();
   //infinitySymbol.draw(canvas);
-    
-  var pathChart = new PathChart();
-  pathChart.draw(canvas);
+
+  // var pathChart = new PathChart();
+  // pathChart.draw(canvas);
 }
