@@ -2,10 +2,11 @@ from selenium import webdriver
 
 from unittest import TestCase, main
 
-
 path = #change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
+#Used to assert expectedUrl and currentUrl
+#Link Name : identifyingKeyword
 links = {"Sorting Algorithms" : "sort", 
          "Hash table" : "hashTable", 
          "Find a Minimum Spanning Tree" : "minSpanningTree",
@@ -19,7 +20,7 @@ links = {"Sorting Algorithms" : "sort",
          "Great data structure visualizations" : "visualization",
          "Sigma.js: a Javascript network graph library" : "sigmajs"}
 
-class TestLink(TestCase):
+class TestLinks(TestCase):
 
     def loadPage(self):
         driver.get("https://gcallah.github.io/Algocynfas/")

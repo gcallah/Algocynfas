@@ -7,9 +7,9 @@ from selenium.common.exceptions import NoSuchElementException
 from unittest import TestCase, main
 from random import randint
 
-#change path to path of chromedriver.exe
-path = r'C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe'
-mydriver = webdriver.Chrome(executable_path=path)
+
+path = #change path to path of chromedriver.exe
+driver = webdriver.Chrome(executable_path=path)
 
 def validOrInvalid():
     if (randint(0, 100) > 50):
@@ -20,21 +20,21 @@ validInputBool = validOrInvalid()
         
 class TestAlert(TestCase):
     def loadPage(self):
-        mydriver.get('https://gcallah.github.io/Algocynfas/')
+        driver.get("https://gcallah.github.io/Algocynfas/")
     
     def getLink(self, linkText):
-        return mydriver.find_element_by_link_text(linkText)
+        return driver.find_element_by_link_text(linkText)
     
     def getById(self, _id):
-        return mydriver.find_element_by_id(_id)
+        return driver.find_element_by_id(_id)
 
 class TestAlertSort(TestAlert):
     def generateValidInput(self):
         #valid input = any list of nums (-99 < num < 99)
-        keys = '';
+        keys = "";
         validInput = randint(0,99);
         for i in range(1,6):
-            keys += str(validInput) + ',';
+            keys += str(validInput) + ",";
             validInput = randint(0,99);
             if (validInput % i == 1): #randomize negative inputs
                 validInput *= -1;
@@ -45,15 +45,15 @@ class TestAlertSort(TestAlert):
         #invalidInput = any non-integers || input.length < 2 
         charNum = randint(0, 126);
         if (charNum <= 32): #input.length = 0
-            return '';
+            return "";
         else:
             if (charNum % 2 == 0): #input.length = 1
                 return chr(charNum);
             else: #input.length > 1
-                return (self.generateValidInput() + ',' + chr(charNum))
+                return (self.generateValidInput() + "," + chr(charNum))
     
     def enterInputs(self, inputBox):
-        _input = ''
+        _input = ""
         if (validInputBool):
             _input = self.generateValidInput();
         else:
@@ -63,21 +63,21 @@ class TestAlertSort(TestAlert):
     
     def testAlert(self):
         self.loadPage()
-        self.getLink('Sorting Algorithms').click()
-        inputBox = self.getById('number-input')
+        self.getLink("Sorting Algorithms").click()
+        inputBox = self.getById("number-input")
         self.enterInputs(inputBox)
-        self.getById('add-number-button').click()
+        self.getById("add-number-button").click()
         try:
-            mydriver.switch_to.alert.accept()    
+            driver.switch_to.alert.accept()    
             if validInputBool:
-                print('Error: Valid input is given and alert pops up')
+                print("Error: Valid input is given and alert pops up")
             else:
                 print("Ran as expected: Invalid input is given and alert pops up")
         except:
             if validInputBool:
-               print('Ran as expected: Valid input is given and alert doesn\'t pop up')
+               print("Ran as expected: Valid input is given and alert doesn\"t pop up")
             else:
-               print("Error: invalid input is given and alert doesn\'t pop up")
+               print("Error: invalid input is given and alert doesn\"t pop up")
         
 class TestAlertHeap(TestAlert):
     def generateInvalidInput(self, low, high):
@@ -90,31 +90,38 @@ class TestAlertHeap(TestAlert):
         
     def testAlert(self):
         self.loadPage()
-        self.getLink('Hash table').click()
+        self.getLink("Hash table").click()
+        inputID = "tableSize"
         if (randint(0, 100) > 50):
-            inputBox = self.getById('tableSize')
+            inputBox = self.getById(inputID)
             inputBox.clear()
             #invalidInput = < 2 || > 20
             low = 2
             high = 20
         else:
-            inputBox = self.getById('InputValue')
+            inputID = "InputValue"
+            inputBox = self.getById(inputID)
             #invalidInput = < 0 || > 999
             low = 0
             high = 999
         inputBox.send_keys(self.generateInvalidInput(low,high))
-        
-        self.getById('run-button').click()
+        self.getById("run-button").click()
         try:
-            mydriver.switch_to.alert.accept()    
-            print("Ran as expected: Invalid input is given and alert pops up")
+            driver.switch_to.alert.accept()  
+            if inputID == "tableSize":
+                print("TableSize: Ran as expected: Invalid input is given and alert pops up")
+            else:
+                print("InputValue: Ran as expected: Invalid input is given and alert pops up")
         except:
-            print("Error: invalid input is given and alert doesn\'t pop up")
+            if inputID == "tableSize":
+                print("TableSize: Error: invalid input is given and alert doesn\"t pop up")
+            else:
+                print("InputValue: Error: invalid input is given and alert doesn\"t pop up")
 
-       
-sort = TestAlertSort()
-sort.testAlert()
-heap = TestAlertHeap()
-heap.testAlert()
+if __name__ == "__main__": 
+    sort = TestAlertSort()
+    sort.testAlert()
+    heap = TestAlertHeap()
+    heap.testAlert()
     
 
