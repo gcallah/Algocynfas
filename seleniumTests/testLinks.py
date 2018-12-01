@@ -2,11 +2,12 @@ from selenium import webdriver
 
 from unittest import TestCase, main
 
-path = #change path to path of chromedriver.exe
+#change path to path of chromedriver.exe
+path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=path)
 
-#Used to assert expectedUrl and currentUrl
-#Link Name : identifyingKeyword
+#used to assert expectedUrl and currentUrl
+#linkName : identifyingKeyword
 links = {"Sorting Algorithms" : "sort", 
          "Hash table" : "hashTable", 
          "Find a Minimum Spanning Tree" : "minSpanningTree",
@@ -42,12 +43,12 @@ class TestLinks(TestCase):
         for link in linksList:
             linkNameList.append(link.text)
             
-        for name in linkNameList:
-            clickLink = self.getLink(name)
+        for linkName in linkNameList:
+            clickLink = self.getLink(linkName)
             clickLink.click()
             #AssertionError will pop up and testing will stop
             #if the link is wrong/mismatched
-            self.assertIn(links[name], driver.current_url)
+            self.assertIn(links[linkName], driver.current_url)
             self.loadPage()
         
         self.closePage()
