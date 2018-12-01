@@ -1,11 +1,6 @@
 from selenium import webdriver
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-
 from unittest import TestCase, main
-from random import randint
 
 
 path = #change path to path of chromedriver.exe
@@ -35,24 +30,26 @@ class TestLink(TestCase):
     def getLink(self, linkText):
         return driver.find_element_by_link_text(linkText)
 
-    def getById(self, id):
-        return self.driver.find_element_by_id(id)
+    def getElemsByTagName(self, tagName):
+        return driver.find_elements_by_tag_name(tagName)
 
     def test_links(self):
-        lst = []
-        driver.get("https://gcallah.github.io/Algocynfas/")
-        linksList = driver.find_elements_by_tag_name("li")
+        linkNameList = []
+        self.loadPage()
+        linksList = self.getElemsByTagName("li")
         
         for link in linksList:
-            lst.append(link.text)
+            linkNameList.append(link.text)
             
-        for name in lst:
-            driver.get("https://gcallah.github.io/Algocynfas/")
+        for name in linkNameList:
             clickLink = self.getLink(name)
             clickLink.click()
             #AssertionError will pop up and testing will stop
             #if the link is wrong/mismatched
             self.assertIn(links[name], driver.current_url)
-
+            self.loadPage()
+        
+        self.closePage()
+        
 if __name__ == "__main__":
     main()
