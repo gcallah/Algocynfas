@@ -348,22 +348,17 @@ async function heapSort(myList){           //CLRS P 160
   
 
   var h = new heap(heap_greater);
-  h.build_heap(myList.list);
+  await h.build_heap(myList.list);
 
-  await myList.draw();
 
-  console.log( h.getDataList());
   
   for(var i = h.data.length - 1; i >= 2; i--) {
     [h.data[1].key, h.data[i].key] =  [h.data[i].key, h.data[1].key];
-    h.heapify(i, 1);
-    console.log( h.getDataList());
-    myList = new List(canvas, h.getDataList());
-    await myList.draw(true);
+    await h.down_heap(1, i );
   }
 
 
-   document.getElementsByClassName("canvas-container")[0].style.height = "144px";
+  document.getElementsByClassName("canvas-container")[0].style.height = "144px";
   getHTML("heapCanvas").style.display = "none";
 
 }
