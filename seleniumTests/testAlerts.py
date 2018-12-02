@@ -1,9 +1,11 @@
 from selenium import webdriver
-
+from selenium.webdriver.support.ui import Select
 from unittest import TestCase, main
+
 from random import randint
 
-path = #change path to path of chromedriver.exe
+#path = #change path to path of chromedriver.exe
+path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=path)
 
 #Parent Class - General TestAlert
@@ -65,6 +67,7 @@ class TestAlertSort(TestAlert):
         print(_input)
     
     def testAlert(self):
+        print("TestAlertSort")
         self.getLink("Sorting Algorithms").click()
         inputBox = self.getById("number-input")
         self.enterInputs(inputBox)
@@ -81,7 +84,8 @@ class TestAlertSort(TestAlert):
                print("Ran as expected: Valid input is given and alert doesn\'t pop up")
             else:
                print("Error: invalid input is given and alert doesn\'t pop up")
-
+        
+        print()
 #Child Class - TestAlert for Heap
 class TestAlertHeap(TestAlert):
     
@@ -89,41 +93,77 @@ class TestAlertHeap(TestAlert):
             invalidInput = randint(high + 1, high * 10) 
             if invalidInput % 2 == 0:
                 #negative invalidInput
-                invalidInput = randint(high * -1 , low-1)
+                invalidInput = randint(high * -1 , low - 1)
             print(invalidInput)
             return invalidInput
+    
+    def setSize(self):
+        #setSizeDefaultValue = 10
+        self.getById("set-button").click()
+        
+    def chooseFunc(self, validInput):
+        inputBox = self.getById("funcChoices")
+        options = inputBox.find_elements_by_tag_name('option')
+        validRandInt = randint(1, 4)
+        if validInput:
+            #validFunc = options[1 to 4]
+            options[validRandInt].click()
+        else:
+            #invalidFunc = Select One (options[0]) || Customize (options[5]) with no input
+            if (validRandInt % 2 == 0): 
+                options[5].click()
         
     def testAlert(self):
+        print("TestAlertHash")
         self.loadPage()
         self.getLink("Hash table").click()
         inputID = "tableSize"
         
-        if (randint(0, 100) > 50): #test Set Size with invalid input
+        choices = randint(0, 100) #!! randint(0, 100)
+        if (choices < 33): #test Set Size with invalid input
             inputBox = self.getById(inputID)
             inputBox.clear()
             #invalidInput = < 2 || > 20
             inputBox.send_keys(self.generateInvalidInput(2, 20))
-            self.getById("set-button").click()
+            self.setSize()
+            
+        elif (33 < choices < 66): #test choose func with invalid func
+            inputID = "funcChoices"
+            validFunc = True
+            #need to set a valid size to test invalid func
+            self.setSize()
+            self.chooseFunc(False)
+            self.getById("run-button").click()
             
         else: #test Hash with invalid input
             inputID = "InputValue"
+            validFunc = True
+            #need to set a valid size and choose a valid func to best invalid hash
+            self.setSize()
+            self.chooseFunc(validFunc)
             inputBox = self.getById(inputID)
             #invalidInput = < 0 || > 999
             inputBox.send_keys(self.generateInvalidInput(0, 999))
             self.getById("run-button").click()
-        
+            
         try:
             driver.switch_to.alert.accept()  
             if inputID == "tableSize":
                 print("Ran as expected: Set Size: Invalid input is given and alert pops up")
+            elif inputID == "funcChoices":
+                print("Ran as expected: Function Choices: Invalid input is given and alert pops up")
             else:
                 print("Ran as expected: Hash: Invalid input is given and alert pops up")
+        
         except:
             if inputID == "tableSize":
                 print("Error: Set Size: invalid input is given and alert doesn\'t pop up")
+            elif inputID == "funcChoices":
+                print("Error: Function Choices: invalid input is given and alert doesn\'t pop up")
             else:
                 print("Error: Hash: invalid input is given and alert doesn\'t pop up")
-
+        print()
+        
 if __name__ == "__main__": 
     
     testAlert = TestAlert()

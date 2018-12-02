@@ -2,7 +2,8 @@ from selenium import webdriver
 
 from unittest import TestCase, main
 
-#change path to path of chromedriver.exe
+
+#path = #change path to path of chromedriver.exe
 path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=path)
 
