@@ -1144,12 +1144,12 @@ noticeErr("Please input a valid integer", errorBox);
 }
 
 
-class heap extends ourGraph {   // changed to extend from graph
-  constructor(cmp = heap_less) {
+class heap extends ourGraph {   
+  constructor(cmp = heap_less, lst = fList) {
     super();
     this.data = [];             // elements are treeNode
     this.data.push(null);       // ignore index 0 to make child/parent computation easier
-    this.arrayList =fList;      // heap array form
+    this.arrayList = lst;       // heap array form
     this.cmp = cmp;             // compare function, determine min/max-heap
     this.id = 0;                // assign incremental ids to nodes and edges of the sigma graph 
     this.highLightNodes = [];  
@@ -1250,7 +1250,9 @@ class heap extends ourGraph {   // changed to extend from graph
 
         this.arrayList.unhighlight(i-1);
         this.arrayList.unhighlight(this.left(i)-1);
-        this.arrayList.unhighlight(this.right(i)-1);
+        if (this.right(i) < end){
+          this.arrayList.unhighlight(this.right(i)-1);
+        }
 
         i = min_child;
       } else {
@@ -1258,7 +1260,9 @@ class heap extends ourGraph {   // changed to extend from graph
         this.highLightEdges = [];
         this.arrayList.unhighlight(i-1);
         this.arrayList.unhighlight(this.left(i)-1);
-        this.arrayList.unhighlight(this.right(i)-1);
+        if (this.right(i) < end){
+          this.arrayList.unhighlight(this.right(i)-1);
+        }
         this.startGraph(false, 'heapCanvas');
         await this.pause();
         return;
