@@ -1373,6 +1373,7 @@ class heap extends ourGraph {
 
   async remove() {
 
+    //heap is already empty
     if(this.data.length == 1)
       return;
     var result = this.data[1];
@@ -1398,6 +1399,15 @@ class heap extends ourGraph {
     this.arrayList.dataElems.pop();
 
     this.highLightNodes.pop();
+
+
+    // heap empty after pop
+    if(this.data.length == 1){
+      this.highLightNodes = [];
+      this.startGraph(false, 'heapCanvas');
+      await this.pause();
+      return result;
+    }
 
     this.down_heap(1, this.data.length);
 
