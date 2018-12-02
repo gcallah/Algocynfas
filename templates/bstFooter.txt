@@ -1,4 +1,3 @@
-
     <footer id="bstLegend" style = "margin-left: 10em">
         <script> window.display_legend("bstLegend", "Items not looking at", "Items being traced", '#0039e6','#F5B041') </script>
     </footer>

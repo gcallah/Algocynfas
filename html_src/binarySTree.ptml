@@ -8,9 +8,9 @@
   <h1> Binary Search Tree </h1>
   <div class="container" style = "margin-left: 10em">
  <h5 style = "margin-left: 0em">1. Create a Binary Search Tree: </h5>
- <!--include binaryList.txt -->
+ <!--include treeList.txt -->
  <!--include binaryListBtn.txt -->
- <!--include binarySample.txt -->
+ <!--include treeSample.txt -->
  <!--include random.txt --> 
  <hr>
  <h5 style = "margin-left: 0em">2. Choose an algorithm: </h5>

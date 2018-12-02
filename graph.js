@@ -2,8 +2,11 @@ const EdgeNodeCOLOR = '#0039e6' ;
 const HIGHLIGHT = '#F5B041';
 const RESULTCOLOR = '#FF5733';
 const ErrorCOLOR = '#FF0000';
-
 adjustPosition = false;
+
+
+
+
 
 function typeChange(){
   var choice = getHTML("choices").selectedIndex;
@@ -76,10 +79,76 @@ if(animeRunning){
  Graph = graph;
 }
 disableButtons(false);
-
+}
 
 }
 
+async function createRBT(type){
+  if(!animeRunning){
+    var graph = new RBT();
+    for(var i = 0; i < Graph.nodes.length; i++){
+      graph.insert(parseInt(Graph.nodes[i]),false,false);
+    }
+    Graph = graph;
+  }
+  animeRunning = true;
+  if(type == 1){
+   getHTML("rbtGraphContainer").style.height = 300;
+   getHTML("rbtGraphContainer").style.width = 800;
+   getHTML("rbtGraphContainer").style.marginLeft = "10em";
+   getHTML("rbtLegend").style.marginLeft = "10em";
+   var graph = new RBT();
+
+   if(getHTML("random").checked == true){
+     var input = graph.random();
+   }
+   else{
+    var input = splitInput(getHTML("treeList").value, true);
+  }
+  for(var i = 0; i < input.length; i++){
+    graph.insert(parseInt(input[i]));
+  }
+  Graph = graph;  
+}
+else{
+ disableButtons(true);
+ var input = parseInt(getHTML("treeNode").value);
+ if(!Graph){
+  var graph = new RBT();
+}
+else{
+ $( ".graph" ).empty();
+ var graph = Graph;
+
+}
+await graph.insert(input,true);
+if(animeRunning){
+ Graph = graph;
+}
+disableButtons(false);
+}
+
+}
+
+function setTreeSample(){
+  let selectedBox = getHTML("treeSample");
+  var sampleSelected = selectedBox.selectedIndex;
+  $(".graph").empty();
+
+  if (sampleSelected == 0){
+    getHTML("treeList").value = "";
+  }
+
+  if (sampleSelected == 1){
+
+    getHTML("treeList").value = "15,4,29,1,63,17";
+  }
+
+  else if (sampleSelected == 2){
+    getHTML("treeList").value = "10,7,15,3,21,5,11,18,8,9,4,6,19,2,1";
+
+  }
+  getHTML("random").checked == false;
 }
 
 
@@ -301,11 +370,11 @@ if(node.right){
 }
 
 strench(adjustList){
-    for(var i = 0; i < adjustList.length; i++){
-      adjustList[i].strenchTimes += 1;
-      this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
-    }
+  for(var i = 0; i < adjustList.length; i++){
+    adjustList[i].strenchTimes += 1;
+    this.adjustPos(adjustList[i].sideToParent, adjustList[i]);
   }
+}
 
 enableDrag(){
   var dragListener = sigma.plugins.dragNodes(this.sigma, this.sigma.renderers[0]);
@@ -544,7 +613,6 @@ kruskal(){
 }
 
 // prim
-
 prim(){                                                // Refer to CLRS P634's prim's algorithm
 var path = [];
 var color = true;
@@ -680,6 +748,62 @@ class tree extends ourGraph{
    }
    return result;
  }
+}
+
+ class treeNode{
+  constructor(num, counter){
+    this.key = num;
+    this.id = counter;
+    this.left = null;
+    this.right = null;
+    this.parent = null;
+    this.layout = null;
+    this.position = null;
+    this.sideToParent = null;
+    this.leftEdge = null;
+    this.rightEdge = null;
+    this.strenchTimes = 0;
+  }
+  setNode(){
+    if(!this.parent){
+      this.layout = {
+        "id": this.id.toString(),
+        "label": this.key.toString(),
+        "x": 0,
+        "y": -100,
+        "size": 12,
+        "color": EdgeNodeCOLOR,
+      }; 
+      this.position = {
+        x: 0,
+        y: -100,
+      };
+    }
+    else{
+      if (this.sideToParent == "left"){
+        this.position = {
+          x: this.parent.position.x - 30,
+          y: this.parent.position.y + 30,
+        }
+      }
+      else{
+        this.position = {
+          x: this.parent.position.x + 30,
+          y: this.parent.position.y + 30,
+        }
+      }
+      this.layout = {
+        "id": this.id.toString(),
+        "label": this.key.toString(),
+        "x": this.position.x,
+        "y": this.position.y,
+        "size": 12, 
+        "color" : EdgeNodeCOLOR,
+      }
+    }
+
+  }
+
 }
 
 
@@ -953,69 +1077,80 @@ async insert(input,single = false,draw = true){
    }
  }
 
- class treeNode{
-  constructor(num, counter){
-    this.key = num;
-    this.id = counter;
-    this.left = null;
-    this.right = null;
-    this.parent = null;
-    this.layout = null;
-    this.position = null;
-    this.sideToParent = null;
-    this.leftEdge = null;
-    this.rightEdge = null;
-    this.strenchTimes = 0;
-  }
-  setNode(){
-    if(!this.parent){
-      this.layout = {
-        "id": this.id.toString(),
-        "label": this.key.toString(),
-        "x": 0,
-        "y": -100,
-        "size": 12,
-        "color": EdgeNodeCOLOR,
-      }; 
-      this.position = {
-        x: 0,
-        y: -100,
-      };
-    }
-    else{
-      if (this.sideToParent == "left"){
-        this.position = {
-          x: this.parent.position.x - 30,
-          y: this.parent.position.y + 30,
-        }
-      }
-      else{
-        this.position = {
-          x: this.parent.position.x + 30,
-          y: this.parent.position.y + 30,
-        }
-      }
-      this.layout = {
-        "id": this.id.toString(),
-        "label": this.key.toString(),
-        "x": this.position.x,
-        "y": this.position.y,
-        "size": 12, 
-        "color" : EdgeNodeCOLOR,
-      }
-    }
 
-  }
+class RBT extends BST{
+
+ constructor(){
+  super();
 
 }
+
+async insert(input,single = false,draw = true){
+  if(Number.isInteger(input)){
+   correctErr("treeNode");
+   correctErr("treeList");
+   if(single && draw){
+     this.createSigmaGraph('bstGraphContainer');
+     await this.pause();
+   }
+   var node = new treeNode(input, this.treeNodes.length);
+   var result = treeInsert(this.root, node);   // the binary insert algorithm, in binarySTree.js
+   this.root = result.root;
+   node = result.node;
+   var adjustList = result.adj;
+   var hlNodeId = result.hlNodeId;
+
+   node.setNode();
+   if(this.treeNodes.length > 1 && adjustList.length != 0){
+    this.strench(adjustList);
+  }              
+  this.treeNodes.push(node);
+  this.nodeLayout.push(node.layout);
+
+  this.positionCheck(node);
+
+
+  if(this.treeNodes.length > 1){
+    this.connectParentChild(node); 
+    if(single){
+      await this.highLight(hlNodeId); 
+    }   
+  }
+  if(animeRunning|| !draw ){
+    this.nodes.push(input);
+  }
+  let g = {
+    nodes: this.nodeLayout,
+    edges: this.edgeLayout,
+  }; 
+  this.graph = g;
+  if(draw && animeRunning){
+    this.createSigmaGraph('bstGraphContainer');
+  }
+
+  return;  
+}
+
+if(single){
+  var errorBox = "treeNode";
+}
+else{
+  var errorBox = "treeList";
+}
+noticeErr("Please input a valid integer", errorBox);
+
+}
+
+}
+
 
 class heap extends ourGraph {   // changed to extend from graph
   constructor(cmp = heap_less) {
     super();
-    this.data = [];
-    this.data.push(null);
-    this.cmp = cmp;        // compare function, determine min/max-heap
-    this.id = 0;
+    this.data = [];             // elements are treeNode
+    this.data.push(null);      // ignore index 0 to make child/parent computation easier
+    this.cmp = cmp;            // compare function, determine min/max-heap
+    this.id = 0;              
     this.highLightNodes = [];
     this.highLightEdges = [];
     this.adjustList = [];
@@ -1050,6 +1185,7 @@ class heap extends ourGraph {   // changed to extend from graph
     return this.right(i) < this.data.length;
   }
 
+  //return a list of keys, instead of treeNode
   getDataList(){
     list = [];
     for(var i = 1; i < this.data.length; i++) {
@@ -1067,11 +1203,11 @@ class heap extends ourGraph {   // changed to extend from graph
     var largest = i;
 
     if (l < end && this.cmp(this.data[l], this.data[largest])) {
-        largest = l;
+      largest = l;
     }
 
     if (r < end && this.cmp(this.data[r], this.data[largest])) {
-        largest = r;
+      largest = r;
     }
 
     if (largest != i) {
@@ -1080,25 +1216,59 @@ class heap extends ourGraph {   // changed to extend from graph
     }
   }
 
-  build_heap(lst) {
+  //build heap bottom-up
+  async build_heap(lst) {
     for (var i = 0; i <lst.length;i++) {
-      this.data.push(new treeNode(lst[i], this.id++));
+      var node = new treeNode(lst[i], this.id++);
+      this.data.push(node);
     }
 
+    this.data[1].setNode();
+    for (var i = 2; i < this.data.length; i++) {
+
+      this.data[i].parent = this.data[this.parent(i)];
+
+      if(this.is_left(i)) {
+        this.data[i].sideToParent = "left";
+        this.data[i].parent.left = this.data[i];
+        
+      } else {
+        this.data[i].sideToParent = "right";
+        this.data[i].parent.right = this.data[i];
+      }
+
+
+      this.data[i].setNode();
+
+
+      var cur = this.data[i];       
+      this.adjustList = [];
+
+      while(cur && cur.parent ) {
+        if(cur.parent.sideToParent && cur.sideToParent != cur.parent.sideToParent){
+          this.adjustList.push(cur.parent);
+        }
+
+        cur = cur.parent;
+      }
+      this.strench(this.adjustList);
+    }
+
+
     for(var i = Math.floor(this.data.length/2); i >= 1; i--) {
-        this.heapify(this.data.length, i);
+      await this.down_heap(i, this.data.length);
     }
   }
 
 
-  async down_heap(i) {
+  async down_heap(i, end) {
     this.highLightNodes.push(i);
     this.startGraph(false, 'heapCanvas');
     await this.pause();
-    while (this.has_left(i)) {
+    while (this.left(i) < end) {
       var min_child = this.left(i);
 
-      if (this.has_right(i)) {
+      if (this.right(i) < end) {
         if( this.cmp(this.data[this.right(i)], this.data[min_child]) ) {
           min_child = this.right(i);
         }
@@ -1110,10 +1280,11 @@ class heap extends ourGraph {   // changed to extend from graph
 
       if( this.cmp(this.data[min_child], this.data[i])) {
 
+        console.log(i, " ", min_child);
+
         this.highLightEdges.push([this.data[i].id, this.data[min_child].id ]);
 
         [this.data[i].key, this.data[min_child].key] = [this.data[min_child].key, this.data[i].key];
-     //   [this.data[i].id, this.data[min_child].id] = [this.data[min_child].id, this.data[i].id];
 
         this.startGraph(false, 'heapCanvas');
         await this.pause();
@@ -1173,7 +1344,7 @@ class heap extends ourGraph {   // changed to extend from graph
 
   insert(val) {
     var node = new treeNode(val, this.id++);
-   
+
     var l = this.data.length;
     if(l != 1) {
       node.parent = this.data[this.parent(l)];
@@ -1197,16 +1368,15 @@ class heap extends ourGraph {   // changed to extend from graph
     this.adjustList = [];
 
     while(cur && cur.parent ) {
-      console.log(cur.sideToParent, " ", cur.parent.sideToParent);
       if(cur.parent.sideToParent && cur.sideToParent != cur.parent.sideToParent){
         this.adjustList.push(cur.parent);
       }
 
       cur = cur.parent;
     }
-   this.strench(this.adjustList);
+    this.strench(this.adjustList);
 
-   this.startGraph(false, 'heapCanvas');
+    this.startGraph(false, 'heapCanvas');
 
     this.up_heap(l);
   }
@@ -1239,7 +1409,7 @@ class heap extends ourGraph {   // changed to extend from graph
 
     this.highLightNodes.pop();
 
-    this.down_heap(1);
+    this.down_heap(1, this.data.length);
 
     return result;
   }
@@ -1260,15 +1430,15 @@ class heap extends ourGraph {   // changed to extend from graph
 
     for (var i = 0; i < this.edgeLayout.length; i++){
 
-       if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
-          this.edgeLayout[i].color = HIGHLIGHT;  
-        } else if (this.edgeLayout[i].source == t && this.edgeLayout[i].target == s) {
-          this.edgeLayout[i].color = HIGHLIGHT;   
-        } 
-    }
-
-
+     if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
+      this.edgeLayout[i].color = HIGHLIGHT;  
+    } else if (this.edgeLayout[i].source == t && this.edgeLayout[i].target == s) {
+      this.edgeLayout[i].color = HIGHLIGHT;   
+    } 
   }
+
+
+}
 
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
 
@@ -1277,7 +1447,7 @@ class heap extends ourGraph {   // changed to extend from graph
 
     //add nodeLayout
     for(var i = 1; i < this.data.length; i++) {
-      this.data[i].layout.label = this.data[i].key.toString(),
+      this.data[i].layout.label = this.data[i].key.toString();
       this.data[i].layout.color = EdgeNodeCOLOR;
       this.nodeLayout.push(this.data[i].layout);
     }
@@ -1302,8 +1472,10 @@ class heap extends ourGraph {   // changed to extend from graph
 
     //highlight edges
     for (var i = 0;  i < this.highLightEdges.length; i++) {
-        this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
+      this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
     }
+
+    $("#heapCanvas").empty();
 
     this.graph = {
       "nodes": this.nodeLayout,
@@ -1326,4 +1498,6 @@ class heap extends ourGraph {   // changed to extend from graph
     l.draw(true);
   }
 }
+
+
 
