@@ -4,8 +4,7 @@ from unittest import TestCase, main
 
 from random import randint
 
-#path = #change path to path of chromedriver.exe
-path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
+path = #change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
 #Parent Class - General TestAlert
@@ -119,7 +118,7 @@ class TestAlertHeap(TestAlert):
         self.getLink("Hash table").click()
         inputID = "tableSize"
         
-        choices = randint(0, 100) #!! randint(0, 100)
+        choices = randint(0, 100) 
         if (choices < 33): #test Set Size with invalid input
             inputBox = self.getById(inputID)
             inputBox.clear()
@@ -127,10 +126,10 @@ class TestAlertHeap(TestAlert):
             inputBox.send_keys(self.generateInvalidInput(2, 20))
             self.setSize()
             
-        elif (33 < choices < 66): #test choose func with invalid func
+        elif (33 < choices < 66): #test chooseFunc with invalid function
             inputID = "funcChoices"
             validFunc = True
-            #need to set a valid size to test invalid func
+            #need to set a valid size to test invalid function
             self.setSize()
             self.chooseFunc(False)
             self.getById("run-button").click()
@@ -138,7 +137,7 @@ class TestAlertHeap(TestAlert):
         else: #test Hash with invalid input
             inputID = "InputValue"
             validFunc = True
-            #need to set a valid size and choose a valid func to best invalid hash
+            #need to set a valid size and choose a valid func to test invalid hash
             self.setSize()
             self.chooseFunc(validFunc)
             inputBox = self.getById(inputID)
