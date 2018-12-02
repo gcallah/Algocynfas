@@ -1383,6 +1383,16 @@ class heap extends ourGraph {
     this.startGraph(false, 'heapCanvas');
     await this.pause();
 
+    // pop last element
+    if(this.data.length == 2){
+      this.data.pop();
+      this.arrayList.dataElems.pop();
+      this.highLightNodes.pop();
+      this.startGraph(false, 'heapCanvas');
+      await this.pause();
+      return result;
+    }
+
 
     this.highLightNodes.push(this.data.length-1);
     this.arrayList.highlightSwap(this.data.length-2);
@@ -1399,15 +1409,6 @@ class heap extends ourGraph {
     this.arrayList.dataElems.pop();
 
     this.highLightNodes.pop();
-
-
-    // heap empty after pop
-    if(this.data.length == 1){
-      this.highLightNodes = [];
-      this.startGraph(false, 'heapCanvas');
-      await this.pause();
-      return result;
-    }
 
     this.down_heap(1, this.data.length);
 
