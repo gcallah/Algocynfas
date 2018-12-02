@@ -320,6 +320,13 @@ class Person extends Group {
     rightLeg.rotate(-45);
     this.add(rightLeg.object);
   }
+
+  withBug(){
+    var bugBox = new Rectangle(100,100,50,50,'black');
+    this.add(bugBox.object);
+    var bugText = new Text('Bug',100,100,'white');
+    this.add(bugText.object);
+  }
 }
 
 
@@ -337,6 +344,7 @@ function createCanvas(canvasHeight, canvasWidth) { //don't have to be a class
 
 function create() {
   var person = new Person();
+  person.withBug();
   person.draw(canvas);
   // var circle = new Circle();
   // var text = new Text('aaa');
