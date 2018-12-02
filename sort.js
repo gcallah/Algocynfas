@@ -339,34 +339,40 @@ function mergePrepare(){
 
 }
 
+// for heapsort compare function
 function heap_greater(t1, t2) {
   return parseInt(t1.key) > parseInt(t2.key);
 }
 
-// heapSort below
 async function heapSort(myList){           //CLRS P 160
   
-
   var h = new heap(heap_greater);
-  h.build_heap(myList.list);
-
-  await myList.draw();
-
-  console.log( h.getDataList());
+  await h.build_heap(myList.list);
   
   for(var i = h.data.length - 1; i >= 2; i--) {
+
+    h.highLightNodes.push(1);
+    h.highLightNodes.push(i);
+    h.arrayList.highlightSwap(0);
+    h.arrayList.highlightSwap(i-1);
+    h.startGraph(false, "heapCanvas");
+    await h.pause();
+
     [h.data[1].key, h.data[i].key] =  [h.data[i].key, h.data[1].key];
-    h.heapify(i, 1);
-    console.log( h.getDataList());
-    myList = new List(canvas, h.getDataList());
-    await myList.draw(true);
+    h.arrayList.swap(0, i-1);
+    h.startGraph(false, "heapCanvas");
+    await h.pause();
+
+    h.highLightNodes = [];
+    h.arrayList.unhighlight(0);
+    h.arrayList.unhighlight(i-1);
+    h.startGraph(false, "heapCanvas");
+    await h.pause();
+    await h.down_heap(1, i);
+
   }
-
-
-   document.getElementsByClassName("canvas-container")[0].style.height = "144px";
-  getHTML("heapCanvas").style.display = "none";
-
 }
+
 
 async function pause () {
   return new Promise(function (resolve) {

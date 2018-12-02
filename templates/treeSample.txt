@@ -2,7 +2,7 @@
             <b>
             sample values:
             </b>
-                <select id= bstSample onchange="setBstSample()">
+                <select id= treeSample onchange="setTreeSample()">
                 <option value="Select" >Customize</option>
                 <option value="sample1" >6 nodes </option>
                 <option value="sample2" >15 nodes </option>

@@ -1,0 +1,3 @@
+&emsp;
+<input type="text" class="Box" id="deleteRbBox" 
+placeholder="Enter an Node">

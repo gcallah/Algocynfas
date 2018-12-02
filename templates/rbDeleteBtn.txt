@@ -1,0 +1,5 @@
+<button class="btn btn-primary" id="delete-rb-button" type="button" 
+onclick="deleteRBNode()"> Delete
+</button>
+&emsp;
+
