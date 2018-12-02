@@ -1,0 +1,4 @@
+ <button class="btn btn-primary" id="createRBT-button" type="button" 
+  onclick="createRBT(1)">Create RBT
+</button> 
+

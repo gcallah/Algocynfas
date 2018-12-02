@@ -82,6 +82,27 @@ disableButtons(false);
 
 }
 
+function setTreeSample(){
+  let selectedBox = getHTML("treeSample");
+  var sampleSelected = selectedBox.selectedIndex;
+  $(".graph").empty();
+
+  if (sampleSelected == 0){
+        getHTML("treeList").value = "";
+    }
+
+    if (sampleSelected == 1){
+
+        getHTML("treeList").value = "15,4,29,1,63,17";
+    }
+
+    else if (sampleSelected == 2){
+        getHTML("treeList").value = "10,7,15,3,21,5,11,18,8,9,4,6,19,2,1";
+        
+    }
+  getHTML("random").checked == false;
+}
+
 
 //////////wrapper class implementation
 

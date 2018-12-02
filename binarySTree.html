@@ -42,7 +42,7 @@
             <b>
             sample values:
             </b>
-                <select id= bstSample onchange="setBstSample()">
+                <select id= treeSample onchange="setTreeSample()">
                 <option value="Select" >Customize</option>
                 <option value="sample1" >6 nodes </option>
                 <option value="sample2" >15 nodes </option>
@@ -146,10 +146,8 @@ onclick="findPreSuc()"> Find
 </button>
 <br>
 <br>
-
 <button id = "clear-button" type="button" class="btn btn-danger col-1" 
 style = "max-width: 150 ;width: 130" onclick="clearBstGraph()">Clear Graph</button>
-
            <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
            <br>
            <br>
@@ -168,9 +166,7 @@ style = "max-width: 150 ;width: 130" onclick="clearBstGraph()">Clear Graph</butt
 
 </script>
 </div> 
-
 <div id="bstGraphContainer"  class = "bstGraphContainer" style = "width: 800; height: 300; margin-left: 10em; border: 1px; border-style: solid"></div>
-
     <footer id="bstLegend" style = "margin-left: 10em">
         <script> window.display_legend("bstLegend", "Items not looking at", "Items being traced", '#0039e6','#F5B041') </script>
     </footer>
