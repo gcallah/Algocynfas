@@ -43,7 +43,8 @@ async function heapInsert(ifEdge ) {
 	var val = getHTML("heap-insert-value").value;
 	if (isNaN(val))
 	{
-		noticeErr("Please enter a number","heap-insert-value")
+		noticeErr("Please enter a number","heap-insert-value");
+		disableHeapButtons(false);
 		return;
 	}
 	correctErr("heap-insert-value");
@@ -57,7 +58,7 @@ async function heapInsert(ifEdge ) {
 
 
 
-function heapInsertList(){
+async function heapInsertList(){
 
 	disableHeapButtons(true);
 	
@@ -65,32 +66,35 @@ function heapInsertList(){
 	var list_num = splitInput(an_input, true);
 	if(list_num.length == 0 || list_num.length == 1){
 		noticeErr("Invalid List!", "heap-insert-list-value");
+		disableHeapButtons(false);
 		return;
 	}
 	for (var i = 0; i<list_num.length; i++) {
 		list_num[i]=parseInt(list_num[i]);
 		if (!Number.isInteger(list_num[i])){
 			noticeErr("The number at index" + i + "is invalid! ", "heap-insert-list-value");
+			disableHeapButtons(false);
 			return;
 		}
 	}
 	correctErr("heap-insert-list-value");
-	for(var i = 0; i<list_num.length; i++){
-		graph.insert(list_num[i]);
-		graph.startGraph(false, 'heapCanvas');
-	}
+	/*for(var i = 0; i<list_num.length; i++){
+		await graph.insert(list_num[i]);
+	}*/
+
+	graph.arrayList = window.createList(canvas, list_num);
+	await graph.build_heap(list_num);
 
 	disableHeapButtons(false);
 
 }
 
 
-function heapRemove(ifEdge) {
+async function heapRemove(ifEdge) {
 
 	disableHeapButtons(true);
 
-	graph.remove();
-	graph.startGraph(ifEdge, 'heapCanvas');
+	await graph.remove();
 
 	disableHeapButtons(false);
 }

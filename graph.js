@@ -1410,7 +1410,7 @@ class heap extends ourGraph {
 
     this.highLightNodes.pop();
 
-    this.down_heap(1, this.data.length);
+    await this.down_heap(1, this.data.length);
 
     return result;
   }
