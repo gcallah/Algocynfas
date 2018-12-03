@@ -2,8 +2,8 @@ from selenium import webdriver
 
 from unittest import TestCase, main
 
-#change path to path of chromedriver.exe
-path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
+
+path = #change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
 #used to assert expectedUrl and currentUrl
@@ -12,6 +12,7 @@ links = {"Sorting Algorithms" : "sort",
          "Hash table" : "hashTable", 
          "Find a Minimum Spanning Tree" : "minSpanningTree",
          "Binary Search Tree" : "binarySTree",
+         "Red Black Tree" : "redBlackTree",
          "Graph" : "graph",
          "Tree" : "tree",
          "Heap" : "heap",
@@ -44,6 +45,9 @@ class TestLinks(TestCase):
             linkNameList.append(link.text)
             
         for linkName in linkNameList:
+            if linkName not in links:
+                print("Please update the dictionary links to include", linkName)
+                continue
             clickLink = self.getLink(linkName)
             clickLink.click()
             #AssertionError will pop up and testing will stop
@@ -55,3 +59,4 @@ class TestLinks(TestCase):
         
 if __name__ == "__main__":
     main()
+    

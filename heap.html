@@ -35,7 +35,6 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
-<script src="heap.js"></script>
 <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
     </head>
     <body >
@@ -47,12 +46,12 @@
 <b>
 	Heap Types:
 
-	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapChange()" checked="true"> Min-Heap
-	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapChange()"> Max-Heap
+	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapClear()" checked="true"> Min-Heap
+	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapClear()"> Max-Heap
 
 	<br> <br>
 
-<input type="text" class="boxLarge" id="heap-insert-list" placeholder="Enter a list of numbers">
+<input type="text" class="boxLarge" id="heap-insert-list-value" placeholder="Enter a list of numbers">
     <button id = "heap-insert-list" type="button" 
       class="btn btn-success col-1 btn-primary" onclick="heapInsertList()">Create
     </button>
@@ -71,10 +70,6 @@
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
 
-   	<button id = "heap-clear" type="button"
-       class="btn btn-danger col-1" onclick="heapChange()">Clear
-    </button>
-
     <br> <br>
 
 </b>
@@ -89,6 +84,15 @@
 
             <br>
             </b>
+<button id = "heap-clear" type="button"
+    class="btn btn-danger col-1" onclick="heapClear()">Clear
+</button>
+           <button id = "stop-button" type="button" class="btn btn-danger col-1" onclick="stopAnime()">Stop</button>
+           <br>
+           <br>
+
+           
+         
 <canvas id="heapArrayCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
 <div id="heapCanvas"  class = "heapCanvas" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>
@@ -109,6 +113,7 @@ style="border:0.1em solid #000000"></canvas>
   let fList = null;
   drawListOnScreen(list);
 </script>
+<script src="heap.js"></script>
        </div>
       </body>
 </html>

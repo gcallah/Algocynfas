@@ -3,7 +3,6 @@
     <head>
 <!--include head.txt -->
 <!--include graphHead.txt -->
-<!--include heapHead.txt -->
 <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
     </head>
     <body >
@@ -14,9 +13,12 @@
         </h1>
         <!--include heapInputs.txt -->
         <!--include speedButtons.txt -->
+        <!--include clearHeapBtn.txt -->
+        <!--include stopButton.txt -->
         <!--include heapCanvas.txt -->
          <!--include graphGlobal.txt -->
          <!--include heapGlobal.txt -->
+         <!--include heapHead.txt -->
        </div>
       </body>
 </html>

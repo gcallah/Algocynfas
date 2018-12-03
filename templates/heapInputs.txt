@@ -1,12 +1,12 @@
 <b>
 	Heap Types:
 
-	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapChange()" checked="true"> Min-Heap
-	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapChange()"> Max-Heap
+	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapClear()" checked="true"> Min-Heap
+	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapClear()"> Max-Heap
 
 	<br> <br>
 
-<input type="text" class="boxLarge" id="heap-insert-list" placeholder="Enter a list of numbers">
+<input type="text" class="boxLarge" id="heap-insert-list-value" placeholder="Enter a list of numbers">
     <button id = "heap-insert-list" type="button" 
       class="btn btn-success col-1 btn-primary" onclick="heapInsertList()">Create
     </button>
@@ -24,10 +24,6 @@
     <button id = "heap-remove" type="button"
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
-
-   	<button id = "heap-clear" type="button"
-       class="btn btn-danger col-1" onclick="heapChange()">Clear
-    </button>
 
     <br> <br>
 

@@ -8,6 +8,7 @@ adjustPosition = false;
 
 
 
+
 function typeChange(){
   var choice = getHTML("choices").selectedIndex;
   var inputBox = getHTML("nodeNum");
@@ -1144,32 +1145,35 @@ noticeErr("Please input a valid integer", errorBox);
 }
 
 
-class heap extends ourGraph {   // changed to extend from graph
-  constructor(cmp = heap_less) {
+class heap extends ourGraph {   
+  constructor(cmp = heap_less, lst = fList) {
     super();
     this.data = [];             // elements are treeNode
-    this.data.push(null);      // ignore index 0 to make child/parent computation easier
-    this.cmp = cmp;            // compare function, determine min/max-heap
-    this.id = 0;              
-    this.highLightNodes = [];
+    this.data.push(null);       // ignore index 0 to make child/parent computation easier
+    this.arrayList = lst;       // heap array form
+    this.cmp = cmp;             // compare function, determine min/max-heap
+    this.id = 0;                // assign incremental ids to nodes and edges of the sigma graph 
+    this.highLightNodes = [];  
     this.highLightEdges = [];
-    this.adjustList = [];
-    this.nodeLayout = []
+    this.nodeLayout = [];
   }
 
-  parent(i) {      // this probably need to be named as parentIndex
+  // parent index
+  parent(i) {      
     return Math.floor(i / 2);
   }
-
-  left(i) {       // leftIndex
+  
+  // leftIndex
+  left(i) {       
     return 2 * i;
   }
 
-  right(i) {      //rightIndex
+  // rightIndex
+  right(i) {      
     return 2 * i + 1;
   }
 
-  is_left(i) {                                 // does the following really needed?
+  is_left(i) {                             
     return this.parent(i) * 2 == i;
   }
 
@@ -1195,27 +1199,6 @@ class heap extends ourGraph {   // changed to extend from graph
     return list;
   }
 
-  heapify(end, i) {
-
-    var l = this.left(i);
-    var r = this.right(i);
-
-    var largest = i;
-
-    if (l < end && this.cmp(this.data[l], this.data[largest])) {
-      largest = l;
-    }
-
-    if (r < end && this.cmp(this.data[r], this.data[largest])) {
-      largest = r;
-    }
-
-    if (largest != i) {
-      [this.data[i].key, this.data[largest].key] = [this.data[largest].key, this.data[i].key];
-      this.heapify(end, largest);
-    }
-  }
-
   //build heap bottom-up
   async build_heap(lst) {
     for (var i = 0; i <lst.length;i++) {
@@ -1225,7 +1208,123 @@ class heap extends ourGraph {   // changed to extend from graph
 
     this.data[1].setNode();
     for (var i = 2; i < this.data.length; i++) {
+        this.posAdjust(i);
+    }
 
+
+    for(var i = Math.floor(this.data.length/2); i >= 1; i--) {
+        await this.down_heap(i, this.data.length);
+    }
+  }
+
+
+  async down_heap(i, end) {
+    this.highLightNodes.push(i);
+    this.arrayList.highlightSwap(i-1);
+    this.startGraph(false, 'heapCanvas');
+    await this.pause();
+    while (this.left(i) < end) {
+      this.arrayList.highlightSwap(i-1);
+      var min_child = this.left(i);
+      this.highLightNodes.push(this.left(i));
+      this.arrayList.highlight(this.left(i)-1);
+
+      if (this.right(i) < end) {
+        this.highLightNodes.push(this.right(i));
+        this.arrayList.highlight(this.right(i)-1);
+        if( this.cmp(this.data[this.right(i)], this.data[min_child]) ) {
+          min_child = this.right(i);
+        }
+      }
+
+      this.startGraph(false, 'heapCanvas');
+      await this.pause();
+
+      if( this.cmp(this.data[min_child], this.data[i])) {
+
+        this.highLightEdges.push([this.data[i].id, this.data[min_child].id ]);
+
+        [this.data[i].key, this.data[min_child].key] = [this.data[min_child].key, this.data[i].key];
+        this.arrayList.swap(i-1, min_child-1);
+        this.startGraph(false, 'heapCanvas');
+        await this.pause();
+
+        this.arrayList.unhighlight(i-1);
+        this.arrayList.unhighlight(this.left(i)-1);
+        if (this.right(i) < end){
+          this.arrayList.unhighlight(this.right(i)-1);
+        }
+
+        i = min_child;
+      } else {
+        this.highLightNodes = [];
+        this.highLightEdges = [];
+        this.arrayList.unhighlight(i-1);
+        this.arrayList.unhighlight(this.left(i)-1);
+        if (this.right(i) < end){
+          this.arrayList.unhighlight(this.right(i)-1);
+        }
+        this.startGraph(false, 'heapCanvas');
+        return;
+      }
+
+    }
+
+    this.highLightNodes = [];
+    this.highLightEdges = [];
+    this.arrayList.unhighlight(i-1);
+    this.startGraph(false, 'heapCanvas');
+
+  }
+
+
+  async up_heap(i) {
+    this.highLightNodes.push(i);
+    this.arrayList.highlightSwap(i-1);
+    this.startGraph(false, 'heapCanvas');
+    await this.pause();
+
+    while(i > 1) {
+      var p = this.parent(i);
+      this.highLightNodes.push(p);
+      this.arrayList.highlightSwap(i-1);
+      this.arrayList.highlight(p-1);
+      this.startGraph(false, 'heapCanvas');
+      await this.pause();
+      if( this.cmp(this.data[i], this.data[p]) ) {
+
+        this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
+
+        [this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
+
+        this.arrayList.swap(i-1, p-1);
+
+        this.startGraph(false, 'heapCanvas');
+        await this.pause();
+
+        this.arrayList.unhighlight(i-1);
+        this.arrayList.unhighlight(p-1);
+        i = p;
+      } else {
+        this.highLightNodes = [];
+        this.highLightEdges = [];
+        this.arrayList.unhighlight(i-1);
+        this.arrayList.unhighlight(p-1);
+        this.startGraph(false, 'heapCanvas');
+        return;
+      }
+
+    }
+
+    this.highLightNodes = [];
+    this.highLightEdges = [];
+    this.arrayList.unhighlight(i-1);
+    this.startGraph(false, 'heapCanvas');
+  }
+
+  posAdjust(i) {
+
+    if(i > 1) {
       this.data[i].parent = this.data[this.parent(i)];
 
       if(this.is_left(i)) {
@@ -1236,180 +1335,82 @@ class heap extends ourGraph {   // changed to extend from graph
         this.data[i].sideToParent = "right";
         this.data[i].parent.right = this.data[i];
       }
-
-
-      this.data[i].setNode();
-
-
-      var cur = this.data[i];       
-      this.adjustList = [];
-
-      while(cur && cur.parent ) {
-        if(cur.parent.sideToParent && cur.sideToParent != cur.parent.sideToParent){
-          this.adjustList.push(cur.parent);
-        }
-
-        cur = cur.parent;
-      }
-      this.strench(this.adjustList);
     }
 
 
-    for(var i = Math.floor(this.data.length/2); i >= 1; i--) {
-      await this.down_heap(i, this.data.length);
-    }
-  }
+    this.data[i].setNode();
+  
 
+    var cur = this.data[i];       
+    var adjustList = [];
 
-  async down_heap(i, end) {
-    this.highLightNodes.push(i);
-    this.startGraph(false, 'heapCanvas');
-    await this.pause();
-    while (this.left(i) < end) {
-      var min_child = this.left(i);
-
-      if (this.right(i) < end) {
-        if( this.cmp(this.data[this.right(i)], this.data[min_child]) ) {
-          min_child = this.right(i);
-        }
-      }
-
-      this.highLightNodes.push(min_child);
-      this.startGraph(false, 'heapCanvas');
-      await this.pause();
-
-      if( this.cmp(this.data[min_child], this.data[i])) {
-
-        console.log(i, " ", min_child);
-
-        this.highLightEdges.push([this.data[i].id, this.data[min_child].id ]);
-
-        [this.data[i].key, this.data[min_child].key] = [this.data[min_child].key, this.data[i].key];
-
-        this.startGraph(false, 'heapCanvas');
-        await this.pause();
-
-        i = min_child;
-      } else {
-        this.highLightNodes = [];
-        this.highLightEdges = [];
-        this.startGraph(false, 'heapCanvas');
-        await this.pause();
-        return;
-      }
-
-    }
-
-    this.highLightNodes = [];
-    this.highLightEdges = [];
-    this.startGraph(false, 'heapCanvas');
-
-  }
-
-
-  async up_heap(i) {
-    this.highLightNodes.push(i);
-
-    this.startGraph(false, 'heapCanvas');
-    await this.pause();
-
-    while(i > 1) {
-      var p = this.parent(i);
-      this.highLightNodes.push(p);
-      this.startGraph(false, 'heapCanvas');
-      await this.pause();
-      if( this.cmp(this.data[i], this.data[p]) ) {
-
-        this.highLightEdges.push([this.data[i].id, this.data[p].id ]);
-
-        [this.data[i].key, this.data[p].key] = [this.data[p].key, this.data[i].key];
-        i = p;
-
-        this.startGraph(false, 'heapCanvas');
-        await this.pause();
-      } else {
-        this.highLightNodes = [];
-        this.highLightEdges = [];
-        this.startGraph(false, 'heapCanvas');
-        await this.pause();
-        return;
-      }
-    }
-
-    this.highLightNodes = [];
-    this.highLightEdges = [];
-    this.startGraph(false, 'heapCanvas');
-  }
-
-
-  insert(val) {
-    var node = new treeNode(val, this.id++);
-
-    var l = this.data.length;
-    if(l != 1) {
-      node.parent = this.data[this.parent(l)];
-
-      if(this.is_left(l)) {
-        node.sideToParent = "left";
-        node.parent.left = node;
-        
-      } else {
-        node.sideToParent = "right";
-        node.parent.right = node;
-      }
-    }
-
-
-    node.setNode();
-    this.data.push(node);
-    
-
-    var cur = node
-    this.adjustList = [];
-
-    while(cur && cur.parent ) {
+    while(cur && cur.parent) {
       if(cur.parent.sideToParent && cur.sideToParent != cur.parent.sideToParent){
-        this.adjustList.push(cur.parent);
+        adjustList.push(cur.parent);
       }
 
       cur = cur.parent;
     }
-    this.strench(this.adjustList);
+    this.strench(adjustList);
 
+  }
+
+
+  async insert(val) {
+    var node = new treeNode(val, this.id++);
+
+    this.data.push(node); // add the treenode
+
+    this.arrayList.insert(new ListElem(val));
+
+    this.posAdjust(this.data.length-1);
+   
     this.startGraph(false, 'heapCanvas');
+    await this.pause();
 
-    this.up_heap(l);
+    await this.up_heap(this.data.length-1);
   }
 
   async remove() {
 
+    //heap is already empty
     if(this.data.length == 1)
       return;
     var result = this.data[1];
 
     this.highLightNodes.push(1);
+    this.arrayList.highlightSwap(0);
     this.startGraph(false, 'heapCanvas');
     await this.pause();
 
-    if (this.data.length == 2) {
+    // pop last element
+    if(this.data.length == 2){
       this.data.pop();
+      this.arrayList.dataElems.pop();
       this.highLightNodes.pop();
       this.startGraph(false, 'heapCanvas');
-      return;
+      await this.pause();
+      return result;
     }
 
 
     this.highLightNodes.push(this.data.length-1);
+    this.arrayList.highlightSwap(this.data.length-2);
     this.startGraph(false, 'heapCanvas');
     await this.pause();
 
     [this.data[1].key, this.data[this.data.length-1].key] = [this.data[this.data.length-1].key, this.data[1].key];
+    this.arrayList.swap(0, this.data.length-2);
+    this.startGraph(false, 'heapCanvas');
+    await this.pause();
+
 
     this.data.pop();
+    this.arrayList.dataElems.pop();
 
     this.highLightNodes.pop();
 
-    this.down_heap(1, this.data.length);
+    await this.down_heap(1, this.data.length);
 
     return result;
   }
@@ -1430,15 +1431,13 @@ class heap extends ourGraph {   // changed to extend from graph
 
     for (var i = 0; i < this.edgeLayout.length; i++){
 
-     if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
-      this.edgeLayout[i].color = HIGHLIGHT;  
-    } else if (this.edgeLayout[i].source == t && this.edgeLayout[i].target == s) {
-      this.edgeLayout[i].color = HIGHLIGHT;   
-    } 
+       if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
+          this.edgeLayout[i].color = HIGHLIGHT;  
+        } else if (this.edgeLayout[i].source == t && this.edgeLayout[i].target == s) {
+          this.edgeLayout[i].color = HIGHLIGHT;   
+        } 
+    }
   }
-
-
-}
 
   startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
 
@@ -1472,7 +1471,7 @@ class heap extends ourGraph {   // changed to extend from graph
 
     //highlight edges
     for (var i = 0;  i < this.highLightEdges.length; i++) {
-      this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
+        this.highlightEdge(this.highLightEdges[i][0], this.highLightEdges[i][1]);
     }
 
     $("#heapCanvas").empty();
@@ -1485,17 +1484,9 @@ class heap extends ourGraph {   // changed to extend from graph
     this.createSigmaGraph(container);
 
     //draw heap array form
-    list = [];
-    for(var i = 1; i < this.data.length; i++) {
-      list.push(this.data[i].key);
-    }
 
     canvas.clear();
-    l = new List(canvas, list);
-    for (var i = 0; i < this.highLightNodes.length; i++){
-      l.highlight(this.highLightNodes[i]-1, this.highLightNodes[i]-1);
-    }
-    l.draw(true);
+    this.arrayList.draw(true);
   }
 }
 
