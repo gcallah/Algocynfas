@@ -10,23 +10,26 @@ function heap_greater(t1, t2) {
 	return parseInt(t1.key) > parseInt(t2.key);
 }
 
-function heapChange() {
+function heapClear() {
 
 	var radios = document.getElementsByName('heapType');
+
+	var func = heap_less;
 
 	for (var i = 0;  i < radios.length; i++)
 	{
 		if (radios[i].checked)
 		{
 			if (radios[i].value == "maxHeap")
-				graph = new heap(heap_greater);
-			else
-				graph = new heap(heap_less)
+				func = heap_greater;
 		}
 	}
 
-	graph.startGraph(false, 'heapCanvas');
+	graph = new heap(func, window.createList(canvas, []));
+	$("#heapCanvas").empty();
+	canvas.clear();
 
+	return func;
 }
 
 function disableHeapButtons(ifDisable){
@@ -59,6 +62,8 @@ async function heapInsert(ifEdge ) {
 
 
 async function heapInsertList(){
+
+	heapClear();
 
 	disableHeapButtons(true);
 	
@@ -98,10 +103,4 @@ async function heapRemove(ifEdge) {
 
 	disableHeapButtons(false);
 }
-
-function heapClear() {
-	$("#heapCanvas").empty();
-	canvas.clear();
-}
-
 
