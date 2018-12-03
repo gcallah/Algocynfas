@@ -3,8 +3,7 @@ from selenium import webdriver
 from unittest import TestCase, main
 
 
-#path = #change path to path of chromedriver.exe
-path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
+path = #change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
 #used to assert expectedUrl and currentUrl
@@ -60,3 +59,4 @@ class TestLinks(TestCase):
         
 if __name__ == "__main__":
     main()
+    
