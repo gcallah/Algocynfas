@@ -29,8 +29,16 @@ function heapChange() {
 
 }
 
+function disableHeapButtons(ifDisable){
+  getHTML("heap-insert-list").disabled = ifDisable;
+  getHTML("heap-insert").disabled = ifDisable;
+  getHTML("heap-remove").disabled = ifDisable;
+}
 
-function heapInsert(ifEdge ) {
+
+async function heapInsert(ifEdge ) {
+
+	disableHeapButtons(true);
 
 	var val = getHTML("heap-insert-value").value;
 	if (isNaN(val))
@@ -41,44 +49,55 @@ function heapInsert(ifEdge ) {
 	correctErr("heap-insert-value");
 	
 
-	graph.insert(val);
-	graph.startGraph(ifEdge, 'heapCanvas');
+	await graph.insert(val);
+
+	disableHeapButtons(false);
 }
 
 
 
 
 function heapInsertList(){
+
+	disableHeapButtons(true);
 	
-	var an_input = getHTML("heap-insert-list").value;
+	var an_input = getHTML("heap-insert-list-value").value;
 	var list_num = splitInput(an_input, true);
 	if(list_num.length == 0 || list_num.length == 1){
-		noticeErr("Invalid List!", "heap-insert-list");
+		noticeErr("Invalid List!", "heap-insert-list-value");
 		return;
 	}
 	for (var i = 0; i<list_num.length; i++) {
 		list_num[i]=parseInt(list_num[i]);
 		if (!Number.isInteger(list_num[i])){
-			noticeErr("The number at index" + i + "is invalid! ", "heap-insert-list");
+			noticeErr("The number at index" + i + "is invalid! ", "heap-insert-list-value");
 			return;
 		}
 	}
-	correctErr("heap-insert-list");
+	correctErr("heap-insert-list-value");
 	for(var i = 0; i<list_num.length; i++){
 		graph.insert(list_num[i]);
 		graph.startGraph(false, 'heapCanvas');
 	}
+
+	disableHeapButtons(false);
 
 }
 
 
 function heapRemove(ifEdge) {
 
+	disableHeapButtons(true);
+
 	graph.remove();
 	graph.startGraph(ifEdge, 'heapCanvas');
+
+	disableHeapButtons(false);
 }
 
 function heapClear() {
 	$("#heapCanvas").empty();
 	canvas.clear();
 }
+
+

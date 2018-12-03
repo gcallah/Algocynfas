@@ -8,6 +8,7 @@ adjustPosition = false;
 
 
 
+
 function typeChange(){
   var choice = getHTML("choices").selectedIndex;
   var inputBox = getHTML("nodeNum");
@@ -1264,7 +1265,6 @@ class heap extends ourGraph {
           this.arrayList.unhighlight(this.right(i)-1);
         }
         this.startGraph(false, 'heapCanvas');
-        await this.pause();
         return;
       }
 
@@ -1311,7 +1311,6 @@ class heap extends ourGraph {
         this.arrayList.unhighlight(i-1);
         this.arrayList.unhighlight(p-1);
         this.startGraph(false, 'heapCanvas');
-        await this.pause();
         return;
       }
 
@@ -1357,7 +1356,7 @@ class heap extends ourGraph {
   }
 
 
-  insert(val) {
+  async insert(val) {
     var node = new treeNode(val, this.id++);
 
     this.data.push(node); // add the treenode
@@ -1367,8 +1366,9 @@ class heap extends ourGraph {
     this.posAdjust(this.data.length-1);
    
     this.startGraph(false, 'heapCanvas');
+    await this.pause();
 
-    this.up_heap(this.data.length-1);
+    await this.up_heap(this.data.length-1);
   }
 
   async remove() {
