@@ -25,10 +25,6 @@
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
 
-   	<button id = "heap-clear" type="button"
-       class="btn btn-danger col-1" onclick="heapChange()">Clear
-    </button>
-
     <br> <br>
 
 </b>
