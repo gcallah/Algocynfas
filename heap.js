@@ -77,3 +77,8 @@ function heapRemove(ifEdge) {
 	graph.remove();
 	graph.startGraph(ifEdge, 'heapCanvas');
 }
+
+function heapClear() {
+	$("#heapCanvas").empty();
+	canvas.clear();
+}
