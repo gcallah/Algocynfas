@@ -107,6 +107,9 @@ async function run() {                                    // Display layer
     document.getElementsByClassName("canvas-container")[0].style.height = "0px";
     getHTML("heapCanvas").style.display = "block";
     await window.heapSort(fList);
+
+    document.getElementsByClassName("canvas-container")[0].style.height = "144px";
+    getHTML("heapCanvas").style.display = "none";
   }
 
   runButton.disabled = false;
@@ -346,7 +349,8 @@ function heap_greater(t1, t2) {
 
 async function heapSort(myList){           //CLRS P 160
   
-  var h = new heap(heap_greater);
+  console.log(fList.list);
+  var h = new heap(heap_greater, myList);
   await h.build_heap(myList.list);
   
   for(var i = h.data.length - 1; i >= 2; i--) {
@@ -371,6 +375,8 @@ async function heapSort(myList){           //CLRS P 160
     await h.down_heap(1, i);
 
   }
+
+
 }
 
 

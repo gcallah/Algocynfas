@@ -1219,6 +1219,9 @@ class heap extends ourGraph {
 
 
   async down_heap(i, end) {
+    if(!animeRunning){
+      return;
+    }
     this.highLightNodes.push(i);
     this.arrayList.highlightSwap(i-1);
     this.startGraph(false, 'heapCanvas');
@@ -1279,6 +1282,9 @@ class heap extends ourGraph {
 
 
   async up_heap(i) {
+    if(!animeRunning){
+      return;
+    }
     this.highLightNodes.push(i);
     this.arrayList.highlightSwap(i-1);
     this.startGraph(false, 'heapCanvas');
