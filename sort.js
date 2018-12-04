@@ -106,10 +106,12 @@ async function run() {                                    // Display layer
   } else if(sortType[5].checked){
     document.getElementsByClassName("canvas-container")[0].style.height = "0px";
     getHTML("heapCanvas").style.display = "block";
+    getHTML("heapTitle").style.display = "block";
     await window.heapSort(fList);
 
     document.getElementsByClassName("canvas-container")[0].style.height = "144px";
     getHTML("heapCanvas").style.display = "none";
+    getHTML("heapTitle").style.display = "none";
   }
 
   runButton.disabled = false;
@@ -351,8 +353,11 @@ async function heapSort(myList){           //CLRS P 160
   
   console.log(fList.list);
   var h = new heap(heap_greater, myList);
+
+  getHTML("heapTitle").innerHTML = "<b>Building heap bottom-up ... </b>"
   await h.build_heap(myList.list);
   
+  getHTML("heapTitle").innerHTML = "<b> Extracting Max and sorting... <b>"
   for(var i = h.data.length - 1; i >= 2; i--) {
 
     h.highLightNodes.push(1);
