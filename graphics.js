@@ -295,6 +295,10 @@ class PathChart extends Group {
     var topSideY = y - rectangleHeight * 6;
     var midSideY = y - rectangleHeight * 4;
     var botSideY = y - rectangleHeight * 2;
+    
+    var topSideArrowY = y - rectangleHeight * 5;
+    var midSideArrowY = y - rectangleHeight * 3;
+    
 
     var pathCenterTop = new Rectangle(centerX, topCenterY, rectangleHeight, rectangleWidth);
     this.add(pathCenterTop.object);
@@ -305,14 +309,6 @@ class PathChart extends Group {
     this.add(pathCenterBottom.object);
     var pathCenterBottomText = new Text(pathCenter[1], centerX, bottomCenterY, 'black', fontSize);
     this.add(pathCenterBottomText.object);
-
-    var pathCenterArrowTop = new SolidArrow(centerX, topCenterArrowY, 50, rectangleHeight, 'black');
-    pathCenterArrowTop.rotate(90);
-    this.add(pathCenterArrowTop.object);
-
-    var pathCenterArrowBottom = new SolidArrow(centerX, bottomCenterArrowY, 50, rectangleHeight, 'black');
-    pathCenterArrowBottom.rotate(90);
-    this.add(pathCenterArrowBottom.object);
     
     var pathRightTop = new Rectangle(rightX, topSideY, rectangleHeight, rectangleWidth);
     this.add(pathRightTop.object);
@@ -343,6 +339,31 @@ class PathChart extends Group {
     this.add(pathLeftBot.object);
     var pathLeftBotText = new Text(pathLeft[2], leftX, botSideY, 'black', fontSize);
     this.add(pathLeftBotText.object);
+      
+    // Arrows
+    var pathCenterArrowTop = new SolidArrow(centerX, topCenterArrowY, 50, rectangleHeight, 'black');
+    pathCenterArrowTop.rotate(90);
+    this.add(pathCenterArrowTop.object);
+
+    var pathCenterArrowBottom = new SolidArrow(centerX, bottomCenterArrowY, 50, rectangleHeight, 'black');
+    pathCenterArrowBottom.rotate(90);
+    this.add(pathCenterArrowBottom.object);
+      
+    var pathRightArrowTop = new SolidArrow(rightX, topSideArrowY, 50, rectangleHeight, 'black');
+    pathRightArrowTop.rotate(90);
+    this.add(pathRightArrowTop.object);
+      
+    var pathRightArrowMid = new SolidArrow(rightX, midSideArrowY, 50, rectangleHeight, 'black');
+    pathRightArrowMid.rotate(90);
+    this.add(pathRightArrowMid.object);
+      
+    var pathLeftArrowTop = new SolidArrow(leftX, topSideArrowY, 50, rectangleHeight, 'black');
+    pathLeftArrowTop.rotate(90);
+    this.add(pathLeftArrowTop.object);
+      
+    var pathLeftArrowMid = new SolidArrow(leftX, midSideArrowY, 50, rectangleHeight, 'black');
+    pathLeftArrowMid.rotate(90);
+    this.add(pathLeftArrowMid.object);
   }
 }
 
