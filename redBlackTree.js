@@ -1,4 +1,4 @@
-// below are binary search tree algorithms
+// below are Red Black tree algorithms
 
 function treeInsert(root, newNode){      // CLRS P294 root == T.root, r == x, curr == y, newNode == z 
   var r = root;                        
