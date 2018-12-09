@@ -298,8 +298,14 @@ class PathChart extends Group {
     
     var topSideArrowY = y - rectangleHeight * 5;
     var midSideArrowY = y - rectangleHeight * 3;
+    var botSideArrowY = y
     
-
+    var botRightArrowX = x + rectangleWidth;
+    var botLeftArrowX = x - rectangleWidth;
+    var botArrowExtensionY = botSideArrowY - 25;
+    
+      
+    // Component creation
     var pathCenterTop = new Rectangle(centerX, topCenterY, rectangleHeight, rectangleWidth);
     this.add(pathCenterTop.object);
     var pathCenterTopText = new Text(pathCenter[0], centerX, topCenterY, 'black', fontSize);
@@ -364,6 +370,17 @@ class PathChart extends Group {
     var pathLeftArrowMid = new SolidArrow(leftX, midSideArrowY, 50, rectangleHeight, 'black');
     pathLeftArrowMid.rotate(90);
     this.add(pathLeftArrowMid.object);
+      
+    var pathRightArrowBot = new SolidArrow(botRightArrowX, botSideArrowY, 50, rectangleHeight * 1.75, 'black');
+    pathRightArrowBot.rotate(180);
+    this.add(pathRightArrowBot.object);
+    var pathRightArrowExtension = new Rectangle(rightX, botArrowExtensionY, 75, 25, 'black');
+    this.add(pathRightArrowExtension.object);
+    
+    var pathLeftArrowBot = new SolidArrow(botLeftArrowX, botSideArrowY, 50, rectangleHeight * 1.75, 'black');
+    this.add(pathLeftArrowBot.object);
+    var pathLeftArrowExtension = new Rectangle(leftX, botArrowExtensionY, 75, 25, 'black');
+    this.add(pathLeftArrowExtension.object);
   }
 }
 
