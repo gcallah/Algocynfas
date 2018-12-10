@@ -2,6 +2,8 @@ const EdgeNodeCOLOR = '#0039e6' ;
 const HIGHLIGHT = '#F5B041';
 const RESULTCOLOR = '#FF5733';
 const ErrorCOLOR = '#FF0000';
+const RED = '#FF0000'
+const BLACK = '000000'
 adjustPosition = false;
 
 
@@ -745,7 +747,7 @@ class tree extends ourGraph{
  }
 }
 
- class treeNode{
+class treeNode{
   constructor(num, counter){
     this.key = num;
     this.id = counter;
@@ -759,7 +761,7 @@ class tree extends ourGraph{
     this.rightEdge = null;
     this.strenchTimes = 0;
   }
-  setNode(){
+  setNode(defaultColor = EdgeNodeCOLOR){
     if(!this.parent){
       this.layout = {
         "id": this.id.toString(),
@@ -767,7 +769,7 @@ class tree extends ourGraph{
         "x": 0,
         "y": -100,
         "size": 12,
-        "color": EdgeNodeCOLOR,
+        "color": defaultColor,
       }; 
       this.position = {
         x: 0,
@@ -793,12 +795,11 @@ class tree extends ourGraph{
         "x": this.position.x,
         "y": this.position.y,
         "size": 12, 
-        "color" : EdgeNodeCOLOR,
+        "color" : defaultColor,
       }
     }
 
   }
-
 }
 
 
@@ -1018,7 +1019,7 @@ class BST extends ourGraph{
         }
         noticeErr("Please give a valid input!", "deleteBox");
       }
-      connectParentChild(node){
+      connectParentChild(node,edgeColor = EdgeNodeCOLOR){
         if (!node.parent){
           return;
         }
@@ -1029,7 +1030,7 @@ class BST extends ourGraph{
          target: (node.id).toString(),
          size :5,
          label : null,
-         color: EdgeNodeCOLOR,
+         color: edgeColor,
        }
        this.edgeLayout.push(newEdge);
        if(node.sideToParent == "left"){
@@ -1072,71 +1073,85 @@ class BST extends ourGraph{
      }
 }
 
+class rbTreeNode extends treeNode{
+  constructor(num,counter){
+    super(num,counter);
+    this.color = null;
+    this.leftNode = null;
+    this.rightNode = null;
+  }
+
+  setNode(defaultColor = RED){
+    super.setNode(defaultColor);
+
+  }
+
+}
 
 class RBT extends BST{
 
  constructor(){
   super();
 
-}
+ }
 
-async insert(input,single = false,draw = true){
-  if(Number.isInteger(input)){
-   correctErr("treeNode");
-   correctErr("treeList");
-   if(single && draw){
-     this.createSigmaGraph('rbtGraphContainer');
-     await this.pause();
-   }
-   var node = new treeNode(input, this.treeNodes.length);
-   var result = treeInsert(this.root, node);   // the binary insert algorithm, in binarySTree.js
-   this.root = result.root;
-   node = result.node;
-   var adjustList = result.adj;
-   var hlNodeId = result.hlNodeId;
+  async insert(input,single = false,draw = true){
+    if(Number.isInteger(input)){
+     correctErr("treeNode");
+     correctErr("treeList");
+     if(single && draw){
+       this.createSigmaGraph('rbtGraphContainer');
+       await this.pause();
+     }
+     var node = new rbTreeNode(input, this.treeNodes.length);
+     var result = treeInsert(this.root, node);   // the binary insert algorithm, in binarySTree.js
+     this.root = result.root;
+     node = result.node;
+     var adjustList = result.adj;
+     var hlNodeId = result.hlNodeId;
 
-   node.setNode();
-   if(this.treeNodes.length > 1 && adjustList.length != 0){
-    this.strench(adjustList);
-  }              
-  this.treeNodes.push(node);
-  this.nodeLayout.push(node.layout);
+     node.setNode(node.color);
+     if(this.treeNodes.length > 1 && adjustList.length != 0){
+      this.strench(adjustList);
+    }              
+    this.treeNodes.push(node);
+    this.nodeLayout.push(node.layout);
 
-  this.positionCheck(node);
+    this.positionCheck(node);
 
 
-  if(this.treeNodes.length > 1){
-    this.connectParentChild(node); 
+    if(this.treeNodes.length > 1){
+      this.connectParentChild(node,BLACK); 
+      if(single){
+        await this.highLight(hlNodeId); 
+      }   
+    }
+    if(animeRunning|| !draw ){
+      this.nodes.push(input);
+    }
+    let g = {
+      nodes: this.nodeLayout,
+      edges: this.edgeLayout,
+    }; 
+    this.graph = g;
+    if(draw && animeRunning){
+      this.createSigmaGraph('rbtGraphContainer');
+    }
+
+    return;  
+    }
+
     if(single){
-      await this.highLight(hlNodeId); 
-    }   
-  }
-  if(animeRunning|| !draw ){
-    this.nodes.push(input);
-  }
-  let g = {
-    nodes: this.nodeLayout,
-    edges: this.edgeLayout,
-  }; 
-  this.graph = g;
-  if(draw && animeRunning){
-    this.createSigmaGraph('rbtGraphContainer');
+      var errorBox = "treeNode";
+    }
+    else{
+      var errorBox = "treeList";
+    }
+    noticeErr("Please input a valid integer", errorBox);
   }
 
-  return;  
 }
 
-if(single){
-  var errorBox = "treeNode";
-}
-else{
-  var errorBox = "treeList";
-}
-noticeErr("Please input a valid integer", errorBox);
-
-}
-
-}
 
 
 class heap extends ourGraph {   

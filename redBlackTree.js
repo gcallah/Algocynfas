@@ -1,13 +1,13 @@
 // below are Red Black tree algorithms
 
 function treeInsert(root, newNode){      // CLRS P294 root == T.root, r == x, curr == y, newNode == z 
-  var r = root;                        
-  var curr = null;                    // y = NIL
+  var r = root;                          //x = root
+  var curr = null;                       // y = NIL
   var LastDir = null;
   var adjustList = [];
   var highLightN = [];
-  while (r != null){                    // while x != NIL
-    curr = r;                          // y = x
+  while (r!= null){                    // while x != NIL
+    curr = r;                              // y = x
     highLightN.push(curr.id);
     if (newNode.key < r.key){          // if z.key < x.key
       if(LastDir == "right"){
@@ -30,12 +30,18 @@ function treeInsert(root, newNode){      // CLRS P294 root == T.root, r == x, cu
   }
   else if (newNode.key < curr.key){    // else if z.key < y.key
     curr.left = newNode;               // y.left = z;
+    curr.leftNode = "EXIST";
     newNode.sideToParent = "left";
   }
   else{
     curr.right = newNode;             // else y.right = z
+    curr.rightNode = "EXIST";
     newNode.sideToParent = "right";
   }
+
+  newNode.leftNode = "NIL"    // Z.left = T.nil
+  newNode.rightNode = "NIL"   //  Z.right = T.nil
+  newNode.color = RED         //  Z.color = Red
 
   var result = {
           root: root,
@@ -47,109 +53,84 @@ function treeInsert(root, newNode){      // CLRS P294 root == T.root, r == x, cu
   return result;
 }
 
+function insertFixUp(root, newNode){   // T,z
+  //while z.p.color == Red
+     // if z.p == z.p.p.left
+         // y = z.p.p.right
+         // if y.color == RED
+            //  z.p.color = BLACK
+            //  y.color = BLACK
+            //  z.p.p.color = RED
+            //  z = z.p.p
+        //  else if z == z.p.right
+            //  z = z.p
+            //  LEFT-ROTATE(T,z)
+        //  z.p.color = BLACK
+        //  z.p.p.color = RED
+        //  RIGHT-ROTATE(T,z.p.p)
 
-function treeSearch( root, target, highLightN = []){   //CLRS p291, x == root, k == target
 
-  try{
-    highLightN.push(root.id);
-  }
-  catch(error){}
-  
-  if(!root || target == root.key){                               // if x == NIL or k == x.key(line 56)
-    return {
-      node: root,                                              // return x
-      path: highLightN,
-    };
-  }
-  if (target < root.key){                               // if k < x.key 
-    return treeSearch(root.left, target, highLightN);   // return Tree-Search(x.left, k)
-  }
-  return treeSearch(root.right, target, highLightN);     // return Tree-Search(x.right, k)
+      //else
+        // y = z.p.p.left
+         // if y.color == RED
+            //  z.p.color = BLACK
+            //  y.color = BLACK
+            //  z.p.p.color = RED
+            //  z = z.p.p
+        //  else if z == z.p.left
+            //  z = z.p
+            //  RIGHT-ROTATE(T,z)
+        //  z.p.color = BLACK
+        //  z.p.p.color = RED
+        //  LIGHT-ROTATE(T,z.p.p)
 
-} 
+    // T.root.color = BLACK
 
-function treeMin(root){                   // CLRS p291, x == root
-   var highLightN = []
-   while (root.left){                 // while(x.left != NIL)
-    highLightN.push(root.id);
-    root = root.left;                        // x = x.left
-  }
-  highLightN.push(root.id);
-  return {
-        min: root,                           // return x
-        HLNodeId: highLightN,
-  }
 }
 
-function treeMax(root){                 // CLRS p291, x == root
-  var highLightN = []
-   while (root.right){               // while(x.right != NIL)
-    highLightN.push(root.id);
-    root = root.right;                    // x = x.right
-  }
-  highLightN.push(root.id);
-  return {
-        max: root,                          // return x
-        HLNodeId: highLightN,
-  }
+function leftRotate(root, newNode){ // T x
+
+// y = x.right
+// x.right = y.left
+// if y.left != T.nil
+//   y.left.p = x
+// y.p = x.p
+// if x.p == T.nil
+//   T.root = y
+// else if x == x.p.left
+//   x.p.left = y
+// else 
+//   x.p.right = y
+// y.left = x
+// x.p = y
+
+
 }
 
-function treeSuccessor(node){             // CLRS p292 x == node   y == suc 
-   if (node.right){                        // if(x.right != NIL)
-     var result = treeMin(node.right);       // return Tree-Minimum(x.right)  (line 97-101)
-     result.HLNodeId.unshift(node.id);   //This line ensure the highlighting path starts with the node (unshift is push to stack)
-     return {
-      HLNodeId: result.HLNodeId,
-      suc: result.min.key,
-   };
-  }
-  var highLightN = [node.id];             
-  suc = node.parent;                   // y = x.p
-  while (suc && node == suc.right){   // while(y != NIL and x == y.right )
-    node = suc;                       // x = y
-    highLightN.push(node.id);
-    suc = suc.parent;              // y = y.p
-  }
-  if(suc){
-    highLightN.push(suc.id);
-    return  {
-      HLNodeId: highLightN,
-      suc: suc.key,               // return y
-    };
-  }
-  else{
-    noticeErr("This node is already the largest in the tree!")
-  }
+function rightRotate(root, newNode){  // T x
+
+// y = x.left
+// x.left = y.right
+// if y.left != T.nil
+//   y.right.p = x
+// y.p = x.p
+// if x.p == T.nil
+//   T.root = y
+// else if x == x.p.right
+//   x.p.right = y
+// else 
+//   x.p.left = y
+// y.right = x
+// x.p = y
+
+
+
+
 }
 
-function treePredecessor(node){
-  if (node.left){
-     var result = treeMax(node.left);
-     result.HLNodeId.unshift(node.id);  // This make sure the highlighting path starts with node (unshift is push to stack)
-     return  {
-      HLNodeId: result.HLNodeId,
-      pre: result.max.key,
-   };
-  }
-  var highLightN = [];
-  highLightN.push(node.id);
-  pre = node.parent;
-  while (pre && node == pre.left){
-    node = pre;
-    highLightN.push(node.id);
-    pre = pre.parent; 
-  }
-  if(pre){
-    highLightN.push(pre.id);
-    return  {
-      HLNodeId: highLightN,
-      pre: pre.key,
-    };
-  }
-  else{
-    noticeErr("This node is already the smallest in the tree!")
-  }
-}
+
+
+
 
 function treeDelete(root, node, treeNodes){                    //CLRS p298   (z == node,T == this.root,y == replaceNode )
  
@@ -270,94 +251,21 @@ function afterDeletePosition(node, x, y){
 }
 
 
+function deleteFixUp(){
 
-function inorderTreeWalk(root){                 // derived from CLRS P288
-   if(root){
-    var node = [root.id];
-    var edge = [];
-    var left = inorderTreeWalk(root.left);
-    var right = inorderTreeWalk(root.right);
-    node = left.node.concat(node).concat(right.node);   //inorderTreeWalk(node.left); print(node); inorderTreeWalk(node.right);
-   if(root.leftEdge){    
-      edge = edge.concat(left.edge);
-      edge.push(root.leftEdge.id);
-    } 
-    if(root.rightEdge){
-      edge.push(root.rightEdge.id);
-      edge = edge.concat(right.edge);
-    }
-    return {
-      node: node,
-      edge: edge,
-  }
-}
-  return {
-    node: [],
-    edge: [],
-  };
 }
 
-function preorderTreeWalk(root){
-  if(root){
-    var node = [root.id];
-    var edge = [];
-    var left = preorderTreeWalk(root.left);
-    var right = preorderTreeWalk(root.right);
-    node = node.concat(left.node).concat(right.node);
-    if(root.leftEdge){
-      edge.push(root.leftEdge.id);
-      edge = edge.concat(left.edge);
-    } 
-    if(root.rightEdge){
-      edge.push(root.rightEdge.id);
-      edge = edge.concat(right.edge);
-    }
-    return {
-      node: node,
-      edge: edge,
-  }
-}
-  return {
-    node: [],
-    edge: [],
-  };
-}
 
-function postorderTreeWalk(root){
-  if(root){
-    var node = [root.id];
-    var edge = [];
-    var left = postorderTreeWalk(root.left);
-    var right = postorderTreeWalk(root.right);
-    node = left.node.concat(right.node).concat(node);
 
-    if(root.leftEdge){
-      edge = edge.concat(left.edge);
-      edge.push(root.leftEdge.id);
-    } 
-    if(root.rightEdge){
-      
-      edge = edge.concat(right.edge);
-      edge.push(root.rightEdge.id);
-    }
-    return {
-      node: node,
-      edge: edge,
-  }
-}
-  return {
-    node: [],
-    edge: [],
-  };
-}
+
 
 
 
 // below are facilitate functions
 
- function bstCheck(){
+ function rbtCheck(){
   if(!animeRunning){
-    var graph = new BST();
+    var graph = new RBT();
     for(var i = 0; i < Graph.nodes.length; i++){
        graph.insert(parseInt(Graph.nodes[i]),false,false);
     }
@@ -370,66 +278,29 @@ function postorderTreeWalk(root){
     disableButtons(false);
     return false;
   }
-   $( ".bstGraphContainer" ).empty();
+   $( ".rbtGraphContainer" ).empty();
 
-   Graph.createSigmaGraph('bstGraphContainer');
+   Graph.createSigmaGraph('rbtGraphContainer');
    return true;
 }
- async function searchInTree(){
-  if ( bstCheck()){
-  var input = parseInt(getHTML("searchBox").value);
-   if(Number.isInteger(input)){
-      correctErr("searchBox");
-      await Graph.search(input);
-      disableButtons(false);
-      return;
-   }
-    noticeErr("Please input a valid integer", "searchBox");
-    disableButtons(false);
-  }
- 
-}
-async function findMinMax(){
-  if ( bstCheck()){
-  await Graph.minMax();
-  disableButtons(false);
-}
-}
 
-async function findPreSuc(){
-  if (bstCheck()){
-  await Graph.preSuc();
-  disableButtons(false);
- }
-}
-
-async function PreInPost(){
- if ( bstCheck()){
-  await Graph.traversal();
-  disableButtons(false);
-}
-}
 
 async function deleteNode(){
-  if (bstCheck()){
-  await Graph.delete();
-  disableButtons(false);
-}
+  if (rbtCheck()){
+    await Graph.delete();
+    disableButtons(false);
+  }
 }
 
 function disableButtons(ifDisable){
-  getHTML("createBST-button").disabled = ifDisable;
-  getHTML("insert-button").disabled = ifDisable;
-  getHTML("search-button").disabled = ifDisable;
-  getHTML("minmax-button").disabled = ifDisable;
-  getHTML("presuc-button").disabled = ifDisable;
-  getHTML("delete-button").disabled = ifDisable;
-  getHTML("traversal-button").disabled = ifDisable;
-  getHTML("clear-button").disabled = ifDisable;
+  getHTML("createRBT-button").disabled = ifDisable;
+  getHTML("insert-rb-button").disabled = ifDisable;
+  getHTML("delete-rb-button").disabled = ifDisable;
+  getHTML("clear-rb-button").disabled = ifDisable;
 }
 
 function clearBstGraph(){
-   $( ".bstGraphContainer" ).empty();
-   let selectedBox = getHTML("bstSample");
+   $( ".rbtGraphContainer" ).empty();
+   let selectedBox = getHTML("rbtSample");
    selectedBox.selectedIndex = 0;
 }
