@@ -82,11 +82,11 @@ class TestAlertSort(TestAlert):
             if self.validInput:
                 print("Error: Valid input is given and alert pops up")
             else:
-                print("Ran as expected: Invalid input is given", end="")
+                print("Ran as expected: Invalid input is given ", end="")
                 print("and alert pops up")
         except:
             if self.validInput:
-                print("Ran as expected: Valid input is given and", end="")
+                print("Ran as expected: Valid input is given and ", end="")
                 print("alert doesn\'t pop up")
             else:
                 print("Error: invalid input is given and alert ", end="")
@@ -122,7 +122,7 @@ class TestAlertHeap(TestAlert):
             # Customize (options[5]) with no input
             if (validRandInt % 2 == 0):
                 options[5].click()
-                print("Selected customize function but didn't input", end="")
+                print("Selected customize function but didn't input ", end="")
                 print("a function")
             else:
                 print("Didn't select an option")
@@ -163,24 +163,24 @@ class TestAlertHeap(TestAlert):
         try:
             driver.switch_to.alert.accept()
             if inputID == "tableSize":
-                print("Ran as expected: Set Size:", end="")
+                print("Ran as expected: Set Size: ", end="")
                 print("Invalid input is given and alert pops up")
             elif inputID == "funcChoices":
-                print("Ran as expected: Function Choices:", end="")
-                print("Invalid input is given and alert pops up", end="")
+                print("Ran as expected: Function Choices: ", end="")
+                print("Invalid input is given and alert pops up")
             else:
-                print("Ran as expected: Hash:", end="")
+                print("Ran as expected: Hash: ", end="")
                 print("Invalid input is given and alert pops up")
 
         except:
             if inputID == "tableSize":
-                print("Error: Set Size: invalid input is given", end="")
+                print("Error: Set Size: invalid input is given ", end="")
                 print("and alert doesn\'t pop up")
             elif inputID == "funcChoices":
-                print("Error: Function Choices:", end="")
+                print("Error: Function Choices: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
             else:
-                print("Error: Hash: invalid input is given and", end="")
+                print("Error: Hash: invalid input is given and ", end="")
                 print("alert doesn\'t pop up")
 
         print()
@@ -222,11 +222,11 @@ class TestAlertMST(TestAlert):
         try:
             driver.switch_to.alert.accept()
             if inputID == "nodeNum":
-                print("Ran as expected: Create Nodes:", end="")
+                print("Ran as expected: Create Nodes: ", end="")
                 print("Invalid input is given and alert pops up")
         except:
             if inputID == "nodeNum":
-                print("Error: Create Node:", end="")
+                print("Error: Create Node: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
 
 
