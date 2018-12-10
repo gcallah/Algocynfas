@@ -82,12 +82,15 @@ class TestAlertSort(TestAlert):
             if self.validInput:
                 print("Error: Valid input is given and alert pops up")
             else:
-                print("Ran as expected: Invalid input is given and alert pops up")
+                print("Ran as expected: Invalid input is given", end="")
+                print("and alert pops up")
         except:
             if self.validInput:
-                print("Ran as expected: Valid input is given and alert doesn\'t pop up")
+                print("Ran as expected: Valid input is given and", end="")
+                print("alert doesn\'t pop up")
             else:
-               print("Error: invalid input is given and alert doesn\'t pop up")
+                print("Error: invalid input is given and alert ", end="")
+                print("doesn\'t pop up")
 
         print()
 
@@ -99,7 +102,7 @@ class TestAlertHeap(TestAlert):
             invalidInput = randint(high + 1, high * 10)
             if invalidInput % 2 == 0:
                 # negative invalidInput
-                invalidInput = randint(high * -1 , low - 1)
+                invalidInput = randint(high * -1, low - 1)
             print(invalidInput)
             return invalidInput
 
@@ -115,10 +118,12 @@ class TestAlertHeap(TestAlert):
             # validFunc = options[1 to 4]
             options[validRandInt].click()
         else:
-            # invalidFunc = Select One (options[0]) || Customize (options[5]) with no input
+            # invalidFunc = Select One (options[0]) ||
+            # Customize (options[5]) with no input
             if (validRandInt % 2 == 0):
                 options[5].click()
-                print("Selected customize function but didn't input a function")
+                print("Selected customize function but didn't input", end="")
+                print("a function")
             else:
                 print("Didn't select an option")
 
@@ -147,7 +152,7 @@ class TestAlertHeap(TestAlert):
         else:  # test Hash with invalid input
             inputID = "InputValue"
             validFunc = True
-            # need to set a valid size and choose a valid func to test invalid hash
+            # need to set a validSize and a validFunc to test invalid hash
             self.setSize()
             self.chooseFunc(validFunc)
             inputBox = self.getById(inputID)
@@ -156,21 +161,27 @@ class TestAlertHeap(TestAlert):
             self.getById("run-button").click()
 
         try:
-            driver.switch_to.alert.accept()  
+            driver.switch_to.alert.accept()
             if inputID == "tableSize":
-                print("Ran as expected: Set Size: Invalid input is given and alert pops up")
+                print("Ran as expected: Set Size:", end="")
+                print("Invalid input is given and alert pops up")
             elif inputID == "funcChoices":
-                print("Ran as expected: Function Choices: Invalid input is given and alert pops up")
+                print("Ran as expected: Function Choices:", end="")
+                print("Invalid input is given and alert pops up", end="")
             else:
-                print("Ran as expected: Hash: Invalid input is given and alert pops up")
+                print("Ran as expected: Hash:", end="")
+                print("Invalid input is given and alert pops up")
 
         except:
             if inputID == "tableSize":
-                print("Error: Set Size: invalid input is given and alert doesn\'t pop up")
+                print("Error: Set Size: invalid input is given", end="")
+                print("and alert doesn\'t pop up")
             elif inputID == "funcChoices":
-                print("Error: Function Choices: invalid input is given and alert doesn\'t pop up")
+                print("Error: Function Choices:", end="")
+                print("invalid input is given and alert doesn\'t pop up")
             else:
-                print("Error: Hash: invalid input is given and alert doesn\'t pop up")
+                print("Error: Hash: invalid input is given and", end="")
+                print("alert doesn\'t pop up")
 
         print()
 
@@ -180,27 +191,28 @@ class TestAlertMST(TestAlert):
 
     def addNodes(self, validInput):
         inputBox = self.getById("nodeNum")
-        lowestValidInput = 1 # 2?
+        lowestValidInput = 1  # 2?
         highestValidInput = 16
         if validInput:
             inputBox.send_keys(randint(lowestValidInput, highestValidInput))
         else:
-            invalidInput = randint(highestValidInput * -1, lowestValidInput - 1)
+            invalidInput = randint(highestValidInput * -1,
+                                   lowestValidInput - 1)
             inputBox.send_keys(invalidInput)
             print(invalidInput)
         self.getById("add-node-button").click()
-    
+
     def testAlert(self):
         print("TestAlertMST")
         self.loadPage()
         self.getLink("Find a Minimum Spanning Tree").click()
         inputID = "nodeNum"
-    
-        choices = 1 # self.randNum()
+
+        choices = 1  # self.randNum()
         if (choices <= 33):  # test Create Nodes with invalid input
             validNodeNum = False
             self.addNodes(validNodeNum)
-        
+
         elif (33 < choices <= 66):  # test Create Edges with invalid edges
             inputID = "edges"
             validNodeNum = True
@@ -208,15 +220,17 @@ class TestAlertMST(TestAlert):
             self.addNodes(validNodeNum)
 
         try:
-            driver.switch_to.alert.accept()  
+            driver.switch_to.alert.accept()
             if inputID == "nodeNum":
-                print("Ran as expected: Create Nodes: Invalid input is given and alert pops up")
+                print("Ran as expected: Create Nodes:", end="")
+                print("Invalid input is given and alert pops up")
         except:
             if inputID == "nodeNum":
-                print("Error: Create Node: invalid input is given and alert doesn\'t pop up")
-    
+                print("Error: Create Node:", end="")
+                print("invalid input is given and alert doesn\'t pop up")
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
 
     testAlert = TestAlert()
     testAlert.loadPage()
@@ -230,6 +244,4 @@ if __name__ == "__main__":
     mst = TestAlertMST()
     mst.testAlert()
 
-    # testAlert.closePage()
-    
-
+    testAlert.closePage()
