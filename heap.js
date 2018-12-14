@@ -83,9 +83,6 @@ async function heapInsertList(){
 		}
 	}
 	correctErr("heap-insert-list-value");
-	/*for(var i = 0; i<list_num.length; i++){
-		await graph.insert(list_num[i]);
-	}*/
 
 	graph.arrayList = window.createList(canvas, list_num);
 	await graph.build_heap(list_num);
