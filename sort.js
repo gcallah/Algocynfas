@@ -344,15 +344,12 @@ function mergePrepare(){
 
 }
 
-// for heapsort compare function
-function heap_greater(t1, t2) {
-  return parseInt(t1.key) > parseInt(t2.key);
-}
-
 async function heapSort(myList){           //CLRS P 160
   
   console.log(fList.list);
-  var h = new heap(heap_greater, myList);
+  var h = new heap(function(t1,t2) {
+    return parseInt(t1.key) > parseInt(t2.key);
+  }, myList);
 
   getHTML("heapTitle").innerHTML = "<b>Building heap bottom-up ... </b>"
   await h.build_heap(myList.list);
