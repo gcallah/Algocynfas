@@ -1198,6 +1198,16 @@ class heap extends ourGraph {
     return this.right(i) < this.data.length;
   }
 
+  //return a list of keys, instead of treeNode
+  getDataList(){
+    list = [];
+    for(var i = 1; i < this.data.length; i++) {
+      list.push(this.data[i].key);
+    }
+
+    return list;
+  }
+
   //build heap bottom-up
   async build_heap(lst) {
     for (var i = 0; i <lst.length;i++) {
