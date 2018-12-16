@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoAlertPresentException
 from unittest import TestCase
 
 from random import randint
@@ -6,10 +7,6 @@ from random import randint
 # path = # change path to path of chromedriver.exe
 path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=path)
-
-
-class Error(Exception):
-    pass
 
 
 # Parent Class - General TestAlert
@@ -88,7 +85,7 @@ class TestAlertSort(TestAlert):
             else:
                 print("Ran as expected: Invalid input is given ", end="")
                 print("and alert pops up")
-        except Error:
+        except NoAlertPresentException:
             if self.validInput:
                 print("Ran as expected: Valid input is given and ", end="")
                 print("alert doesn\'t pop up")
@@ -176,7 +173,7 @@ class TestAlertHeap(TestAlert):
                 print("Ran as expected: Hash: ", end="")
                 print("Invalid input is given and alert pops up")
 
-        except Error:
+        except NoAlertPresentException:
             if inputID == "tableSize":
                 print("Error: Set Size: invalid input is given ", end="")
                 print("and alert doesn\'t pop up")
@@ -192,43 +189,115 @@ class TestAlertHeap(TestAlert):
 
 # Child Class - TestAlert for Minimum Spanning Tree
 class TestAlertMST(TestAlert):
-
+    
+    def __init__(self):
+        self.maxNodes = 16
+        
+        
     def addNodes(self, validInput):
         inputBox = self.getById("nodeNum")
-        lowestValidInput = 1  # 2?
-        highestValidInput = 16
+        lowestValidInput = 2  # 1
+        highestValidInput = self.maxNodes
+        numOfNodes = 0
         if validInput:
-            inputBox.send_keys(randint(lowestValidInput, highestValidInput))
+            numOfNodes = randint(lowestValidInput, highestValidInput)
         else:
-            invalidInput = randint(highestValidInput * -1,
+            numOfNodes = randint(highestValidInput * -1,
                                    lowestValidInput - 1)
-            inputBox.send_keys(invalidInput)
-            print(invalidInput)
+            print(numOfNodes)
+        inputBox.send_keys(numOfNodes)
         self.getById("add-node-button").click()
-
+        return numOfNodes
+    
+    
+    def sendEdgesInput(self, numOfNodes, validInput):
+        inputEdges = ""
+        asciiOfA = 97
+        
+        #generate validEsdges
+        for i in range(numOfNodes - 1):
+            if i == numOfNodes - 2:
+                #Every node connected to its prev node
+                inputEdges += chr(asciiOfA + i) + "-" + chr(asciiOfA + i + 1)
+            else:
+                inputEdges += chr(asciiOfA + i) + "-" + chr(asciiOfA + i + 1) + ", "
+        
+        #generate invalidEdges
+        if validInput == False:
+            #InvalidEdges = repeatedEdge || self-loop
+            randOrd = randint(0, numOfNodes - 1)
+            if randOrd == "0":
+                inputEdges += ", a-a"
+                print("Self-assignment:", inputEdges + "a-a")
+            else:
+                randNum = asciiOfA + randOrd
+                inputEdges += ", " + chr(randNum) + "-" + chr(randNum + 1)
+                print("Repeated edge:", inputEdges)
+        
+        print("SendEdges:", inputEdges)
+        self.getById("edges").send_keys(inputEdges)    
+        
+    def sendWeightsInput(self, numOfNodes, validInput):
+        inputWeights = ""
+        
+        for i in range(numOfNodes):
+            # assumed valid max weight = 100
+            randNum = self.randNum()
+            if validInput == False and i == numOfNodes - 2:
+                #invalidWeights = negativeWeights
+                inputWeights += str(randNum * -1)
+                pass
+            elif validInput and i == numOfNodes - 1:
+                inputWeights += str(randNum)
+            else:
+                inputWeights += str(randNum) + ", "
+                
+        self.getById("weights").send_keys(inputWeights)    
+        
     def testAlert(self):
         print("TestAlertMST")
         self.loadPage()
         self.getLink("Find a Minimum Spanning Tree").click()
-        inputID = "nodeNum"
+        inputID = ""
 
-        choices = 1  # self.randNum()
+        choices = 50  # self.randNum()
         if (choices <= 33):  # test Create Nodes with invalid input
+            inputID = "nodeNum"
             validNodeNum = False
             self.addNodes(validNodeNum)
 
         elif (33 < choices <= 66):  # test Create Edges with invalid edges
             inputID = "edges"
             validNodeNum = True
+            validWeights = True
+            validEdges = False
             # need to add a valid number of nodes to test invalid edges
-            self.addNodes(validNodeNum)
-
+            numOfNodes = self.addNodes(validNodeNum)
+            # need to send valid weights to test invalid edges
+            self.sendWeightsInput(numOfNodes, validWeights)
+            # send invalid number of Edges
+            self.sendEdgesInput(numOfNodes, validEdges)
+            self.getById("add-edge-button").click()
+            
+        else:
+            inputID = "weights"
+            validNodeNum = True
+            validEdges = True
+            validWeights = False
+            # need to add a valid number of nodes to test invalid weights
+            numOfNodes = self.addNodes(validNodeNum)
+            # need to send valid edges to test invalid weights
+            self.sendEdgesInput(numOfNodes, validEdges)
+            # send invalid number of weights
+            self.sendWeightsInput(numOfNodes, validWeights)
+            self.getById("add-edge-button").click()
+            
         try:
             driver.switch_to.alert.accept()
             if inputID == "nodeNum":
                 print("Ran as expected: Create Nodes: ", end="")
                 print("Invalid input is given and alert pops up")
-        except Error:
+        except NoAlertPresentException:
             if inputID == "nodeNum":
                 print("Error: Create Node: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
@@ -244,8 +313,8 @@ if __name__ == "__main__":
 
     heap = TestAlertHeap()
     heap.testAlert()
-
+    
     mst = TestAlertMST()
     mst.testAlert()
 
-    #testAlert.closePage()
+    # testAlert.closePage()

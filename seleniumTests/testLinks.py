@@ -3,7 +3,7 @@ from selenium import webdriver
 from unittest import TestCase, main
 
 
-path = # change path to path of chromedriver.exe
+path =  # change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
 # used to assert expectedUrl and currentUrl
@@ -26,7 +26,7 @@ links = {"Sorting Algorithms": "sort",
 class TestLinks(TestCase):
 
     def loadPage(self):
-        driver.get("https: //gcallah.github.io/Algocynfas/")
+        driver.get("https://gcallah.github.io/Algocynfas/")
 
     def closePage(self):
         driver.quit()
