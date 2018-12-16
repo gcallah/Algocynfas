@@ -4,8 +4,7 @@ from unittest import TestCase
 
 from random import randint
 
-# path = # change path to path of chromedriver.exe
-path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
+path = # change path to path of chromedriver.exe
 driver = webdriver.Chrome(executable_path=path)
 
 
@@ -189,11 +188,10 @@ class TestAlertHeap(TestAlert):
 
 # Child Class - TestAlert for Minimum Spanning Tree
 class TestAlertMST(TestAlert):
-    
+
     def __init__(self):
         self.maxNodes = 16
-        
-        
+
     def addNodes(self, validInput):
         inputBox = self.getById("nodeNum")
         lowestValidInput = 2  # 1
@@ -202,29 +200,27 @@ class TestAlertMST(TestAlert):
         if validInput:
             numOfNodes = randint(lowestValidInput, highestValidInput)
         else:
-            numOfNodes = randint(highestValidInput * -1,
-                                   lowestValidInput - 1)
+            numOfNodes = randint(highestValidInput * -1, lowestValidInput - 1)
             print(numOfNodes)
         inputBox.send_keys(numOfNodes)
         self.getById("add-node-button").click()
         return numOfNodes
-    
-    
+
     def sendEdgesInput(self, numOfNodes, validInput):
         inputEdges = ""
         asciiOfA = 97
-        
-        #generate validEsdges
+
+        # generate validEsdges
         for i in range(numOfNodes - 1):
             if i == numOfNodes - 2:
-                #Every node connected to its prev node
+                # Every node connected to its prev node
                 inputEdges += chr(asciiOfA + i) + "-" + chr(asciiOfA + i + 1)
             else:
                 inputEdges += chr(asciiOfA + i) + "-" + chr(asciiOfA + i + 1) + ", "
-        
-        #generate invalidEdges
-        if validInput == False:
-            #InvalidEdges = repeatedEdge || self-loop
+
+        # generate invalidEdges
+        if validInput is False:
+            # InvalidEdges = repeatedEdge || self-loop
             randOrd = randint(0, numOfNodes - 1)
             if randOrd == "0":
                 inputEdges += ", a-a"
@@ -233,25 +229,25 @@ class TestAlertMST(TestAlert):
                 randNum = asciiOfA + randOrd
                 inputEdges += ", " + chr(randNum) + "-" + chr(randNum + 1)
                 print("Repeated edge:", inputEdges)
-        self.getById("edges").send_keys(inputEdges)    
-        
+        self.getById("edges").send_keys(inputEdges)
+
     def sendWeightsInput(self, numOfNodes, validInput):
         inputWeights = ""
-        
+
         for i in range(numOfNodes):
             # assumed valid max weight = 100
             randNum = self.randNum()
-            if validInput == False and i == numOfNodes - 2:
-                #invalidWeights = negativeWeights
+            if validInput is False and i == numOfNodes - 2:
+                # invalidWeights = negativeWeights
                 inputWeights += str(randNum * -1)
-            elif validInput == False and i == numOfNodes - 1:
+            elif validInput is False and i == numOfNodes - 1:
                 pass
             else:
                 inputWeights += str(randNum) + ", "
-        
+
         print(inputWeights)
-        self.getById("weights").send_keys(inputWeights)    
-        
+        self.getById("weights").send_keys(inputWeights)
+
     def testAlert(self):
         print("TestAlertMST")
         self.loadPage()
@@ -276,7 +272,7 @@ class TestAlertMST(TestAlert):
             # send invalid number of Edges
             self.sendEdgesInput(numOfNodes, validEdges)
             self.getById("add-edge-button").click()
-            
+
         else:
             inputID = "weights"
             validNodeNum = True
@@ -289,7 +285,7 @@ class TestAlertMST(TestAlert):
             # send invalid number of weights
             self.sendWeightsInput(numOfNodes, validWeights)
             self.getById("add-edge-button").click()
-            
+
         try:
             driver.switch_to.alert.accept()
             if inputID == "nodeNum":
@@ -312,7 +308,8 @@ class TestAlertMST(TestAlert):
             else:
                 print("Error: Weights: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
-                
+
+
 if __name__ == "__main__":
 
     testAlert = TestAlert()
@@ -323,7 +320,7 @@ if __name__ == "__main__":
 
     heap = TestAlertHeap()
     heap.testAlert()
-    
+
     mst = TestAlertMST()
     mst.testAlert()
 
