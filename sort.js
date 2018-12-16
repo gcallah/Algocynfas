@@ -344,21 +344,28 @@ function mergePrepare(){
 
 }
 
-// for heapsort compare function
-function heap_greater(t1, t2) {
-  return parseInt(t1.key) > parseInt(t2.key);
-}
-
 async function heapSort(myList){           //CLRS P 160
-  
-  console.log(fList.list);
-  var h = new heap(heap_greater, myList);
 
-  getHTML("heapTitle").innerHTML = "<b>Building heap bottom-up ... </b>"
+  console.log(myList)
+
+  if (!animeRunning) {
+    return;
+  }
+  
+  var h = new heap(function(t1,t2) {
+    return parseInt(t1.key) > parseInt(t2.key);
+  }, myList);
+
+  getHTML("heapTitle").innerHTML = "<b>Building the heap from bottom-up ... </b>"
   await h.build_heap(myList.list);
   
-  getHTML("heapTitle").innerHTML = "<b> Extracting Max and sorting... <b>"
+  getHTML("heapTitle").innerHTML = "<b> Extracting the Max and sorting... <b>"
   for(var i = h.data.length - 1; i >= 2; i--) {
+    console.log(fList)
+    if (!animeRunning) {
+      fList.list = h.getDataList();
+      return;
+    }
 
     h.highLightNodes.push(1);
     h.highLightNodes.push(i);

@@ -1291,9 +1291,11 @@ class heap extends ourGraph {
 
 
   async up_heap(i) {
+
     if(!animeRunning){
       return;
     }
+
     this.highLightNodes.push(i);
     this.arrayList.highlightSwap(i-1);
     this.startGraph(false, 'heapCanvas');
@@ -1430,6 +1432,7 @@ class heap extends ourGraph {
     return result;
   }
 
+  //connet two nodes in the heap tree
   connectEdge(s, t) {
     this.edgeLayout.push({
       id: this.id++,
@@ -1454,8 +1457,7 @@ class heap extends ourGraph {
     }
   }
 
-  startGraph(ifEdge, container) {                 // this is too much repeat of code. Should be able to use method from ourgraph and bst
-
+  startGraph(ifEdge, container) {                 
     this.nodeLayout = [];
     this.edgeLayout = [];
 
