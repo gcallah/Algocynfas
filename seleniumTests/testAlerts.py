@@ -8,6 +8,10 @@ path = r"C:\Users\dli19\Desktop\chromedriver\lib\chromedriver\chromedriver.exe"
 driver = webdriver.Chrome(executable_path=path)
 
 
+class Error(Exception):
+    pass
+
+
 # Parent Class - General TestAlert
 class TestAlert(TestCase):
 
@@ -84,7 +88,7 @@ class TestAlertSort(TestAlert):
             else:
                 print("Ran as expected: Invalid input is given ", end="")
                 print("and alert pops up")
-        except:
+        except Error:
             if self.validInput:
                 print("Ran as expected: Valid input is given and ", end="")
                 print("alert doesn\'t pop up")
@@ -172,7 +176,7 @@ class TestAlertHeap(TestAlert):
                 print("Ran as expected: Hash: ", end="")
                 print("Invalid input is given and alert pops up")
 
-        except:
+        except Error:
             if inputID == "tableSize":
                 print("Error: Set Size: invalid input is given ", end="")
                 print("and alert doesn\'t pop up")
@@ -224,7 +228,7 @@ class TestAlertMST(TestAlert):
             if inputID == "nodeNum":
                 print("Ran as expected: Create Nodes: ", end="")
                 print("Invalid input is given and alert pops up")
-        except:
+        except Error:
             if inputID == "nodeNum":
                 print("Error: Create Node: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
@@ -244,4 +248,4 @@ if __name__ == "__main__":
     mst = TestAlertMST()
     mst.testAlert()
 
-    testAlert.closePage()
+    #testAlert.closePage()
