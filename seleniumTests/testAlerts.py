@@ -233,8 +233,6 @@ class TestAlertMST(TestAlert):
                 randNum = asciiOfA + randOrd
                 inputEdges += ", " + chr(randNum) + "-" + chr(randNum + 1)
                 print("Repeated edge:", inputEdges)
-        
-        print("SendEdges:", inputEdges)
         self.getById("edges").send_keys(inputEdges)    
         
     def sendWeightsInput(self, numOfNodes, validInput):
@@ -246,12 +244,12 @@ class TestAlertMST(TestAlert):
             if validInput == False and i == numOfNodes - 2:
                 #invalidWeights = negativeWeights
                 inputWeights += str(randNum * -1)
+            elif validInput == False and i == numOfNodes - 1:
                 pass
-            elif validInput and i == numOfNodes - 1:
-                inputWeights += str(randNum)
             else:
                 inputWeights += str(randNum) + ", "
-                
+        
+        print(inputWeights)
         self.getById("weights").send_keys(inputWeights)    
         
     def testAlert(self):
@@ -260,7 +258,7 @@ class TestAlertMST(TestAlert):
         self.getLink("Find a Minimum Spanning Tree").click()
         inputID = ""
 
-        choices = 50  # self.randNum()
+        choices = 99
         if (choices <= 33):  # test Create Nodes with invalid input
             inputID = "nodeNum"
             validNodeNum = False
@@ -297,12 +295,24 @@ class TestAlertMST(TestAlert):
             if inputID == "nodeNum":
                 print("Ran as expected: Create Nodes: ", end="")
                 print("Invalid input is given and alert pops up")
+            elif inputID == "edges":
+                print("Ran as expected: Edges: ", end="")
+                print("Invalid input is given and alert pops up")
+            else:
+                print("Ran as expected: Weight: ", end="")
+                print("Invalid input is given and alert pops up")
+
         except NoAlertPresentException:
             if inputID == "nodeNum":
                 print("Error: Create Node: ", end="")
                 print("invalid input is given and alert doesn\'t pop up")
-
-
+            elif inputID == "edges":
+                print("Error: Edges: ", end="")
+                print("invalid input is given and alert doesn\'t pop up")
+            else:
+                print("Error: Weights: ", end="")
+                print("invalid input is given and alert doesn\'t pop up")
+                
 if __name__ == "__main__":
 
     testAlert = TestAlert()
@@ -317,4 +327,4 @@ if __name__ == "__main__":
     mst = TestAlertMST()
     mst.testAlert()
 
-    # testAlert.closePage()
+    testAlert.closePage()
