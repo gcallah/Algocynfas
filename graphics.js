@@ -74,6 +74,21 @@ class Group extends GraphicElems {
 
 }
 
+class Image extends GraphicElems {
+  constructor(url, x, y, height, width) {
+    super();
+    fabric.Image.fromURL(url, function(image) {
+      var img = image.set({
+        left: x,
+        top: y,
+        width: width,
+        height: height
+      });
+      canvas.add(image);
+    });
+  }
+}
+
 class Rectangle extends GraphicElems {
 
   constructor(x = 0, y = 0, height = 50, width = 50, color = 'blue') {
@@ -462,6 +477,9 @@ function create() {
   //var infinitySymbol = new InfinitySymbol();
   //infinitySymbol.draw(canvas);
 
-  var pathChart = new PathChart();
-  pathChart.draw(canvas);
+  //var pathChart = new PathChart();
+  //pathChart.draw(canvas);
+  
+  var img = new Image("lib/images/cat.jpg", 10, 10, 150, 150);
+  img.draw(canvas);
 }
