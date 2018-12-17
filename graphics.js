@@ -290,112 +290,63 @@ class Line extends Rectangle {
 class PathChart extends Group {
   constructor(pathLeft = ['Agile Adoption', 'Differential Testing Services', 'Continuous'], pathRight = ['Remote Support', 'Managed Services', 'Outcome Based Models'], pathCenter = ['IT Transformation', 'IT Consulting'], goal = "DevOp Services!", x = 300, y = 300, rectangleHeight = 50, rectangleWidth = 150, fontSize = 15) {
     super();
+    
     var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth);
     this.add(goalBox.object);
     var goalText = new Text(goal, x, y, 'black', fontSize);
     this.add(goalText.object);
       
-    var centerX = x;
-    var rightX = x + rectangleWidth * 1.5;
-    var leftX = x - rectangleWidth * 1.5;
-      
-    // For the center path
-    var topCenterY = y - rectangleHeight * 6;
-    var bottomCenterY = y - rectangleHeight * 3;
-    
-    var topCenterArrowY = y - rectangleHeight * 4.5;
-    var bottomCenterArrowY = y - rectangleHeight * 1.5;
-      
-    // For the side paths
-    var topSideY = y - rectangleHeight * 6;
-    var midSideY = y - rectangleHeight * 4;
-    var botSideY = y - rectangleHeight * 2;
-    
-    var topSideArrowY = y - rectangleHeight * 5;
-    var midSideArrowY = y - rectangleHeight * 3;
-    var botSideArrowY = y
-    
-    var botRightArrowX = x + rectangleWidth;
-    var botLeftArrowX = x - rectangleWidth;
-    var botArrowExtensionY = botSideArrowY - 25;
-    
-      
-    // Component creation
-    var pathCenterTop = new Rectangle(centerX, topCenterY, rectangleHeight, rectangleWidth);
-    this.add(pathCenterTop.object);
-    var pathCenterTopText = new Text(pathCenter[0], centerX, topCenterY, 'black', fontSize);
-    this.add(pathCenterTopText.object);
+    // Arrays go from left to right, top to bottom  
+    var sideX = [x - rectangleWidth * 1.5, x + rectangleWidth * 1.5];
+    var bottomArrowX = [x - rectangleWidth, x + rectangleWidth];
+    var centerTextY = [y - rectangleHeight * 6, y - rectangleHeight * 3];
+    var centerArrowY = [y - rectangleHeight * 4.5, y - rectangleHeight * 1.5];
+    var sideTextY = [y - rectangleHeight * 6, y - rectangleHeight * 4, y - rectangleHeight * 2];
+    var sideArrowY = [y - rectangleHeight * 5, y - rectangleHeight * 3, y];
 
-    var pathCenterBottom = new Rectangle(centerX, bottomCenterY, rectangleHeight, rectangleWidth);
-    this.add(pathCenterBottom.object);
-    var pathCenterBottomText = new Text(pathCenter[1], centerX, bottomCenterY, 'black', fontSize);
-    this.add(pathCenterBottomText.object);
+    // Create the center
+    var centerLength = centerTextY.length;
+    for (var i = 0; i < centerLength; i++) {
+      var textBox = new Rectangle(x, centerTextY[i], rectangleHeight, rectangleWidth);
+      this.add(textBox.object);
+      var text = new Text(pathCenter[i], x, centerTextY[i], 'black', fontSize);
+      this.add(text.object);
+      var arrow = new SolidArrow(x, centerArrowY[i], 50, rectangleHeight, 'black');
+      arrow.rotate(90);
+      this.add(arrow.object);
+    }
     
-    var pathRightTop = new Rectangle(rightX, topSideY, rectangleHeight, rectangleWidth);
-    this.add(pathRightTop.object);
-    var pathRightTopText = new Text(pathRight[0], rightX, topSideY, 'black', fontSize);
-    this.add(pathRightTopText.object);
-      
-    var pathRightMid = new Rectangle(rightX, midSideY, rectangleHeight, rectangleWidth);
-    this.add(pathRightMid.object);
-    var pathRightMidText = new Text(pathRight[1], rightX, midSideY, 'black', fontSize);
-    this.add(pathRightMidText.object);
-      
-    var pathRightBot = new Rectangle(rightX, botSideY, rectangleHeight, rectangleWidth);
-    this.add(pathRightBot.object);
-    var pathRightBotText = new Text(pathRight[2], rightX, botSideY, 'black', fontSize);
-    this.add(pathRightBotText.object);
-      
-    var pathLeftTop = new Rectangle(leftX, topSideY, rectangleHeight, rectangleWidth);
-    this.add(pathLeftTop.object);
-    var pathLeftTopText = new Text(pathLeft[0], leftX, topSideY, 'black', fontSize);
-    this.add(pathLeftTopText.object);
-      
-    var pathLeftMid = new Rectangle(leftX, midSideY, rectangleHeight, rectangleWidth);
-    this.add(pathLeftMid.object);
-    var pathLeftMidText = new Text(pathLeft[1], leftX, midSideY, 'black', fontSize);
-    this.add(pathLeftMidText.object);
-      
-    var pathLeftBot = new Rectangle(leftX, botSideY, rectangleHeight, rectangleWidth);
-    this.add(pathLeftBot.object);
-    var pathLeftBotText = new Text(pathLeft[2], leftX, botSideY, 'black', fontSize);
-    this.add(pathLeftBotText.object);
-      
-    // Arrows
-    var pathCenterArrowTop = new SolidArrow(centerX, topCenterArrowY, 50, rectangleHeight, 'black');
-    pathCenterArrowTop.rotate(90);
-    this.add(pathCenterArrowTop.object);
-
-    var pathCenterArrowBottom = new SolidArrow(centerX, bottomCenterArrowY, 50, rectangleHeight, 'black');
-    pathCenterArrowBottom.rotate(90);
-    this.add(pathCenterArrowBottom.object);
-      
-    var pathRightArrowTop = new SolidArrow(rightX, topSideArrowY, 50, rectangleHeight, 'black');
-    pathRightArrowTop.rotate(90);
-    this.add(pathRightArrowTop.object);
-      
-    var pathRightArrowMid = new SolidArrow(rightX, midSideArrowY, 50, rectangleHeight, 'black');
-    pathRightArrowMid.rotate(90);
-    this.add(pathRightArrowMid.object);
-      
-    var pathLeftArrowTop = new SolidArrow(leftX, topSideArrowY, 50, rectangleHeight, 'black');
-    pathLeftArrowTop.rotate(90);
-    this.add(pathLeftArrowTop.object);
-      
-    var pathLeftArrowMid = new SolidArrow(leftX, midSideArrowY, 50, rectangleHeight, 'black');
-    pathLeftArrowMid.rotate(90);
-    this.add(pathLeftArrowMid.object);
-      
-    var pathRightArrowBot = new SolidArrow(botRightArrowX, botSideArrowY, 50, rectangleHeight * 1.75, 'black');
-    pathRightArrowBot.rotate(180);
-    this.add(pathRightArrowBot.object);
-    var pathRightArrowExtension = new Rectangle(rightX, botArrowExtensionY, 75, 25, 'black');
-    this.add(pathRightArrowExtension.object);
-    
-    var pathLeftArrowBot = new SolidArrow(botLeftArrowX, botSideArrowY, 50, rectangleHeight * 1.75, 'black');
-    this.add(pathLeftArrowBot.object);
-    var pathLeftArrowExtension = new Rectangle(leftX, botArrowExtensionY, 75, 25, 'black');
-    this.add(pathLeftArrowExtension.object);
+    // Create the side paths
+    var sides = sideX.length;
+    for (var i = 0; i < sides; i++) {
+      var sideHeight = sideTextY.length;
+      if (i == 0) {
+        var sideArray = pathLeft;
+      }
+      else {
+        var sideArray = pathRight;
+      }
+      for (var j = sideHeight - 1; j >= 0; j--) {
+        var textBox = new Rectangle(sideX[i], sideTextY[j], rectangleHeight, rectangleWidth);
+        this.add(textBox.object);
+        var text = new Text(sideArray[j], sideX[i], sideTextY[j], 'black', fontSize);
+        this.add(text.object);
+        if(j != sideHeight - 1) {
+          var arrow = new SolidArrow(sideX[i], sideArrowY[j], 50, rectangleHeight, 'black');
+          arrow.rotate(90);
+          this.add(arrow.object);
+        }
+        else {
+          var arrow = new SolidArrow(bottomArrowX[i], sideArrowY[j], 50, rectangleHeight * 1.75, 'black');
+          if(i == 1) {
+            arrow.rotate(180);
+          }
+          this.add(arrow.object);
+          var extension = new Rectangle(sideX[i], sideArrowY[j] - 25, 75, 25, 'black');
+          this.add(extension.object);
+        }
+      }
+    }
   }
 }
 
@@ -477,9 +428,9 @@ function create() {
   //var infinitySymbol = new InfinitySymbol();
   //infinitySymbol.draw(canvas);
 
-  //var pathChart = new PathChart();
-  //pathChart.draw(canvas);
+  var pathChart = new PathChart();
+  pathChart.draw(canvas);
   
-  var img = new Image("lib/images/cat.jpg", 10, 10, 150, 150);
-  img.draw(canvas);
+  //var img = new Image("lib/images/cat.jpg", 10, 10, 150, 150);
+  //img.draw(canvas);
 }
