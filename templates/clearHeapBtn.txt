@@ -1,3 +1,0 @@
-<button id = "heap-clear" type="button"
-    class="btn btn-danger col-1" onclick="heapClear()">Clear
-</button>
