@@ -1,3 +1,6 @@
+<footer id="heapLegend">
+	<script> window.display_legend("heapLegend", "Target Node", "Nodes being Compared") </script>
+</footer>
 <canvas id="heapArrayCanvas" width="800" height="144"
 style="border:0.1em solid #000000"></canvas>
 <div id="heapCanvas"  class = "heapCanvas" style = "width: 800px; height: 500px; border: 1px; border-style: solid"></div>

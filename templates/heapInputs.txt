@@ -4,7 +4,6 @@
 	<input type="radio" name="heapType" id="minHeap" value="minHeap" onclick="heapClear()" checked="true"> Min-Heap
 	<input type="radio" name="heapType" id="maxHeap" value="maxHeap" onclick="heapClear()"> Max-Heap
 
-	<br> <br>
   <hr>
 
 <h5 style = "margin-left: 0em">Enter a list of numbers to build heap bottom-up: </h5>
@@ -13,7 +12,6 @@
       class="btn btn-success col-1 btn-primary" onclick="heapInsertList()">Create
     </button>
 
-    <br>
     <hr>
 
   <h5 style = "margin-left: 0em">Insert a number to the current heap or pop the root: </h5>
@@ -27,7 +25,5 @@
     <button id = "heap-remove" type="button"
        class="btn btn-success col-1" onclick="heapRemove(false)">Pop
   	</button>
-
-    <br> <br>
     <hr>
 </b>

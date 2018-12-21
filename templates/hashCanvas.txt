@@ -1,3 +1,4 @@
-              <div class="canvasBox"  style="border:0.1em solid #000000">
-                 <canvas id="hashCanvas" width="1000" height="1400"></canvas>
-              </div>
+
+<div class="canvasBox"  style="border:0.1em solid #000000">
+ <canvas id="hashCanvas" width="1000" height="1400"></canvas>
+</div>
