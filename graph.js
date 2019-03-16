@@ -77,7 +77,8 @@ async function createBST(type) {
 //display layer for AVL
 async function createAVL(type) {
   if (!animeRunning) {
-    var graph = new BST();
+    //create a new AVL (AVL extends BST)
+    var graph = new AVL();
     for (var i = 0; i < Graph.nodes.length; i++) {
       graph.insert(parseInt(Graph.nodes[i]), false, false);
     }
@@ -89,7 +90,7 @@ async function createAVL(type) {
     getHTML("AVLGraphContainer").style.width = 800;
     getHTML("AVLGraphContainer").style.marginLeft = "10em";
     getHTML("AVLegend").style.marginLeft = "10em";
-    var graph = new BST();
+    var graph = new AVL();
 
     if (getHTML("random").checked == true) {
       var input = graph.random();
@@ -1036,6 +1037,70 @@ class rbTreeNode extends treeNode {
 
   setNode(defaultColor = RED) {
     super.setNode(defaultColor);
+  }
+}
+//class AVL Extends BST
+
+class AVL extends BST {
+  constructor() {
+    super();
+  }
+  //insert node function
+  async insert(input, single = false, draw = true) {
+    //check input
+    if (Number.isInteger(input)) {
+      correctErr("treeNode");
+      correctErr("treeList");
+      if (single && draw) {
+        this.createSigmaGraph("AVLGraphContainer");
+        await this.pause();
+      }
+      //create an object of type AvlTreeNode
+      var node = new AvlTreeNode(input, this.treeNodes.length);
+      //the binary tree insert algo in avl.js
+      var result = treeInsertAVL(this.root, node);
+      //have a function here which checks whether height of left & right subtrees is greater than 1
+      //here-->
+      this.root = result.root;
+      node = result.node;
+      var adjustList = result.adj;
+      var hlNodeId = result.hlNodeId;
+
+      node.setNode();
+      if (this.treeNodes.length > 1 && adjustList.length != 0) {
+        this.strench(adjustList);
+      }
+      this.treeNodes.push(node);
+      this.nodeLayout.push(node.layout);
+
+      this.positionCheck(node);
+
+      if (this.treeNodes.length > 1) {
+        this.connectParentChild(node);
+        if (single) {
+          await this.highLight(hlNodeId);
+        }
+      }
+      if (animeRunning || !draw) {
+        this.nodes.push(input);
+      }
+      let g = {
+        nodes: this.nodeLayout,
+        edges: this.edgeLayout
+      };
+      this.graph = g;
+      if (draw && animeRunning) {
+        this.createSigmaGraph("AVLGraphContainer");
+      }
+
+      return;
+    }
+    if (single) {
+      var errorBox = "treeNode";
+    } else {
+      var errorBox = "treeList";
+    }
+    noticeErr("please input a valid integer", errorBox);
   }
 }
 

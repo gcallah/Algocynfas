@@ -45,3 +45,4 @@ function treeInsertAVL(root, newNode) {
     hlNodeId: highLightN
   };
 }
+//write  a function here which checks height of left and right subtrees
