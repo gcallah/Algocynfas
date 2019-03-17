@@ -46,3 +46,27 @@ function treeInsertAVL(root, newNode) {
   };
 }
 //write  a function here which checks height of left and right subtrees
+
+/**
+ * Performs a right rotate on this node.
+ *
+ *       b                           a
+ *      / \                         / \
+ *     a   e -> b.rotateRight() -> c   b
+ *    / \                             / \
+ *   c   d                           d   e
+ *
+ * @return {Node} The root of the sub-tree; the node where this node used to be.
+ */
+
+/**
+ * Performs a left rotate on this node.
+ *
+ *     a                              b
+ *    / \                            / \
+ *   c   b   -> a.rotateLeft() ->   a   e
+ *      / \                        / \
+ *     d   e                      c   d
+ *
+ * @return {Node} The root of the sub-tree; the node where this node used to be.
+ */

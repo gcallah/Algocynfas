@@ -1059,8 +1059,7 @@ class AVL extends BST {
       var node = new AvlTreeNode(input, this.treeNodes.length);
       //the binary tree insert algo in avl.js
       var result = treeInsertAVL(this.root, node);
-      //have a function here which checks whether height of left & right subtrees is greater than 1
-      //here-->
+
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
