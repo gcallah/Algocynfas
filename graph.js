@@ -31,7 +31,7 @@ function createTree(ifEdge) {
   graph.setGraph(ifEdge, "treeGraphContainer");
   Graph = graph;
 }
-
+//display layer for BST
 async function createBST(type) {
   if (!animeRunning) {
     var graph = new BST();
@@ -105,7 +105,7 @@ async function createAVL(type) {
     disableButtons(true);
     var input = parseInt(getHTML("treeNode").value);
     if (!Graph) {
-      var graph = new BST();
+      var graph = new AVL();
     } else {
       $(".graph").empty();
       var graph = Graph;
@@ -804,6 +804,7 @@ class BST extends ourGraph {
       this.vertiAdjust = true;
     }
   }
+  //insert node function
   async insert(input, single = false, draw = true) {
     if (Number.isInteger(input)) {
       correctErr("treeNode");
@@ -1041,9 +1042,38 @@ class rbTreeNode extends treeNode {
 }
 //class AVL Extends BST
 
-class AVL extends BST {
+class AVL extends ourGraph {
   constructor() {
     super();
+    this.root = null;
+    this.nodeLayout = [];
+    this.treeNodes = [];
+    this.horiAdjust = false;
+    this.vertiAdjust = false;
+
+    //initialize avl
+    this.left = null;
+    this.right = null;
+    this.height = null;
+    this.key = null;
+    this.value = null;
+  }
+
+  positionCheck(node) {
+    if (Math.abs(node.position.x) > 200 && this.horiAdjust == false) {
+      getHTML("AVLGraphContainer").style.width = 1200;
+      getHTML("AVLGraphContainer").style.marginLeft = "5em";
+      getHTML("AVLegend").style.marginLeft = "5em";
+      this.horiAdjust = true;
+    }
+    if (Math.abs(node.position.y) > 130 && this.vertiAdjust == false) {
+      getHTML("AVLGraphContainer").style.height = 800;
+      for (var k = 0; k < this.nodeLayout.length; k++) {
+        this.treeNodes[k].position.y -= 150;
+        this.treeNodes[k].layout.y -= 150;
+      }
+      this.vertiAdjust = true;
+    }
   }
   //insert node function
   async insert(input, single = false, draw = true) {
@@ -1055,8 +1085,8 @@ class AVL extends BST {
         this.createSigmaGraph("AVLGraphContainer");
         await this.pause();
       }
-      //create an object of type AvlTreeNode
-      var node = new AvlTreeNode(input, this.treeNodes.length);
+      //create an object of type TreeNode
+      var node = new treeNode(input, this.treeNodes.length);
       //the binary tree insert algo in avl.js
       var result = treeInsertAVL(this.root, node);
 
@@ -1064,7 +1094,7 @@ class AVL extends BST {
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-
+      //check if avl is balanced or not
       node.setNode();
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
         this.strench(adjustList);
