@@ -45,6 +45,26 @@ function treeInsertAVL(root, newNode) {
     hlNodeId: highLightN
   };
 }
+//function for rotate Right
+function rotateRight(root) {}
+//function for rotate left
+function rotateLeft(root) {}
+//calculate left height{
+function leftHeight() {
+  if (!this.left) {
+    return -1;
+  }
+  return this.left.height;
+}
+//calculate right height
+function rightHeight() {
+  if (!this.right) {
+    return -1;
+  }
+  return this.right.height;
+}
+//check if avl is balanced or not
+function balanced() {}
 //write  a function here which checks height of left and right subtrees
 
 /**
