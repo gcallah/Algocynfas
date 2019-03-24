@@ -91,7 +91,6 @@ async function createAVL(type) {
     getHTML("AVLGraphContainer").style.marginLeft = "10em";
     getHTML("AVLegend").style.marginLeft = "10em";
     var graph = new AVL();
-
     if (getHTML("random").checked == true) {
       var input = graph.random();
     } else {
@@ -1040,23 +1039,18 @@ class rbTreeNode extends treeNode {
     super.setNode(defaultColor);
   }
 }
+
+class AVLTreeNode extends treeNode {
+  constructor(num, counter) {
+    super(num, counter);
+    this.height_tree = null;
+  }
+}
 //class AVL Extends BST
 
-class AVL extends ourGraph {
+class AVL extends BST {
   constructor() {
     super();
-    this.root = null;
-    this.nodeLayout = [];
-    this.treeNodes = [];
-    this.horiAdjust = false;
-    this.vertiAdjust = false;
-
-    //initialize avl
-    this.left = null;
-    this.right = null;
-    this.height = null;
-    this.key = null;
-    this.value = null;
   }
 
   positionCheck(node) {
@@ -1075,6 +1069,7 @@ class AVL extends ourGraph {
       this.vertiAdjust = true;
     }
   }
+
   //insert node function
   async insert(input, single = false, draw = true) {
     //check input
@@ -1086,10 +1081,10 @@ class AVL extends ourGraph {
         await this.pause();
       }
       //create an object of type TreeNode
-      var node = new treeNode(input, this.treeNodes.length);
+      var node = new AVLTreeNode(input, this.treeNodes.length);
       //the binary tree insert algo in avl.js
-      var result = treeInsertAVL(this.root, node);
-
+      var result = treeInsert(this.root, node);
+      //console.log(result);
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;

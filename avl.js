@@ -1,6 +1,6 @@
 //Below is the code for AVL tree
 //perform standard BST insert for new node
-function treeInsertAVL(root, newNode) {
+function treeInsert(root, newNode) {
   var r = root;
   var curr = null; // y = NIL
   var LastDir = null;
@@ -44,27 +44,43 @@ function treeInsertAVL(root, newNode) {
     adj: adjustList,
     hlNodeId: highLightN
   };
+  return result;
+}
+
+function disableButtons(ifDisable) {
+  getHTML("createAVL-button").disabled = ifDisable;
+  getHTML("insert-button").disabled = ifDisable;
+  //getHTML("presuc-button").disabled = ifDisable;
+  getHTML("delete-button").disabled = ifDisable;
+  getHTML("traversal-button").disabled = ifDisable;
+  getHTML("clear-button").disabled = ifDisable;
+}
+
+function clearAVLGraph() {
+  $(".AVLGraphContainer").empty();
+  let selectedBox = getHTML("bstSample");
+  selectedBox.selectedIndex = 0;
 }
 //function for rotate Right
-function rotateRight(root) {}
+//function rotateRight(root) {}
 //function for rotate left
-function rotateLeft(root) {}
+//function rotateLeft(root) {}
 //calculate left height{
-function leftHeight() {
-  if (!this.left) {
-    return -1;
-  }
-  return this.left.height;
-}
+// function leftHeight() {
+//   if (!this.left) {
+//     return -1;
+//   }
+//   return this.left.height;
+// }
 //calculate right height
-function rightHeight() {
-  if (!this.right) {
-    return -1;
-  }
-  return this.right.height;
-}
+// function rightHeight() {
+//   if (!this.right) {
+//     return -1;
+//   }
+//   return this.right.height;
+// }
 //check if avl is balanced or not
-function balanced() {}
+// function balanced() {}
 //write  a function here which checks height of left and right subtrees
 
 /**
