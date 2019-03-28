@@ -1,6 +1,5 @@
-//Below is the code for AVL tree
-//perform standard BST insert for new node
-function treeInsert(root, newNode) {
+function treeInsertAVL(root, newNode) {
+  // CLRS P294 root == T.root, r == x, curr == y, newNode == z
   var r = root;
   var curr = null; // y = NIL
   var LastDir = null;
@@ -44,44 +43,24 @@ function treeInsert(root, newNode) {
     adj: adjustList,
     hlNodeId: highLightN
   };
+
   return result;
 }
-
-function disableButtons(ifDisable) {
-  getHTML("createAVL-button").disabled = ifDisable;
-  getHTML("insert-button").disabled = ifDisable;
-  //getHTML("presuc-button").disabled = ifDisable;
-  getHTML("delete-button").disabled = ifDisable;
-  getHTML("traversal-button").disabled = ifDisable;
-  getHTML("clear-button").disabled = ifDisable;
+//calculate leftHeight
+function leftHeight(newNode) {
+  if (!newNode.left) {
+    return -1;
+  }
+  return newNode.left.height;
 }
 
-function clearAVLGraph() {
-  $(".AVLGraphContainer").empty();
-  let selectedBox = getHTML("bstSample");
-  selectedBox.selectedIndex = 0;
+//calculate rightHeight
+function rightHeight(newNode) {
+  if (!newNode.right) {
+    return -1;
+  }
+  return newNode.right.height;
 }
-//function for rotate Right
-//function rotateRight(root) {}
-//function for rotate left
-//function rotateLeft(root) {}
-//calculate left height{
-// function leftHeight() {
-//   if (!this.left) {
-//     return -1;
-//   }
-//   return this.left.height;
-// }
-//calculate right height
-// function rightHeight() {
-//   if (!this.right) {
-//     return -1;
-//   }
-//   return this.right.height;
-// }
-//check if avl is balanced or not
-// function balanced() {}
-//write  a function here which checks height of left and right subtrees
 
 /**
  * Performs a right rotate on this node.
@@ -95,6 +74,15 @@ function clearAVLGraph() {
  * @return {Node} The root of the sub-tree; the node where this node used to be.
  */
 
+//function rotateRight
+function rotateRight(root, newNode) {
+  var other = newNode.left;
+  newNode.left = other.right;
+  other.right = newNode;
+  newNode.height = Math.max(newNode.leftHeight(), newNode.rightHeight()) + 1;
+  other.height = Math.max(other.leftHeight(), newNode.height) + 1;
+  return other;
+}
 /**
  * Performs a left rotate on this node.
  *
@@ -106,3 +94,27 @@ function clearAVLGraph() {
  *
  * @return {Node} The root of the sub-tree; the node where this node used to be.
  */
+function rotateLeft(root, newNode) {
+  var other = newNode.right;
+  newNode.right = other.left;
+  other.left = newNode;
+  newNode.height = Math.max(newNode.leftHeight(), newNode.rightHeight()) + 1;
+  other.height = Math.max(other.leftHeight(), newNode.height) + 1;
+  return other;
+}
+
+function disableButtons(ifDisable) {
+  getHTML("createAVL-button").disabled = ifDisable;
+  getHTML("insert-button").disabled = ifDisable;
+  //getHTML("search-button").disabled = ifDisable;
+  //getHTML("minmax-button").disabled = ifDisable;
+  //getHTML("presuc-button").disabled = ifDisable;
+  getHTML("delete-button").disabled = ifDisable;
+  getHTML("traversal-button").disabled = ifDisable;
+  getHTML("clear-button").disabled = ifDisable;
+}
+function clearBstGraph() {
+  $(".AVLGraphContainer").empty();
+  let selectedBox = getHTML("bstSample");
+  selectedBox.selectedIndex = 0;
+}
