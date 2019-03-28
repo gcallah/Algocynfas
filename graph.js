@@ -1062,7 +1062,8 @@ class AVL extends BST {
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
       //update height and rebalance tree
-      this.root.height = Math.max(this.root.leftHeight(), this.root.rightHeight())+1;
+      this.root.height =
+        Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
       var balanceState = getBalanceState(this.root);
 
       //check for balanced left state
@@ -1087,12 +1088,6 @@ class AVL extends BST {
           return root.rotateLeft();
         }
       }
-    
-      return root;
-    };
-
-
-
 
       node.setNode();
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
