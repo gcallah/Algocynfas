@@ -1062,32 +1062,32 @@ class AVL extends BST {
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
       //update height and rebalance tree
-      // this.root.height =
-      //   Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
-      // var balanceState = getBalanceState(this.root);
+      this.root.height =
+        Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
+      var balanceState = getBalanceState(this.root);
 
       //check for balanced left state
-      // if (balanceState === BalanceState.UNBALANCED_LEFT) {
-      //   if (this.compare(key, root.left.key) < 0) {
-      //     // Left left case
-      //     root = root.rotateRight();
-      //   } else {
-      //     // Left right case
-      //     root.left = root.left.rotateLeft();
-      //     return root.rotateRight();
-      //   }
-      // }
-      // //check for balanced right state
-      // if (balanceState === BalanceState.UNBALANCED_RIGHT) {
-      //   if (this._compare(key, root.right.key) > 0) {
-      //     // Right right case
-      //     root = root.rotateLeft();
-      //   } else {
-      //     // Right left case
-      //     root.right = root.right.rotateRight();
-      //     return root.rotateLeft();
-      //   }
-      // }
+      if (balanceState === BalanceState.UNBALANCED_LEFT) {
+        if (this.compare(key, root.left.key) < 0) {
+          // Left left case
+          root = root.rotateRight();
+        } else {
+          // Left right case
+          root.left = root.left.rotateLeft();
+          return root.rotateRight();
+        }
+      }
+      //check for balanced right state
+      if (balanceState === BalanceState.UNBALANCED_RIGHT) {
+        if (this._compare(key, root.right.key) > 0) {
+          // Right right case
+          root = root.rotateLeft();
+        } else {
+          // Right left case
+          root.right = root.right.rotateRight();
+          return root.rotateLeft();
+        }
+      }
 
       node.setNode();
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
