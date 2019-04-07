@@ -110,6 +110,8 @@ function rotateLeft(newNode) {
  *
  * @private
  */
+
+//cases for types of balanced state
 var BalanceState = {
   UNBALANCED_RIGHT: 1,
   SLIGHTLY_UNBALANCED_RIGHT: 2,
@@ -126,6 +128,8 @@ var BalanceState = {
  * @param {Node} node The node to get the difference from.
  * @return {BalanceState} The BalanceState of the node.
  */
+
+//return balanced state after comparison
 function getBalanceState(node) {
   var heightDifference = node.leftHeight() - node.rightHeight();
   switch (heightDifference) {
