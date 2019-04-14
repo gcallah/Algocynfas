@@ -1,6 +1,12 @@
 // below are binary search tree algorithms
 
 function treeInsert(root, newNode) {
+  console.log("bst.js");
+  //root is the first element of the input list
+  console.log("root");
+  console.log(root);
+  console.log("newNode");
+  console.log(newNode);
   // CLRS P294 root == T.root, r == x, curr == y, newNode == z
   var r = root;
   var curr = null; // y = NIL
