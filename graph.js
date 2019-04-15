@@ -815,8 +815,6 @@ class BST extends ourGraph {
         await this.pause();
       }
       var node = new treeNode(input, this.treeNodes.length);
-      console.log("Tree node");
-      console.log(node);
       var result = treeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
       this.root = result.root;
       node = result.node;
@@ -1031,8 +1029,6 @@ class BST extends ourGraph {
   }
 }
 
-class AVL extends ourGraph {}
-
 class rbTreeNode extends treeNode {
   constructor(num, counter) {
     super(num, counter);
@@ -1043,6 +1039,234 @@ class rbTreeNode extends treeNode {
 
   setNode(defaultColor = RED) {
     super.setNode(defaultColor);
+  }
+}
+class AVL extends BST {
+  constructor() {
+    super();
+  }
+
+  //insert node function
+  async insert(input, single = false, draw = true) {
+    if (Number.isInteger(input)) {
+      correctErr("treeNode");
+      correctErr("treeList");
+      if (single && draw) {
+        this.createSigmaGraph("AVLGraphContainer");
+        await this.pause();
+      }
+      var node = new treeNode(input, this.treeNodes.length);
+      var result = treeInsertAVL(this.root, node); // the binary insert algorithm, in binarySTree.js
+      this.root = result.root;
+      node = result.node;
+      var adjustList = result.adj;
+      var hlNodeId = result.hlNodeId;
+
+      node.setNode();
+      if (this.treeNodes.length > 1 && adjustList.length != 0) {
+        this.strench(adjustList);
+      }
+      this.treeNodes.push(node);
+      this.nodeLayout.push(node.layout);
+
+      this.positionCheck(node);
+
+      if (this.treeNodes.length > 1) {
+        this.connectParentChild(node);
+        if (single) {
+          await this.highLight(hlNodeId);
+        }
+      }
+      if (animeRunning || !draw) {
+        this.nodes.push(input);
+      }
+      let g = {
+        nodes: this.nodeLayout,
+        edges: this.edgeLayout
+      };
+      this.graph = g;
+      if (draw && animeRunning) {
+        this.createSigmaGraph("AVLGraphContainer");
+      }
+
+      return;
+    }
+
+    if (single) {
+      var errorBox = "treeNode";
+    } else {
+      var errorBox = "treeList";
+    }
+    noticeErr("Please input a valid integer", errorBox);
+  }
+
+  async search(input) {
+    var result = treeSearch(this.root, input); // the binary search algorithm, in binarySTree.js
+    await this.highLight(result.path);
+    if (!result.node) {
+      noticeErr("Node not found", "searchBox");
+    }
+  }
+  async minMax() {
+    var index = getHTML("minMaxChoice").selectedIndex;
+    if (index == 0) {
+      var result = treeMin(this.root); // the binary search algorithm, in binarySTree.js
+      await this.highLight(result.HLNodeId);
+      var returnValue = "The minimum is " + result.min.key;
+    } else {
+      var result = treeMax(this.root); // the binary search algorithm, in binarySTree.js
+      await this.highLight(result.HLNodeId);
+      var returnValue = "The maximum is " + result.max.key;
+    }
+    if (animeRunning) {
+      alert(returnValue);
+    }
+    return;
+  }
+
+  async preSuc() {
+    var input = parseInt(getHTML("preSucBox").value);
+    if (Number.isInteger(input)) {
+      var searched = treeSearch(this.root, input);
+
+      if (searched.node) {
+        var node = searched.node;
+        var index = getHTML("preSucChoice").selectedIndex;
+
+        if (index == 0) {
+          var result = treePredecessor(node); // the binary search algorithm, in binarySTree.js
+          await this.highLight(result.HLNodeId);
+          var returnValue = "The predecessor is " + result.pre;
+        } else {
+          var result = treeSuccessor(node); // the binary search algorithm, in binarySTree.js
+          await this.highLight(result.HLNodeId);
+
+          var returnValue = "The successor is " + result.suc;
+        }
+        if (animeRunning) {
+          alert(returnValue);
+        }
+        return;
+      }
+      noticeErr("Node is not in this tree", "preSucBox");
+      return;
+    }
+    noticeErr("Please give a valid input!", "preSucBox");
+  }
+
+  async traversal() {
+    var index = getHTML("treeWalkChoice").selectedIndex;
+    if (index == 0) {
+      var result = preorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+    } else if (index == 1) {
+      var result = inorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+    } else {
+      var result = postorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+    }
+
+    await this.highLight(result.node, result.edge);
+  }
+
+  async delete() {
+    var input = parseInt(getHTML("deleteBox").value);
+    if (Number.isInteger(input)) {
+      correctErr("deleteBox");
+      var searched = treeSearch(this.root, input);
+      if (searched.node) {
+        await this.highLight(searched.path);
+        var node = searched.node;
+        var result = treeDelete(this.root, node, this.treeNodes);
+        this.root = result.root;
+        if (result.path.length != 0) {
+          result.path.unshift(node.id);
+          await this.highLight(result.path);
+        }
+        if (animeRunning) {
+          this.nodes.splice(node.id, 1);
+        }
+        this.treeNodes[node.id] = null;
+        this.nodeLayout = [];
+        this.edgeLayout = [];
+        for (var i = 0; i < this.treeNodes.length; i++) {
+          if (this.treeNodes[i]) {
+            this.nodeLayout.push(this.treeNodes[i].layout);
+            if (this.treeNodes[i].leftEdge) {
+              this.edgeLayout.push(this.treeNodes[i].leftEdge);
+            }
+            if (this.treeNodes[i].rightEdge) {
+              this.edgeLayout.push(this.treeNodes[i].rightEdge);
+            }
+          }
+        }
+        let g = {
+          nodes: this.nodeLayout,
+          edges: this.edgeLayout
+        };
+        this.graph = g;
+        if (animeRunning) {
+          this.createSigmaGraph("bstGraphContainer");
+        }
+
+        return;
+      }
+
+      noticeErr("Node is not in this tree", "deleteBox");
+
+      return;
+    }
+    noticeErr("Please give a valid input!", "deleteBox");
+  }
+  connectParentChild(node, edgeColor = EdgeNodeCOLOR) {
+    if (!node.parent) {
+      return;
+    }
+    var edgeId = node.parent.id.toString() + "-" + node.id.toString();
+    var newEdge = {
+      id: edgeId,
+      source: node.parent.id.toString(),
+      target: node.id.toString(),
+      size: 5,
+      label: null,
+      color: edgeColor
+    };
+    this.edgeLayout.push(newEdge);
+    if (node.sideToParent == "left") {
+      node.parent.leftEdge = newEdge;
+    } else {
+      node.parent.rightEdge = newEdge;
+    }
+  }
+  random() {
+    var input = getHTML("treeList").value;
+    input = splitInput(input, true);
+    var result = [];
+    while (input.length != 0) {
+      var index = Math.floor(Math.random() * input.length);
+      var temp = input[input.length - 1];
+      input[input.length - 1] = input[index];
+      input[index] = temp;
+      result.push(input.pop());
+    }
+    var returnValue = result;
+    result.join();
+    getHTML("treeList").value = result;
+    return returnValue;
+  }
+
+  async highLight(HLNodeLst, HLEdgeList = null) {
+    if (HLNodeLst.length != 0) {
+      if (!HLEdgeList) {
+        var HLEdgeList = [];
+        //create edgeId list:
+
+        for (var i = 0; i < HLNodeLst.length - 1; i++) {
+          var edgeId =
+            HLNodeLst[i].toString() + "-" + HLNodeLst[i + 1].toString();
+          HLEdgeList.push(edgeId);
+        }
+      }
+      await this.color(HLEdgeList, HLNodeLst);
+    }
   }
 }
 
