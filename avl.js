@@ -74,8 +74,8 @@ function rightHeight(newNode) {
  * @return {Node} The root of the sub-tree; the node where this node used to be.
  */
 
-//function rotateRight
-function rotateRight(root, newNode) {
+//function for rotateRight
+function rotateRight(newNode) {
   var other = newNode.left;
   newNode.left = other.right;
   other.right = newNode;
@@ -94,13 +94,62 @@ function rotateRight(root, newNode) {
  *
  * @return {Node} The root of the sub-tree; the node where this node used to be.
  */
-function rotateLeft(root, newNode) {
+
+//function for rotateLeft
+function rotateLeft(newNode) {
   var other = newNode.right;
   newNode.right = other.left;
   other.left = newNode;
   newNode.height = Math.max(newNode.leftHeight(), newNode.rightHeight()) + 1;
   other.height = Math.max(other.leftHeight(), newNode.height) + 1;
   return other;
+}
+
+/**
+ * Represents how balanced a node's left and right children are.
+ *
+ * @private
+ */
+var BalanceState = {
+  UNBALANCED_RIGHT: 1,
+  SLIGHTLY_UNBALANCED_RIGHT: 2,
+  BALANCED: 3,
+  SLIGHTLY_UNBALANCED_LEFT: 4,
+  UNBALANCED_LEFT: 5
+};
+
+/**
+ * Gets the balance state of a node, indicating whether the left or right
+ * sub-trees are unbalanced.
+ *
+ * @private
+ * @param {Node} node The node to get the difference from.
+ * @return {BalanceState} The BalanceState of the node.
+ */
+function getBalanceState(node) {
+  var heightDifference = node.leftHeight() - node.rightHeight();
+  switch (heightDifference) {
+    case -2:
+      return BalanceState.UNBALANCED_RIGHT;
+    case -1:
+      return BalanceState.SLIGHTLY_UNBALANCED_RIGHT;
+    case 1:
+      return BalanceState.SLIGHTLY_UNBALANCED_LEFT;
+    case 2:
+      return BalanceState.UNBALANCED_LEFT;
+    default:
+      return BalanceState.BALANCED;
+  }
+}
+
+function compare(a, b) {
+  if (a > b) {
+    return 1;
+  }
+  if (a < b) {
+    return -1;
+  }
+  return 0;
 }
 
 function disableButtons(ifDisable) {
