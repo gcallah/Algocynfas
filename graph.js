@@ -1129,7 +1129,7 @@ class AVL extends BST {
   }
 
   async search(input) {
-    var result = treeSearch(this.root, input); // the binary search algorithm, in binarySTree.js
+    var result = treeSearch(this.root, input);
     await this.highLight(result.path);
     if (!result.node) {
       noticeErr("Node not found", "searchBox");
@@ -1138,11 +1138,11 @@ class AVL extends BST {
   async minMax() {
     var index = getHTML("minMaxChoice").selectedIndex;
     if (index == 0) {
-      var result = treeMin(this.root); // the binary search algorithm, in binarySTree.js
+      var result = treeMin(this.root);
       await this.highLight(result.HLNodeId);
       var returnValue = "The minimum is " + result.min.key;
     } else {
-      var result = treeMax(this.root); // the binary search algorithm, in binarySTree.js
+      var result = treeMax(this.root);
       await this.highLight(result.HLNodeId);
       var returnValue = "The maximum is " + result.max.key;
     }
@@ -1162,11 +1162,11 @@ class AVL extends BST {
         var index = getHTML("preSucChoice").selectedIndex;
 
         if (index == 0) {
-          var result = treePredecessor(node); // the binary search algorithm, in binarySTree.js
+          var result = treePredecessor(node);
           await this.highLight(result.HLNodeId);
           var returnValue = "The predecessor is " + result.pre;
         } else {
-          var result = treeSuccessor(node); // the binary search algorithm, in binarySTree.js
+          var result = treeSuccessor(node);
           await this.highLight(result.HLNodeId);
 
           var returnValue = "The successor is " + result.suc;
@@ -1185,11 +1185,11 @@ class AVL extends BST {
   async traversal() {
     var index = getHTML("treeWalkChoice").selectedIndex;
     if (index == 0) {
-      var result = preorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+      var result = preorderTreeWalk(this.root);
     } else if (index == 1) {
-      var result = inorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+      var result = inorderTreeWalk(this.root);
     } else {
-      var result = postorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
+      var result = postorderTreeWalk(this.root);
     }
 
     await this.highLight(result.node, result.edge);

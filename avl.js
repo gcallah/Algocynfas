@@ -104,11 +104,10 @@ function rotateLeft(newNode) {
   other.height = Math.max(other.leftHeight(), newNode.height) + 1;
   return other;
 }
-
+/
 /**
  * Represents how balanced a node's left and right children are.
  *
- * @private
  */
 var BalanceState = {
   UNBALANCED_RIGHT: 1,
@@ -122,9 +121,6 @@ var BalanceState = {
  * Gets the balance state of a node, indicating whether the left or right
  * sub-trees are unbalanced.
  *
- * @private
- * @param {Node} node The node to get the difference from.
- * @return {BalanceState} The BalanceState of the node.
  */
 function getBalanceState(node) {
   var heightDifference = node.leftHeight() - node.rightHeight();
