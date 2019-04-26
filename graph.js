@@ -161,6 +161,7 @@ async function createRBT(type) {
 }
 
 function setTreeSample() {
+  console.log('tree sample');
   let selectedBox = getHTML("treeSample");
   var sampleSelected = selectedBox.selectedIndex;
   $(".graph").empty();
@@ -1042,9 +1043,31 @@ class rbTreeNode extends treeNode {
   }
 }
 
-class AVL extends BST {
+class AVL extends ourGraph {
   constructor() {
     super();
+    this.root = null;
+    this.nodeLayout = [];
+    this.treeNodes = [];
+    this.horiAdjust = false;
+    this.vertiAdjust = false;
+  }
+
+  positionCheck(node) {
+    if (Math.abs(node.position.x) > 200 && this.horiAdjust == false) {
+      getHTML("AVLGraphContainer").style.width = 1200;
+      getHTML("AVLGraphContainer").style.marginLeft = "5em";
+      getHTML("AVLegend").style.marginLeft = "5em";
+      this.horiAdjust = true;
+    }
+    if (Math.abs(node.position.y) > 130 && this.vertiAdjust == false) {
+      getHTML("AVLGraphContainer").style.height = 800;
+      for (var k = 0; k < this.nodeLayout.length; k++) {
+        this.treeNodes[k].position.y -= 150;
+        this.treeNodes[k].layout.y -= 150;
+      }
+      this.vertiAdjust = true;
+    }
   }
 
   //insert node function
@@ -1062,33 +1085,35 @@ class AVL extends BST {
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-      //update height and rebalance tree
-      this.root.height =
-        Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
-      var balanceState = getBalanceState(this.root);
 
-      //check for balanced left state
-      if (balanceState === BalanceState.UNBALANCED_LEFT) {
-        if (this.compare(key, root.left.key) < 0) {
-          // Left left case
-          root = root.rotateRight();
-        } else {
-          // Left right case
-          root.left = root.left.rotateLeft();
-          return root.rotateRight();
-        }
-      }
-      //check for balanced right state
-      if (balanceState === BalanceState.UNBALANCED_RIGHT) {
-        if (this._compare(key, root.right.key) > 0) {
-          // Right right case
-          root = root.rotateLeft();
-        } else {
-          // Right left case
-          root.right = root.right.rotateRight();
-          return root.rotateLeft();
-        }
-      }
+      // -------------------------------
+      //update height and rebalance tree
+      // this.root.height =
+      //   Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
+      // var balanceState = getBalanceState(this.root);
+
+      // //check for balanced left state
+      // if (balanceState === BalanceState.UNBALANCED_LEFT) {
+      //   if (this.compare(key, root.left.key) < 0) {
+      //     // Left left case
+      //     root = root.rotateRight();
+      //   } else {
+      //     // Left right case
+      //     root.left = root.left.rotateLeft();
+      //     return root.rotateRight();
+      //   }
+      // }
+      // //check for balanced right state
+      // if (balanceState === BalanceState.UNBALANCED_RIGHT) {
+      //   if (this._compare(key, root.right.key) > 0) {
+      //     // Right right case
+      //     root = root.rotateLeft();
+      //   } else {
+      //     // Right left case
+      //     root.right = root.right.rotateRight();
+      //     return root.rotateLeft();
+      //   }
+      // }
 
       node.setNode();
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
@@ -1232,7 +1257,7 @@ class AVL extends BST {
         };
         this.graph = g;
         if (animeRunning) {
-          this.createSigmaGraph("bstGraphContainer");
+          this.createSigmaGraph("AVLGraphContainer");
         }
 
         return;
@@ -1281,21 +1306,21 @@ class AVL extends BST {
     return returnValue;
   }
 
-  async highLight(HLNodeLst, HLEdgeList = null) {
-    if (HLNodeLst.length != 0) {
-      if (!HLEdgeList) {
-        var HLEdgeList = [];
-        //create edgeId list:
+  // async highLight(HLNodeLst, HLEdgeList = null) {
+  //   if (HLNodeLst.length != 0) {
+  //     if (!HLEdgeList) {
+  //       var HLEdgeList = [];
+  //       //create edgeId list:
 
-        for (var i = 0; i < HLNodeLst.length - 1; i++) {
-          var edgeId =
-            HLNodeLst[i].toString() + "-" + HLNodeLst[i + 1].toString();
-          HLEdgeList.push(edgeId);
-        }
-      }
-      await this.color(HLEdgeList, HLNodeLst);
-    }
-  }
+  //       for (var i = 0; i < HLNodeLst.length - 1; i++) {
+  //         var edgeId =
+  //           HLNodeLst[i].toString() + "-" + HLNodeLst[i + 1].toString();
+  //         HLEdgeList.push(edgeId);
+  //       }
+  //     }
+  //     await this.color(HLEdgeList, HLNodeLst);
+  //   }
+  // }
 }
 
 class RBT extends BST {

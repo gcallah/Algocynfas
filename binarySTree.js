@@ -433,5 +433,6 @@ function disableButtons(ifDisable) {
 function clearBstGraph() {
   $(".bstGraphContainer").empty();
   let selectedBox = getHTML("bstSample");
+  console.log(selectedBox);
   selectedBox.selectedIndex = 0;
 }
