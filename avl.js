@@ -1,5 +1,4 @@
 function treeInsertAVL(root, newNode) {
-  // CLRS P294 root == T.root, r == x, curr == y, newNode == z
   var r = root;
   var curr = null; // y = NIL
   var LastDir = null;
@@ -46,6 +45,113 @@ function treeInsertAVL(root, newNode) {
 
   return result;
 }
+
+function resetEdge(edge, sourceNode, targetNode) {
+  if (targetNode) {
+    var source = sourceNode.id.toString();
+    var target = targetNode.id.toString();
+    edge.id = source + "-" + target;
+    edge.source = source;
+    edge.target = target;
+    return edge;
+  }
+  return null;
+}
+
+function resetReplace(replace, toDelete) {
+  var x = toDelete.position.x - replace.position.x;
+  var y = toDelete.position.y - replace.position.y;
+  if (replace.strenchTimes != 0 && toDelete.parent) {
+    if (replace == toDelete.left) {
+      x -= 30 * replace.strenchTimes;
+    } else if (replace == toDelete.right) {
+      x += 30 * replace.strenchTimes;
+    }
+  }
+
+  replace.sideToParent = toDelete.sideToParent;
+  replace.strenchTimes = toDelete.strenchTimes;
+  return afterDeletePosition(replace, x, y);
+}
+
+
+//avlcheck
+function AVLCheck() {
+  if (!animeRunning) {
+    var graph = new AVL();
+    for (var i = 0; i < Graph.nodes.length; i++) {
+      graph.insert(parseInt(Graph.nodes[i]), false, false);
+    }
+    Graph = graph;
+  }
+  animeRunning = true;
+  disableButtons(true);
+  if (!Graph) {
+    noticeErr("The tree is empty!");
+    disableButtons(false);
+    return false;
+  }
+  $(".AVLGraphContainer").empty();
+
+  Graph.createSigmaGraph("AVLGraphContainer");
+  return true;
+}
+
+
+
+
+async function searchInTree() {
+  if (AVLCheck()) {
+    var input = parseInt(getHTML("searchBox").value);
+    if (Number.isInteger(input)) {
+      correctErr("searchBox");
+      await Graph.search(input);
+      disableButtons(false);
+      return;
+    }
+    noticeErr("Please input a valid integer", "searchBox");
+    disableButtons(false);
+  }
+}
+
+
+
+async function findMinMax() {
+  if (AVLCheck()) {
+    await Graph.minMax();
+    disableButtons(false);
+  }
+}
+
+async function findPreSuc() {
+  if (AVLCheck()) {
+    await Graph.preSuc();
+    disableButtons(false);
+  }
+}
+
+async function PreInPost() {
+  if (AVLCheck()) {
+    await Graph.traversal();
+    disableButtons(false);
+  }
+}
+
+async function deleteNode() {
+  if (AVLCheck()) {
+    await Graph.delete();
+    disableButtons(false);
+  }
+}
+
+
+
+
+
+
+
+
+
 //calculate leftHeight
 function leftHeight(newNode) {
   if (!newNode.left) {
@@ -104,7 +210,7 @@ function rotateLeft(newNode) {
   other.height = Math.max(other.leftHeight(), newNode.height) + 1;
   return other;
 }
-/
+
 /**
  * Represents how balanced a node's left and right children are.
  *
@@ -151,15 +257,15 @@ function compare(a, b) {
 function disableButtons(ifDisable) {
   getHTML("createAVL-button").disabled = ifDisable;
   getHTML("insert-button").disabled = ifDisable;
-  //getHTML("search-button").disabled = ifDisable;
-  //getHTML("minmax-button").disabled = ifDisable;
-  //getHTML("presuc-button").disabled = ifDisable;
+  // getHTML("search-button").disabled = ifDisable;
+  // getHTML("minmax-button").disabled = ifDisable;
+  // getHTML("presuc-button").disabled = ifDisable;
   getHTML("delete-button").disabled = ifDisable;
   getHTML("traversal-button").disabled = ifDisable;
-  getHTML("clear-button").disabled = ifDisable;
+  getHTML("clear-AVL-button").disabled = ifDisable;
 }
-function clearBstGraph() {
+function clearAVLGraph() {
   $(".AVLGraphContainer").empty();
-  let selectedBox = getHTML("bstSample");
+  let selectedBox = getHTML("AVLSample");
   selectedBox.selectedIndex = 0;
 }
