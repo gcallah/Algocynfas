@@ -264,6 +264,7 @@ function disableButtons(ifDisable) {
   getHTML("traversal-button").disabled = ifDisable;
   getHTML("clear-AVL-button").disabled = ifDisable;
 }
+//clear avl graph
 function clearAVLGraph() {
   $(".AVLGraphContainer").empty();
   let selectedBox = getHTML("AVLSample");

@@ -78,8 +78,10 @@ async function createBST(type) {
 //display layer for AVL
 async function createAVL(type) {
   if (!animeRunning) {
+    //instantiate graph of Class type AVL 
     var graph = new AVL();
     for (var i = 0; i < Graph.nodes.length; i++) {
+      //follow the AVL insert function
       graph.insert(parseInt(Graph.nodes[i]), false, false);
     }
     Graph = graph;
@@ -1080,7 +1082,8 @@ class AVL extends ourGraph {
         await this.pause();
       }
       var node = new treeNode(input, this.treeNodes.length);
-      var result = treeInsertAVL(this.root, node); // the insert algorithm, in avl.js
+      // the insert algorithm, in avl.js
+      var result = treeInsertAVL(this.root, node); 
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
