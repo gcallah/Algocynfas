@@ -153,12 +153,30 @@ async function deleteNode() {
 
 
 //calculate leftHeight
-function leftHeight(newNode) {
+ function leftHeight(newNode) {
   if (!newNode.left) {
     return -1;
   }
   return newNode.left.height;
 }
+
+function getBalanceState(node) {
+  var heightDifference = leftHeight(node) - rightHeight(node);
+  switch (heightDifference) {
+    case -2: return BalanceState.UNBALANCED_RIGHT;
+    case -1: return BalanceState.SLIGHTLY_UNBALANCED_RIGHT;
+    case 1: return BalanceState.SLIGHTLY_UNBALANCED_LEFT;
+    case 2: return BalanceState.UNBALANCED_LEFT;
+    default: return BalanceState.BALANCED;
+  }
+}
+var BalanceState = {
+  UNBALANCED_RIGHT: 1,
+  SLIGHTLY_UNBALANCED_RIGHT: 2,
+  BALANCED: 3,
+  SLIGHTLY_UNBALANCED_LEFT: 4,
+  UNBALANCED_LEFT: 5
+};
 
 //calculate rightHeight
 function rightHeight(newNode) {
@@ -185,8 +203,8 @@ function rotateRight(newNode) {
   var other = newNode.left;
   newNode.left = other.right;
   other.right = newNode;
-  newNode.height = Math.max(newNode.leftHeight(), newNode.rightHeight()) + 1;
-  other.height = Math.max(other.leftHeight(), newNode.height) + 1;
+  newNode.height = Math.max(leftHeight(newNode), rightHeight(newNode)) + 1;
+  other.height = Math.max(leftHeight(other), newNode.height) + 1;
   return other;
 }
 /**
@@ -206,8 +224,8 @@ function rotateLeft(newNode) {
   var other = newNode.right;
   newNode.right = other.left;
   other.left = newNode;
-  newNode.height = Math.max(newNode.leftHeight(), newNode.rightHeight()) + 1;
-  other.height = Math.max(other.leftHeight(), newNode.height) + 1;
+  newNode.height = Math.max(leftHeight(newNode), rightHeight(newNode)) + 1;
+  other.height = Math.max(leftHeight(other), newNode.height) + 1;
   return other;
 }
 
