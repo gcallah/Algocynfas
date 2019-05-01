@@ -78,7 +78,7 @@ async function createBST(type) {
 //display layer for AVL
 async function createAVL(type) {
   if (!animeRunning) {
-    //instantiate graph of Class type AVL 
+    //instantiate graph of Class type AVL
     var graph = new AVL();
     for (var i = 0; i < Graph.nodes.length; i++) {
       //follow the AVL insert function
@@ -163,7 +163,7 @@ async function createRBT(type) {
 }
 
 function setTreeSample() {
-  console.log('tree sample');
+  console.log("tree sample");
   let selectedBox = getHTML("treeSample");
   var sampleSelected = selectedBox.selectedIndex;
   $(".graph").empty();
@@ -741,7 +741,6 @@ class treeNode {
     this.sideToParent = null;
     this.leftEdge = null;
     this.rightEdge = null;
-    this.height = null; //height for AVL node
     this.strenchTimes = 0;
     
   }
@@ -1045,32 +1044,17 @@ class rbTreeNode extends treeNode {
     super.setNode(defaultColor);
   }
 }
-
-class AVL extends ourGraph {
+class avlTreeNode extends treeNode {
+  constructor(num, counter) {
+    super(num, counter);
+    this.leftNode = null;
+    this.rightNode = null;
+    this.height = null;
+  }
+}
+class AVL extends BST {
   constructor() {
     super();
-    this.root = null;
-    this.nodeLayout = [];
-    this.treeNodes = [];
-    this.horiAdjust = false;
-    this.vertiAdjust = false;
-  }
-
-  positionCheck(node) {
-    if (Math.abs(node.position.x) > 200 && this.horiAdjust == false) {
-      getHTML("AVLGraphContainer").style.width = 1200;
-      getHTML("AVLGraphContainer").style.marginLeft = "5em";
-      getHTML("AVLegend").style.marginLeft = "5em";
-      this.horiAdjust = true;
-    }
-    if (Math.abs(node.position.y) > 130 && this.vertiAdjust == false) {
-      getHTML("AVLGraphContainer").style.height = 800;
-      for (var k = 0; k < this.nodeLayout.length; k++) {
-        this.treeNodes[k].position.y -= 150;
-        this.treeNodes[k].layout.y -= 150;
-      }
-      this.vertiAdjust = true;
-    }
   }
 
   //insert node function
@@ -1082,9 +1066,9 @@ class AVL extends ourGraph {
         this.createSigmaGraph("AVLGraphContainer");
         await this.pause();
       }
-      var node = new treeNode(input, this.treeNodes.length);
+      var node = new avlTreeNode(input, this.treeNodes.length);
       // the insert algorithm, in avl.js
-      var result = treeInsertAVL(this.root, node); 
+      var result = treeInsert(this.root, node);
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;

@@ -1,4 +1,4 @@
-function treeInsertAVL(root, newNode) {
+function treeInsert(root, newNode) {
   var r = root;
   var curr = null; // y = NIL
   var LastDir = null;
@@ -74,7 +74,6 @@ function resetReplace(replace, toDelete) {
   return afterDeletePosition(replace, x, y);
 }
 
-
 //avlcheck
 function AVLCheck() {
   if (!animeRunning) {
@@ -97,9 +96,6 @@ function AVLCheck() {
   return true;
 }
 
-
-
-
 async function searchInTree() {
   if (AVLCheck()) {
     var input = parseInt(getHTML("searchBox").value);
@@ -113,8 +109,6 @@ async function searchInTree() {
     disableButtons(false);
   }
 }
-
-
 
 async function findMinMax() {
   if (AVLCheck()) {
@@ -143,14 +137,6 @@ async function deleteNode() {
     disableButtons(false);
   }
 }
-
-
-
-
-
-
-
-
 
 //calculate leftHeight
  function leftHeight(newNode) {
