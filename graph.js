@@ -743,6 +743,7 @@ class treeNode {
     this.rightEdge = null;
     this.height = null; //height for AVL node
     this.strenchTimes = 0;
+    
   }
   setNode(defaultColor = EdgeNodeCOLOR) {
     if (!this.parent) {
@@ -1088,35 +1089,36 @@ class AVL extends ourGraph {
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-
+      
       // -------------------------------
       //update height and rebalance tree
-      // this.root.height =
-      //   Math.max(this.root.leftHeight(), this.root.rightHeight()) + 1;
-      // var balanceState = getBalanceState(this.root);
+      this.root.height = Math.max(leftHeight(this.root), rightHeight(this.root)) + 1;
 
-      // //check for balanced left state
-      // if (balanceState === BalanceState.UNBALANCED_LEFT) {
-      //   if (this.compare(key, root.left.key) < 0) {
-      //     // Left left case
-      //     root = root.rotateRight();
-      //   } else {
-      //     // Left right case
-      //     root.left = root.left.rotateLeft();
-      //     return root.rotateRight();
-      //   }
-      // }
+      
+      var balanceState = getBalanceState(this.root);
+
+      //check for balanced left state
+      if (balanceState === BalanceState.UNBALANCED_LEFT) {
+        if (this.compare(key, root.left.key) < 0) {
+          // Left left case
+          root = rotateRight(root);
+        } else {
+          // Left right case
+          root.left = root.left.rotateLeft();
+          return root.rotateRight();
+        }
+      }
       // //check for balanced right state
-      // if (balanceState === BalanceState.UNBALANCED_RIGHT) {
-      //   if (this._compare(key, root.right.key) > 0) {
-      //     // Right right case
-      //     root = root.rotateLeft();
-      //   } else {
-      //     // Right left case
-      //     root.right = root.right.rotateRight();
-      //     return root.rotateLeft();
-      //   }
-      // }
+      if (balanceState === BalanceState.UNBALANCED_RIGHT) {
+        if (this._compare(key, root.right.key) > 0) {
+          // Right right case
+          root = rotateLeft(root);
+        } else {
+          // Right left case
+          root.right = rotateRight(root.right);
+          return rotateLeft(root);
+        }
+      }
 
       node.setNode();
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
