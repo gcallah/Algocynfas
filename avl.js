@@ -35,7 +35,7 @@ function treeInsert(root, newNode) {
     curr.right = newNode; // else y.right = z
     newNode.sideToParent = "right";
   }
-
+  //return result object
   var result = {
     root: root,
     node: newNode,
@@ -139,7 +139,7 @@ async function deleteNode() {
 }
 
 //calculate leftHeight
- function leftHeight(newNode) {
+function leftHeight(newNode) {
   if (!newNode.left) {
     return -1;
   }
@@ -148,12 +148,18 @@ async function deleteNode() {
 
 function getBalanceState(node) {
   var heightDifference = leftHeight(node) - rightHeight(node);
+  //switch case for handling different cases
   switch (heightDifference) {
-    case -2: return BalanceState.UNBALANCED_RIGHT;
-    case -1: return BalanceState.SLIGHTLY_UNBALANCED_RIGHT;
-    case 1: return BalanceState.SLIGHTLY_UNBALANCED_LEFT;
-    case 2: return BalanceState.UNBALANCED_LEFT;
-    default: return BalanceState.BALANCED;
+    case -2:
+      return BalanceState.UNBALANCED_RIGHT;
+    case -1:
+      return BalanceState.SLIGHTLY_UNBALANCED_RIGHT;
+    case 1:
+      return BalanceState.SLIGHTLY_UNBALANCED_LEFT;
+    case 2:
+      return BalanceState.UNBALANCED_LEFT;
+    default:
+      return BalanceState.BALANCED;
   }
 }
 var BalanceState = {
@@ -233,6 +239,7 @@ var BalanceState = {
  *
  */
 function getBalanceState(node) {
+  //height difference between left tree and right tree
   var heightDifference = node.leftHeight() - node.rightHeight();
   switch (heightDifference) {
     case -2:
@@ -261,9 +268,7 @@ function compare(a, b) {
 function disableButtons(ifDisable) {
   getHTML("createAVL-button").disabled = ifDisable;
   getHTML("insert-button").disabled = ifDisable;
-  // getHTML("search-button").disabled = ifDisable;
-  // getHTML("minmax-button").disabled = ifDisable;
-  // getHTML("presuc-button").disabled = ifDisable;
+
   getHTML("delete-button").disabled = ifDisable;
   getHTML("traversal-button").disabled = ifDisable;
   getHTML("clear-AVL-button").disabled = ifDisable;
