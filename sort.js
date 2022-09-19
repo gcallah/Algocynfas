@@ -65,6 +65,7 @@ function checkInput(an_input) { // Logic layer: to test
 
 
 async function run() {                                    // Display layer
+
   animeRunning = true;
   let runButton = getHTML("run-button");
   let addNumberButton = getHTML("add-number-button");
@@ -126,7 +127,7 @@ let animeRunning = false;
 
 async function quickSort(myList) {                                    // Logic layer: to test
 
-  var delayTime = check_and_Delay   
+  var delayTime = check_and_Delay()   
   myList.setDelay(delayTime);
   await mySort(myList, 0, myList.size() - 1);
 }
