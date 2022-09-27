@@ -240,6 +240,7 @@ var BalanceState = {
  */
 function getBalanceState(node) {
   //height difference between left tree and right tree
+  
   var heightDifference = node.leftHeight() - node.rightHeight();
   switch (heightDifference) {
     case -2:

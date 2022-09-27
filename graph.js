@@ -99,10 +99,12 @@ async function createAVL(type) {
     } else {
       var input = splitInput(getHTML("treeList").value, true);
     }
+    
     for (var i = 0; i < input.length; i++) {
       graph.insert(parseInt(input[i]));
     }
     Graph = graph;
+    console.log(graph)
   } else {
     disableButtons(true);
     var input = parseInt(getHTML("treeNode").value);
@@ -121,8 +123,10 @@ async function createAVL(type) {
 }
 
 async function createRBT(type) {
+  
   if (!animeRunning) {
     var graph = new RBT();
+    
     for (var i = 0; i < Graph.nodes.length; i++) {
       graph.insert(parseInt(Graph.nodes[i]), false, false);
     }
@@ -138,11 +142,15 @@ async function createRBT(type) {
 
     if (getHTML("random").checked == true) {
       var input = graph.random();
+      
     } else {
       var input = splitInput(getHTML("treeList").value, true);
+      
     }
+    
     for (var i = 0; i < input.length; i++) {
       graph.insert(parseInt(input[i]));
+      
     }
     Graph = graph;
   } else {
@@ -152,6 +160,7 @@ async function createRBT(type) {
       var graph = new RBT();
     } else {
       $(".graph").empty();
+     
       var graph = Graph;
     }
     await graph.insert(input, true);
@@ -163,7 +172,7 @@ async function createRBT(type) {
 }
 
 function setTreeSample() {
-  console.log("tree sample");
+  
   let selectedBox = getHTML("treeSample");
   var sampleSelected = selectedBox.selectedIndex;
   $(".graph").empty();
@@ -1326,13 +1335,15 @@ class RBT extends BST {
         await this.pause();
       }
       var node = new rbTreeNode(input, this.treeNodes.length);
-      var result = treeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
+      var result = rbtreeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
+      console.log(result.root)
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-
+      if (this.treeNodes && this.treeNodes[0] === this.root) console.log('good')
       node.setNode(node.color);
+      
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
         this.strench(adjustList);
       }
