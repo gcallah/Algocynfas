@@ -1,6 +1,17 @@
 // below are Red Black tree algorithms
+// testTree.root = new rbTreeNode(4)
+// testTree.root.color = BLACK;
+// testTree.root.left = new rbTreeNode(1)
+// testTree.root.left.parent = testTree.root
+// testTree.root.left.color = RED;
+// testTree.root.right = new rbTreeNode(17);
+// testTree.root.right.color = RED;
+// testTree.root.right.parent = testTree.root;
+// testTree.root.right.right = new rbTreeNode(20);
+// testTree.root.right.right.color = RED;
+// testTree.root.right.right.parent = testTree.root.right;
 
-function rbtreeInsert(root, newNode) {
+function rbtreeInsert(root, newNode, tree) {
   // CLRS P294 root == T.root, r == x, curr == y, newNode == z
 
   var r = root; //x = root
@@ -47,27 +58,27 @@ function rbtreeInsert(root, newNode) {
   newNode.rightNode = null; //  Z.right = T.nil
 
   newNode.color = RED; //  Z.color = Red
+
   if (newNode == root) newNode.color = BLACK;
-  else if (newNode.parent && newNode.parent.color == BLACK) newNode.color = RED;
-  // else if (newNode.parent && newNode.parent.color == RED) {
-  //   [root, newNode2] = insertFixUp(root, newNode);
-  //   console.log(newRoot, newNode2);
-  // }
+  else {
+    root = insertFixUp(tree, newNode);
+  }
 
   var result = {
     root: root,
     node: newNode,
     adj: adjustList,
     hlNodeId: highLightN,
+    
   };
 
   return result;
 }
 
-function insertFixUp(root, newNode) {
+function insertFixUp(tree, newNode) {
   // T,z
-  console.log(newNode.parent.color);
-  while (newNode.parent.color == RED) {
+  
+  while (newNode.parent && newNode.parent.color == RED) {
     if (newNode.parent == newNode.parent.parent.left) {
       aunt = newNode.parent.parent.right;
       if (aunt != null && aunt.color == RED) {
@@ -75,13 +86,15 @@ function insertFixUp(root, newNode) {
         aunt.color = BLACK;
         newNode.parent.parent.color = RED;
         newNode = newNode.parent.parent;
-      } else if (newNode == newNode.parent.right) {
-        newNode = newNode.parent;
-        root = leftRotate(root, newNode);
+      } else {
+        if (newNode == newNode.parent.right) {
+          newNode = newNode.parent;
+          leftRotate(tree, newNode);
+        }
+        newNode.parent.color = BLACK;
+        newNode.parent.parent.color = RED;
+        rightRotate(tree, newNode.parent.parent);
       }
-      newNode.parent.color = BLACK;
-      newNode.parent.parent.color = RED;
-      root = rightRotate(root, newNode.parent.parent);
     } else {
       aunt = newNode.parent.parent.left;
       if (aunt != null && aunt.color == RED) {
@@ -89,19 +102,20 @@ function insertFixUp(root, newNode) {
         aunt.color = BLACK;
         newNode.parent.parent.color = RED;
         newNode = newNode.parent.parent;
-        continue;
-      } else if (newNode == newNode.parent.left) {
-        newNode = newNode.parent;
-        root = rightRotate(root, newNode);
-      }
+      } else {
+        if (newNode == newNode.parent.left) {
+          newNode = newNode.parent;
+          rightRotate(tree, newNode);
+        }
 
-      newNode.parent.color = BLACK;
-      newNode.parent.parent.color = RED;
-      root = leftRotate(root, newNode.parent.parent);
+        newNode.parent.color = BLACK;
+        newNode.parent.parent.color = RED;
+        leftRotate(tree, newNode.parent.parent);
+      }
     }
-    root.color = BLACK;
   }
-  return [root, newNode];
+  tree.root.color = BLACK;
+  return tree.root;
   //while z.p.color == Red
   // if z.p == z.p.p.left
   // y = z.p.p.right
@@ -134,7 +148,7 @@ function insertFixUp(root, newNode) {
   // T.root.color = BLACK
 }
 
-function leftRotate(root, newNode) {
+function leftRotate(tree, newNode) {
   // T x
   y = newNode.right;
   newNode.right = y.left;
@@ -143,7 +157,7 @@ function leftRotate(root, newNode) {
   }
   y.parent = newNode.parent;
   if (newNode.parent == null) {
-    root = y;
+    tree.root = y;
   } else if (newNode == newNode.parent.left) {
     newNode.parent.left = y;
   } else {
@@ -164,10 +178,10 @@ function leftRotate(root, newNode) {
   //   x.p.right = y
   // y.left = x
   // x.p = y
-  return root;
+  return tree.root;
 }
 
-function rightRotate(root, newNode) {
+function rightRotate(tree, newNode) {
   // T x
   y = newNode.left;
   newNode.left = y.right;
@@ -176,7 +190,7 @@ function rightRotate(root, newNode) {
   }
   y.parent = newNode.parent;
   if (newNode.parent == null) {
-    root = y;
+    tree.root = y;
   } else if (newNode.parent.right == y) {
     newNode.parent.right = y;
   } else {
@@ -198,7 +212,7 @@ function rightRotate(root, newNode) {
   //   x.p.left = y
   // y.right = x
   // x.p = y
-  return root;
+  return tree.root;
 }
 
 function treeDelete(root, node, treeNodes) {

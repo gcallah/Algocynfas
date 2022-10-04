@@ -1328,20 +1328,23 @@ class RBT extends BST {
 
   async insert(input, single = false, draw = true) {
     if (Number.isInteger(input)) {
+      
       correctErr("treeNode");
       correctErr("treeList");
       if (single && draw) {
         this.createSigmaGraph("rbtGraphContainer");
         await this.pause();
       }
+      
       var node = new rbTreeNode(input, this.treeNodes.length);
-      var result = rbtreeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
+      
+      var result = rbtreeInsert(this.root, node, this); // the binary insert algorithm, in binarySTree.js
       console.log(result.root)
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-      if (this.treeNodes && this.treeNodes[0] === this.root) console.log('good')
+      
       node.setNode(node.color);
       
       if (this.treeNodes.length > 1 && adjustList.length != 0) {
