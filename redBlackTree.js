@@ -1,14 +1,14 @@
 // below are Red Black tree algorithms
 
 
-function insert(rbtree, data) {
+function createTree(rbtree, data) {
   for (const input of data) {
-    actualInsert(rbtree, input)
+    insert(rbtree, input)
   }
   console.log("insertion good, the root is:", rbtree.root)
 }
 
-function actualInsert(rbtree, data)
+function insert(rbtree, data)
 {
     let newNode = new rbTreeNode(data);
                     
