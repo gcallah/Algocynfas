@@ -5,16 +5,19 @@ const ErrorCOLOR = "#FF0000";
 const RED = "#FF0000";
 const BLACK = "000000";
 adjustPosition = false;
+const NUM_NODES = 0;
+NUM_ENTRY_WIDTH = 200;
+LIST_ENTRY_WIDTH = 400;
 
 function typeChange() {
   var choice = getHTML("choices").selectedIndex;
   var inputBox = getHTML("nodeNum");
-  if (choice == 0) {
-    inputBox.style.width = 200;
-    inputBox.placeholder = "Enter node#, max 16 nodes";
+  if (choice == NUM_NODES) {
+    inputBox.style.width = NUM_ENTRY_WIDTH;
+    inputBox.placeholder = "Enter number of nodes (max 16 nodes)";
     inputType = "num";
   } else {
-    inputBox.style.width = 400;
+    inputBox.style.width = LIST_ENTRY_WIDTH;
     inputBox.placeholder = "Enter node names separate by comma, max 16 nodes";
     inputType = "name";
   }
@@ -68,9 +71,8 @@ async function createBST(type) {
       var graph = Graph;
     }
     await graph.insert(input, true);
-    if (animeRunning) {
-      Graph = graph;
-    }
+    // animeRunning was checked here, but it is set to true above!
+    Graph = graph;
     disableButtons(false);
   }
 }
@@ -255,7 +257,7 @@ class ourGraph {
 
     try {
       console.log(container);
-      this.createSigmaGraph(container);
+      this.createGraph(container);
       if (this.edges.length == 0) {
         correctErr("edges");
       }
@@ -348,7 +350,7 @@ class ourGraph {
     }
   }
 
-  createSigmaGraph(containerName) {
+  createGraph(containerName) {
     var container = "." + containerName;
     $(container).empty();
     let s = new sigma({
@@ -823,7 +825,7 @@ class BST extends ourGraph {
       correctErr("treeNode");
       correctErr("treeList");
       if (single && draw) {
-        this.createSigmaGraph("bstGraphContainer");
+        this.createGraph("bstGraphContainer");
         await this.pause();
       }
       var node = new treeNode(input, this.treeNodes.length);
@@ -857,7 +859,7 @@ class BST extends ourGraph {
       };
       this.graph = g;
       if (draw && animeRunning) {
-        this.createSigmaGraph("bstGraphContainer");
+        this.createGraph("bstGraphContainer");
       }
 
       return;
@@ -975,7 +977,7 @@ class BST extends ourGraph {
         };
         this.graph = g;
         if (animeRunning) {
-          this.createSigmaGraph("bstGraphContainer");
+          this.createGraph("bstGraphContainer");
         }
 
         return;
@@ -1053,6 +1055,7 @@ class rbTreeNode extends treeNode {
     super.setNode(defaultColor);
   }
 }
+
 class avlTreeNode extends treeNode {
   constructor(num, counter) {
     super(num, counter);
@@ -1072,7 +1075,7 @@ class AVL extends BST {
       correctErr("treeNode");
       correctErr("treeList");
       if (single && draw) {
-        this.createSigmaGraph("AVLGraphContainer");
+        this.createGraph("AVLGraphContainer");
         await this.pause();
       }
       var node = new avlTreeNode(input, this.treeNodes.length);
@@ -1137,7 +1140,7 @@ class AVL extends BST {
       };
       this.graph = g;
       if (draw && animeRunning) {
-        this.createSigmaGraph("AVLGraphContainer");
+        this.createGraph("AVLGraphContainer");
       }
 
       return;
@@ -1255,7 +1258,7 @@ class AVL extends BST {
         };
         this.graph = g;
         if (animeRunning) {
-          this.createSigmaGraph("AVLGraphContainer");
+          this.createGraph("AVLGraphContainer");
         }
 
         return;
@@ -1332,7 +1335,7 @@ class RBT extends BST {
       correctErr("treeNode");
       correctErr("treeList");
       if (single && draw) {
-        this.createSigmaGraph("rbtGraphContainer");
+        this.createGraph("rbtGraphContainer");
         await this.pause();
       }
       
@@ -1370,7 +1373,7 @@ class RBT extends BST {
       };
       this.graph = g;
       if (draw && animeRunning) {
-        this.createSigmaGraph("rbtGraphContainer");
+        this.createGraph("rbtGraphContainer");
       }
 
       return;
@@ -1721,7 +1724,7 @@ class heap extends ourGraph {
       edges: this.edgeLayout
     };
 
-    this.createSigmaGraph(container);
+    this.createGraph(container);
 
     //draw heap array form
 
