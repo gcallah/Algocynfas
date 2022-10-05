@@ -1,4 +1,51 @@
 // below are Red Black tree algorithms
+
+
+function insert(rbtree, data) {
+  for (const input of data) {
+    actualInsert(rbtree, input)
+  }
+  console.log("insertion good, the root is:", rbtree.root)
+}
+
+function actualInsert(rbtree, data)
+{
+    let newNode = new rbTreeNode(data);
+                    
+    if(rbtree.root === null){
+        newNode.color = BLACK;
+        rbtree.root = newNode;
+    }
+    else {
+      newNode.color = RED;
+      insertNode(rbtree.root, newNode);
+      insertFixUp(rbtree, newNode)
+    }
+    
+}
+
+function insertNode(node, newNode)
+{
+    if(newNode.key < node.key)
+    {
+        if(node.left === null) {
+            node.left = newNode;
+            newNode.parent = node;
+        }
+        else
+            this.insertNode(node.left, newNode);
+    }
+    else
+    {
+        if(node.right === null) {
+            node.right = newNode;
+            newNode.parent = node;
+        }
+        else
+            this.insertNode(node.right,newNode);
+    }
+}
+
 // testTree.root = new rbTreeNode(4)
 // testTree.root.color = BLACK;
 // testTree.root.left = new rbTreeNode(1)
@@ -89,8 +136,10 @@ function insertFixUp(tree, newNode) {
       } else {
         if (newNode == newNode.parent.right) {
           newNode = newNode.parent;
+          console.log("before left rotation ", tree)
           leftRotate(tree, newNode);
         }
+        
         newNode.parent.color = BLACK;
         newNode.parent.parent.color = RED;
         rightRotate(tree, newNode.parent.parent);
@@ -150,7 +199,8 @@ function insertFixUp(tree, newNode) {
 
 function leftRotate(tree, newNode) {
   // T x
-  y = newNode.right;
+  if (newNode == null || newNode.right == null) return;
+  let y = newNode.right;
   newNode.right = y.left;
   if (y.left !== null) {
     y.left.parent = newNode;
@@ -183,15 +233,16 @@ function leftRotate(tree, newNode) {
 
 function rightRotate(tree, newNode) {
   // T x
-  y = newNode.left;
+  if (newNode == null || newNode.left == null) return;
+  let y = newNode.left;
   newNode.left = y.right;
-  if (y.left != null) {
+  if (y.right != null) {
     y.right.parent = newNode;
   }
   y.parent = newNode.parent;
   if (newNode.parent == null) {
     tree.root = y;
-  } else if (newNode.parent.right == y) {
+  } else if (newNode.parent.right == newNode) {
     newNode.parent.right = y;
   } else {
     newNode.parent.left = y;
