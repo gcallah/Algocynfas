@@ -149,9 +149,9 @@ async function createRBT(type) {
       var input = splitInput(getHTML("treeList").value, true);
       
     }
-    
+    const inputOrder = bfsTranversal(createTree(new RBT(), input))
     for (var i = 0; i < input.length; i++) {
-      graph.insert(parseInt(input[i]));
+      graph.insert(inputOrder[i]);
       
     }
     Graph = graph;
@@ -1330,6 +1330,8 @@ class RBT extends BST {
   }
 
   async insert(input, single = false, draw = true) {
+    let correctColor = input[1]
+    input = input[0]
     if (Number.isInteger(input)) {
       
       correctErr("treeNode");
@@ -1342,12 +1344,12 @@ class RBT extends BST {
       var node = new rbTreeNode(input, this.treeNodes.length);
       
       var result = rbtreeInsert(this.root, node, this); // the binary insert algorithm, in binarySTree.js
-      console.log(result.root)
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
-      
+      node.color = correctColor;
+      console.log('Inserting', input, "the color is", node.color)
       node.setNode(node.color);
       
       if (this.treeNodes.length > 1 && adjustList.length != 0) {

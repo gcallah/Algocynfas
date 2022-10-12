@@ -1,11 +1,24 @@
 // below are Red Black tree algorithms
 
+function bfsTranversal(rbtree) {
+  let res = []
+  let queue = []
+  queue.push(rbtree)
+  while (queue.length > 0){
+    node = queue.shift();
+    res.push([node.key, node.color])
+    if (node.left) queue.push(node.left);
+    if (node.right) queue.push(node.right);
+  }
+  return res
+}
 
 function createTree(rbtree, data) {
   for (const input of data) {
-    insert(rbtree, input)
+    insert(rbtree, Number(input))
   }
   console.log("insertion good, the root is:", rbtree.root)
+  return rbtree.root
 }
 
 function insert(rbtree, data)
@@ -136,7 +149,7 @@ function insertFixUp(tree, newNode) {
       } else {
         if (newNode == newNode.parent.right) {
           newNode = newNode.parent;
-          console.log("before left rotation ", tree)
+          
           leftRotate(tree, newNode);
         }
         
