@@ -1343,13 +1343,13 @@ class RBT extends BST {
       
       var node = new rbTreeNode(input, this.treeNodes.length);
       
-      var result = rbtreeInsert(this.root, node, this); // the binary insert algorithm, in binarySTree.js
+      var result = rbtreeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
       this.root = result.root;
       node = result.node;
       var adjustList = result.adj;
       var hlNodeId = result.hlNodeId;
       node.color = correctColor;
-      console.log('Inserting', input, "the color is", node.color)
+      console.log('Inserting', input, "the color is", node.color, node)
       node.setNode(node.color);
       
       if (this.treeNodes.length > 1 && adjustList.length != 0) {

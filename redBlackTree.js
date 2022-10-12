@@ -59,19 +59,8 @@ function insertNode(node, newNode)
     }
 }
 
-// testTree.root = new rbTreeNode(4)
-// testTree.root.color = BLACK;
-// testTree.root.left = new rbTreeNode(1)
-// testTree.root.left.parent = testTree.root
-// testTree.root.left.color = RED;
-// testTree.root.right = new rbTreeNode(17);
-// testTree.root.right.color = RED;
-// testTree.root.right.parent = testTree.root;
-// testTree.root.right.right = new rbTreeNode(20);
-// testTree.root.right.right.color = RED;
-// testTree.root.right.right.parent = testTree.root.right;
 
-function rbtreeInsert(root, newNode, tree) {
+function rbtreeInsert(root, newNode) {
   // CLRS P294 root == T.root, r == x, curr == y, newNode == z
 
   var r = root; //x = root
@@ -117,12 +106,7 @@ function rbtreeInsert(root, newNode, tree) {
   newNode.leftNode = null; // Z.left = T.nil
   newNode.rightNode = null; //  Z.right = T.nil
 
-  newNode.color = RED; //  Z.color = Red
-
-  if (newNode == root) newNode.color = BLACK;
-  else {
-    root = insertFixUp(tree, newNode);
-  }
+  // newNode.color = RED; //  Z.color = Red
 
   var result = {
     root: root,
