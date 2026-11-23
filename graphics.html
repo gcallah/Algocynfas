@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8">
-<link rel="stylesheet" href="lib/bootstrap.min.css">
-<link rel="stylesheet" href="userInterface.css">
- <script src="lib/jquery.min.js"></script>
-<script src="lib/bootstrap.min.js"></script>
-<script src="lib/fabric.js"></script>
-<script src="graphics.js"></script>
 
-<button id = "cir-button" type="button" class="btn btn-success col-1" onclick="create()">Circle</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphics Library</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/fabric.js"></script>
 
-<canvas id="canvas" width="800" height="144"
-style="border:0.1em solid #000000"></canvas>
+  <link rel="stylesheet" href="style.css">
+  <!--algocynfas webpage css, independent from the user interface css -->
+</head>
 
+<body>
+  <h1>Graphics Library</h1>
+  <div class="container">
+    <p>
+      <button id="cir-button" type="button" class="btn btn-success" onclick="create()">Circle</button>
+    </p>
+    <canvas id="canvas" width="800" height="144" style="border:0.1em solid #000000"></canvas>
+    <!-- graphics.js builds its Fabric canvas on load, so it must come after the canvas element. -->
+    <script src="graphics.js"></script>
+  </div>
+</body>
 
 </html>
