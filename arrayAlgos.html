@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Array Algorithms</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/fabric.js"></script>
+  <script src="algocynfas.js"></script>
+  <script src="widgets.js"></script>
+  <script src="array_algos.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Array Algorithms</h1>
+  <div class="container">
+    <div class="controls">
+      <b>Algorithm:</b>
+      <span class="opt"><input type="radio" name="algo" id="maxsubDC" onchange="algoChanged()" checked> <label for="maxsubDC">Maximum Subarray (4.1)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="maxsubLinear" onchange="algoChanged()"> <label for="maxsubLinear">Maximum Subarray, linear (Ex. 4.1-5)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="hoare" onchange="algoChanged()"> <label for="hoare">Hoare Partition (Problem 7-1)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="minmax" onchange="algoChanged()"> <label for="minmax">Minimum and Maximum (9.1)</label></span>
+    </div>
+    <p id="algo-note" class="algo-note"></p>
+
+    <div class="controls">
+      <b>Speed:</b>
+      <span class="opt"><input type="radio" name="speed" value="350" id="Fast"> <label for="Fast">Fast</label></span>
+      <span class="opt"><input type="radio" name="speed" value="900" id="Medium" checked> <label for="Medium">Medium</label></span>
+      <span class="opt"><input type="radio" name="speed" value="1800" id="Slow"> <label for="Slow">Slow</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Sample input:</b>
+      <select id="sample" onchange="setSample()">
+        <option value="">Select one</option>
+        <option value="stock">Maximum subarray: stock price changes (CLRS Figure 4.3)</option>
+        <option value="negative">Maximum subarray: all negative</option>
+        <option value="hoare">Hoare partition: CLRS Problem 7-1</option>
+        <option value="sorted">Already sorted</option>
+        <option value="minmax">Minimum and maximum: odd length</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <label for="number-input"><b>A =</b></label>
+      <input type="text" id="number-input" style="width: 30em"
+             value="13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7"
+             placeholder="Up to 16 integers from -99 to 99, separated by commas">
+      <button class="btn btn-primary" type="button" onclick="showList()">Show Array</button>
+      <button id="run-button" type="button" class="btn btn-success" onclick="run()">Run</button>
+      <button id="stop-button" type="button" class="btn btn-danger" onclick="stopAnime()">Stop</button>
+    </div>
+
+    <footer id="arrayLegend"></footer>
+    <div id="status" class="status"></div>
+    <canvas id="arrayCanvas" width="1040" height="150"></canvas>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    display_legend_list("arrayLegend", [
+      ["Range being worked on", RANGE_COLOR], ["Being looked at", CURRENT_COLOR],
+      ["Best so far / ≤ pivot / min", BEST_COLOR], ["Crossing subarray / ≥ pivot", CROSS_COLOR],
+      ["Pivot / max", PIVOT_COLOR]]);
+    canvas = new fabric.Canvas('arrayCanvas');
+    algoChanged();
+    // Wait for the web font so the boxes are measured in it.
+    document.fonts.ready.then(showList);
+  </script>
+</body>
+</html>

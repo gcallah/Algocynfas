@@ -459,6 +459,93 @@ iterator() {
      }
      
    }
+  /**
+   * Grid: a 2-D table of boxes, for dynamic-programming tables and matrices
+   * (e.g. the c table of LCS-LENGTH or the D matrices of Floyd-Warshall).
+   * Rows and columns are 0-based here; labels say what the reader sees.
+   */
+  class Grid {
+    constructor(canvas, rows, cols, opts = {}) {
+      this.canvas = canvas;
+      this.rows = rows;
+      this.cols = cols;
+      this.cellW = opts.cellW || 48;
+      this.cellH = opts.cellH || 38;
+      this.fontSize = opts.fontSize || 18;
+      // Leave room on the left and top for the labels.
+      this.x0 = opts.x0 !== undefined ? opts.x0 : 70;
+      this.y0 = opts.y0 !== undefined ? opts.y0 : 56;
+      this.cells = [];
+      for (var r = 0; r < rows; r++) {
+        var row = [];
+        for (var c = 0; c < cols; c++) {
+          row.push(this._makeCell(r, c));
+        }
+        this.cells.push(row);
+      }
+    }
+
+    _makeCell(r, c) {
+      var rect = new fabric.Rect({
+        fill: DEF_BG_COLOR, originX: CENTER, originY: CENTER,
+        width: this.cellW, height: this.cellH});
+      var text = new fabric.Text(' ', {
+        fontSize: this.fontSize, fontFamily: DEF_FONT_FAMILY,
+        originX: CENTER, originY: CENTER});
+      var group = new fabric.Group([rect, text], {
+        left: this.x0 + c * (this.cellW + 1), top: this.y0 + r * (this.cellH + 1),
+        selectable: false});
+      this.canvas.add(group);
+      return {rect: rect, text: text, group: group, key: null, color: DEF_BG_COLOR};
+    }
+
+    setKey(r, c, key) {
+      var cell = this.cells[r][c];
+      cell.key = key;
+      cell.text.set({text: String(key)});
+      cell.group.set('dirty', true);
+    }
+
+    getKey(r, c) {
+      return this.cells[r][c].key;
+    }
+
+    colorCell(r, c, color) {
+      var cell = this.cells[r][c];
+      cell.color = color;
+      cell.rect.set('fill', color);
+      cell.group.set('dirty', true);
+    }
+
+    uncolorAll() {
+      for (var r = 0; r < this.rows; r++) {
+        for (var c = 0; c < this.cols; c++) {
+          this.colorCell(r, c, DEF_BG_COLOR);
+        }
+      }
+    }
+
+    // Labels above the columns and left of the rows. Each label may have up to
+    // two lines, e.g. "j=3\nB" for an index and a character.
+    setLabels(rowLabels, colLabels) {
+      for (var obj of this.canvas.getObjects().slice()) {
+        if (obj.tag === 'gridLabel') this.canvas.remove(obj);
+      }
+      var style = {fontSize: 14, fontFamily: DEF_FONT_FAMILY, fill: '#5b6770',
+                   selectable: false, tag: 'gridLabel', textAlign: CENTER};
+      colLabels.forEach((label, c) => this.canvas.add(new fabric.Text(String(label), Object.assign({
+        left: this.x0 + c * (this.cellW + 1) + this.cellW / 2, top: this.y0 - 6,
+        originX: CENTER, originY: 'bottom'}, style))));
+      rowLabels.forEach((label, r) => this.canvas.add(new fabric.Text(String(label), Object.assign({
+        left: this.x0 - 8, top: this.y0 + r * (this.cellH + 1) + this.cellH / 2,
+        originX: 'right', originY: CENTER}, style))));
+    }
+
+    draw() {
+      this.canvas.renderAll();
+    }
+  }
+
    function createList(canvas, list) {
     l = new List(canvas, list);
     l.draw(true);
