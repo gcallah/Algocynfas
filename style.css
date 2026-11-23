@@ -644,3 +644,31 @@ canvas.upper-canvas {
 
 #run-button::before  { content: "\25B6"; }
 #stop-button::before { content: "\25A0"; }
+
+/* ---------- Link home ---------- */
+
+/* A slim bar at the top of every page with a link back to the index. */
+.site-nav {
+    position: relative;
+    z-index: 1;
+    padding: 0.4rem 1rem;
+    background: var(--brand);
+    font-family: var(--font-head);
+    font-size: 0.95rem;
+}
+
+.site-nav .home-link {
+    display: inline-block;
+    padding: 0.1rem 0.7rem;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s;
+}
+
+.site-nav .home-link:hover, .site-nav .home-link:focus {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    text-decoration: none;
+}

@@ -2,8 +2,8 @@
 <html><head><meta charset="utf-8"></head><body>
 <script src="harness.js"></script>
 <script>
-// Every page: it loads without script errors, and every onclick/onchange/oninput
-// handler calls functions that actually exist (a renamed function otherwise
+// Every page: it loads without script errors, links back to index.html, and every
+// onclick/onchange/oninput handler calls functions that actually exist (a renamed function otherwise
 // leaves a dead button that fails silently).
 const PAGES = ['index.html', 'sort.html', 'hashTable.html', 'minSpanningTree.html',
                'binarySTree.html', 'redBlackTree.html', 'avl.html', 'heap.html', 'tree.html',
@@ -64,6 +64,9 @@ runTests(async () => {
     }
     check(missing.length === 0, page + ': every handler exists', 'missing: ' + missing.join(', '));
     check(w.__errors.length === 0, page + ': loads without script errors', w.__errors.join('; '));
+    if (page !== 'index.html') {
+      check(d.querySelector('a[href="index.html"]') !== null, page + ': has a link back home');
+    }
     f.remove();
   }
 });

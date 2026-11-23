@@ -1,0 +1,1 @@
+<nav class="site-nav"><a class="home-link" href="index.html">&larr; All algorithms</a></nav>
