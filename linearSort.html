@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linear-Time Sorting</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/fabric.js"></script>
+  <script src="algocynfas.js"></script>
+  <script src="widgets.js"></script>
+  <script src="linearSort.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Sorting in Linear Time</h1>
+  <div class="container">
+    <p class="algo-note">
+      Counting sort never compares two elements: it counts how many times each
+      key 0..k occurs in A, turns the counts into positions in C, and copies
+      each element straight to its place in B. Radix sort runs a stable
+      counting sort once per digit, starting with the least significant.
+    </p>
+
+    <div class="controls">
+      <b>Algorithm:</b>
+      <input type="radio" name="algo" id="counting" onchange="algoChanged()" checked>
+      <label for="counting">Counting Sort (8.2)</label>
+      <input type="radio" name="algo" id="radix" onchange="algoChanged()">
+      <label for="radix">Radix Sort (8.3)</label>
+    </div>
+
+    <div class="controls">
+      <b>Speed:</b>
+      <input type="radio" name="speed" value="400" id="Fast">
+      <label for="Fast">Fast</label>
+      <input type="radio" name="speed" value="900" id="Medium" checked>
+      <label for="Medium">Medium</label>
+      <input type="radio" name="speed" value="1800" id="Slow">
+      <label for="Slow">Slow</label>
+    </div>
+
+    <div class="controls">
+      <b>Sample input:</b>
+      <select id="sample" onchange="setSample()">
+        <option value="">Select one</option>
+        <option value="clrs">Counting sort: CLRS Figure 8.2</option>
+        <option value="dups">Counting sort: many duplicates</option>
+        <option value="small">Counting sort: small example</option>
+        <option value="radix">Radix sort: CLRS Figure 8.3</option>
+        <option value="radix2">Radix sort: two-digit numbers</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <label for="number-input"><b>A =</b></label>
+      <input type="text" id="number-input" style="width: 24em; max-width: 100%"
+             value="2, 5, 3, 0, 2, 3, 0, 3" placeholder="Up to 12 integers from 0 to k">
+      <span id="k-group">
+        <label for="k-input"><b>largest key k =</b></label>
+        <input type="text" id="k-input" class="box" style="width: 4em" value="5">
+      </span>
+      <span id="d-group" style="display: none">
+        <label for="d-input"><b>digits d =</b></label>
+        <input type="text" id="d-input" class="box" style="width: 4em" value="3">
+      </span>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" type="button" onclick="showArrays()">Show Arrays</button>
+      <button id="run-button" type="button" class="btn btn-success" onclick="run()">Run</button>
+      <button id="stop-button" type="button" class="btn btn-danger" onclick="stopAnime()">Stop</button>
+    </div>
+
+    <footer id="sortLegend"></footer>
+    <div id="status" class="status"></div>
+
+    <div class="array-label">Input array</div>
+    <canvas id="canvasA" width="800" height="135"></canvas>
+    <div class="array-label">Counts and positions</div>
+    <canvas id="canvasC" width="800" height="135"></canvas>
+    <div class="array-label">Output array</div>
+    <canvas id="canvasB" width="800" height="135"></canvas>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    display_legend_list("sortLegend", [
+      ["Element of A being read", READ_COLOR], ["Entry of C being changed", COUNT_COLOR],
+      ["Just written to B", WRITTEN_COLOR]]);
+    canvases = {A: new fabric.Canvas('canvasA'), B: new fabric.Canvas('canvasB'),
+                C: new fabric.Canvas('canvasC')};
+    // Wait for the web font so the boxes are measured in it.
+    document.fonts.ready.then(showArrays);
+  </script>
+</body>
+</html>

@@ -26,7 +26,7 @@
  // Shrink the font for keys longer than two characters so they stay inside the box.
  function fitFont(val) {
    var len = String(val).length;
-   return len > 2 ? Math.floor(DEF_FONT * 2.1 / len) : DEF_FONT;
+   return len > 2 ? Math.floor(DEF_FONT * 1.9 / len) : DEF_FONT;
  }
 
  class DataElem {
