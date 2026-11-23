@@ -1,3 +1,3 @@
     <footer id="hashLegend">
-        <script> window.display_legend("hashLegend", "Table Index", "Hashed Values", '#a6dfe8','#ffff99') </script>
+        <script> window.display_legend("hashLegend", "Table Index", "Hashed Values", '#a6dfe8','#e3e8ec') </script>
     </footer>
