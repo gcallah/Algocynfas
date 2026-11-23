@@ -565,3 +565,82 @@ input[type="radio"], input[type="checkbox"] {
 .controls select, .controls input[type="text"] {
     max-width: 100%;
 }
+
+/* ---------- Drawing areas ---------- */
+
+/* Sigma graphs and trees, and the fabric canvases: a white board with a faint
+   dot grid, rounded corners and a soft shadow (overriding the pages' inline
+   black borders). */
+[id$="GraphContainer"], #heapCanvas, canvas.lower-canvas {
+    border: 1px solid var(--border) !important;
+    border-radius: 0.75rem;
+    background-color: #fdfefe;
+    background-image: radial-gradient(circle, #d6e3e7 1px, transparent 1.3px);
+    background-size: 22px 22px;
+    box-shadow: inset 0 1px 3px rgba(29, 74, 92, 0.06), 0 4px 14px rgba(29, 74, 92, 0.08);
+}
+
+/* Fabric copies the canvas's inline style onto the transparent layer above it. */
+canvas.upper-canvas {
+    border: 1px solid transparent !important;
+    border-radius: 0.75rem;
+}
+
+[id$="GraphContainer"], #heapCanvas {
+    overflow: hidden;
+    position: relative;
+}
+
+/* ---------- Fancier buttons ---------- */
+
+/* A light sheen on top of each colour, a lift on hover, and a press on click. */
+.btn-primary, .btn-success, .btn-danger {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%);
+    border-width: 1px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 5px rgba(29, 74, 92, 0.22);
+}
+
+.btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 14px rgba(29, 74, 92, 0.28);
+}
+
+.btn:not(:disabled):active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: var(--blue);
+    background-image: linear-gradient(180deg, #3a72c0, var(--blue) 70%);
+}
+
+.btn-success {
+    background-image: linear-gradient(180deg, #3c8a57, var(--forest) 70%);
+}
+
+.btn-danger {
+    background-image: linear-gradient(180deg, #c6506f, var(--berry) 70%);
+}
+
+/* Hover: the same sheen, a shade darker. */
+.btn-primary:not(:disabled):hover { background-image: linear-gradient(180deg, #3368b3, #234d8a 70%); }
+.btn-success:not(:disabled):hover { background-image: linear-gradient(180deg, #357c4e, #255a37 70%); }
+.btn-danger:not(:disabled):hover  { background-image: linear-gradient(180deg, #b8476a, #942f4a 70%); }
+
+/* Play and stop symbols on the animation controls. */
+#run-button::before, #stop-button::before {
+    display: inline-block;
+    margin-right: 0.45em;
+    font-size: 0.75em;
+    vertical-align: 0.08em;
+}
+
+#run-button::before  { content: "\25B6"; }
+#stop-button::before { content: "\25A0"; }

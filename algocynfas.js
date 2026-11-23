@@ -21,12 +21,17 @@
  const VERTICAL = 1;
  const HashTableMargin = 10;
  const DEF_FONT_FAMILY = 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
+// How boxes and their numbers look: rounded corners, a faint outline and a soft shadow.
+const BOX_STYLE = {rx: 7, ry: 7, stroke: 'rgba(28, 40, 51, 0.22)', strokeWidth: 1,
+                   shadow: 'rgba(20, 40, 60, 0.22) 0px 2px 4px'};
+const CELL_STYLE = {rx: 4, ry: 4, stroke: 'rgba(28, 40, 51, 0.12)', strokeWidth: 1};
+const TEXT_STYLE = {fontFamily: DEF_FONT_FAMILY, fontWeight: '600', fill: '#1c2833'};
 
 
  // Shrink the font for keys longer than two characters so they stay inside the box.
  function fitFont(val) {
    var len = String(val).length;
-   return len > 2 ? Math.floor(DEF_FONT * 1.9 / len) : DEF_FONT;
+   return len > 2 ? Math.floor(DEF_FONT * 1.7 / len) : len == 2 ? Math.floor(DEF_FONT * 0.85) : DEF_FONT;
  }
 
  class DataElem {
@@ -84,14 +89,16 @@ class ListElem extends DataElem {
       fill: this.color,
       originX: CENTER,
       originY: CENTER,
-      width: DEF_ELEM_WIDTH,
-      height: DEF_ELEM_HEIGHT,
+      // A little smaller than the slot, so neighbouring boxes don't touch.
+      width: DEF_ELEM_WIDTH - 5,
+      height: DEF_ELEM_HEIGHT - 5,
+      ...BOX_STYLE,
     });
   }
 
   setText(val) {
     return new fabric.Text(String(val),
-      {fontSize: fitFont(val), fontFamily: DEF_FONT_FAMILY, originX: CENTER, originY: CENTER});
+      {fontSize: fitFont(val), ...TEXT_STYLE, originX: CENTER, originY: CENTER});
   }
 
   // Change the key shown in this box (for algorithms that write into arrays).
@@ -488,9 +495,9 @@ iterator() {
     _makeCell(r, c) {
       var rect = new fabric.Rect({
         fill: DEF_BG_COLOR, originX: CENTER, originY: CENTER,
-        width: this.cellW, height: this.cellH});
+        width: this.cellW, height: this.cellH, ...CELL_STYLE});
       var text = new fabric.Text(' ', {
-        fontSize: this.fontSize, fontFamily: DEF_FONT_FAMILY,
+        fontSize: this.fontSize, ...TEXT_STYLE,
         originX: CENTER, originY: CENTER});
       var group = new fabric.Group([rect, text], {
         left: this.x0 + c * (this.cellW + 1), top: this.y0 + r * (this.cellH + 1),

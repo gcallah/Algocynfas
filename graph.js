@@ -1,4 +1,4 @@
-const EdgeNodeCOLOR = "#0039e6";
+const EdgeNodeCOLOR = "#2b5ea7";
 const HIGHLIGHT = "#F5B041";
 const RESULTCOLOR = "#FF5733";
 const ErrorCOLOR = "#FF0000";
@@ -770,12 +770,12 @@ class BST extends ourGraph {
     walk(this.root, 0);
 
     var box = getHTML(this.container);
-    var width = Math.min(1100, Math.max(800, order.length * 40 + 80));
-    var levelGap = 50;
-    var height = Math.max(300, (maxDepth + 1) * levelGap + 60);
+    var width = Math.min(1100, Math.max(800, order.length * 44 + 100));
+    var levelGap = 62;
+    var height = Math.max(320, (maxDepth + 1) * levelGap + 50);
     box.style.width = width + "px";
     box.style.height = height + "px";
-    var step = order.length > 1 ? Math.min(60, (width - 80) / (order.length - 1)) : 0;
+    var step = order.length > 1 ? Math.min(64, (width - 100) / (order.length - 1)) : 0;
 
     this.nodeLayout = [];
     this.edgeLayout = [];
@@ -783,14 +783,14 @@ class BST extends ourGraph {
       var n = order[i];
       n.position = {
         x: (i - (order.length - 1) / 2) * step,
-        y: -height / 2 + 30 + n.depth * levelGap
+        y: -height / 2 + 36 + n.depth * levelGap
       };
       n.layout = {
         id: n.id.toString(),
         label: n.key.toString(),
         x: n.position.x,
         y: n.position.y,
-        size: 12,
+        size: 17,
         color: this.nodeColor(n)
       };
       this.nodeLayout.push(n.layout);
@@ -807,7 +807,7 @@ class BST extends ourGraph {
       id: parent.id + "-" + child.id,
       source: parent.id.toString(),
       target: child.id.toString(),
-      size: 4,
+      size: 3,
       color: EdgeNodeCOLOR
     };
     this.edgeLayout.push(edge);
@@ -1304,8 +1304,7 @@ class heap extends ourGraph {
       id: this.id++,
       source: s,
       target: t,
-      size: 5,
-      label: 0,
+      size: 3,
       type: "line",
       color: EdgeNodeCOLOR
     });
@@ -1328,11 +1327,19 @@ class heap extends ourGraph {
     this.nodeLayout = [];
     this.edgeLayout = [];
 
-    //add nodeLayout
+    //add nodeLayout, placing A[i] by its index: depth floor(lg i), spread
+    //evenly across its level (sigma's origin is the middle of the container)
+    var width = 720;
     for (var i = 1; i < this.data.length; i++) {
-      this.data[i].layout.label = this.data[i].key.toString();
-      this.data[i].layout.color = EdgeNodeCOLOR;
-      this.nodeLayout.push(this.data[i].layout);
+      var depth = Math.floor(Math.log2(i));
+      var slots = Math.pow(2, depth);
+      var layout = this.data[i].layout;
+      layout.label = this.data[i].key.toString();
+      layout.color = EdgeNodeCOLOR;
+      layout.x = ((i - slots + 0.5) / slots - 0.5) * width;
+      layout.y = -190 + depth * 72;
+      layout.size = 17;
+      this.nodeLayout.push(layout);
     }
 
     //highlight nodes

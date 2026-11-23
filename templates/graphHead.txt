@@ -23,3 +23,4 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
+  <script src="sigma_style.js"></script>

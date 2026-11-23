@@ -118,17 +118,10 @@ function setDir(){
 
 
 
-function display_legend(id,title1, title2, c1= '#cbb8ea', c2 = '#a6dfe8') {
-  var legend = create_legend(title1, title2, c1, c2);
-  return getHTML(id).innerHTML =
-  `<div class='list-group col-3'>
-  <div class='list-group-item' style = background-color:${legend.data[0].color}>
-  ${legend.data[0].title}
-  </div>
-  <div class='list-group-item' style = background-color:${legend.data[1].color}>
-  ${legend.data[1].title}
-  </div>
-  </div>`;
+// The two-entry legend used by the older pages; drawn the same way as
+// display_legend_list.
+function display_legend(id, title1, title2, c1 = '#cbb8ea', c2 = '#a6dfe8') {
+  return display_legend_list(id, [[title1, c1], [title2, c2]]);
 }
 
 
