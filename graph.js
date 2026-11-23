@@ -1,5 +1,8 @@
 const EdgeNodeCOLOR = "#2b5ea7";
 const HIGHLIGHT = "#F5B041";
+// A comparison edge in the heap tree: a deeper cyan than the compared nodes,
+// so it shows on the white board.
+const HEAP_EDGE_HIGHLIGHT = "#1fa5b8";
 const RESULTCOLOR = "#FF5733";
 const ErrorCOLOR = "#FF0000";
 const RED = "#FF0000";
@@ -1313,12 +1316,12 @@ class heap extends ourGraph {
   highlightEdge(s, t) {
     for (var i = 0; i < this.edgeLayout.length; i++) {
       if (this.edgeLayout[i].source == s && this.edgeLayout[i].target == t) {
-        this.edgeLayout[i].color = HIGHLIGHT;
+        this.edgeLayout[i].color = HEAP_EDGE_HIGHLIGHT;
       } else if (
         this.edgeLayout[i].source == t &&
         this.edgeLayout[i].target == s
       ) {
-        this.edgeLayout[i].color = HIGHLIGHT;
+        this.edgeLayout[i].color = HEAP_EDGE_HIGHLIGHT;
       }
     }
   }
@@ -1342,9 +1345,14 @@ class heap extends ourGraph {
       this.nodeLayout.push(layout);
     }
 
-    //highlight nodes
+    //highlight nodes in the same colour as their box in the array above
+    //(purple for the target node, cyan for the nodes it is compared with),
+    //so the tree, the array and the legend agree
     for (var i = 0; i < this.highLightNodes.length; i++) {
-      this.nodeLayout[this.highLightNodes[i] - 1].color = HIGHLIGHT;
+      var k = this.highLightNodes[i];
+      var box = this.arrayList.dataElems[k - 1];
+      this.nodeLayout[k - 1].color =
+        box && box.color !== DEF_BG_COLOR ? box.color : HIGHLIGHT;
     }
 
     //add edges
