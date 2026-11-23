@@ -548,3 +548,7 @@ input[type="radio"], input[type="checkbox"] {
 .controls .opt {
     white-space: nowrap;
 }
+
+.controls select, .controls input[type="text"] {
+    max-width: 100%;
+}

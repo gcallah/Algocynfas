@@ -236,7 +236,7 @@ async function selectionSort(myList){       //CLRS EXCERCISE 2.2-2  SELECTION-SO
           if (!animeRunning) break;
             if(myList.elemAt(j).getKey() < myList.elemAt(min).getKey()){    //if A[j] < A[min]
               if(min != i){
-                myList.unhighlight(minInd);
+                myList.unhighlight(min);
               }
                 min = j;                        // min = j
                 myList.highlightSwap(j);
