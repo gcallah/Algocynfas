@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dynamic Programming and Greedy</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/fabric.js"></script>
+  <script src="algocynfas.js"></script>
+  <script src="widgets.js"></script>
+  <script src="dp.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Dynamic Programming and Greedy Algorithms</h1>
+  <div class="container">
+    <div class="controls">
+      <b>Algorithm:</b>
+      <span class="opt"><input type="radio" name="algo" id="rod" onchange="algoChanged()" checked> <label for="rod">Rod Cutting (15.1)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="lcs" onchange="algoChanged()"> <label for="lcs">Longest Common Subsequence (15.4)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="activity" onchange="algoChanged()"> <label for="activity">Activity Selection (16.1)</label></span>
+    </div>
+
+    <p class="algo-note rod-only">
+      A rod of length <i>n</i> can be cut into pieces, and a piece of length <i>i</i> sells
+      for <i>p</i>[<i>i</i>]. Bottom-up, compute the best revenue <i>r</i>[<i>j</i>] for every
+      length <i>j</i> &le; <i>n</i>, remembering in <i>s</i>[<i>j</i>] the size of the first piece.
+    </p>
+    <p class="algo-note lcs-only">
+      Fill in <i>c</i>[<i>i</i>, <i>j</i>], the length of an LCS of the first <i>i</i>
+      characters of X and the first <i>j</i> of Y. The arrows record which case applied, and
+      following them back from the corner spells out the LCS.
+    </p>
+    <p class="algo-note activity-only">
+      With activities sorted by finish time, repeatedly choose the first one that starts
+      after the last chosen one finishes. This greedy choice gives the most compatible activities.
+    </p>
+
+    <div class="controls">
+      <b>Speed:</b>
+      <span class="opt"><input type="radio" name="speed" value="350" id="Fast"> <label for="Fast">Fast</label></span>
+      <span class="opt"><input type="radio" name="speed" value="900" id="Medium" checked> <label for="Medium">Medium</label></span>
+      <span class="opt"><input type="radio" name="speed" value="1800" id="Slow"> <label for="Slow">Slow</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Sample input:</b>
+      <select id="sample" onchange="setSample()">
+        <option value="">Select one</option>
+        <option value="rodClrs">Rod cutting: CLRS price table (Figure 15.1)</option>
+        <option value="rodFlat">Rod cutting: short pieces don't pay</option>
+        <option value="lcsClrs">LCS: CLRS Figure 15.8</option>
+        <option value="lcsDna">LCS: two DNA strands</option>
+        <option value="actClrs">Activity selection: CLRS 16.1</option>
+        <option value="actUnsorted">Activity selection: not sorted by finish time</option>
+      </select>
+    </div>
+
+    <div class="controls rod-only">
+      <label for="prices"><b>Prices p[1..] =</b></label>
+      <input type="text" id="prices" style="width: 20em" value="1, 5, 8, 9, 10, 17, 17, 20, 24, 30"
+             placeholder="Up to 10 prices, for pieces of length 1, 2, 3, ...">
+      <label for="rod-n"><b>Rod length n =</b></label>
+      <input type="text" id="rod-n" class="box" style="width: 4em" value="8">
+    </div>
+    <div class="controls lcs-only">
+      <label for="lcs-x"><b>X =</b></label>
+      <input type="text" id="lcs-x" class="box" style="width: 10em" value="ABCBDAB" maxlength="10">
+      <label for="lcs-y"><b>Y =</b></label>
+      <input type="text" id="lcs-y" class="box" style="width: 10em" value="BDCABA" maxlength="10">
+    </div>
+    <div class="controls activity-only">
+      <label for="act-s"><b>Start times s =</b></label>
+      <input type="text" id="act-s" style="width: 20em" value="1, 3, 0, 5, 3, 5, 6, 8, 8, 2, 12">
+      <label for="act-f"><b>Finish times f =</b></label>
+      <input type="text" id="act-f" style="width: 20em" value="4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16">
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" type="button" onclick="prepare()">Show Input</button>
+      <button id="run-button" type="button" class="btn btn-success" onclick="run()">Run</button>
+      <button id="stop-button" type="button" class="btn btn-danger" onclick="stopAnime()">Stop</button>
+    </div>
+
+    <footer id="dpLegend"></footer>
+    <div id="status" class="status"></div>
+
+    <div class="rod-only">
+      <div class="array-label">Prices</div>
+      <canvas id="rodP" width="800" height="135"></canvas>
+      <div class="array-label">Best revenue r[j] for a rod of length j</div>
+      <canvas id="rodR" width="800" height="135"></canvas>
+      <div class="array-label">Size s[j] of the first piece to cut</div>
+      <canvas id="rodS" width="800" height="135"></canvas>
+    </div>
+    <div class="lcs-only">
+      <canvas id="lcsGrid" width="700" height="520"></canvas>
+    </div>
+    <div class="activity-only">
+      <canvas id="actS" width="900" height="135"></canvas>
+      <canvas id="actF" width="900" height="135"></canvas>
+      <div class="array-label">Timeline</div>
+      <canvas id="actTimeline" width="900" height="300"></canvas>
+    </div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    display_legend_list("dpLegend", [
+      ["Being computed / considered", CURRENT_COLOR], ["Values it uses", USED_COLOR],
+      ["Part of the answer", CHOSEN_COLOR], ["LCS path (no character)", PATH_COLOR],
+      ["Skipped activity", REJECTED_COLOR]]);
+    for (var id of ["rodP", "rodR", "rodS", "lcsGrid", "actS", "actF", "actTimeline"]) {
+      canvases[id] = new fabric.Canvas(id);
+    }
+    // Wait for the web font so the boxes are measured in it.
+    document.fonts.ready.then(algoChanged);
+  </script>
+</body>
+</html>

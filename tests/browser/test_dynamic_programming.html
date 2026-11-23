@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// dynamicProgramming.html: rod cutting, LCS, activity selection.
+
+// Best revenue by plain recursion (exponential, fine for n <= 10).
+function bestRevenue(p, n) {
+  if (n === 0) return 0;
+  let q = -Infinity;
+  for (let i = 1; i <= n; i++) q = Math.max(q, p[i - 1] + bestRevenue(p, n - i));
+  return q;
+}
+
+function lcsLength(x, y) {
+  const c = [...Array(x.length + 1)].map(() => new Array(y.length + 1).fill(0));
+  for (let i = 1; i <= x.length; i++)
+    for (let j = 1; j <= y.length; j++)
+      c[i][j] = x[i - 1] === y[j - 1] ? c[i - 1][j - 1] + 1 : Math.max(c[i - 1][j], c[i][j - 1]);
+  return c[x.length][y.length];
+}
+
+const isSubsequence = (z, x) => {
+  let k = 0;
+  for (const ch of x) if (k < z.length && ch === z[k]) k++;
+  return k === z.length;
+};
+
+// The most mutually compatible activities, by trying every subset.
+function maxActivities(s, f) {
+  let best = 0;
+  for (let mask = 0; mask < (1 << s.length); mask++) {
+    const chosen = s.map((_, i) => i).filter((i) => mask & (1 << i));
+    const ok = chosen.every((i) => chosen.every((j) => i === j || f[i] <= s[j] || f[j] <= s[i]));
+    if (ok) best = Math.max(best, chosen.length);
+  }
+  return best;
+}
+
+runTests(async () => {
+  const f = await load("dynamicProgramming.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(500);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const pick = (id) => { d.getElementById(id).checked = true; w.algoChanged(); };
+  const result = () => d.getElementById('result').textContent;
+
+  const clrsPrices = [1, 5, 8, 9, 10, 17, 17, 20, 24, 30];
+  for (const [prices, n] of [[clrsPrices, 4], [clrsPrices, 7], [clrsPrices, 10],
+                             [[3, 5, 8, 9, 10], 5], [[1], 1], [[0, 10, 0], 3]]) {
+    pick('rod'); set('prices', prices.join(', ')); set('rod-n', n);
+    w.run(); await waitDone(d);
+    const m = result().match(/r\[\d+\] = (\d+), cutting it into pieces of length ([\d + ]+)\./);
+    const pieces = m ? m[2].split(' + ').map(Number) : [];
+    const ok = m && +m[1] === bestRevenue(prices, n) &&
+               pieces.reduce((a, b) => a + b, 0) === n &&
+               pieces.reduce((a, len) => a + prices[len - 1], 0) === +m[1];
+    check(ok, `rod cutting n=${n}, prices [${prices}]`, result());
+  }
+
+  for (const [x, y] of [['ABCBDAB', 'BDCABA'], ['GTTCCTAAT', 'CGATAATTG'], ['ABC', 'XYZ'],
+                        ['A', 'A'], ['AAAA', 'AA'], ['ACCGGTCGAG', 'GTCGTTCGGA']]) {
+    pick('lcs'); set('lcs-x', x); set('lcs-y', y);
+    w.run(); await waitDone(d);
+    const want = lcsLength(x, y);
+    const m = result().match(/is (\S+) \(length (\d+)\)/);
+    const ok = want === 0 ? result().includes('LCS is empty')
+                          : m && +m[2] === want && m[1].length === want &&
+                            isSubsequence(m[1], x) && isSubsequence(m[1], y);
+    check(ok, `LCS of ${x} and ${y} (length ${want})`, result());
+  }
+
+  for (const [s, fin] of [['1, 3, 0, 5, 3, 5, 6, 8, 8, 2, 12', '4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16'],
+                          ['5, 0, 8, 1, 3, 6', '9, 6, 11, 4, 5, 10'], ['0', '5'],
+                          ['0, 0, 0', '3, 2, 1']]) {
+    pick('activity'); set('act-s', s); set('act-f', fin);
+    w.run(); await waitDone(d);
+    // The page may renumber activities by finish time, so read the inputs back.
+    const S = d.getElementById('act-s').value.split(',').map(Number);
+    const F = d.getElementById('act-f').value.split(',').map(Number);
+    const m = result().match(/Chose (\d+) compatible activities: (.*)\./);
+    const chosen = m ? m[2].split(', ').map((a) => +a.slice(1) - 1) : [];
+    const compatible = chosen.every((i, k) => k === 0 || S[i] >= F[chosen[k - 1]]);
+    check(m && +m[1] === maxActivities(S, F) && chosen.length === +m[1] && compatible,
+          `activity selection s=[${s}] f=[${fin}]`, result());
+  }
+
+  pick('lcs'); set('lcs-x', 'ABCBDAB'); set('lcs-y', 'BDCABA');
+  w.run(); await sleep(2000); w.stopAnime(); await waitDone(d);
+  check(d.getElementById('status').textContent === 'Stopped.', 'Stop halts the run');
+  w.run(); await waitDone(d);
+  check(result().includes('(length 4)'), 'runs again after Stop', result());
+});
+</script>
+</body></html>
