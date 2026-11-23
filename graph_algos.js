@@ -5,7 +5,9 @@
  *   - Topological sort                (CLRS 22.4)
  *   - Strongly connected components   (CLRS 22.5)
  *   - Bellman-Ford                    (CLRS 24.1)
+ *   - Shortest paths in a DAG         (CLRS 24.2)
  *   - Dijkstra                        (CLRS 24.3)
+ *   - Floyd-Warshall                  (CLRS 25.2)
  * Vertices are named a, b, c, ... and stored as indices 0, 1, 2, ...
  * The page must define GRAPH_CONTAINER and WEIGHTED, and may define ALLOW_NEGATIVE_WEIGHTS.
  */
@@ -166,10 +168,13 @@ function placeVertices(g) {
 // A space leaves a gap, e.g. [" bc", "a  ", " de"].
 function gridLayout(rows) {
   var pos = [];
+  // Columns 150px apart, closer if needed to fit the 800px-wide graph area.
+  var cols = Math.max(...rows.map((row) => row.length));
+  var colStep = cols > 1 ? Math.min(150, 700 / (cols - 1)) : 150;
   rows.forEach((row, r) => {
     for (var c = 0; c < row.length; c++) {
       if (row[c] === " ") continue;
-      pos[letterNumConvert(row[c])] = [(c - (row.length - 1) / 2) * 150,
+      pos[letterNumConvert(row[c])] = [Math.round((c - (row.length - 1) / 2) * colStep),
                                        (r - (rows.length - 1) / 2) * 200];
     }
   });
@@ -557,6 +562,146 @@ async function bellmanFord(g, s) {
   return "Bellman-Ford returns TRUE (no negative-weight cycle).\n" + distanceReport(g, s, d, pi);
 }
 
+// ---------- Shortest paths in a DAG (CLRS 24.2) ----------
+
+// A topological order of g's vertices (by DFS finishing times), or null if g has a cycle.
+function topologicalOrder(g) {
+  var color = new Array(g.n).fill(0), order = [], cyclic = false;
+  var visit = (u) => {
+    color[u] = 1;
+    for (var e of g.adj[u]) {
+      if (color[e.v] === 1) cyclic = true;
+      else if (color[e.v] === 0) visit(e.v);
+    }
+    color[u] = 2;
+    order.unshift(u);
+  };
+  for (var u = 0; u < g.n; u++) if (color[u] === 0) visit(u);
+  return cyclic ? null : order;
+}
+
+async function dagShortestPaths(g, s) {
+  if (!g.directed) {
+    throw new GraphError("DAG shortest paths needs a directed acyclic graph: " +
+                         "set the graph type to Directed.");
+  }
+  var order = topologicalOrder(g);                   // topologically sort the vertices of G
+  if (order === null) {
+    throw new GraphError("The graph has a cycle, so it isn't a DAG. " +
+                         "Use Bellman-Ford (or Dijkstra, if no weight is negative).");
+  }
+  var d = [], pi = [], piEdge = [];
+  initializeSingleSource(g, s, d, pi, piEdge);       // INITIALIZE-SINGLE-SOURCE(G, s)
+  var orderText = "Topological order: " + order.map(vname).join(", ");
+  await step(orderText + ". Relax each vertex's edges in this order.");
+  for (var u of order) {                             // for each vertex u, in topological order
+    setVertex(u, V_CURRENT);
+    await step(orderText + ". u = " + vname(u) + ", d = " + showDist(d[u]) +
+               (d[u] === Infinity ? " (not reachable from " + vname(s) + ")." : "."));
+    for (var e of g.adj[u]) {                        //   for each vertex v in G.Adj[u]
+      flashEdge(e.id);
+      await step("Relax " + vname(u) + "→" + vname(e.v) + ": is " + showDist(d[e.v]) +
+                 " > " + showDist(d[u]) + " + " + e.w + "?");
+      if (relax(g, u, e, d, pi, piEdge)) {           //     RELAX(u, v, w)
+        await step("Yes: d(" + vname(e.v) + ") = " + d[e.v] + ", π(" + vname(e.v) + ") = " +
+                   vname(u) + ".");
+      } else {
+        unflashEdge(g, e.id);
+      }
+    }
+    setVertex(u, d[u] === Infinity ? V_WHITE : V_BLACK);
+  }
+  await step("Every edge has been relaxed once, in topological order: done.");
+  return orderText + "\n" + distanceReport(g, s, d, pi);
+}
+
+// ---------- Floyd-Warshall (CLRS 25.2) ----------
+// Needs fabric.js and algocynfas.js (for Grid) and a canvas with id "matrixCanvas".
+
+// (Same values as DEF_HL_COLOR and SWAP_COLOR in algocynfas.js, which the
+// Graph Search page doesn't load.)
+const M_ROW_COL = '#a6dfe8';    // row and column k
+const M_UPDATED = '#8fd19e';    // improved while k is in use
+const M_CURRENT = '#cbb8ea';    // the entry being improved
+const showWeight = (x) => x === Infinity ? "∞" : String(x);
+
+let matrixCanvas = null;
+
+async function floydWarshall(g) {
+  var n = g.n;
+  var D = [], P = [];
+  for (var i = 0; i < n; i++) {                      // D(0) = W
+    D.push(new Array(n).fill(Infinity));
+    P.push(new Array(n).fill(null));
+    D[i][i] = 0;
+  }
+  for (var e of g.edges) {
+    var pairs = g.directed ? [[e.u, e.v]] : [[e.u, e.v], [e.v, e.u]];
+    for (var [u, v] of pairs) {
+      if (e.w < D[u][v]) { D[u][v] = e.w; P[u][v] = u; }
+    }
+  }
+  if (matrixCanvas === null) matrixCanvas = new fabric.Canvas("matrixCanvas");
+  var cellW = 50, cellH = 36, x0 = 50, y0 = 34;
+  matrixCanvas.clear();
+  matrixCanvas.setWidth(x0 + n * (cellW + 1) + 10);
+  matrixCanvas.setHeight(y0 + n * (cellH + 1) + 10);
+  var M = new Grid(matrixCanvas, n, n, {cellW: cellW, cellH: cellH, x0: x0, y0: y0});
+  var names = [...Array(n).keys()].map(vname);
+  M.setLabels(names, names);
+  for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) M.setKey(i, j, showWeight(D[i][j]));
+  var fwStep = async (msg) => { M.draw(); await step(msg); };
+  await fwStep("D(0) holds the edge weights: row i, column j is the weight of edge i→j " +
+               "(∞ if there is none).");
+  for (var k = 0; k < n; k++) {                      // for k = 1 to n
+    M.uncolorAll();
+    for (var x = 0; x < n; x++) {
+      M.colorCell(k, x, M_ROW_COL);
+      M.colorCell(x, k, M_ROW_COL);
+    }
+    setVertex(k, V_CURRENT);
+    await fwStep("k = " + vname(k) + ": can a path get shorter by going through " +
+                 vname(k) + "? Compare each d(i,j) with d(i," + vname(k) + ") + d(" +
+                 vname(k) + ",j), using row and column " + vname(k) + ".");
+    var improved = 0;
+    for (var i = 0; i < n; i++) {                    //   for i = 1 to n
+      for (var j = 0; j < n; j++) {                  //     for j = 1 to n
+        if (D[i][k] + D[k][j] < D[i][j]) {           //       d(i,j) = min(d(i,j), d(i,k) + d(k,j))
+          var old = D[i][j];
+          D[i][j] = D[i][k] + D[k][j];
+          P[i][j] = P[k][j];
+          M.setKey(i, j, showWeight(D[i][j]));
+          M.colorCell(i, j, M_CURRENT);
+          improved++;
+          await fwStep("d(" + vname(i) + "," + vname(j) + ") = min(" + showWeight(old) + ", " +
+                       showWeight(D[i][k]) + " + " + showWeight(D[k][j]) + ") = " + D[i][j] +
+                       ", going " + vname(i) + " ⇝ " + vname(k) + " ⇝ " + vname(j) + ".");
+          M.colorCell(i, j, M_UPDATED);
+        }
+      }
+    }
+    setVertex(k, V_BLACK);
+    await fwStep("Done with k = " + vname(k) + ": " + (improved === 0 ? "no entry improved." :
+                 improved + " entr" + (improved === 1 ? "y" : "ies") + " improved (green)."));
+  }
+  M.uncolorAll();
+  var negative = [...Array(n).keys()].filter((i) => D[i][i] < 0);
+  for (var i of negative) M.colorCell(i, i, E_BAD);
+  await fwStep(negative.length ? "A negative entry on the diagonal means a negative-weight cycle."
+                               : "D(n) holds every shortest-path distance.");
+  if (negative.length) {
+    throw new GraphError("Negative-weight cycle: d(" + negative.map((i) => vname(i) + "," + vname(i))
+                         .join("), d(") + ") < 0, so shortest paths through " +
+                         negative.map(vname).join(", ") + " are not defined.");
+  }
+  var width = Math.max(...D.flat().map((x) => showWeight(x).length)) + 1;
+  var pad = (t) => String(t).padStart(width);
+  var lines = ["Shortest-path distances (row = from, column = to):",
+               "  " + names.map(pad).join(" ")];
+  for (var i = 0; i < n; i++) lines.push(names[i] + " " + D[i].map(showWeight).map(pad).join(" "));
+  return lines.join("\n");
+}
+
 // ---------- Page wiring ----------
 
 function algoChoice() {
@@ -566,6 +711,9 @@ function algoChoice() {
 // Algorithms that start from a source vertex show the "start" box.
 function algoChanged() {
   getHTML("start-group").style.display = NEEDS_SOURCE.includes(algoChoice()) ? "" : "none";
+  // Floyd-Warshall shows its distance matrix under the graph.
+  var matrix = getHTML("matrix-section");
+  if (matrix) matrix.style.display = algoChoice() === "floyd" ? "" : "none";
 }
 
 function run() {

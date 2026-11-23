@@ -2,7 +2,8 @@
 <html><head><meta charset="utf-8"></head><body>
 <script src="harness.js"></script>
 <script>
-// shortestPaths.html: Dijkstra and Bellman-Ford, checked against Floyd-Warshall.
+// shortestPaths.html: Dijkstra, Bellman-Ford, DAG shortest paths and Floyd-Warshall,
+// checked against an independent Floyd-Warshall in harness.js.
 runTests(async () => {
   const f = await load("shortestPaths.html");
   const w = f.contentWindow, d = f.contentDocument;
@@ -31,6 +32,44 @@ runTests(async () => {
       check(result().includes('negative-weight cycle is reachable'), label, result());
     } else {
       check(String(parseDistances(result(), n)) === String(D[vindex(s)]), label, result());
+    }
+  }
+
+  // DAG shortest paths (CLRS 24.5 and others) must match Floyd-Warshall too.
+  for (const [n, edges, weights, s] of [
+      [6, 'a-b, a-c, b-c, b-d, c-d, c-e, c-f, d-e, d-f, e-f', '5, 3, 2, 6, 7, 4, 2, -1, 1, -2', 'b'],
+      [6, 'a-b, a-c, b-c, b-d, c-d, c-e, c-f, d-e, d-f, e-f', '5, 3, 2, 6, 7, 4, 2, -1, 1, -2', 'a'],
+      [4, 'd-c, c-b, b-a', '1, -2, 3', 'd']]) {
+    d.getElementById('dag').checked = true; w.algoChanged();
+    set('nodeNum', n); set('graphType', 'dir'); set('edges', edges); set('weights', weights);
+    set('start', s);
+    w.run(); await waitDone(d);
+    const {D} = allPairs(n, edges, weights, true);
+    check(String(parseDistances(result(), n)) === String(D[vindex(s)]),
+          `DAG shortest paths from ${s} on ${edges} / ${weights}`, result());
+  }
+  d.getElementById('dag').checked = true; w.algoChanged();
+  set('nodeNum', 3); set('graphType', 'dir'); set('edges', 'a-b, b-c, c-a'); set('weights', '1, 1, 1'); set('start', 'a');
+  w.run(); await waitDone(d);
+  check(result().includes("isn't a DAG"), 'DAG shortest paths rejects a cycle', result());
+
+  // Floyd-Warshall: read the whole matrix back and compare.
+  for (const [n, type, edges, weights] of [
+      [5, 'dir', 'a-b, a-c, a-e, b-d, b-e, c-b, d-a, d-c, e-d', '3, 8, -4, 1, 7, 4, 2, -5, 6'],  // CLRS 25.1
+      [5, 'undir', 'a-b, b-c, c-d, d-e, a-e, b-e, a-c, a-d', '1, 2, 3, 4, 5, 6, 7, 8'],
+      [4, 'dir', 'a-b, c-d', '2, 5'],
+      [4, 'dir', 'a-b, b-c, c-a, c-d', '1, -3, 1, 2']]) {                                   // negative cycle
+    d.getElementById('floyd').checked = true; w.algoChanged();
+    set('nodeNum', n); set('graphType', type); set('edges', edges); set('weights', weights);
+    w.run(); await waitDone(d);
+    const {D, negCycle} = allPairs(n, edges, weights, type === 'dir');
+    const label = `Floyd-Warshall on ${type} ${edges} / ${weights}`;
+    if (negCycle) {
+      check(result().includes('Negative-weight cycle'), label, result());
+    } else {
+      const rows = result().split('\n').slice(2).map((line) =>
+        line.trim().split(/\s+/).slice(1).map((x) => x === '∞' ? Infinity : +x));
+      check(JSON.stringify(rows) === JSON.stringify(D), label, result());
     }
   }
 
