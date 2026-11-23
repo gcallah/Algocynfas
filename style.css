@@ -216,6 +216,15 @@ figcaption .credit {
     color: var(--muted);
 }
 
+.credits {
+    margin: 2rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+}
+
 /* Grid of visualization links on the home page. */
 ul.link-grid {
     list-style: none;
