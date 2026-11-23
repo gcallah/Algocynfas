@@ -1,4 +1,5 @@
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="lib/bootstrap.min.css">
 <link rel="stylesheet" href="userInterface.css">
  <script src="lib/jquery.min.js"></script>

@@ -1,243 +1,301 @@
+/* Algocynfas site styles. Loaded after Bootstrap on the visualization pages. */
+
+:root {
+    --ink: #1f2a33;
+    --muted: #5b6770;
+    --brand: #1f4e5f;
+    --brand-light: #e6f2f3;
+    --accent: #2a7f8f;
+    --page-bg: #f6f9f9;
+    --card-bg: #ffffff;
+    --border: #d5e2e4;
+    --input-bg: #fffaf0;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-size: 100%;
-    color: #333;
-    background: #dff;
-    font-family: initial;
+    color: var(--ink);
+    background: var(--page-bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
 }
 
-table {
-    font-size: 1.4em;
-    margin: .5em 2.5em .5em 2.5em;
-    border-collapse: collapse;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-th {
-    border: .03125em solid black;
-    font-weight: normal;
+a {
+    color: var(--accent);
 }
 
-th, td {
-    padding: .5em;
+a:hover, a:focus {
+    color: var(--brand);
 }
 
-td {
-    background: #dff;
-}
-
-td#languages {
-    color: #dff;
-    background: #245;
-}
-
-th#chapter-head {
-    font-size: 1.4em;
-    color: #245;
-    background: #cff;
-}
-
-th {
-    background: #afd;
-}
-
-
-li {
-    margin: .5em .75em .5em .75em;
-}
-
-ol, ul, dl {
-    font-size: 1.4em;
-    margin: 1em 2.5em 1em 2.5em;
-}
-
-ol.nested, ul.nested, dl.nested {
-    font-size: 1em;
-}
-
-p, summary.sum4 {
-    font-size: 1.4em;
-    margin: .5em 2.5em .5em 2.5em;
-    padding: 0;
-    line-height: 140%;
-}
-
-blockquote {
-    font-size: 1.1em;
-    margin: .75em 4.5em .75em 4.5em;
-    padding: 0;
-    line-height: 140%;
-}
-
-p.authors {
-    text-align: center;
-}
-
-h1,h2 {
-    font-weight: bold;
-}
+/* ---------- Headings ---------- */
 
 h1 {
-
-    margin: 0 0 1.5em 0;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    margin: 0 0 1.5rem 0;
+    padding: 1rem;
     text-align: center;
-    font-weight: 300;
-    font-size: 2.5em;
-    background-color: #245;
-    color: #dff;
-}
-
-h1.toc-head {
-    margin: 0 0 0 0;
-}
-
-h2 {
-    font-size: 2.2em;
-    margin: 1.25em 1em 1.25em 1em;
-    color: #245;
-}
-
-h3 {
-    font-size: 2em;
-    margin: 1.15em 1.5em 1em 1.5em;
-    color: #633;
-    font-weight: bold;
-}
-
-h4 {
-    font-size: 1.8em;
-    margin: 1em 2em .75em 2em;
-    color: #339;
-    font-weight: bold;
-}
-
-h5 {
-    font-size: 1.6em;
-    margin: 1em 2em .75em 2em;
-    color: #366;
-    font-weight: bold;
-}
-
-#header {
-    width: auto;
-    height: 60;
-    padding: 10 2.5em;
-    line-height: 2.5em;
-    background-color: #245;
-    color: #dff;
-    overflow: hidden;
-}
-
-#header a:link, #header a:visited {
+    font-weight: 600;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, var(--brand), var(--accent));
     color: #fff;
 }
 
-#header a:focus , #header a:hover {
-    text-decoration: underline;
+/* On the visualization pages the h1 sits inside .container. */
+.container h1 {
+    border-radius: 0.5rem;
 }
 
-figure, figure.toc {
+h2 {
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--brand);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
+    margin: 1.5rem 0 0.75rem;
+    color: #633;
+    font-weight: 600;
+}
+
+h4, h5 {
+    font-size: 1.2rem;
+    margin: 1.25rem 0 0.5rem;
+    color: #339;
+    font-weight: 600;
+}
+
+/* ---------- Main page layout ---------- */
+
+.page {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 0 1rem 3rem;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+ul, ol {
+    padding-left: 1.5rem;
+}
+
+li {
+    margin: 0.35rem 0;
+}
+
+figure {
+    margin: 0 0 1.5rem;
     text-align: center;
 }
 
-figure.toc {
-    margin: 0em 4em 4em 4em;
-}
-
-figure.left {
-    margin: 2em 1em 1em 6em;
-    text-align: left;
+.hero img {
+    display: block;
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 figcaption {
     color: #606;
     font-style: italic;
-    text-align: center;
-    margin: 1em 1.25em .75em 20;
+    margin-top: 0.6rem;
 }
 
-.python-console {
-    text-align: center;
-    float: center;
-    width: 100%;
-    font-family: sans-serif; 
+figcaption .credit {
+    display: block;
+    font-size: 0.8rem;
+    font-style: normal;
+    color: var(--muted);
 }
 
-.illustr-container {
-    width: 1000;
-    height: 400;
-    flex: 1;
-    margin: 1.25em 20 0 0;
-    overflow: auto;
-}
-
-.illustr-text {
-    display: inline-block;
-    width: 33%;
-}
-
-.illustration {
-    display: inline-block;
-    float: right;
-}
-
-#logo {
-    float: left;
-    margin: .1em 1.25em 0 1.25em;
-}
-
-#user-tools {
-    float: right;
+/* Grid of visualization links on the home page. */
+ul.link-grid {
+    list-style: none;
     padding: 0;
-    margin: 0 1.25em 0 1.25em;
-    font-weight: 300;
-    font-size: 1em;
-    letter-spacing: 0.00375em;
-    text-transform: uppercase;
-    text-align: right;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.75rem;
 }
 
-#user-tools a {
-    border-bottom: .03125em solid rgba(255, 255, 255, 0.25);
+ul.link-grid li {
+    margin: 0;
 }
 
-#user-tools a:focus, #user-tools a:hover {
+ul.link-grid a {
+    display: block;
+    height: 100%;
+    padding: 0.9rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0.4rem;
+    color: var(--brand);
+    font-weight: 500;
     text-decoration: none;
-    border-bottom-color: #285d91;
-    color: #285d91;
+    transition: box-shadow 0.15s, transform 0.15s;
 }
 
-summary.sum1 {
-    font-size: 2em;
-    color: #245;
-    margin: 1em 1.5em 1em 1.5em;
+ul.link-grid a:hover, ul.link-grid a:focus {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
 }
 
-summary.sum2 {
-    font-size: 1.8em;
-    color: #633;
-    margin: .75em 1.5em .75em 2.5em;
+/* ---------- Tables ---------- */
+
+table {
+    margin: 0.5rem 0;
+    border-collapse: collapse;
 }
 
-summary.sum3 {
-    font-size: 1.6em;
-    color: #339;
-    margin: .5em 1.5em .5em 3.5em;
+th, td {
+    padding: 0.5em;
+    border: 1px solid var(--border);
 }
 
-summary.menu_sum {
-    font-size: 1.6em;
-    color: #249;
-    margin: .5em 0em .5em 0em;
+th {
+    background: var(--brand-light);
+    font-weight: 600;
 }
 
-p.lead-quote {
-    margin: .75em 8em .75em 8em;
+/* ---------- Visualization pages ---------- */
+
+.container {
+    margin: 1.5rem auto;
+    /* Canvases have fixed pixel sizes; let them scroll sideways on small screens. */
+    overflow-x: auto;
+}
+
+.box, .boxLarge, .weightBox, .edgeBox, .funcBox {
+    font-size: 15px;
+    height: 2rem;
+    max-width: 100%;
+    padding: 0 0.4rem;
+    background: var(--input-bg);
+    border: 1px solid #c9bfa6;
+    border-radius: 0.25rem;
+}
+
+.box      { width: 135px; }
+.boxLarge { width: 150px; }
+.weightBox { width: 270px; display: none; }
+.edgeBox  { width: 300px; }
+.funcBox  { width: 220px; visibility: hidden; }
+
+.funcText {
+    display: inline;
+    visibility: hidden;
+}
+
+.canvasBox {
+    width: 1100px;
+    max-width: 100%;
+    height: 400px;
+    overflow: auto;
 }
 
 .center {
     margin: 0 auto;
 }
 
+/* ---------- Help tooltip ---------- */
+
+.help-tip {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    text-align: center;
+    background-color: var(--accent);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    line-height: 26px;
+    cursor: default;
+}
+
+.help-tip:before {
+    content: '?';
+    font-weight: bold;
+    color: #fff;
+}
+
+.help-tip:hover p {
+    display: block;
+    transform-origin: 100% 0%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.help-tip p { /* The tooltip */
+    display: none;
+    text-align: left;
+    background-color: #1e2021;
+    padding: 20px;
+    width: 200px;
+    max-width: 80vw;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    right: -4px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+    z-index: 10;
+}
+
+.help-tip p:before { /* The pointer of the tooltip */
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom-color: #1e2021;
+    right: 10px;
+    top: -12px;
+}
+
+.help-tip p:after { /* Prevents the tooltip from being hidden */
+    width: 100%;
+    height: 100px;
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 0;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 600px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .container {
+        margin: 1rem auto;
+        padding: 0 0.75rem;
+    }
+
+    .help-tip {
+        top: 10px;
+        right: 10px;
+    }
+}
