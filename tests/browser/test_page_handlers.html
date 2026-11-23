@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// Every page: it loads without script errors, and every onclick/onchange/oninput
+// handler calls functions that actually exist (a renamed function otherwise
+// leaves a dead button that fails silently).
+const PAGES = ['index.html', 'sort.html', 'hashTable.html', 'minSpanningTree.html',
+               'binarySTree.html', 'redBlackTree.html', 'avl.html', 'heap.html', 'tree.html',
+               'graph.html', 'graphics.html', 'graphicsTest.html', 'search.html',
+               'linearSort.html', 'arrayAlgos.html', 'dynamicProgramming.html',
+               'graphSearch.html', 'shortestPaths.html'];
+
+// Names called in a handler like "createGraph(true,'x'); foo()" -> [createGraph, foo].
+// Method calls (a.b()) and keywords are skipped.
+function calledFunctions(code) {
+  const names = [];
+  for (const m of code.matchAll(/(^|[^.\w$])([A-Za-z_$][\w$]*)\s*\(/g)) {
+    if (!['if', 'for', 'while', 'return', 'function', 'typeof'].includes(m[2])) names.push(m[2]);
+  }
+  return names;
+}
+
+// Load a page with an error recorder that runs before any of its scripts, so
+// errors thrown while the page loads are caught too.
+function loadRecordingErrors(page) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', REPO + page, false);
+  xhr.send();
+  const recorder = '<base href="' + REPO + '"><script>window.__errors = [];' +
+    'addEventListener("error", (e) => __errors.push(e.message + " (" + ' +
+    '(e.filename || "").split("/").pop() + ":" + e.lineno + ")"));' +
+    'window.alert = () => {};<\/script>';
+  const html = /<head[^>]*>/i.test(xhr.responseText)
+    ? xhr.responseText.replace(/<head[^>]*>/i, (m) => m + recorder)
+    : recorder + xhr.responseText;
+  return new Promise((res) => {
+    const f = document.createElement('iframe');
+    f.style.cssText = "width:1100px;height:900px;border:0";
+    f.onload = () => res(f);
+    f.srcdoc = html;
+    document.body.appendChild(f);
+  });
+}
+
+runTests(async () => {
+  for (const page of PAGES) {
+    const f = await loadRecordingErrors(page);
+    await sleep(800);
+    const w = f.contentWindow, d = f.contentDocument;
+    const missing = [];
+    for (const el of d.querySelectorAll('[onclick], [onchange], [oninput]')) {
+      for (const attr of ['onclick', 'onchange', 'oninput']) {
+        const code = el.getAttribute(attr);
+        if (!code) continue;
+        for (const name of calledFunctions(code)) {
+          // Top-level let/const and function declarations aren't always window
+          // properties, so ask the page's own scope.
+          let type;
+          try { type = w.eval('typeof ' + name); } catch (e) { type = 'error'; }
+          if (type !== 'function') missing.push(`${name} (${attr} on #${el.id || el.tagName.toLowerCase()})`);
+        }
+      }
+    }
+    check(missing.length === 0, page + ': every handler exists', 'missing: ' + missing.join(', '));
+    check(w.__errors.length === 0, page + ': loads without script errors', w.__errors.join('; '));
+    f.remove();
+  }
+});
+</script>
+</body></html>

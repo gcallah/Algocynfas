@@ -2,46 +2,131 @@
 <html><head><meta charset="utf-8"></head><body>
 <script src="harness.js"></script>
 <script>
-// The older pages: every sort on sort.html, Kruskal and Prim, and a load check of the rest.
-runTests(async () => {
+// The original pages: every sort on sort.html, Kruskal and Prim, and the graph and
+// tree builders. (Trees, heaps and hash tables have their own test files.)
+
+// Total weight of a minimum spanning forest, by Kruskal with union-find, as an
+// independent check. Returns {weight, connected}.
+function mstWeight(n, edges, weights) {
+  const E = edges.split(',').map((s, i) => [...s.trim().split('-').map(vindex), +weights.split(',')[i]])
+    .sort((a, b) => a[2] - b[2]);
+  const parent = [...Array(n).keys()];
+  const find = (x) => parent[x] === x ? x : (parent[x] = find(parent[x]));
+  let weight = 0, joined = 0;
+  for (const [u, v, w] of E) {
+    if (find(u) !== find(v)) { parent[find(u)] = find(v); weight += w; joined++; }
+  }
+  return {weight, connected: joined === n - 1};
+}
+
+async function attempt(label, fn) {
+  try {
+    await fn();
+  } catch (e) {
+    check(false, label, 'threw ' + (e && e.message || e));
+  }
+}
+
+async function sorting() {
   const sortNames = ['insertion', 'bubble', 'quick', 'selection', 'merge', 'heap'];
+  const inputs = [[9, -12, 7, 99, 5, 3], [3, 1, 3, 2, 1, 3], [1, 2, 3, 4, 5], [5, 4, 3, 2, 1],
+                  [2, 1], [-99, 99, 0, -99]];
   for (let t = 0; t < sortNames.length; t++) {
     const f = await load("sort.html");
     const w = f.contentWindow, d = f.contentDocument;
     d.getElementById('Fast').checked = true;
-    d.getElementById('number-input').value = '9, -12, 7, 99, 5, 3';
-    w.inputNumberToArray();
-    d.getElementsByName('sort')[t].checked = true;
-    w.run(); await waitDone(d);
-    // fList is declared with let, so it isn't a property of window.
-    const keys = w.eval('fList.dataElems.map((e) => e.key).join()');
-    check(keys === '-12,3,5,7,9,99', sortNames[t] + ' sort', keys);
+    const bad = [];
+    for (const input of inputs) {
+      d.getElementById('number-input').value = input.join(', ');
+      w.inputNumberToArray();
+      d.getElementsByName('sort')[t].checked = true;
+      w.run(); await waitDone(d);
+      // fList is declared with let, so it isn't a property of window.
+      const keys = w.eval('fList.dataElems.map((e) => e.key).join()');
+      const want = input.slice().sort((a, b) => a - b).join();
+      if (keys !== want) bad.push(`[${input}] gave [${keys}]`);
+    }
+    check(bad.length === 0, `${sortNames[t]} sort on ${inputs.length} inputs`, bad.join('; '));
     f.remove();
   }
+}
 
-  for (const algo of ['kruskal', 'prims']) {
-    const f = await load("minSpanningTree.html");
+async function spanningTrees() {
+  // The page's three samples: 5 nodes, 10 nodes, and a disconnected graph.
+  for (const sample of [1, 2, 3]) {
+    for (const algo of ['kruskal', 'prims']) {
+      await attempt(`${algo} on sample ${sample}`, async () => {
+        const f = await load("minSpanningTree.html");
+        const w = f.contentWindow, d = f.contentDocument;
+        d.getElementById('Fast').checked = true;
+        d.getElementById(algo).checked = true;
+        d.getElementById('spanningSample').selectedIndex = sample;
+        w.setSpanningSample();
+        const n = +d.getElementById('nodeNum').value;
+        const edges = d.getElementById('edges').value;
+        const weights = d.getElementById('weights').value;
+        w.createGraph(true, 'spanningGraphContainer');
+        w.run(); await sleep(25000);
+        const want = mstWeight(n, edges, weights);
+        const label = `${algo === 'prims' ? "Prim's" : "Kruskal's"} algorithm on sample ${sample}`;
+        if (!want.connected) {
+          check(f.alerts.some((a) => a.includes('disconnected')),
+                label + ' reports a disconnected graph', f.alerts.join('; '));
+        } else {
+          const weightOf = {};
+          edges.split(',').forEach((e, i) => weightOf[e.trim()] = +weights.split(',')[i]);
+          const tree = w.eval('Graph').sigma.graph.edges().filter((e) => e.color === '#F5B041')
+            .map((e) => e.id);
+          const total = tree.reduce((s, id) => s + weightOf[id], 0);
+          check(tree.length === n - 1 && total === want.weight,
+                `${label}: ${n - 1} edges, total weight ${want.weight}`,
+                `got ${tree.length} edges (${tree.join(' ')}), weight ${total}`);
+        }
+        f.remove();
+      });
+    }
+  }
+}
+
+async function builders() {
+  await attempt('graph.html', async () => {
+    const f = await load("graph.html");
     const w = f.contentWindow, d = f.contentDocument;
-    d.getElementById('Fast').checked = true;
-    d.getElementById(algo).checked = true;
-    d.getElementById('spanningSample').selectedIndex = 1;
-    w.setSpanningSample();
-    w.createGraph(true, 'spanningGraphContainer');
-    w.run(); await sleep(15000);
-    const tree = w.eval('Graph').sigma.graph.edges().filter((e) => e.color === '#F5B041')
-      .map((e) => e.id).sort().join(' ');
-    check(tree === 'a-b b-c c-d d-e', algo + ' minimum spanning tree', tree);
+    d.getElementById('nodeNum').value = '5';
+    d.getElementById('graphType').selectedIndex = 1; w.setDir();
+    d.getElementById('graphWeight').selectedIndex = 1; w.setWeight();
+    d.getElementById('edges').value = 'a-b, b-c, c-d, d-e';
+    d.getElementById('weights').value = '4, 8, 15, 16';
+    w.createGraph(true, 'graphContainer');
+    const g = w.eval('Graph').sigma.graph;
+    const edges = g.edges().map((e) => `${e.source}-${e.target}:${e.label}:${e.type}`).join(' ');
+    check(g.nodes().length === 5 && edges === '0-1:4:arrow 1-2:8:arrow 2-3:15:arrow 3-4:16:arrow',
+          'graph.html draws a weighted directed graph', `${g.nodes().length} nodes; ${edges}`);
+    f.alerts.length = 0;
+    d.getElementById('edges').value = 'a-b, b-z';
+    d.getElementById('weights').value = '1, 2';
+    w.createGraph(true, 'graphContainer');
+    check(f.alerts.length > 0, 'graph.html rejects an edge to a missing vertex');
     f.remove();
-  }
+  });
 
-  for (const page of ['index.html', 'hashTable.html', 'graph.html', 'heap.html', 'tree.html',
-                      'binarySTree.html', 'redBlackTree.html', 'avl.html', 'graphics.html',
-                      'graphicsTest.html']) {
-    const f = await load(page);
-    await sleep(500);
-    check(f.contentDocument.querySelector('h1') !== null, page + ' loads');
+  await attempt('tree.html', async () => {
+    const f = await load("tree.html");
+    const w = f.contentWindow, d = f.contentDocument;
+    d.getElementById('nodeNum').value = '6';
+    d.getElementById('edges').value = 'a-b, a-c, b-d, b-e, c-f';
+    w.createTree(true);
+    const g = w.eval('Graph').sigma.graph;
+    check(g.nodes().length === 6 && g.edges().length === 5, 'tree.html draws a 6-node tree',
+          `${g.nodes().length} nodes, ${g.edges().length} edges`);
     f.remove();
-  }
+  });
+}
+
+runTests(async () => {
+  await sorting();
+  await spanningTrees();
+  await builders();
 });
 </script>
 </body></html>

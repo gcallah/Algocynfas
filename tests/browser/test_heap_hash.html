@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// heap.html and hashTable.html.
+
+// Problems with the heap property in data[1..] (index 0 is unused), as strings.
+function heapProblems(keys, isMax) {
+  const problems = [];
+  for (let i = 2; i < keys.length; i++) {
+    const parent = keys[Math.floor(i / 2)], child = keys[i];
+    if (isMax ? child > parent : child < parent) {
+      problems.push(`A[${Math.floor(i / 2)}] = ${parent} vs child A[${i}] = ${child}`);
+    }
+  }
+  return problems;
+}
+
+const sorted = (a) => a.slice().sort((x, y) => x - y);
+
+async function attempt(label, fn) {
+  try {
+    await fn();
+  } catch (e) {
+    check(false, label, 'threw ' + (e && e.message || e));
+  }
+}
+
+async function heaps() {
+  const f = await load("heap.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const heapKeys = () => [null, ...w.eval('graph').data.slice(1).map((n) => parseInt(n.key))];
+  const arrayKeys = () => w.eval('graph').arrayList.dataElems.map((e) => parseInt(e.key));
+  const report = (isMax) => heapProblems(heapKeys(), isMax).join('; ') + ' / heap ' +
+                            heapKeys().slice(1) + ' / array ' + arrayKeys();
+
+  for (const isMax of [false, true]) {
+    const kind = isMax ? 'max-heap' : 'min-heap';
+    const keys = [4, 1, 3, 2, 16, 9, 10, 14, 8, 7];   // CLRS Figure 6.3
+    let expect = keys.slice();
+    await attempt(kind + ': build', async () => {
+      d.getElementById(isMax ? 'maxHeap' : 'minHeap').checked = true;
+      w.heapClear();
+      set('heap-insert-list-value', keys.join(','));
+      await w.heapInsertList();
+      const h = heapKeys().slice(1);
+      check(heapProblems(heapKeys(), isMax).length === 0 && String(sorted(h)) === String(sorted(keys)) &&
+            String(arrayKeys()) === String(h), `${kind}: BUILD-HEAP of ${keys}`, report(isMax));
+    });
+    await attempt(kind + ': insert', async () => {
+      for (const k of [15, 0, 20]) {
+        set('heap-insert-value', k);
+        await w.heapInsert(false);
+        expect.push(k);
+      }
+      const h = heapKeys().slice(1);
+      check(heapProblems(heapKeys(), isMax).length === 0 && String(sorted(h)) === String(sorted(expect)) &&
+            String(arrayKeys()) === String(h), `${kind}: insert 15, 0, 20`, report(isMax));
+    });
+    await attempt(kind + ': extract', async () => {
+      const removed = [];
+      for (let i = 0; i < 4; i++) {
+        removed.push(heapKeys()[1]);
+        await w.heapRemove(false);
+      }
+      const want = isMax ? sorted(expect).reverse().slice(0, 4) : sorted(expect).slice(0, 4);
+      const h = heapKeys().slice(1);
+      check(String(removed) === String(want) && heapProblems(heapKeys(), isMax).length === 0 &&
+            h.length === expect.length - 4 && String(arrayKeys()) === String(h),
+            `${kind}: remove the root 4 times gives ${want}`, 'removed ' + removed + ' / ' + report(isMax));
+    });
+  }
+  f.remove();
+}
+
+async function hashTables() {
+  const f = await load("hashTable.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  const set = (id, v) => d.getElementById(id).value = v;
+  const size = 7;
+  const fns = [null, (x) => (2 * x) % size, (x) => (x ** 2) % size, (x) => (x ** 3) % size,
+               (x) => (7 * x + 11) % size];
+  const keys = [12, 5, 19, 26, 3, 40];
+
+  for (const choice of [1, 4]) {
+    await attempt('chaining', async () => {
+      d.getElementById('chaining').checked = true;
+      set('tableSize', size);
+      w.SetupTable();
+      d.getElementById('funcChoices').selectedIndex = choice;
+      w.isCustomize();
+      for (const k of keys) { set('InputValue', k); w.hash(); }
+      const chains = w.eval('hashTable').HeadLists.map((c) => c.map(Number));
+      const want = [...Array(size)].map(() => []);
+      for (const k of keys) want[fns[choice](k)].push(k);
+      check(JSON.stringify(chains) === JSON.stringify(want),
+            `chaining with ${d.getElementById('funcChoices').options[choice].text}`,
+            JSON.stringify(chains) + ' vs ' + JSON.stringify(want));
+      w.clearTable();
+    });
+  }
+
+  await attempt('linear probing', async () => {
+    d.getElementById('linearProbing').checked = true;
+    set('tableSize', size);
+    w.eval('probingCounter = 0');
+    w.SetupTable();
+    d.getElementById('funcChoices').selectedIndex = 1;
+    w.isCustomize();
+    for (const k of keys) { set('InputValue', k); w.hash(); }
+    const slots = w.eval('hashTable').HeadLists.map((c) => c.length ? Number(c[0]) : null);
+    // Expected: each key goes in the first free slot at or after h(k), wrapping around.
+    const want = new Array(size).fill(null);
+    for (const k of keys) {
+      let i = fns[1](k);
+      while (want[i] !== null) i = (i + 1) % size;
+      want[i] = k;
+    }
+    check(JSON.stringify(slots) === JSON.stringify(want), 'linear probing with 2x % Size',
+          JSON.stringify(slots) + ' vs ' + JSON.stringify(want));
+  });
+  f.remove();
+}
+
+runTests(async () => {
+  await heaps();
+  await hashTables();
+});
+</script>
+</body></html>

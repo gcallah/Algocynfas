@@ -18,14 +18,16 @@ function check(ok, label, detail = "") {
   log((ok ? "OK   " : "FAIL ") + label + (!ok && detail ? "\n     " + detail : ""));
 }
 
-// Load a site page in an iframe. Alerts are logged instead of blocking.
+// Load a site page in an iframe. Alerts are recorded in f.alerts (and logged)
+// instead of blocking.
 function load(page) {
   return new Promise((res) => {
     const f = document.createElement('iframe');
     f.style.cssText = "width:1100px;height:900px;border:0";
+    f.alerts = [];
     f.onload = () => {
       const w = f.contentWindow;
-      w.alert = (m) => log("     (alert: " + m + ")");
+      w.alert = (m) => { f.alerts.push(String(m)); log("     (alert: " + m + ")"); };
       w.addEventListener('error', (e) => log("ERROR in " + page + ": " + e.message + " line " + e.lineno));
       w.addEventListener('unhandledrejection',
         (e) => log("ERROR in " + page + ": " + (e.reason && e.reason.message || e.reason)));

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// binarySTree.html, avl.html, redBlackTree.html: build, insert, delete, search,
+// min/max, predecessor/successor and walks, checking the tree's shape directly.
+
+function inorder(n, acc = []) {
+  if (n) { inorder(n.left, acc); acc.push(n.key); inorder(n.right, acc); }
+  return acc;
+}
+function preorder(n, acc = []) {
+  if (n) { acc.push(n.key); preorder(n.left, acc); preorder(n.right, acc); }
+  return acc;
+}
+function postorder(n, acc = []) {
+  if (n) { postorder(n.left, acc); postorder(n.right, acc); acc.push(n.key); }
+  return acc;
+}
+const height = (n) => n ? 1 + Math.max(height(n.left), height(n.right)) : 0;
+
+// Problems with the BST property or parent pointers, as a list of strings.
+function bstProblems(root) {
+  const problems = [];
+  if (root && root.parent) problems.push('root has a parent');
+  const walk = (n, lo, hi) => {
+    if (!n) return;
+    if (n.key < lo || n.key > hi) problems.push(`${n.key} is out of order`);
+    for (const c of [n.left, n.right]) {
+      if (c && c.parent !== n) problems.push(`${c.key}'s parent pointer is wrong`);
+    }
+    walk(n.left, lo, n.key);
+    walk(n.right, n.key, hi);
+  };
+  walk(root, -Infinity, Infinity);
+  return problems;
+}
+
+function avlProblems(root) {
+  const problems = [];
+  const walk = (n) => {
+    if (!n) return;
+    if (Math.abs(height(n.left) - height(n.right)) > 1) {
+      problems.push(`${n.key} is unbalanced (${height(n.left)} vs ${height(n.right)})`);
+    }
+    walk(n.left); walk(n.right);
+  };
+  walk(root);
+  return problems;
+}
+
+// The red-black properties (CLRS 13.1), with nil leaves counted as black.
+function rbProblems(root, RED, BLACK) {
+  const problems = [];
+  if (root && root.color !== BLACK) problems.push('the root is not black');
+  const blackHeight = (n) => {
+    if (!n) return 1;
+    if (n.color !== RED && n.color !== BLACK) problems.push(`${n.key} has no colour`);
+    if (n.color === RED) {
+      for (const c of [n.left, n.right]) {
+        if (c && c.color === RED) problems.push(`red ${n.key} has a red child ${c.key}`);
+      }
+    }
+    const l = blackHeight(n.left), r = blackHeight(n.right);
+    if (l !== r) problems.push(`black heights differ under ${n.key} (${l} vs ${r})`);
+    return l + (n.color === BLACK ? 1 : 0);
+  };
+  blackHeight(root);
+  return problems;
+}
+
+const sorted = (a) => a.slice().sort((x, y) => x - y);
+
+// Run one step of a test; an exception counts as a failure instead of ending the file.
+async function attempt(label, fn) {
+  try {
+    await fn();
+  } catch (e) {
+    check(false, label, 'threw ' + (e && e.message || e));
+  }
+}
+
+async function binarySearchTree() {
+  const f = await load("binarySTree.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const tree = () => w.eval('Graph');
+  const keys = [50, 30, 70, 20, 40, 60, 80, 35, 45, 65];
+  let expect = keys.slice();
+
+  await attempt('BST: build', async () => {
+    d.getElementById('random').checked = false;
+    set('treeList', keys.join(','));
+    await w.createBST(1);
+    const root = tree().root;
+    check(String(inorder(root)) === String(sorted(keys)) && bstProblems(root).length === 0,
+          'BST: build from ' + keys, bstProblems(root).join('; ') + ' / ' + inorder(root));
+  });
+
+  await attempt('BST: walks', async () => {
+    const root = tree().root;
+    const idsToKeys = (ids) => ids.map((id) => tree().treeNodes[id].key);
+    for (const [fn, mine] of [['inorderTreeWalk', inorder], ['preorderTreeWalk', preorder],
+                              ['postorderTreeWalk', postorder]]) {
+      const got = idsToKeys(w.eval(fn + '(Graph.root)').node);
+      check(String(got) === String(mine(root)), 'BST: ' + fn, got + ' vs ' + mine(root));
+    }
+  });
+
+  await attempt('BST: search, min, max, predecessor, successor', async () => {
+    f.alerts.length = 0;
+    set('searchBox', 45); await w.searchInTree();
+    check(f.alerts.length === 0, 'BST: search finds 45', f.alerts.join('; '));
+    set('searchBox', 47); await w.searchInTree();
+    check(f.alerts.some((a) => a.includes('not found')), 'BST: search reports 47 missing',
+          f.alerts.join('; '));
+    for (const [choice, want] of [[0, 'The minimum is 20'], [1, 'The maximum is 80']]) {
+      f.alerts.length = 0;
+      d.getElementById('minMaxChoice').selectedIndex = choice;
+      await w.findMinMax();
+      check(f.alerts.includes(want), 'BST: ' + want, f.alerts.join('; '));
+    }
+    for (const [key, choice, want] of [[40, 0, 'The predecessor is 35'],
+                                       [40, 1, 'The successor is 45'],
+                                       [50, 0, 'The predecessor is 45'],
+                                       [50, 1, 'The successor is 60'],
+                                       [35, 0, 'The predecessor is 30']]) {
+      f.alerts.length = 0;
+      set('preSucBox', key);
+      d.getElementById('preSucChoice').selectedIndex = choice;
+      await w.findPreSuc();
+      check(f.alerts.includes(want), `BST: ${want} (of ${key})`, f.alerts.join('; '));
+    }
+  });
+
+  // Delete a leaf, a node with one child, and the root (two children).
+  for (const k of [20, 30, 50]) {
+    await attempt('BST: delete ' + k, async () => {
+      set('deleteBox', k);
+      await w.deleteNode();
+      expect = expect.filter((x) => x !== k);
+      const root = tree().root;
+      check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0,
+            'BST: delete ' + k, bstProblems(root).join('; ') + ' / ' + inorder(root));
+    });
+  }
+
+  await attempt('BST: insert', async () => {
+    set('treeNode', 55);
+    await w.createBST(2);
+    expect.push(55);
+    const root = tree().root;
+    check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0,
+          'BST: insert 55 after the deletes', bstProblems(root).join('; ') + ' / ' + inorder(root));
+  });
+  f.remove();
+}
+
+async function avlTree() {
+  const f = await load("avl.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const tree = () => w.eval('Graph');
+  const report = (root) => [...bstProblems(root), ...avlProblems(root)].join('; ') +
+                           ' / ' + inorder(root);
+
+  // Sorted and reverse-sorted input force single rotations; the zigzag forces double ones.
+  for (const keys of [[10, 20, 30, 40, 50, 60, 70], [70, 60, 50, 40, 30, 20, 10],
+                      [50, 20, 40, 10, 30, 45, 42]]) {
+    await attempt('AVL: build ' + keys, async () => {
+      d.getElementById('random').checked = false;
+      set('treeList', keys.join(','));
+      await w.createAVL(1);
+      const root = tree().root;
+      check(String(inorder(root)) === String(sorted(keys)) && bstProblems(root).length === 0 &&
+            avlProblems(root).length === 0, 'AVL: build from ' + keys, report(root));
+    });
+  }
+
+  let expect = [50, 20, 40, 10, 30, 45, 42];
+  await attempt('AVL: insert', async () => {
+    for (const k of [5, 3]) {
+      set('treeNode', k);
+      await w.createAVL(2);
+      expect.push(k);
+    }
+    const root = tree().root;
+    check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
+          avlProblems(root).length === 0, 'AVL: insert 5 then 3 (needs a rotation)', report(root));
+  });
+
+  for (const k of [42, 40]) {
+    await attempt('AVL: delete ' + k, async () => {
+      set('deleteBox', k);
+      await w.deleteNode();
+      expect = expect.filter((x) => x !== k);
+      const root = tree().root;
+      check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
+            avlProblems(root).length === 0, 'AVL: delete ' + k, report(root));
+    });
+  }
+
+  await attempt('AVL: min and max', async () => {
+    for (const [choice, want] of [[0, 'The minimum is ' + Math.min(...expect)],
+                                  [1, 'The maximum is ' + Math.max(...expect)]]) {
+      f.alerts.length = 0;
+      d.getElementById('minMaxChoice').selectedIndex = choice;
+      await w.findMinMax();
+      check(f.alerts.includes(want), 'AVL: ' + want, f.alerts.join('; '));
+    }
+  });
+  f.remove();
+}
+
+async function redBlackTree() {
+  const f = await load("redBlackTree.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const tree = () => w.eval('Graph');
+  const RED = w.eval('RED'), BLACK = w.eval('BLACK');
+  const report = (root) => [...bstProblems(root), ...rbProblems(root, RED, BLACK)].join('; ') +
+                           ' / ' + inorder(root);
+
+  // CLRS Exercise 13.3-2's keys, then sorted input, which needs many fix-ups.
+  for (const keys of [[41, 38, 31, 12, 19, 8], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]) {
+    await attempt('RBT: build ' + keys, async () => {
+      d.getElementById('random').checked = false;
+      set('treeList', keys.join(','));
+      await w.createRBT(1);
+      const root = tree().root;
+      check(String(inorder(root)) === String(sorted(keys)) && bstProblems(root).length === 0 &&
+            rbProblems(root, RED, BLACK).length === 0, 'RBT: build from ' + keys, report(root));
+    });
+  }
+
+  let expect = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  await attempt('RBT: insert', async () => {
+    set('treeNode', 11);
+    await w.createRBT(2);
+    expect.push(11);
+    const root = tree().root;
+    check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
+          rbProblems(root, RED, BLACK).length === 0, 'RBT: insert 11', report(root));
+  });
+
+  await attempt('RBT: delete', async () => {
+    set('deleteRbBox', 4);
+    // The page's Delete button; check it is wired to a real function first.
+    const handler = d.getElementById('delete-rb-button').getAttribute('onclick').replace('()', '');
+    check(w.eval('typeof ' + handler) === 'function', 'RBT: Delete button calls a real function',
+          handler + ' is not defined');
+    if (w.eval('typeof ' + handler) !== 'function') return;
+    await w.eval(handler + '()');
+    expect = expect.filter((x) => x !== 4);
+    const root = tree().root;
+    check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
+          rbProblems(root, RED, BLACK).length === 0, 'RBT: delete 4', report(root));
+  });
+  f.remove();
+}
+
+runTests(async () => {
+  await binarySearchTree();
+  await avlTree();
+  await redBlackTree();
+});
+</script>
+</body></html>

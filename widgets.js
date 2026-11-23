@@ -177,7 +177,8 @@ function setStatus(text, id = "status") {
 
 // testing part (logic layer)
 
-module.exports = {
+// For the Jest tests in __tests__; browsers have no module object.
+if (typeof module !== "undefined") module.exports = {
   func1: function letterNumConvert(key){
     if(Number.isInteger(key)){
       var aAlph = {

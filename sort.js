@@ -401,7 +401,8 @@ async function pause () {
 
 //tests
 
-module.exports = {
+// For the Jest tests in __tests__; browsers have no module object.
+if (typeof module !== "undefined") module.exports = {
   func1: function checkInput(an_input){                            // Logic layer: to test
   var list_num = an_input.split(",");
   if(list_num.length == 0 || list_num.length == 1){
