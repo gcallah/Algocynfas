@@ -1,3 +1,4 @@
+<p id="tree-status" class="status" style="margin-left: 10em"></p>
 <div id="rbtGraphContainer" class = "rbtGraphContainer" style = "width: 800; height: 300; margin-left: 10em; border: 1px; border-style: solid" position = "relative"> 
 
    <div position = "absolute" style = "display:none">  

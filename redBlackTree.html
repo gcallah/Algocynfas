@@ -26,6 +26,7 @@
 
   <script src="widgets.js"></script>
   <script src="graph.js"></script>
+<script src="tree_algos.js"></script>
 <script src="redBlackTree.js"></script>
  <link rel="stylesheet" href="style.css">  <!--algocynfas webpage css, independent from the user interface css -->
 </head>
@@ -76,7 +77,7 @@ onclick="createRBT(2)"> Insert
 <input type="text" class="Box" id="deleteRbBox" 
 placeholder="Enter an Node">
 <button class="btn btn-primary" id="delete-rb-button" type="button" 
-onclick="deleteRBNode()"> Delete
+onclick="deleteNode()"> Delete
 </button>
 &emsp;
 
@@ -101,6 +102,7 @@ style = "max-width: 150 ;width: 130" onclick="clearRBGraph()">Clear Graph</butto
 
 </script>
 </div> 
+<p id="tree-status" class="status" style="margin-left: 10em"></p>
 <div id="rbtGraphContainer" class = "rbtGraphContainer" style = "width: 800; height: 300; margin-left: 10em; border: 1px; border-style: solid" position = "relative"> 
 
    <div position = "absolute" style = "display:none">  
@@ -111,7 +113,7 @@ style = "max-width: 150 ;width: 130" onclick="clearRBGraph()">Clear Graph</butto
 
 
     <footer id="rbtLegend" style = "margin-left: 10em">
-        <script> window.display_legend("rbtLegend", "Items not looking at", "Items being traced", '#0039e6','#F5B041') </script>
+        <script> window.display_legend_list("rbtLegend", [["Red node", "#FF0000"], ["Black node", "#000000"], ["Being traced", "#F5B041"]]) </script>
     </footer>
 
 </body>

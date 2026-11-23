@@ -24,6 +24,7 @@
 
     <script src="widgets.js"></script>
     <script src="graph.js"></script>
+    <script src="tree_algos.js"></script>
     <script src="avl.js"></script>
     <link rel="stylesheet" href="style.css" />
     <!--algocynfas webpage css, independent from the user interface css -->
@@ -130,13 +131,13 @@
       <br />
 
       <br />
-      <!-- <input
+      <input
         type="text"
         class="Box"
         id="searchBox"
         placeholder="Enter an Node"
-      /> -->
-      <!-- <button
+      />
+      <button
         class="btn btn-primary"
         id="search-button"
         type="button"
@@ -144,16 +145,16 @@
       >
         Search
       </button>
-      &emsp; -->
-      <!-- <b>
+      &emsp;
+      <b>
         Get
       </b>
       <select id="minMaxChoice">
         <option value="min">Min </option>
         <option value="max"> Max </option>
-      </select> -->
+      </select>
 
-      <!-- <button
+      <button
         class="btn btn-primary"
         id="minmax-button"
         type="button"
@@ -168,26 +169,26 @@
       <select id="preSucChoice">
         <option value="pre">Predecessor </option>
         <option value="suc"> Successor </option>
-      </select> -->
-      <!-- 
+      </select>
+      
       <b>
         of
-      </b> -->
-      <!-- 
+      </b>
+      
       <input
         type="text"
         class="Box"
         id="preSucBox"
         placeholder="Enter an Node"
-      /> -->
-      <!-- <button
+      />
+      <button
         class="btn btn-primary"
         id="presuc-button"
         type="button"
         onclick="findPreSuc()"
       >
         Find
-      </button> -->
+      </button>
       <br />
       <br />
       <button
@@ -218,6 +219,7 @@
         let animeRunning = true;
       </script>
     </div>
+    <p id="tree-status" class="status" style="margin-left: 10em"></p>
     <div
       id="AVLGraphContainer"
       class="AVLGraphContainer"

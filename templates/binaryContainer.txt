@@ -1,1 +1,2 @@
+<p id="tree-status" class="status" style="margin-left: 10em"></p>
 <div id="bstGraphContainer"  class = "bstGraphContainer" style = "width: 800; height: 300; margin-left: 10em; border: 1px; border-style: solid"></div>

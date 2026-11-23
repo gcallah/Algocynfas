@@ -3,7 +3,7 @@ const HIGHLIGHT = "#F5B041";
 const RESULTCOLOR = "#FF5733";
 const ErrorCOLOR = "#FF0000";
 const RED = "#FF0000";
-const BLACK = "000000";
+const BLACK = "#000000";
 adjustPosition = false;
 const NUM_NODES = 0;
 NUM_ENTRY_WIDTH = 200;
@@ -41,142 +41,18 @@ function createTree(ifEdge) {
   Graph = graph;
 }
 
-//display layer for BST
-async function createBST(type) {
-  if (!animeRunning) {
-    var graph = new BST();
-    for (var i = 0; i < Graph.nodes.length; i++) {
-      graph.insert(parseInt(Graph.nodes[i]), false, false);
-    }
-    Graph = graph;
-  }
-  animeRunning = true;
-  if (type == 1) {
-    getHTML("bstGraphContainer").style.height = 300;
-    getHTML("bstGraphContainer").style.width = 800;
-    getHTML("bstGraphContainer").style.marginLeft = "10em";
-    getHTML("bstLegend").style.marginLeft = "10em";
-    var graph = new BST();
-
-    if (getHTML("random").checked == true) {
-      var input = graph.random();
-    } else {
-      var input = splitInput(getHTML("treeList").value, true);
-    }
-    for (var i = 0; i < input.length; i++) {
-      graph.insert(parseInt(input[i]));
-    }
-    Graph = graph;
-  } else {
-    disableButtons(true);
-    var input = parseInt(getHTML("treeNode").value);
-    if (!Graph) {
-      var graph = new BST();
-    } else {
-      $(".graph").empty();
-      var graph = Graph;
-    }
-    await graph.insert(input, true);
-    // animeRunning was checked here, but it is set to true above!
-    Graph = graph;
-    disableButtons(false);
-  }
+// The Create (type 1) and Insert (type 2) buttons on the tree pages; buildTree
+// is in tree_algos.js.
+function createBST(type) {
+  return buildTree(BST, type);
 }
 
-//display layer for AVL
-async function createAVL(type) {
-  if (!animeRunning) {
-    //instantiate graph of Class type AVL
-    var graph = new AVL();
-    for (var i = 0; i < Graph.nodes.length; i++) {
-      //follow the AVL insert function
-      graph.insert(parseInt(Graph.nodes[i]), false, false);
-    }
-    Graph = graph;
-  }
-  animeRunning = true;
-  if (type == 1) {
-    getHTML("AVLGraphContainer").style.height = 300;
-    getHTML("AVLGraphContainer").style.width = 800;
-    getHTML("AVLGraphContainer").style.marginLeft = "10em";
-    getHTML("AVLegend").style.marginLeft = "10em";
-    var graph = new AVL();
-
-    if (getHTML("random").checked == true) {
-      var input = graph.random();
-    } else {
-      var input = splitInput(getHTML("treeList").value, true);
-    }
-    
-    for (var i = 0; i < input.length; i++) {
-      graph.insert(parseInt(input[i]));
-    }
-    Graph = graph;
-    console.log(graph)
-  } else {
-    disableButtons(true);
-    var input = parseInt(getHTML("treeNode").value);
-    if (!Graph) {
-      var graph = new AVL();
-    } else {
-      $(".graph").empty();
-      var graph = Graph;
-    }
-    await graph.insert(input, true);
-    if (animeRunning) {
-      Graph = graph;
-    }
-    disableButtons(false);
-  }
+function createAVL(type) {
+  return buildTree(AVL, type);
 }
 
-async function createRBT(type) {
-  
-  if (!animeRunning) {
-    var graph = new RBT();
-    
-    for (var i = 0; i < Graph.nodes.length; i++) {
-      graph.insert(parseInt(Graph.nodes[i]), false, false);
-    }
-    Graph = graph;
-  }
-  animeRunning = true;
-  if (type == 1) {
-    getHTML("rbtGraphContainer").style.height = 300;
-    getHTML("rbtGraphContainer").style.width = 800;
-    getHTML("rbtGraphContainer").style.marginLeft = "10em";
-    getHTML("rbtLegend").style.marginLeft = "10em";
-    var graph = new RBT();
-
-    if (getHTML("random").checked == true) {
-      var input = graph.random();
-      
-    } else {
-      var input = splitInput(getHTML("treeList").value, true);
-      
-    }
-    const inputOrder = bfsTranversal(createTree(new RBT(), input))
-    for (var i = 0; i < input.length; i++) {
-      graph.insert(inputOrder[i]);
-      
-    }
-    Graph = graph;
-  } else {
-    disableButtons(true);
-    var input = parseInt(getHTML("treeNode").value);
-    if (!Graph) {
-      var graph = new RBT();
-    } else {
-      $(".graph").empty();
-     
-      var graph = Graph;
-    }
-    await graph.insert(input, true);
-    if (animeRunning) {
-      Graph = graph;
-    }
-    disableButtons(false);
-  }
+function createRBT(type) {
+  return buildTree(RBT, type);
 }
 
 function setTreeSample() {
@@ -295,6 +171,16 @@ class ourGraph {
           );
           return;
         }
+        var missing = nodesToConnect.filter((v) => !this.hasVertex(v));
+        if (missing.length) {
+          this.edges = edgeList.slice(0, i);
+          noticeErr(
+            "Edge " + edgeList[i] + " uses " + missing.join(" and ") +
+              ", which is not a vertex of this graph",
+            "edges"
+          );
+          return;
+        }
         correctErr("edges");
 
         if (weight == 1) {
@@ -330,6 +216,14 @@ class ourGraph {
         }
       }
     }
+  }
+
+  hasVertex(name) {
+    if (inputType == "num") {
+      var index = letterNumConvert(name);
+      return index !== undefined && index < this.nodes.length;
+    }
+    return this.find(name) != -1;
   }
 
   setGraphEdges(edge, nodesToConnect, WEIGHT, shape) {
@@ -799,419 +693,229 @@ class treeNode {
   }
 }
 
+// The three search trees. The algorithms are in tree_algos.js; these classes
+// draw them. Nodes live in treeNodes, indexed by id (null once deleted), and the
+// tree is laid out again from its shape every time it is drawn, so rotations
+// and deletions never leave stale positions behind.
 class BST extends ourGraph {
-  constructor() {
+  constructor(container = "bstGraphContainer") {
     super();
+    this.container = container;
+    this.deleteBox = "deleteBox";
     this.root = null;
-    this.nodeLayout = [];
     this.treeNodes = [];
-    this.horiAdjust = false;
-    this.vertiAdjust = false;
+    this.nodeLayout = [];
   }
 
-  positionCheck(node) {
-    if (Math.abs(node.position.x) > 200 && this.horiAdjust == false) {
-      getHTML("bstGraphContainer").style.width = 1200;
-      getHTML("bstGraphContainer").style.marginLeft = "5em";
-      getHTML("bstLegend").style.marginLeft = "5em";
-      this.horiAdjust = true;
-    }
-    if (Math.abs(node.position.y) > 130 && this.vertiAdjust == false) {
-      getHTML("bstGraphContainer").style.height = 800;
-      for (var k = 0; k < this.nodeLayout.length; k++) {
-        this.treeNodes[k].position.y -= 150;
-        this.treeNodes[k].layout.y -= 150;
-      }
-      this.vertiAdjust = true;
-    }
-  }
-  //insert node function
-  async insert(input, single = false, draw = true) {
-    if (Number.isInteger(input)) {
-      correctErr("treeNode");
-      correctErr("treeList");
-      if (single && draw) {
-        this.createGraph("bstGraphContainer");
-        await this.pause();
-      }
-      var node = new treeNode(input, this.treeNodes.length);
-      var result = treeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
-      this.root = result.root;
-      node = result.node;
-      var adjustList = result.adj;
-      var hlNodeId = result.hlNodeId;
-
-      node.setNode();
-      if (this.treeNodes.length > 1 && adjustList.length != 0) {
-        this.strench(adjustList);
-      }
-      this.treeNodes.push(node);
-      this.nodeLayout.push(node.layout);
-
-      this.positionCheck(node);
-
-      if (this.treeNodes.length > 1) {
-        this.connectParentChild(node);
-        if (single) {
-          await this.highLight(hlNodeId);
-        }
-      }
-      if (animeRunning || !draw) {
-        this.nodes.push(input);
-      }
-      let g = {
-        nodes: this.nodeLayout,
-        edges: this.edgeLayout
-      };
-      this.graph = g;
-      if (draw && animeRunning) {
-        this.createGraph("bstGraphContainer");
-      }
-
-      return;
-    }
-
-    if (single) {
-      var errorBox = "treeNode";
-    } else {
-      var errorBox = "treeList";
-    }
-    noticeErr("Please input a valid integer", errorBox);
+  newNode(key) {
+    return new treeNode(key, this.treeNodes.length);
   }
 
-  async search(input) {
-    var result = treeSearch(this.root, input); // the binary search algorithm, in binarySTree.js
-    await this.highLight(result.path);
-    if (!result.node) {
-      noticeErr("Node not found", "searchBox");
-    }
-  }
-  async minMax() {
-    var index = getHTML("minMaxChoice").selectedIndex;
-    if (index == 0) {
-      var result = treeMin(this.root); // the binary search algorithm, in binarySTree.js
-      await this.highLight(result.HLNodeId);
-      var returnValue = "The minimum is " + result.min.key;
-    } else {
-      var result = treeMax(this.root); // the binary search algorithm, in binarySTree.js
-      await this.highLight(result.HLNodeId);
-      var returnValue = "The maximum is " + result.max.key;
-    }
-    if (animeRunning) {
-      alert(returnValue);
-    }
-    return;
+  nodeColor(node) {
+    return EdgeNodeCOLOR;
   }
 
-  async preSuc() {
-    var input = parseInt(getHTML("preSucBox").value);
-    if (Number.isInteger(input)) {
-      var searched = treeSearch(this.root, input);
+  // Hooks for the balanced trees.
+  afterInsert(node) {}
+  afterDelete(changed) {}
 
-      if (searched.node) {
-        var node = searched.node;
-        var index = getHTML("preSucChoice").selectedIndex;
-
-        if (index == 0) {
-          var result = treePredecessor(node); // the binary search algorithm, in binarySTree.js
-          await this.highLight(result.HLNodeId);
-          var returnValue = "The predecessor is " + result.pre;
-        } else {
-          var result = treeSuccessor(node); // the binary search algorithm, in binarySTree.js
-          await this.highLight(result.HLNodeId);
-
-          var returnValue = "The successor is " + result.suc;
-        }
-        if (animeRunning) {
-          alert(returnValue);
-        }
-        return;
-      }
-      noticeErr("Node is not in this tree", "preSucBox");
-      return;
+  // Insert a key without drawing; false (and a warning) if it isn't an integer.
+  insertChecked(key, box) {
+    if (!Number.isInteger(key)) {
+      noticeErr("Please input a valid integer", box);
+      return false;
     }
-    noticeErr("Please give a valid input!", "preSucBox");
+    correctErr(box);
+    var node = this.newNode(key);
+    this.root = treeInsert(this.root, node).root;
+    this.treeNodes.push(node);
+    this.afterInsert(node);
+    return true;
   }
 
-  async traversal() {
-    var index = getHTML("treeWalkChoice").selectedIndex;
-    if (index == 0) {
-      var result = preorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
-    } else if (index == 1) {
-      var result = inorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
-    } else {
-      var result = postorderTreeWalk(this.root); // the binary search algorithm, in binarySTree.js
-    }
-
-    await this.highLight(result.node, result.edge);
+  removeNode(z) {
+    var result = treeDelete(this, z);
+    this.afterDelete(result.changed);
   }
 
-  async delete() {
-    var input = parseInt(getHTML("deleteBox").value);
-    if (Number.isInteger(input)) {
-      correctErr("deleteBox");
-      var searched = treeSearch(this.root, input);
-      if (searched.node) {
-        await this.highLight(searched.path);
-        var node = searched.node;
-        var result = treeDelete(this.root, node, this.treeNodes);
-        this.root = result.root;
-        if (result.path.length != 0) {
-          result.path.unshift(node.id);
-          await this.highLight(result.path);
-        }
-        if (animeRunning) {
-          this.nodes.splice(node.id, 1);
-        }
-        this.treeNodes[node.id] = null;
-        this.nodeLayout = [];
-        this.edgeLayout = [];
-        for (var i = 0; i < this.treeNodes.length; i++) {
-          if (this.treeNodes[i]) {
-            this.nodeLayout.push(this.treeNodes[i].layout);
-            if (this.treeNodes[i].leftEdge) {
-              this.edgeLayout.push(this.treeNodes[i].leftEdge);
-            }
-            if (this.treeNodes[i].rightEdge) {
-              this.edgeLayout.push(this.treeNodes[i].rightEdge);
-            }
-          }
-        }
-        let g = {
-          nodes: this.nodeLayout,
-          edges: this.edgeLayout
-        };
-        this.graph = g;
-        if (animeRunning) {
-          this.createGraph("bstGraphContainer");
-        }
-
-        return;
-      }
-
-      noticeErr("Node is not in this tree", "deleteBox");
-
-      return;
+  // The ids on the way down from the root to where key belongs.
+  pathTo(key) {
+    var path = [];
+    for (var x = this.root; x; x = key < x.key ? x.left : x.right) {
+      path.push(x.id);
     }
-    noticeErr("Please give a valid input!", "deleteBox");
+    return path;
   }
-  connectParentChild(node, edgeColor = EdgeNodeCOLOR) {
-    if (!node.parent) {
-      return;
+
+  setStatus(text) {
+    var status = getHTML("tree-status");
+    if (status) {
+      status.textContent = text;
     }
-    var edgeId = node.parent.id.toString() + "-" + node.id.toString();
-    var newEdge = {
-      id: edgeId,
-      source: node.parent.id.toString(),
-      target: node.id.toString(),
-      size: 5,
-      label: null,
-      color: edgeColor
+  }
+
+  // Lay the nodes out from the tree's shape: x from the in-order position,
+  // y from the depth. Sigma's origin is the middle of the container.
+  relayout() {
+    var order = [];
+    var maxDepth = 0;
+    var walk = (n, depth) => {
+      if (!n) return;
+      walk(n.left, depth + 1);
+      n.depth = depth;
+      order.push(n);
+      maxDepth = Math.max(maxDepth, depth);
+      walk(n.right, depth + 1);
     };
-    this.edgeLayout.push(newEdge);
-    if (node.sideToParent == "left") {
-      node.parent.leftEdge = newEdge;
-    } else {
-      node.parent.rightEdge = newEdge;
-    }
-  }
-  random() {
-    var input = getHTML("treeList").value;
-    input = splitInput(input, true);
-    var result = [];
-    while (input.length != 0) {
-      var index = Math.floor(Math.random() * input.length);
-      var temp = input[input.length - 1];
-      input[input.length - 1] = input[index];
-      input[index] = temp;
-      result.push(input.pop());
-    }
-    var returnValue = result;
-    result.join();
-    getHTML("treeList").value = result;
-    return returnValue;
-  }
+    walk(this.root, 0);
 
-  async highLight(HLNodeLst, HLEdgeList = null) {
-    if (HLNodeLst.length != 0) {
-      if (!HLEdgeList) {
-        var HLEdgeList = [];
-        //create edgeId list:
+    var box = getHTML(this.container);
+    var width = Math.min(1100, Math.max(800, order.length * 40 + 80));
+    var levelGap = 50;
+    var height = Math.max(300, (maxDepth + 1) * levelGap + 60);
+    box.style.width = width + "px";
+    box.style.height = height + "px";
+    var step = order.length > 1 ? Math.min(60, (width - 80) / (order.length - 1)) : 0;
 
-        for (var i = 0; i < HLNodeLst.length - 1; i++) {
-          var edgeId =
-            HLNodeLst[i].toString() + "-" + HLNodeLst[i + 1].toString();
-          HLEdgeList.push(edgeId);
-        }
-      }
-      await this.color(HLEdgeList, HLNodeLst);
-    }
-  }
-}
-
-class rbTreeNode extends treeNode {
-  constructor(num, counter) {
-    super(num, counter);
-    this.color = null;
-    this.leftNode = null;
-    this.rightNode = null;
-  }
-
-  setNode(defaultColor = RED) {
-    super.setNode(defaultColor);
-  }
-}
-
-class avlTreeNode extends treeNode {
-  constructor(num, counter) {
-    super(num, counter);
-    this.leftNode = null;
-    this.rightNode = null;
-    this.height = null;
-  }
-}
-class AVL extends BST {
-  constructor() {
-    super();
-  }
-
-  //insert node function
-  async insert(input, single = false, draw = true) {
-    if (Number.isInteger(input)) {
-      correctErr("treeNode");
-      correctErr("treeList");
-      if (single && draw) {
-        this.createGraph("AVLGraphContainer");
-        await this.pause();
-      }
-      var node = new avlTreeNode(input, this.treeNodes.length);
-      // the insert algorithm, in avl.js
-      var result = treeInsert(this.root, node);
-      this.root = result.root;
-      node = result.node;
-      var adjustList = result.adj;
-      var hlNodeId = result.hlNodeId;
-      
-      // -------------------------------
-      //update height and rebalance tree
-      this.root.height = Math.max(leftHeight(this.root), rightHeight(this.root)) + 1;
-
-      
-      var balanceState = getBalanceState(this.root);
-
-      //check for balanced left state
-      if (balanceState === BalanceState.UNBALANCED_LEFT) {
-        if (this.compare(key, root.left.key) < 0) {
-          // Left left case
-          root = rotateRight(root);
-        } else {
-          // Left right case
-          root.left = root.left.rotateLeft();
-          return root.rotateRight();
-        }
-      }
-      // //check for balanced right state
-      if (balanceState === BalanceState.UNBALANCED_RIGHT) {
-        if (this._compare(key, root.right.key) > 0) {
-          // Right right case
-          root = rotateLeft(root);
-        } else {
-          // Right left case
-          root.right = rotateRight(root.right);
-          return rotateLeft(root);
-        }
-      }
-
-      node.setNode();
-      if (this.treeNodes.length > 1 && adjustList.length != 0) {
-        this.strench(adjustList);
-      }
-      this.treeNodes.push(node);
-      this.nodeLayout.push(node.layout);
-
-      this.positionCheck(node);
-
-      if (this.treeNodes.length > 1) {
-        this.connectParentChild(node);
-        if (single) {
-          await this.highLight(hlNodeId);
-        }
-      }
-      if (animeRunning || !draw) {
-        this.nodes.push(input);
-      }
-      let g = {
-        nodes: this.nodeLayout,
-        edges: this.edgeLayout
+    this.nodeLayout = [];
+    this.edgeLayout = [];
+    for (var i = 0; i < order.length; i++) {
+      var n = order[i];
+      n.position = {
+        x: (i - (order.length - 1) / 2) * step,
+        y: -height / 2 + 30 + n.depth * levelGap
       };
-      this.graph = g;
-      if (draw && animeRunning) {
-        this.createGraph("AVLGraphContainer");
-      }
+      n.layout = {
+        id: n.id.toString(),
+        label: n.key.toString(),
+        x: n.position.x,
+        y: n.position.y,
+        size: 12,
+        color: this.nodeColor(n)
+      };
+      this.nodeLayout.push(n.layout);
+    }
+    for (var n of order) {
+      n.leftEdge = n.left ? this.edgeTo(n, n.left) : null;
+      n.rightEdge = n.right ? this.edgeTo(n, n.right) : null;
+    }
+    this.graph = { nodes: this.nodeLayout, edges: this.edgeLayout };
+  }
 
+  edgeTo(parent, child) {
+    var edge = {
+      id: parent.id + "-" + child.id,
+      source: parent.id.toString(),
+      target: child.id.toString(),
+      size: 4,
+      color: EdgeNodeCOLOR
+    };
+    this.edgeLayout.push(edge);
+    return edge;
+  }
+
+  draw() {
+    this.relayout();
+    if (this.sigma) {
+      this.sigma.kill();
+    }
+    this.createGraph(this.container);
+  }
+
+  // Light up a path of node ids; consecutive nodes are parent and child
+  // (either way round).
+  async highLight(ids, edges = null) {
+    if (ids.length == 0 || !this.sigma) {
       return;
     }
-
-    if (single) {
-      var errorBox = "treeNode";
-    } else {
-      var errorBox = "treeList";
+    if (!edges) {
+      edges = [];
+      for (var i = 0; i < ids.length - 1; i++) {
+        var a = this.treeNodes[ids[i]];
+        var b = this.treeNodes[ids[i + 1]];
+        edges.push(b.parent == a ? a.id + "-" + b.id : b.id + "-" + a.id);
+      }
     }
-    noticeErr("Please input a valid integer", errorBox);
+    await this.color(edges, ids);
   }
 
-  async search(input) {
-    var result = treeSearch(this.root, input);
+  // The Insert button: show the path down to where the key goes, then insert it.
+  async insert(key) {
+    if (!Number.isInteger(key)) {
+      noticeErr("Please input a valid integer", "treeNode");
+      return;
+    }
+    if (this.root) {
+      this.draw();
+      await this.highLight(this.pathTo(key));
+    }
+    this.insertChecked(key, "treeNode");
+    this.setStatus(this.insertMessage(key));
+    this.draw();
+    await this.highLight([this.treeNodes.length - 1]);
+  }
+
+  insertMessage(key) {
+    return "Inserted " + key + ".";
+  }
+
+  async search() {
+    var input = parseInt(getHTML("searchBox").value);
+    if (!Number.isInteger(input)) {
+      noticeErr("Please input a valid integer", "searchBox");
+      return;
+    }
+    correctErr("searchBox");
+    var result = treeSearch(this.root, input); // TREE-SEARCH
     await this.highLight(result.path);
     if (!result.node) {
-      noticeErr("Node not found", "searchBox");
+      noticeErr(input + " not found in the tree", "searchBox");
     }
   }
+
   async minMax() {
-    var index = getHTML("minMaxChoice").selectedIndex;
-    if (index == 0) {
-      var result = treeMin(this.root);
+    if (getHTML("minMaxChoice").selectedIndex == 0) {
+      var result = treeMin(this.root); // TREE-MINIMUM
       await this.highLight(result.HLNodeId);
-      var returnValue = "The minimum is " + result.min.key;
+      var message = "The minimum is " + result.min.key;
     } else {
-      var result = treeMax(this.root);
+      var result = treeMax(this.root); // TREE-MAXIMUM
       await this.highLight(result.HLNodeId);
-      var returnValue = "The maximum is " + result.max.key;
+      var message = "The maximum is " + result.max.key;
     }
     if (animeRunning) {
-      alert(returnValue);
+      alert(message);
     }
-    return;
   }
 
   async preSuc() {
     var input = parseInt(getHTML("preSucBox").value);
-    if (Number.isInteger(input)) {
-      var searched = treeSearch(this.root, input);
-
-      if (searched.node) {
-        var node = searched.node;
-        var index = getHTML("preSucChoice").selectedIndex;
-
-        if (index == 0) {
-          var result = treePredecessor(node);
-          await this.highLight(result.HLNodeId);
-          var returnValue = "The predecessor is " + result.pre;
-        } else {
-          var result = treeSuccessor(node);
-          await this.highLight(result.HLNodeId);
-
-          var returnValue = "The successor is " + result.suc;
-        }
-        if (animeRunning) {
-          alert(returnValue);
-        }
-        return;
-      }
+    if (!Number.isInteger(input)) {
+      noticeErr("Please give a valid input!", "preSucBox");
+      return;
+    }
+    var node = treeSearch(this.root, input).node;
+    if (!node) {
       noticeErr("Node is not in this tree", "preSucBox");
       return;
     }
-    noticeErr("Please give a valid input!", "preSucBox");
+    correctErr("preSucBox");
+    if (getHTML("preSucChoice").selectedIndex == 0) {
+      var result = treePredecessor(node); // TREE-PREDECESSOR
+      await this.highLight(result.HLNodeId);
+      var message = result.pre === null
+        ? input + " is the smallest key, so it has no predecessor"
+        : "The predecessor is " + result.pre;
+    } else {
+      var result = treeSuccessor(node); // TREE-SUCCESSOR
+      await this.highLight(result.HLNodeId);
+      var message = result.suc === null
+        ? input + " is the largest key, so it has no successor"
+        : "The successor is " + result.suc;
+    }
+    if (animeRunning) {
+      alert(message);
+    }
   }
 
   async traversal() {
@@ -1223,176 +927,103 @@ class AVL extends BST {
     } else {
       var result = postorderTreeWalk(this.root);
     }
-
+    var keys = result.node.map((id) => this.treeNodes[id].key);
+    this.setStatus(getHTML("treeWalkChoice").selectedOptions[0].text.trim() + ": " + keys.join(", "));
     await this.highLight(result.node, result.edge);
   }
 
   async delete() {
-    var input = parseInt(getHTML("deleteBox").value);
-    if (Number.isInteger(input)) {
-      correctErr("deleteBox");
-      var searched = treeSearch(this.root, input);
-      if (searched.node) {
-        await this.highLight(searched.path);
-        var node = searched.node;
-        var result = treeDelete(this.root, node, this.treeNodes);
-        this.root = result.root;
-        if (result.path.length != 0) {
-          result.path.unshift(node.id);
-          await this.highLight(result.path);
-        }
-        if (animeRunning) {
-          this.nodes.splice(node.id, 1);
-        }
-        this.treeNodes[node.id] = null;
-        this.nodeLayout = [];
-        this.edgeLayout = [];
-        for (var i = 0; i < this.treeNodes.length; i++) {
-          if (this.treeNodes[i]) {
-            this.nodeLayout.push(this.treeNodes[i].layout);
-            if (this.treeNodes[i].leftEdge) {
-              this.edgeLayout.push(this.treeNodes[i].leftEdge);
-            }
-            if (this.treeNodes[i].rightEdge) {
-              this.edgeLayout.push(this.treeNodes[i].rightEdge);
-            }
-          }
-        }
-        let g = {
-          nodes: this.nodeLayout,
-          edges: this.edgeLayout
-        };
-        this.graph = g;
-        if (animeRunning) {
-          this.createGraph("AVLGraphContainer");
-        }
-
-        return;
-      }
-
-      noticeErr("Node is not in this tree", "deleteBox");
-
+    var input = parseInt(getHTML(this.deleteBox).value);
+    if (!Number.isInteger(input)) {
+      noticeErr("Please give a valid input!", this.deleteBox);
       return;
     }
-    noticeErr("Please give a valid input!", "deleteBox");
-  }
-  connectParentChild(node, edgeColor = EdgeNodeCOLOR) {
-    if (!node.parent) {
+    correctErr(this.deleteBox);
+    var searched = treeSearch(this.root, input);
+    await this.highLight(searched.path);
+    var z = searched.node;
+    if (!z) {
+      noticeErr("Node is not in this tree", this.deleteBox);
       return;
     }
-    var edgeId = node.parent.id.toString() + "-" + node.id.toString();
-    var newEdge = {
-      id: edgeId,
-      source: node.parent.id.toString(),
-      target: node.id.toString(),
-      size: 5,
-      label: null,
-      color: edgeColor
-    };
-    this.edgeLayout.push(newEdge);
-    if (node.sideToParent == "left") {
-      node.parent.leftEdge = newEdge;
-    } else {
-      node.parent.rightEdge = newEdge;
+    if (z.left && z.right) {
+      // Two children: show the way to the successor, which takes z's place.
+      var path = treeMin(z.right).HLNodeId;
+      path.unshift(z.id);
+      await this.highLight(path);
     }
-  }
-  random() {
-    var input = getHTML("treeList").value;
-    input = splitInput(input, true);
-    var result = [];
-    while (input.length != 0) {
-      var index = Math.floor(Math.random() * input.length);
-      var temp = input[input.length - 1];
-      input[input.length - 1] = input[index];
-      input[index] = temp;
-      result.push(input.pop());
-    }
-    var returnValue = result;
-    result.join();
-    getHTML("treeList").value = result;
-    return returnValue;
+    this.removeNode(z);
+    this.treeNodes[z.id] = null;
+    this.setStatus(this.deleteMessage(input));
+    this.draw();
   }
 
-  // async highLight(HLNodeLst, HLEdgeList = null) {
-  //   if (HLNodeLst.length != 0) {
-  //     if (!HLEdgeList) {
-  //       var HLEdgeList = [];
-  //       //create edgeId list:
-
-  //       for (var i = 0; i < HLNodeLst.length - 1; i++) {
-  //         var edgeId =
-  //           HLNodeLst[i].toString() + "-" + HLNodeLst[i + 1].toString();
-  //         HLEdgeList.push(edgeId);
-  //       }
-  //     }
-  //     await this.color(HLEdgeList, HLNodeLst);
-  //   }
-  // }
+  deleteMessage(key) {
+    return "Deleted " + key + ".";
+  }
 }
 
-class RBT extends BST {
+// AVL trees rebalance with rotations after every insert and delete
+// (avlRebalance in tree_algos.js).
+class AVL extends BST {
   constructor() {
-    super();
+    super("AVLGraphContainer");
+    this.rotations = [];
   }
 
-  async insert(input, single = false, draw = true) {
-    let correctColor = input[1]
-    input = input[0]
-    if (Number.isInteger(input)) {
-      
-      correctErr("treeNode");
-      correctErr("treeList");
-      if (single && draw) {
-        this.createGraph("rbtGraphContainer");
-        await this.pause();
-      }
-      
-      var node = new rbTreeNode(input, this.treeNodes.length);
-      
-      var result = rbtreeInsert(this.root, node); // the binary insert algorithm, in binarySTree.js
-      this.root = result.root;
-      node = result.node;
-      var adjustList = result.adj;
-      var hlNodeId = result.hlNodeId;
-      node.color = correctColor;
-      console.log('Inserting', input, "the color is", node.color, node)
-      node.setNode(node.color);
-      
-      if (this.treeNodes.length > 1 && adjustList.length != 0) {
-        this.strench(adjustList);
-      }
-      this.treeNodes.push(node);
-      this.nodeLayout.push(node.layout);
+  newNode(key) {
+    var node = super.newNode(key);
+    node.height = 1;
+    return node;
+  }
 
-      this.positionCheck(node);
+  afterInsert(node) {
+    this.rotations = avlRebalance(this, node.parent);
+  }
 
-      if (this.treeNodes.length > 1) {
-        this.connectParentChild(node, BLACK);
-        if (single) {
-          await this.highLight(hlNodeId);
-        }
-      }
-      if (animeRunning || !draw) {
-        this.nodes.push(input);
-      }
-      let g = {
-        nodes: this.nodeLayout,
-        edges: this.edgeLayout
-      };
-      this.graph = g;
-      if (draw && animeRunning) {
-        this.createGraph("rbtGraphContainer");
-      }
+  afterDelete(changed) {
+    this.rotations = avlRebalance(this, changed);
+  }
 
-      return;
-    }
+  rotationText() {
+    return this.rotations.length
+      ? " Rebalanced with " + this.rotations.join(", then ") + "."
+      : " No rotations needed.";
+  }
 
-    if (single) {
-      var errorBox = "treeNode";
-    } else {
-      var errorBox = "treeList";
-    }
-    noticeErr("Please input a valid integer", errorBox);
+  insertMessage(key) {
+    return super.insertMessage(key) + this.rotationText();
+  }
+
+  deleteMessage(key) {
+    return super.deleteMessage(key) + this.rotationText();
+  }
+}
+
+// Red-black trees recolor and rotate after every insert and delete
+// (rbInsertFixup and rbDelete in tree_algos.js).
+class RBT extends BST {
+  constructor() {
+    super("rbtGraphContainer");
+    this.deleteBox = "deleteRbBox";
+  }
+
+  newNode(key) {
+    var node = super.newNode(key);
+    node.color = RED;
+    return node;
+  }
+
+  nodeColor(node) {
+    return node.color;
+  }
+
+  afterInsert(node) {
+    rbInsertFixup(this, node);
+  }
+
+  removeNode(z) {
+    rbDelete(this, z);
   }
 }
 

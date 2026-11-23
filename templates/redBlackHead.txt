@@ -1,1 +1,2 @@
+<script src="tree_algos.js"></script>
 <script src="redBlackTree.js"></script>

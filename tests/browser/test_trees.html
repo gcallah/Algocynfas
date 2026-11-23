@@ -126,7 +126,9 @@ async function binarySearchTree() {
                                        [40, 1, 'The successor is 45'],
                                        [50, 0, 'The predecessor is 45'],
                                        [50, 1, 'The successor is 60'],
-                                       [35, 0, 'The predecessor is 30']]) {
+                                       [35, 0, 'The predecessor is 30'],
+                                       [20, 0, '20 is the smallest key, so it has no predecessor'],
+                                       [80, 1, '80 is the largest key, so it has no successor']]) {
       f.alerts.length = 0;
       set('preSucBox', key);
       d.getElementById('preSucChoice').selectedIndex = choice;
@@ -193,7 +195,7 @@ async function avlTree() {
           avlProblems(root).length === 0, 'AVL: insert 5 then 3 (needs a rotation)', report(root));
   });
 
-  for (const k of [42, 40]) {
+  for (const k of [42, 40, 50, 45, 30]) {
     await attempt('AVL: delete ' + k, async () => {
       set('deleteBox', k);
       await w.deleteNode();
@@ -249,19 +251,21 @@ async function redBlackTree() {
           rbProblems(root, RED, BLACK).length === 0, 'RBT: insert 11', report(root));
   });
 
-  await attempt('RBT: delete', async () => {
-    set('deleteRbBox', 4);
-    // The page's Delete button; check it is wired to a real function first.
-    const handler = d.getElementById('delete-rb-button').getAttribute('onclick').replace('()', '');
-    check(w.eval('typeof ' + handler) === 'function', 'RBT: Delete button calls a real function',
-          handler + ' is not defined');
-    if (w.eval('typeof ' + handler) !== 'function') return;
-    await w.eval(handler + '()');
-    expect = expect.filter((x) => x !== 4);
-    const root = tree().root;
-    check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
-          rbProblems(root, RED, BLACK).length === 0, 'RBT: delete 4', report(root));
-  });
+  // The page's Delete button; check it is wired to a real function first.
+  const handler = d.getElementById('delete-rb-button').getAttribute('onclick').replace('()', '');
+  check(w.eval('typeof ' + handler) === 'function', 'RBT: Delete button calls a real function',
+        handler + ' is not defined');
+  // A red leaf, the root, and black nodes whose removal needs each fix-up case.
+  for (const k of [4, 8, 1, 2, 11, 6, 3]) {
+    await attempt('RBT: delete ' + k, async () => {
+      set('deleteRbBox', k);
+      await w.eval(handler + '()');
+      expect = expect.filter((x) => x !== k);
+      const root = tree().root;
+      check(String(inorder(root)) === String(sorted(expect)) && bstProblems(root).length === 0 &&
+            rbProblems(root, RED, BLACK).length === 0, 'RBT: delete ' + k, report(root));
+    });
+  }
   f.remove();
 }
 
