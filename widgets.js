@@ -118,7 +118,7 @@ function setDir(){
 
 
 
-function display_legend(id,title1, title2, c1= '#ffb380', c2 = '#99ccff') {
+function display_legend(id,title1, title2, c1= '#cbb8ea', c2 = '#a6dfe8') {
   var legend = create_legend(title1, title2, c1, c2);
   return getHTML(id).innerHTML =
   `<div class='list-group col-3'>

@@ -9,9 +9,9 @@ const DEF_ELEM_WIDTH = 60;
 const PCT_FONT_BOX = .72;
 const DEF_FONT = Math.floor(DEF_ELEM_HEIGHT * PCT_FONT_BOX);
 const DEF_BG_COLOR = '#ffff99';
-const DEF_HL_COLOR = '#99ccff';
+const DEF_HL_COLOR = '#a6dfe8';
 const DEF_HLK_COLOR = '#0073e6';
-const SWAP_COLOR = '#ffb380';
+const SWAP_COLOR = '#cbb8ea';
 var delayTime = DEFAULT_DELAY;
 
 async function delay (time) {
