@@ -20,7 +20,14 @@
  const HORIZ = 0;
  const VERTICAL = 1;
  const HashTableMargin = 10;
+ const DEF_FONT_FAMILY = 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
+
+ // Shrink the font for keys longer than two characters so they stay inside the box.
+ function fitFont(val) {
+   var len = String(val).length;
+   return len > 2 ? Math.floor(DEF_FONT * 2.1 / len) : DEF_FONT;
+ }
 
  class DataElem {
 
@@ -84,7 +91,14 @@ class ListElem extends DataElem {
 
   setText(val) {
     return new fabric.Text(String(val),
-      {fontSize: DEF_FONT, originX: CENTER, originY: CENTER});
+      {fontSize: fitFont(val), fontFamily: DEF_FONT_FAMILY, originX: CENTER, originY: CENTER});
+  }
+
+  // Change the key shown in this box (for algorithms that write into arrays).
+  setKey(key) {
+    this.key = key;
+    this.text.set({text: String(key), fontSize: fitFont(key)});
+    this.group.set('dirty', true);
   }
 
   setGroup(shape, dispText, id) {
@@ -270,6 +284,70 @@ iterator() {
 
     removeAll(){
       this.canvas.clear();
+    }
+
+    // Write a new key into slot i (e.g. B[i] = A[j] in counting sort).
+    setKey(i, key) {
+      this.dataElems[i].setKey(key);
+    }
+
+    // Colour one slot with any colour (e.g. to mark a found item).
+    colorElem(i, color) {
+      this.dataElems[i].setColor(color);
+    }
+
+    // Colour every slot with the default background.
+    unhighlightAll() {
+      for (var elem of this.dataElems) {
+        elem.unhighlight();
+      }
+    }
+
+    // Write the index under each box. CLRS arrays start at 1, so start = 1 by default.
+    drawIndices(start = 1) {
+      this._removeTagged('index');
+      for (var i = 0; i < this.size(); i++) {
+        var [x, y] = this.positionElem(i);
+        this.canvas.add(new fabric.Text(String(i + start), {
+          left: x + DEF_ELEM_WIDTH / 2, top: y + DEF_ELEM_HEIGHT + 4,
+          originX: CENTER, fontSize: 14, fill: '#5b6770',
+          fontFamily: DEF_FONT_FAMILY, selectable: false, tag: 'index'}));
+      }
+    }
+
+    // Label slots with pointer names above them, e.g. {p: 0, q: 3, r: 7}.
+    // Pass {} to clear the labels.
+    setMarkers(markers) {
+      this._removeTagged('marker');
+      var byIndex = {};
+      for (var name in markers) {
+        var i = markers[name];
+        if (i === null || i === undefined || i < 0 || i >= this.size()) continue;
+        (byIndex[i] = byIndex[i] || []).push(name);
+      }
+      for (var i in byIndex) {
+        var [x, y] = this.positionElem(i);
+        this.canvas.add(new fabric.Text(byIndex[i].join(','), {
+          left: x + DEF_ELEM_WIDTH / 2, top: y - 24,
+          originX: CENTER, fontSize: 16, fontWeight: 'bold', fill: '#6b4fa0',
+          fontFamily: DEF_FONT_FAMILY, selectable: false, tag: 'marker'}));
+      }
+    }
+
+    // Write a name to the left of the array, e.g. "A" or "C".
+    drawName(name) {
+      this._removeTagged('name');
+      var [x, y] = this.positionElem(0);
+      this.canvas.add(new fabric.Text(name, {
+        left: x - 12, top: y + DEF_ELEM_HEIGHT / 2, originX: 'right', originY: CENTER,
+        fontSize: 22, fontWeight: 'bold', fill: '#1c2833',
+        fontFamily: DEF_FONT_FAMILY, selectable: false, tag: 'name'}));
+    }
+
+    _removeTagged(tag) {
+      for (var obj of this.canvas.getObjects().slice()) {
+        if (obj.tag === tag) this.canvas.remove(obj);
+      }
     }
   }
 

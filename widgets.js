@@ -132,6 +132,44 @@ function display_legend(id,title1, title2, c1= '#cbb8ea', c2 = '#a6dfe8') {
 }
 
 
+// A legend with any number of entries: items is a list of [title, colour] pairs.
+function display_legend_list(id, items) {
+  var rows = items.map(([title, color]) =>
+    `<div class='list-group-item' style='background-color:${color}'>${title}</div>`);
+  return getHTML(id).innerHTML =
+    `<div class='list-group legend-list'>${rows.join('')}</div>`;
+}
+
+// Read a comma/space separated list of integers between lo and hi.
+// Returns the list, or null (after telling the user) if the input is bad.
+function parseIntList(text, lo, hi, maxLen) {
+  var parts = text.split(/[\s,]+/).filter((s) => s !== '');
+  if (parts.length < 1) {
+    noticeErr("Please enter some numbers separated by commas.");
+    return null;
+  }
+  if (parts.length > maxLen) {
+    noticeErr("Please enter at most " + maxLen + " numbers.");
+    return null;
+  }
+  var nums = [];
+  for (var i = 0; i < parts.length; i++) {
+    if (!/^-?\d+$/.test(parts[i]) || parseInt(parts[i]) < lo || parseInt(parts[i]) > hi) {
+      noticeErr("\"" + parts[i] + "\" is not an integer between " + lo + " and " + hi + ".");
+      return null;
+    }
+    nums.push(parseInt(parts[i]));
+  }
+  return nums;
+}
+
+// Show a line of explanation under the controls while an algorithm runs.
+function setStatus(text, id = "status") {
+  var el = getHTML(id);
+  if (el) el.textContent = text;
+}
+
+
 // testing part (logic layer)
 
 module.exports = {
