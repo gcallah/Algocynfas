@@ -77,7 +77,7 @@ function letterNumConvert(key){
 }
 
 function correctErr(id) {
-  getHTML(id).style.background="#FCF5DB";
+  getHTML(id).style.background="";
 }
 
 
@@ -134,8 +134,13 @@ function display_legend(id,title1, title2, c1= '#cbb8ea', c2 = '#a6dfe8') {
 
 // A legend with any number of entries: items is a list of [title, colour] pairs.
 function display_legend_list(id, items) {
+  // White text on dark swatches, dark text on light ones.
+  var textFor = (hex) => {
+    var [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return 0.299 * r + 0.587 * g + 0.114 * b < 150 ? '#fff' : '#1c2833';
+  };
   var rows = items.map(([title, color]) =>
-    `<div class='list-group-item' style='background-color:${color}'>${title}</div>`);
+    `<div class='list-group-item' style='background-color:${color}; color:${textFor(color)}'>${title}</div>`);
   return getHTML(id).innerHTML =
     `<div class='list-group legend-list'>${rows.join('')}</div>`;
 }

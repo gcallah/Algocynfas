@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graph Search</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/sigma/sigma.min.js"></script>
+  <script src="lib/sigma/sigma.renderers.canvas.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+  <script src="lib/sigma/setting.js"></script>
+  <script src="lib/sigma/sigma.classes.graph.js"></script>
+  <script src="lib/sigma/graphArrange.js"></script>
+  <script src="lib/sigma/sigma.core.js"></script>
+  <script src="widgets.js"></script>
+  <script src="graph.js"></script>
+  <script src="graph_algos.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Graph Search</h1>
+  <div class="container">
+    <p class="algo-note">
+      Breadth-first and depth-first search, and two algorithms built on DFS.
+      Vertices are named a, b, c, &hellip; You can drag vertices to tidy the layout.
+    </p>
+
+    <div class="controls">
+      <b>Algorithm:</b>
+      <span class="opt"><input type="radio" name="algo" id="bfs" onchange="algoChanged()" checked> <label for="bfs">Breadth-First Search (22.2)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="dfs" onchange="algoChanged()"> <label for="dfs">Depth-First Search (22.3)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="topo" onchange="algoChanged()"> <label for="topo">Topological Sort (22.4)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="scc" onchange="algoChanged()"> <label for="scc">Strongly Connected Components (22.5)</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Speed:</b>
+      <span class="opt"><input type="radio" name="speed" value="400" id="Fast"> <label for="Fast">Fast</label></span>
+      <span class="opt"><input type="radio" name="speed" value="900" id="Medium" checked> <label for="Medium">Medium</label></span>
+      <span class="opt"><input type="radio" name="speed" value="1800" id="Slow"> <label for="Slow">Slow</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Sample graph:</b>
+      <select id="graphSample" onchange="setGraphSample(SAMPLES)">
+        <option value="">Select one</option>
+        <option value="bfs">BFS: CLRS Figure 22.3</option>
+        <option value="dfs">DFS: CLRS Figure 22.4</option>
+        <option value="dressing">Topological sort: getting dressed (CLRS Figure 22.7)</option>
+        <option value="cycle">Topological sort: a graph with a cycle</option>
+        <option value="scc">SCC: CLRS Figure 22.9</option>
+        <option value="disconnected">BFS: a disconnected graph</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <label for="nodeNum"><b>Vertices:</b></label>
+      <input type="text" class="box" id="nodeNum" style="width: 4em" value="8">
+      <select id="graphType" aria-label="Graph type">
+        <option value="undir">Undirected</option>
+        <option value="dir">Directed</option>
+      </select>
+      <label for="edges"><b>Edges:</b></label>
+      <input type="text" class="edgeBox" id="edges" style="width: 26em"
+             value="a-b, a-e, b-f, c-d, c-f, c-g, d-g, d-h, f-g, g-h"
+             placeholder="e.g. a-b, b-c, c-a">
+      <!-- graph.js reads a weights box even for unweighted graphs. -->
+      <input type="hidden" id="weights" value="">
+      <span id="start-group">
+        <label for="start"><b>Source s =</b></label>
+        <input type="text" class="box" id="start" style="width: 3em" value="b">
+      </span>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" type="button" onclick="drawGraph()">Draw Graph</button>
+      <button id="run-button" type="button" class="btn btn-success" onclick="run()">Run</button>
+      <button id="stop-button" type="button" class="btn btn-danger" onclick="stopAnime()">Stop</button>
+    </div>
+
+    <footer id="graphLegend"></footer>
+    <div id="status" class="status"></div>
+    <div id="algoGraphContainer" class="algoGraphContainer"
+         style="width: 800px; height: 500px; border: 1px solid var(--border)"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const GRAPH_CONTAINER = "algoGraphContainer";
+    const WEIGHTED = false;
+    const NEEDS_SOURCE = ["bfs", "dfs"];
+    const ALGORITHMS = {bfs: bfs, dfs: depthFirstSearch, topo: topologicalSort,
+                        scc: stronglyConnectedComponents};
+    // Vertex names follow the CLRS figures with letters a, b, c, ... in their place.
+    const SAMPLES = {
+      bfs: {n: 8, type: "undir", start: "b", algo: "bfs",
+            edges: "a-b, a-e, b-f, c-d, c-f, c-g, d-g, d-h, f-g, g-h",
+            grid: ["abcd", "efgh"],
+            note: "CLRS Figure 22.3 with r,s,t,u,v,w,x,y renamed a..h; the source s is b."},
+      dfs: {n: 6, type: "dir", start: "a", algo: "dfs",
+            edges: "a-b, a-d, b-e, c-e, c-f, d-b, e-d",
+            grid: ["abc", "def"],
+            note: "CLRS Figure 22.4 with u,v,w,x,y,z renamed a..f (the self-loop on z is left out)."},
+      dressing: {n: 9, type: "dir", algo: "topo",
+            edges: "a-b, a-h, b-c, b-h, c-f, d-c, d-e, e-f, g-h",
+            note: "a undershorts, b pants, c belt, d shirt, e tie, f jacket, g socks, h shoes, i watch."},
+      cycle: {n: 5, type: "dir", algo: "topo", edges: "a-b, b-c, c-d, d-b, d-e",
+            note: "b → c → d → b is a cycle, so there is no topological order."},
+      scc: {n: 8, type: "dir", algo: "scc",
+            edges: "a-b, b-c, b-e, b-f, c-d, c-g, d-c, d-h, e-a, e-f, f-g, g-f, g-h",
+            grid: ["abcd", "efgh"],
+            note: "CLRS Figure 22.9 (the self-loop on h is left out)."},
+      disconnected: {n: 7, type: "undir", start: "a", algo: "bfs",
+            edges: "a-b, a-c, b-c, c-d, e-f, f-g",
+            note: "e, f and g can't be reached from a, so their distance stays ∞."},
+    };
+    display_legend_list("graphLegend", [
+      ["Undiscovered (white)", V_WHITE], ["Discovered (gray)", V_GRAY],
+      ["Finished (black)", V_BLACK], ["Current vertex", V_CURRENT],
+      ["Tree edge", E_TREE],
+      ["Edge being explored", E_EXAMINE]]);
+    getHTML("graphSample").value = "bfs";
+    setGraphSample(SAMPLES);
+  </script>
+</body>
+</html>

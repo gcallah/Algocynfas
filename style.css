@@ -544,3 +544,7 @@ input[type="radio"], input[type="checkbox"] {
     font-weight: 600;
     margin: 0.75rem 0 0.25rem;
 }
+
+.controls .opt {
+    white-space: nowrap;
+}

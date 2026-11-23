@@ -9,6 +9,12 @@ const NUM_NODES = 0;
 NUM_ENTRY_WIDTH = 200;
 LIST_ENTRY_WIDTH = 400;
 
+// Pages for algorithms that handle negative edge weights (e.g. Bellman-Ford)
+// set `const ALLOW_NEGATIVE_WEIGHTS = true;`. Other pages reject them.
+function negativeWeightsAllowed() {
+  return typeof ALLOW_NEGATIVE_WEIGHTS !== "undefined" && ALLOW_NEGATIVE_WEIGHTS;
+}
+
 function typeChange() {
   var choice = getHTML("choices").selectedIndex;
   var inputBox = getHTML("nodeNum");
@@ -295,7 +301,7 @@ class ourGraph {
           var listWeight = splitInput(getHTML("weights").value, true);
           this.weights = listWeight;
           var WEIGHT = parseInt(listWeight[counter]);
-          if (Number.isInteger(WEIGHT) && WEIGHT >= 0) {
+          if (Number.isInteger(WEIGHT) && (WEIGHT >= 0 || negativeWeightsAllowed())) {
             correctErr("weights");
             WEIGHT = WEIGHT.toString();
           } else {

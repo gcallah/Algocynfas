@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shortest Paths</title>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="userInterface.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/sigma/sigma.min.js"></script>
+  <script src="lib/sigma/sigma.renderers.canvas.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.nodes.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.def.js"></script>
+  <script src="lib/sigma/canvas/sigma.canvas.edges.arrow.js"></script>
+  <script src="lib/sigma/sigma.plugins.dragNodes.js"></script>
+  <script src="lib/sigma/sigma.canvas.labels.def.js"></script>
+  <script src="lib/sigma/sigma.canvas.edges.labels.def.js"></script>
+  <script src="lib/sigma/setting.js"></script>
+  <script src="lib/sigma/sigma.classes.graph.js"></script>
+  <script src="lib/sigma/graphArrange.js"></script>
+  <script src="lib/sigma/sigma.core.js"></script>
+  <script src="widgets.js"></script>
+  <script src="graph.js"></script>
+  <script src="graph_algos.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Single-Source Shortest Paths</h1>
+  <div class="container">
+    <p class="algo-note">
+      Each vertex is labelled with its current shortest-path estimate <i>d</i>.
+      Dijkstra's algorithm needs non-negative weights; Bellman-Ford allows
+      negative weights and detects negative-weight cycles.
+      You can drag vertices to tidy the layout.
+    </p>
+
+    <div class="controls">
+      <b>Algorithm:</b>
+      <span class="opt"><input type="radio" name="algo" id="dijkstra" onchange="algoChanged()" checked> <label for="dijkstra">Dijkstra (24.3)</label></span>
+      <span class="opt"><input type="radio" name="algo" id="bellman" onchange="algoChanged()"> <label for="bellman">Bellman-Ford (24.1)</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Speed:</b>
+      <span class="opt"><input type="radio" name="speed" value="400" id="Fast"> <label for="Fast">Fast</label></span>
+      <span class="opt"><input type="radio" name="speed" value="900" id="Medium" checked> <label for="Medium">Medium</label></span>
+      <span class="opt"><input type="radio" name="speed" value="1800" id="Slow"> <label for="Slow">Slow</label></span>
+    </div>
+
+    <div class="controls">
+      <b>Sample graph:</b>
+      <select id="graphSample" onchange="setGraphSample(SAMPLES)">
+        <option value="">Select one</option>
+        <option value="dijkstra">Dijkstra: CLRS Figure 24.6</option>
+        <option value="bellman">Bellman-Ford: CLRS Figure 24.4 (negative weights)</option>
+        <option value="negcycle">Bellman-Ford: a negative-weight cycle</option>
+        <option value="undirected">Dijkstra: an undirected graph</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <label for="nodeNum"><b>Vertices:</b></label>
+      <input type="text" class="box" id="nodeNum" style="width: 4em">
+      <select id="graphType" aria-label="Graph type">
+        <option value="undir">Undirected</option>
+        <option value="dir">Directed</option>
+      </select>
+      <label for="start"><b>Source s =</b></label>
+      <span id="start-group"><input type="text" class="box" id="start" style="width: 3em" value="a"></span>
+    </div>
+    <div class="controls">
+      <label for="edges"><b>Edges:</b></label>
+      <input type="text" class="edgeBox" id="edges" style="width: 24em" placeholder="e.g. a-b, b-c, c-a">
+      <label for="weights"><b>Weights:</b></label>
+      <input type="text" class="weightBox" id="weights" style="width: 16em; display: inline"
+             placeholder="one per edge, e.g. 4, -2, 7">
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" type="button" onclick="drawGraph()">Draw Graph</button>
+      <button id="run-button" type="button" class="btn btn-success" onclick="run()">Run</button>
+      <button id="stop-button" type="button" class="btn btn-danger" onclick="stopAnime()">Stop</button>
+    </div>
+
+    <footer id="graphLegend"></footer>
+    <div id="status" class="status"></div>
+    <div id="algoGraphContainer" class="algoGraphContainer"
+         style="width: 800px; height: 500px; border: 1px solid var(--border)"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const GRAPH_CONTAINER = "algoGraphContainer";
+    const WEIGHTED = true;
+    const ALLOW_NEGATIVE_WEIGHTS = true;   // Bellman-Ford handles them; Dijkstra refuses them
+    const NEEDS_SOURCE = ["dijkstra", "bellman"];
+    const ALGORITHMS = {dijkstra: dijkstra, bellman: bellmanFord};
+    // CLRS names s, t, x, y, z become a, b, c, d, e. Edges that run both ways
+    // between the same two vertices are left out, since their weights would overlap.
+    const SAMPLES = {
+      dijkstra: {n: 5, type: "dir", start: "a", algo: "dijkstra",
+                 edges: "a-b, a-d, b-c, d-b, d-c, d-e, e-c, e-a",
+                 weights: "10, 5, 1, 3, 9, 2, 6, 7",
+                 grid: [" bc", "a  ", " de"],
+                 note: "CLRS Figure 24.6 (s,t,x,y,z renamed a..e; t→y and x→z left out)."},
+      bellman: {n: 5, type: "dir", start: "a", algo: "bellman",
+                edges: "a-b, a-d, b-d, b-e, c-b, d-c, d-e, e-c, e-a",
+                weights: "6, 7, 8, -4, -2, -3, 9, 7, 2",
+                grid: [" bc", "a  ", " de"],
+                note: "CLRS Figure 24.4 (s,t,x,y,z renamed a..e; t→x left out)."},
+      negcycle: {n: 5, type: "dir", start: "a", algo: "bellman",
+                 edges: "a-b, b-c, c-d, d-b, a-e", weights: "4, -2, 3, -3, 2",
+                 note: "b → c → d → b has total weight -2 + 3 - 3 = -2."},
+      undirected: {n: 5, type: "undir", start: "a", algo: "dijkstra",
+                   edges: "a-b, b-c, c-d, d-e, a-e, b-e, a-c, a-d",
+                   weights: "1, 2, 3, 4, 5, 6, 7, 8",
+                   note: "Each undirected edge can be used in either direction."},
+    };
+    display_legend_list("graphLegend", [
+      ["Not reached (d = ∞)", V_WHITE], ["Reached, d may still improve", V_GRAY],
+      ["Done", V_BLACK], ["Current vertex u", V_CURRENT],
+      ["Shortest-path tree (π)", E_TREE], ["Edge being relaxed", E_EXAMINE],
+      ["Negative cycle", E_BAD]]);
+    getHTML("graphSample").value = "dijkstra";
+    setGraphSample(SAMPLES);
+  </script>
+</body>
+</html>
