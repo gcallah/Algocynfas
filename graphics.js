@@ -1,3 +1,15 @@
+// Default colours, taken from the site palette (see style.css).
+const GFX_COLORS = {
+  ink: '#1c2833',
+  forest: '#2f6f45',
+  cyan: '#1fa5b8',
+  blue: '#2b5ea7',
+  violet: '#6b4fa0',
+  silver: '#b8c2cc',
+  paleCyan: '#a6dfe8',
+};
+const GFX_FONT = 'Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
+
 class GraphicElems { // an abstract class
 
   constructor() {
@@ -29,7 +41,7 @@ class GraphicElems { // an abstract class
 }
 
 class Circle extends GraphicElems {
-  constructor(x = 0, y = 0, radius = 50, color = 'red') {
+  constructor(x = 0, y = 0, radius = 50, color = GFX_COLORS.cyan) {
     super();
     var circle = new fabric.Circle({
       radius: radius,
@@ -91,7 +103,7 @@ class Image extends GraphicElems {
 
 class Rectangle extends GraphicElems {
 
-  constructor(x = 0, y = 0, height = 50, width = 50, color = 'blue') {
+  constructor(x = 0, y = 0, height = 50, width = 50, color = GFX_COLORS.paleCyan) {
 
     super();
     var rectangle = new fabric.Rect({
@@ -114,10 +126,11 @@ class Rectangle extends GraphicElems {
 }
 
 class Text extends GraphicElems {
-  constructor(text, x = 0, y = 0, color = 'black', fontSize = 30) {
+  constructor(text, x = 0, y = 0, color = GFX_COLORS.ink, fontSize = 30) {
     super();
     var textElem = new fabric.Text(text, {
       fontSize: fontSize,
+      fontFamily: GFX_FONT,
       left: x,
       top: y,
       originX: 'originX',
@@ -135,7 +148,7 @@ class Text extends GraphicElems {
 
 class Triangle extends GraphicElems {
 
-  constructor(x = 0, y = 0, width = 50, height = 50, color = 'yellow') {
+  constructor(x = 0, y = 0, width = 50, height = 50, color = GFX_COLORS.violet) {
     super();
     var triangle = new fabric.Triangle({
       left: x,
@@ -158,7 +171,7 @@ class Triangle extends GraphicElems {
 
 // Derived Classes
 class Arc extends GraphicElems {
-  constructor(x = 0, y = 0, radius = 50, color = 'black', angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
+  constructor(x = 0, y = 0, radius = 50, color = GFX_COLORS.ink, angle = 0, startAngle = 0, endAngle = Math.PI / 3, width = 3) {
     super();
     var arc = new fabric.Circle({
       radius: radius,
@@ -184,7 +197,7 @@ class Arc extends GraphicElems {
 
 class SolidArrow extends GraphicElems {
 
-  constructor(x = 0, y = 0, height = 50, length = 100, color = 'black') {
+  constructor(x = 0, y = 0, height = 50, length = 100, color = GFX_COLORS.ink) {
 
     super();
     var rectangle = new Rectangle(x, y, height / 2, length, color);
@@ -221,7 +234,7 @@ class SolidArrow extends GraphicElems {
 }
 
 class CircleChart extends Group {
-  constructor(nodes = ['A', 'B', 'C', 'D', 'E'], color = ['orange', 'gray', 'yellow', 'blue', 'green'], x = 300, y = 300, circleRadius = 80, chartRadius = 200, arcWidth = 20) {
+  constructor(nodes = ['A', 'B', 'C', 'D', 'E'], color = [GFX_COLORS.forest, GFX_COLORS.cyan, GFX_COLORS.blue, GFX_COLORS.violet, GFX_COLORS.silver], x = 300, y = 300, circleRadius = 80, chartRadius = 200, arcWidth = 20) {
     super();
     length = nodes.length
     for (var i = 0; i < length; i++) {
@@ -240,7 +253,7 @@ class CircleChart extends Group {
 }
 
 class CurvedArrow extends Group {
-  constructor(x = 250, y = 250, radius = 50, color = 'black', angle = Math.PI, width = 25) {
+  constructor(x = 250, y = 250, radius = 50, color = GFX_COLORS.ink, angle = Math.PI, width = 25) {
 
     super();
     var arc = new Arc(x, y, radius, color, 0, 0, angle, width);
@@ -255,10 +268,10 @@ class CurvedArrow extends Group {
 }
 
 class InfinitySymbol extends Group {
-  constructor(x = 250, y = 250, radius = 75, color = 'black', width = 25) {
+  constructor(x = 250, y = 250, radius = 75, color = GFX_COLORS.ink, width = 25) {
     super();
-    var circleLeft = new Arc(x + 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
-    var circleRight = new Arc(x - 1.4 * radius, y, radius, 'black', 0, 0, 1.5 * Math.PI, width)
+    var circleLeft = new Arc(x + 1.4 * radius, y, radius, color, 0, 0, 1.5 * Math.PI, width)
+    var circleRight = new Arc(x - 1.4 * radius, y, radius, color, 0, 0, 1.5 * Math.PI, width)
     circleRight.rotate(45);
     circleLeft.rotate(225);
     var length = Math.PI * radius * 3.5 / 5;
@@ -276,7 +289,7 @@ class InfinitySymbol extends Group {
 }
 
 class Line extends Rectangle {
-  constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = 'black') {
+  constructor(initialX = 100, initialY = 100, finalX = 25, finalY = 300, width = 1, color = GFX_COLORS.ink) {
     var length = Math.sqrt(Math.pow(Math.abs(initialX - finalX), 2) + Math.pow(Math.abs(initialY - finalY), 2))
     var slope = (finalY - initialY) / (finalX - initialX);
     var radian = Math.atan(slope);
@@ -288,12 +301,14 @@ class Line extends Rectangle {
 }
 
 class PathChart extends Group {
-  constructor(pathLeft = ['Agile Adoption', 'Differential Testing Services', 'Continuous'], pathRight = ['Remote Support', 'Managed Services', 'Outcome Based Models'], pathCenter = ['IT Transformation', 'IT Consulting'], goal = "DevOp Services!", x = 300, y = 300, rectangleHeight = 50, rectangleWidth = 150, fontSize = 15) {
+  constructor(pathLeft = ['Agile Adoption', 'Differential Testing Services', 'Continuous'], pathRight = ['Remote Support', 'Managed Services', 'Outcome Based Models'], pathCenter = ['IT Transformation', 'IT Consulting'], goal = "DevOp Services!", x = 340, y = 350, rectangleHeight = 50, rectangleWidth = 150, fontSize = 15,
+              boxColor = GFX_COLORS.paleCyan, goalColor = GFX_COLORS.forest, arrowColor = GFX_COLORS.blue) {
     super();
-    
-    var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth);
+
+    // The goal box is highlighted; the path boxes use boxColor.
+    var goalBox = new Rectangle(x, y, rectangleHeight, rectangleWidth, goalColor);
     this.add(goalBox.object);
-    var goalText = new Text(goal, x, y, 'black', fontSize);
+    var goalText = new Text(goal, x, y, '#ffffff', fontSize);
     this.add(goalText.object);
       
     // Arrays go from left to right, top to bottom  
@@ -307,11 +322,11 @@ class PathChart extends Group {
     // Create the center
     var centerLength = centerTextY.length;
     for (var i = 0; i < centerLength; i++) {
-      var textBox = new Rectangle(x, centerTextY[i], rectangleHeight, rectangleWidth);
+      var textBox = new Rectangle(x, centerTextY[i], rectangleHeight, rectangleWidth, boxColor);
       this.add(textBox.object);
-      var text = new Text(pathCenter[i], x, centerTextY[i], 'black', fontSize);
+      var text = new Text(pathCenter[i], x, centerTextY[i], GFX_COLORS.ink, fontSize);
       this.add(text.object);
-      var arrow = new SolidArrow(x, centerArrowY[i], 50, rectangleHeight, 'black');
+      var arrow = new SolidArrow(x, centerArrowY[i], 50, rectangleHeight, arrowColor);
       arrow.rotate(90);
       this.add(arrow.object);
     }
@@ -327,22 +342,22 @@ class PathChart extends Group {
         var sideArray = pathRight;
       }
       for (var j = sideHeight - 1; j >= 0; j--) {
-        var textBox = new Rectangle(sideX[i], sideTextY[j], rectangleHeight, rectangleWidth);
+        var textBox = new Rectangle(sideX[i], sideTextY[j], rectangleHeight, rectangleWidth, boxColor);
         this.add(textBox.object);
-        var text = new Text(sideArray[j], sideX[i], sideTextY[j], 'black', fontSize);
+        var text = new Text(sideArray[j], sideX[i], sideTextY[j], GFX_COLORS.ink, fontSize);
         this.add(text.object);
         if(j != sideHeight - 1) {
-          var arrow = new SolidArrow(sideX[i], sideArrowY[j], 50, rectangleHeight, 'black');
+          var arrow = new SolidArrow(sideX[i], sideArrowY[j], 50, rectangleHeight, arrowColor);
           arrow.rotate(90);
           this.add(arrow.object);
         }
         else {
-          var arrow = new SolidArrow(bottomArrowX[i], sideArrowY[j], 50, rectangleHeight * 1.75, 'black');
+          var arrow = new SolidArrow(bottomArrowX[i], sideArrowY[j], 50, rectangleHeight * 1.75, arrowColor);
           if(i == 1) {
             arrow.rotate(180);
           }
           this.add(arrow.object);
-          var extension = new Rectangle(sideX[i], sideArrowY[j] - 25, 75, 25, 'black');
+          var extension = new Rectangle(sideX[i], sideArrowY[j] - 25, 75, 25, arrowColor);
           this.add(extension.object);
         }
       }
@@ -353,26 +368,26 @@ class PathChart extends Group {
 class Person extends Group {
   constructor() {
     super();
-    var head = new Circle(50, 50, 20, 'black');
+    var head = new Circle(50, 50, 20, GFX_COLORS.ink);
     this.add(head.object);
-    var body = new Rectangle(50, 100, 100, 10, 'black');
+    var body = new Rectangle(50, 100, 100, 10, GFX_COLORS.ink);
     this.add(body.object);
-    var leftHand = new Rectangle(30, 100, 50, 10, 'black');
+    var leftHand = new Rectangle(30, 100, 50, 10, GFX_COLORS.ink);
     leftHand.rotate(45);
     this.add(leftHand.object);
-    var rightHand = new Rectangle(70, 100, 50, 10, 'black');
+    var rightHand = new Rectangle(70, 100, 50, 10, GFX_COLORS.ink);
     rightHand.rotate(-45);
     this.add(rightHand.object);
-    var leftLeg = new Rectangle(30, 160, 50, 10, 'black');
+    var leftLeg = new Rectangle(30, 160, 50, 10, GFX_COLORS.ink);
     leftLeg.rotate(45);
     this.add(leftLeg.object);
-    var rightLeg = new Rectangle(70, 160, 50, 10, 'black');
+    var rightLeg = new Rectangle(70, 160, 50, 10, GFX_COLORS.ink);
     rightLeg.rotate(-45);
     this.add(rightLeg.object);
   }
 
   withBug(){
-    var bugBox = new Rectangle(100,100,50,50,'black');
+    var bugBox = new Rectangle(100,100,50,50,GFX_COLORS.ink);
     this.add(bugBox.object);
     var bugText = new Text('Bug',100,100,'white');
     this.add(bugText.object);
