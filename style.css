@@ -315,6 +315,76 @@ th {
     margin: 0 auto;
 }
 
+/* ---------- Buttons (override Bootstrap's defaults) ---------- */
+
+:root {
+    --berry: #b23a5a;
+}
+
+.btn {
+    font-family: var(--font-head);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-radius: 0.4rem;
+    padding: 0.4rem 1rem;
+    margin: 0.15rem 0.1rem;
+    box-shadow: 0 1px 3px rgba(29, 74, 92, 0.2);
+    transition: background-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.btn:hover {
+    box-shadow: 0 3px 8px rgba(29, 74, 92, 0.25);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary, .btn-primary:disabled {
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:not(:disabled):active {
+    background-color: #234d8a;
+    border-color: #234d8a;
+}
+
+.btn-success, .btn-success:disabled {
+    background-color: var(--forest);
+    border-color: var(--forest);
+}
+.btn-success:hover, .btn-success:focus, .btn-success:not(:disabled):active {
+    background-color: #255a37;
+    border-color: #255a37;
+}
+
+.btn-danger, .btn-danger:disabled {
+    background-color: var(--berry);
+    border-color: var(--berry);
+}
+.btn-danger:hover, .btn-danger:focus, .btn-danger:not(:disabled):active {
+    background-color: #942f4a;
+    border-color: #942f4a;
+}
+
+.btn-primary:focus, .btn-primary:not(:disabled):active:focus { box-shadow: 0 0 0 0.2rem rgba(43, 94, 167, 0.35); }
+.btn-success:focus, .btn-success:not(:disabled):active:focus { box-shadow: 0 0 0 0.2rem rgba(47, 111, 69, 0.35); }
+.btn-danger:focus, .btn-danger:not(:disabled):active:focus { box-shadow: 0 0 0 0.2rem rgba(178, 58, 90, 0.35); }
+
+/* Form controls next to the buttons: match the palette's focus colour. */
+select, input[type="text"], input:not([type]) {
+    border-radius: 0.3rem;
+}
+
+select:focus, input:focus {
+    outline: 2px solid var(--cyan);
+    outline-offset: 1px;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--blue);
+}
+
 /* ---------- Help tooltip ---------- */
 
 .help-tip {
