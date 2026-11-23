@@ -106,6 +106,8 @@ figure {
 .hero img {
     display: block;
     width: 100%;
+    max-width: 26rem;
+    margin: 0 auto;
     border-radius: 0.5rem;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
