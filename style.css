@@ -485,6 +485,19 @@ input[type="radio"], input[type="checkbox"] {
         top: 10px;
         right: 10px;
     }
+
+    /* Some pages indent their container inline; on phones that pushes it off screen. */
+    .container[style*="margin-left"] {
+        margin-left: auto !important;
+    }
+}
+
+/* Several Run/Stop buttons carry Bootstrap's col-1 grid class, which squeezes
+   them to a twelfth of the row on narrow screens. Size them to their label. */
+.btn.col-1 {
+    flex: none;
+    max-width: none;
+    width: auto;
 }
 
 /* ---------- Algorithm pages: legend, status and result lines ---------- */

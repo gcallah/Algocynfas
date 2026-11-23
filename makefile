@@ -1,7 +1,7 @@
 # Need to export as ENV var
 export TEMPLATE_DIR = templates
 PTML_DIR = html_src
-UTILS_DIR = utils
+UTILS_DIR = bin
 
 INCS = $(TEMPLATE_DIR)/head.txt
 

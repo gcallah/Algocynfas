@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// graphSearch.html: BFS, DFS, topological sort, strongly connected components.
+runTests(async () => {
+  const f = await load("graphSearch.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const result = () => d.getElementById('result').textContent;
+  const runCase = async (algo, n, type, edges, start) => {
+    d.getElementById(algo).checked = true; w.algoChanged();
+    set('nodeNum', n); set('graphType', type); set('edges', edges);
+    if (start) set('start', start);
+    w.run(); await waitDone(d);
+    return result();
+  };
+
+  // BFS distances must match shortest unweighted distances.
+  for (const [n, type, edges, s] of [
+      [8, 'undir', 'a-b, a-e, b-f, c-d, c-f, c-g, d-g, d-h, f-g, g-h', 'b'],   // CLRS 22.3
+      [7, 'undir', 'a-b, a-c, b-c, c-d, e-f, f-g', 'a'],                       // disconnected
+      [6, 'dir', 'a-b, a-d, b-e, c-e, c-f, d-b, e-d', 'c']]) {
+    const res = await runCase('bfs', n, type, edges, s);
+    const want = allPairs(n, edges, null, type === 'dir').D[vindex(s)];
+    check(String(parseDistances(res, n)) === String(want), `BFS from ${s} on ${type} ${edges}`, res);
+  }
+
+  // DFS on CLRS Figure 22.4 (u..z renamed a..f) gives the book's times.
+  let res = await runCase('dfs', 6, 'dir', 'a-b, a-d, b-e, c-e, c-f, d-b, e-d', 'a');
+  const times = {a: [1, 8], b: [2, 7], e: [3, 6], d: [4, 5], c: [9, 12], f: [10, 11]};
+  check(Object.entries(times).every(([v, [dd, ff]]) => res.includes(`${v}: d = ${dd}, f = ${ff}`)),
+        'DFS times match CLRS Figure 22.4', res);
+
+  // Topological order must put every edge's tail before its head.
+  for (const [n, edges] of [[9, 'a-b, a-h, b-c, b-h, c-f, d-c, d-e, e-f, g-h'], [4, '']]) {
+    res = await runCase('topo', n, 'dir', edges);
+    const m = res.match(/Topological order: (.*)/);
+    const pos = {};
+    if (m) m[1].split(', ').forEach((v, i) => pos[vindex(v)] = i);
+    const {E} = allPairs(n, edges, null, true);
+    check(m && Object.keys(pos).length === n && E.every(([u, v]) => pos[u] < pos[v]),
+          `topological sort of ${edges || 'no edges'}`, res);
+  }
+  res = await runCase('topo', 5, 'dir', 'a-b, b-c, c-d, d-b, d-e');
+  check(res.includes('has a cycle'), 'topological sort reports a cycle', res);
+  res = await runCase('topo', 3, 'undir', 'a-b');
+  check(res.includes('needs a directed graph'), 'topological sort rejects undirected graphs', res);
+
+  // Each SCC must be exactly the vertices mutually reachable with its members.
+  for (const [n, edges] of [
+      [8, 'a-b, b-c, b-e, b-f, c-d, c-g, d-c, d-h, e-a, e-f, f-g, g-f, g-h'],   // CLRS 22.9
+      [5, 'a-b, b-c, c-a, d-e'], [3, 'a-b, b-c']]) {
+    res = await runCase('scc', n, 'dir', edges);
+    const {D} = allPairs(n, edges, null, true);
+    const comps = [...res.matchAll(/\{([^}]*)\}/g)].map((m) => m[1].split(', ').map(vindex));
+    let ok = comps.flat().length === n;
+    for (const c of comps) for (const u of c) for (let v = 0; v < n; v++) {
+      if ((D[u][v] < Infinity && D[v][u] < Infinity) !== c.includes(v)) ok = false;
+    }
+    check(ok, `SCC of ${edges}`, res);
+  }
+
+  res = await runCase('bfs', 4, 'undir', 'a-b, b-z', 'a');
+  check(res === '', 'rejects an edge to a missing vertex');
+
+  d.getElementById('bfs').checked = true;
+  set('nodeNum', 8); set('graphType', 'undir'); set('start', 'b');
+  set('edges', 'a-b, a-e, b-f, c-d, c-f, c-g, d-g, d-h, f-g, g-h');
+  w.run(); await sleep(2000); w.stopAnime(); await waitDone(d);
+  check(d.getElementById('status').textContent === 'Stopped.', 'Stop halts the run');
+  w.run(); await waitDone(d);
+  check(result().startsWith('a: d = 1'), 'runs again after Stop', result());
+});
+</script>
+</body></html>

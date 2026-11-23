@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// linearSort.html: counting sort and radix sort.
+runTests(async () => {
+  const f = await load("linearSort.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(500);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const pick = (id) => { d.getElementById(id).checked = true; w.algoChanged(); };
+  const result = () => d.getElementById('result').textContent;
+
+  const cases = [
+    ['counting', '2,5,3,0,2,3,0,3', '5'], ['counting', '1,4,1,2,7,5,2,1,4', '7'],
+    ['counting', '0,0,0', '1'], ['counting', '11,0,6,11,3', '11'],
+    ['radix', '329,457,657,839,436,720,355', '3'], ['radix', '53,9,81,27,40,66,12,95,30', '2'],
+    ['radix', '5,3,8,1', '1'], ['radix', '0,999,500,5,50', '3'],
+  ];
+  for (const [algo, list, param] of cases) {
+    pick(algo); set('number-input', list); set(algo === 'radix' ? 'd-input' : 'k-input', param);
+    w.run(); await waitDone(d);
+    const want = 'Sorted: ' + list.split(',').map(Number).sort((a, b) => a - b).join(', ');
+    check(result() === want, `${algo} sort [${list}]`, result());
+  }
+
+  pick('counting'); set('number-input', '3,9'); set('k-input', '5');
+  w.run(); await waitDone(d);
+  check(result() === '', 'counting sort rejects a key larger than k');
+
+  pick('counting'); set('number-input', '2,5,3,0,2,3,0,3'); set('k-input', '5');
+  w.run(); await sleep(1500); w.stopAnime(); await waitDone(d);
+  check(d.getElementById('status').textContent === 'Stopped.', 'Stop halts the run');
+  w.run(); await waitDone(d);
+  check(result() === 'Sorted: 0, 0, 2, 2, 3, 3, 3, 5', 'runs again after Stop', result());
+});
+</script>
+</body></html>

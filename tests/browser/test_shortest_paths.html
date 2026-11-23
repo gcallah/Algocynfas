@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// shortestPaths.html: Dijkstra and Bellman-Ford, checked against Floyd-Warshall.
+runTests(async () => {
+  const f = await load("shortestPaths.html");
+  const w = f.contentWindow, d = f.contentDocument;
+  await sleep(300);
+  d.getElementById('Fast').checked = true;
+  const set = (id, v) => d.getElementById(id).value = v;
+  const result = () => d.getElementById('result').textContent;
+
+  const cases = [
+    ['dijkstra', 5, 'dir', 'a-b, a-d, b-c, d-b, d-c, d-e, e-c, e-a', '10, 5, 1, 3, 9, 2, 6, 7', 'a'],
+    ['bellman', 5, 'dir', 'a-b, a-d, b-c, d-b, d-c, d-e, e-c, e-a', '10, 5, 1, 3, 9, 2, 6, 7', 'a'],
+    ['bellman', 5, 'dir', 'a-b, a-d, b-d, b-e, c-b, d-c, d-e, e-c, e-a', '6, 7, 8, -4, -2, -3, 9, 7, 2', 'a'],
+    ['bellman', 5, 'dir', 'a-b, b-c, c-d, d-b, a-e', '4, -2, 3, -3, 2', 'a'],   // negative cycle
+    ['dijkstra', 5, 'undir', 'a-b, b-c, c-d, d-e, a-e, b-e, a-c, a-d', '1, 2, 3, 4, 5, 6, 7, 8', 'd'],
+    ['bellman', 5, 'undir', 'a-b, b-c, c-d, d-e, a-e, b-e, a-c, a-d', '1, 2, 3, 4, 5, 6, 7, 8', 'c'],
+    ['dijkstra', 6, 'dir', 'a-b, b-c, d-e, e-f', '3, 4, 1, 1', 'a'],          // unreachable vertices
+  ];
+  for (const [algo, n, type, edges, weights, s] of cases) {
+    d.getElementById(algo).checked = true; w.algoChanged();
+    set('nodeNum', n); set('graphType', type); set('edges', edges); set('weights', weights);
+    set('start', s);
+    w.run(); await waitDone(d);
+    const {D, negCycle} = allPairs(n, edges, weights, type === 'dir');
+    const label = `${algo} from ${s} on ${type} ${edges} / ${weights}`;
+    if (negCycle) {
+      check(result().includes('negative-weight cycle is reachable'), label, result());
+    } else {
+      check(String(parseDistances(result(), n)) === String(D[vindex(s)]), label, result());
+    }
+  }
+
+  d.getElementById('dijkstra').checked = true; w.algoChanged();
+  set('nodeNum', 4); set('graphType', 'dir'); set('edges', 'a-b, b-c'); set('weights', '3, -1');
+  w.run(); await waitDone(d);
+  check(result().includes('requires non-negative edge weights'),
+        'Dijkstra refuses negative weights', result());
+});
+</script>
+</body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head><body>
+<script src="harness.js"></script>
+<script>
+// The older pages: every sort on sort.html, Kruskal and Prim, and a load check of the rest.
+runTests(async () => {
+  const sortNames = ['insertion', 'bubble', 'quick', 'selection', 'merge', 'heap'];
+  for (let t = 0; t < sortNames.length; t++) {
+    const f = await load("sort.html");
+    const w = f.contentWindow, d = f.contentDocument;
+    d.getElementById('Fast').checked = true;
+    d.getElementById('number-input').value = '9, -12, 7, 99, 5, 3';
+    w.inputNumberToArray();
+    d.getElementsByName('sort')[t].checked = true;
+    w.run(); await waitDone(d);
+    // fList is declared with let, so it isn't a property of window.
+    const keys = w.eval('fList.dataElems.map((e) => e.key).join()');
+    check(keys === '-12,3,5,7,9,99', sortNames[t] + ' sort', keys);
+    f.remove();
+  }
+
+  for (const algo of ['kruskal', 'prims']) {
+    const f = await load("minSpanningTree.html");
+    const w = f.contentWindow, d = f.contentDocument;
+    d.getElementById('Fast').checked = true;
+    d.getElementById(algo).checked = true;
+    d.getElementById('spanningSample').selectedIndex = 1;
+    w.setSpanningSample();
+    w.createGraph(true, 'spanningGraphContainer');
+    w.run(); await sleep(15000);
+    const tree = w.eval('Graph').sigma.graph.edges().filter((e) => e.color === '#F5B041')
+      .map((e) => e.id).sort().join(' ');
+    check(tree === 'a-b b-c c-d d-e', algo + ' minimum spanning tree', tree);
+    f.remove();
+  }
+
+  for (const page of ['index.html', 'hashTable.html', 'graph.html', 'heap.html', 'tree.html',
+                      'binarySTree.html', 'redBlackTree.html', 'avl.html', 'graphics.html',
+                      'graphicsTest.html']) {
+    const f = await load(page);
+    await sleep(500);
+    check(f.contentDocument.querySelector('h1') !== null, page + ' loads');
+    f.remove();
+  }
+});
+</script>
+</body></html>
