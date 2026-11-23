@@ -1,15 +1,28 @@
 /* Algocynfas site styles. Loaded after Bootstrap on the visualization pages. */
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
 :root {
-    --ink: #1f2a33;
+    /* Palette: forest green, cyan, blue, violet, silver. */
+    --forest: #2f6f45;
+    --cyan: #1fa5b8;
+    --blue: #2b5ea7;
+    --violet: #6b4fa0;
+    --silver: #b8c2cc;
+
+    --ink: #1c2833;
     --muted: #5b6770;
-    --brand: #1f4e5f;
-    --brand-light: #e6f2f3;
-    --accent: #2a7f8f;
-    --page-bg: #f6f9f9;
+    --brand: #1d4a5c;
+    --brand-light: #e4f3f5;
+    --accent: #2b5ea7;
+    --page-bg: #eef4f3;
     --card-bg: #ffffff;
-    --border: #d5e2e4;
-    --input-bg: #fffaf0;
+    --border: #cfdde0;
+    --input-bg: #fbfcfd;
+
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-head: "Space Grotesk", var(--font-body);
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
 *, *::before, *::after {
@@ -21,9 +34,30 @@ body {
     padding: 0;
     color: var(--ink);
     background: var(--page-bg);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 1.0625rem;
-    line-height: 1.6;
+    line-height: 1.65;
+}
+
+/* Algorithmic background (a graph with its spanning tree highlighted).
+   A fixed pseudo-element instead of background-attachment: fixed, which iOS ignores. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: url("lib/images/algo-bg.svg") center / cover no-repeat;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-head);
+}
+
+code, pre, kbd {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
 }
 
 img {
@@ -45,11 +79,12 @@ h1 {
     margin: 0 0 1.5rem 0;
     padding: 1rem;
     text-align: center;
-    font-weight: 600;
-    font-size: clamp(1.75rem, 5vw, 2.5rem);
-    letter-spacing: 0.02em;
-    background: linear-gradient(135deg, var(--brand), var(--accent));
+    font-weight: 700;
+    font-size: clamp(1.75rem, 5vw, 2.6rem);
+    letter-spacing: 0.01em;
+    background: linear-gradient(120deg, var(--forest), var(--cyan) 55%, var(--blue));
     color: #fff;
+    box-shadow: 0 2px 10px rgba(29, 74, 92, 0.25);
 }
 
 /* On the visualization pages the h1 sits inside .container. */
@@ -60,21 +95,31 @@ h1 {
 h2 {
     font-size: clamp(1.4rem, 4vw, 1.9rem);
     font-weight: 600;
-    margin: 2rem 0 1rem;
+    margin: 2.25rem 0 1rem;
     color: var(--brand);
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 3px;
+    margin-top: 0.35rem;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--forest), var(--cyan), var(--violet));
 }
 
 h3 {
     font-size: clamp(1.25rem, 3.5vw, 1.6rem);
     margin: 1.5rem 0 0.75rem;
-    color: #633;
+    color: var(--violet);
     font-weight: 600;
 }
 
 h4, h5 {
     font-size: 1.2rem;
     margin: 1.25rem 0 0.5rem;
-    color: #339;
+    color: var(--blue);
     font-weight: 600;
 }
 
@@ -82,8 +127,12 @@ h4, h5 {
 
 .page {
     max-width: 52rem;
-    margin: 0 auto;
-    padding: 0 1rem 3rem;
+    margin: 0 auto 3rem;
+    padding: 1.5rem 1.75rem 2.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 24px rgba(29, 74, 92, 0.08);
 }
 
 p {
@@ -95,7 +144,49 @@ ul, ol {
 }
 
 li {
-    margin: 0.35rem 0;
+    margin: 0.4rem 0;
+}
+
+/* Content lists: small graph-node markers, colours cycling through the palette. */
+.page ul:not(.link-grid) {
+    list-style: none;
+    padding-left: 0;
+}
+
+.page ul:not(.link-grid) li {
+    position: relative;
+    padding-left: 1.6rem;
+}
+
+.page ul:not(.link-grid) li::before {
+    content: "";
+    position: absolute;
+    left: 0.2rem;
+    top: 0.5em;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--forest);
+}
+
+.page ul:not(.link-grid) li:nth-child(4n+2)::before { border-color: var(--cyan); }
+.page ul:not(.link-grid) li:nth-child(4n+3)::before { border-color: var(--blue); }
+.page ul:not(.link-grid) li:nth-child(4n+4)::before { border-color: var(--violet); }
+
+.page ol li::marker {
+    color: var(--blue);
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+.page ul:not(.link-grid) a {
+    text-decoration-color: var(--silver);
+    text-underline-offset: 0.2em;
+}
+
+.page ul:not(.link-grid) a:hover {
+    text-decoration-color: currentColor;
 }
 
 figure {
@@ -144,13 +235,18 @@ ul.link-grid a {
     padding: 0.9rem 1rem;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--accent);
+    border-left: 4px solid var(--forest);
     border-radius: 0.4rem;
     color: var(--brand);
-    font-weight: 500;
+    font-family: var(--font-head);
+    font-weight: 600;
     text-decoration: none;
     transition: box-shadow 0.15s, transform 0.15s;
 }
+
+ul.link-grid li:nth-child(4n+2) a { border-left-color: var(--cyan); }
+ul.link-grid li:nth-child(4n+3) a { border-left-color: var(--blue); }
+ul.link-grid li:nth-child(4n+4) a { border-left-color: var(--violet); }
 
 ul.link-grid a:hover, ul.link-grid a:focus {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -178,6 +274,11 @@ th {
 
 .container {
     margin: 1.5rem auto;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 24px rgba(29, 74, 92, 0.08);
     /* Canvases have fixed pixel sizes; let them scroll sideways on small screens. */
     overflow-x: auto;
 }
@@ -293,7 +394,12 @@ th {
 
     .container {
         margin: 1rem auto;
-        padding: 0 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .page {
+        margin: 0 0.5rem 2rem;
+        padding: 1rem 1rem 2rem;
     }
 
     .help-tip {
